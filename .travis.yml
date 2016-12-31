@@ -44,9 +44,9 @@ install:
 
 script:
   - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-php.hxml && php bin/index.php; fi
-  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-neko.hxml && neko bin/MainServiceTest.n; fi
-  - haxe build-js.hxml           && node bin/MainServiceTest.js
-  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-flash.hxml -D fdb && haxe flash/run.hxml bin/MainServiceTest.swf; fi
+  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-neko.hxml && neko bin/MainDslTest.n; fi
+  - haxe build-js.hxml           && node bin/MainDslTest.js
+  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-flash.hxml -D fdb && haxe flash/run.hxml bin/MainDslTest.swf; fi
   
 notifications:
   email:
