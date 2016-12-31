@@ -1,0 +1,3 @@
+build-each.hxml
+-swf-version 11
+-swf bin/MainDslTest.swf
