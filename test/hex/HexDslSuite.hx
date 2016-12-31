@@ -8,7 +8,7 @@ import hex.runtime.RuntimeSuite;
  * ...
  * @author Francis Bourre
  */
-class HexIoCSuite
+class HexDslSuite
 {
 	@Suite( "HexDsl suite" )
     public var list : Array<Class<Dynamic>> = [ CompiletimeSuite, CoreSuite, RuntimeSuite ];
