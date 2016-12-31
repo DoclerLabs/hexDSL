@@ -6,32 +6,32 @@ import hex.error.VirtualMethodException;
  * ...
  * @author Francis Bourre
  */
-class AbstractParserCollection<T:AbstractContextParser<ContentType>, ContentType> 
+class AbstractParserCollection<ParserType:AbstractContextParser<ContentType>, ContentType> 
 	implements IParserCollection<AbstractContextParser<ContentType>, ContentType>
 {
-	var _index 						: Int;
-	var _parserCommandCollection 	: Array<T>;
+	var _index 				: Int;
+	var _parserCollection 	: Array<ParserType>;
 
 	function new()
 	{
-		this._index = -1;
-		this._parserCommandCollection = [];
+		this._index 			= -1;
+		this._parserCollection 	= [];
 		this._buildParserList();
 	}
 
 	function _buildParserList() : Void
 	{
-		throw new VirtualMethodException( this + ".setParserList() must be implemented in concrete class." );
+		throw new VirtualMethodException( "'setParserList'  must be overridden" );
 	}
 
-	public function next() : T
+	public function next() : ParserType
 	{
-		return _parserCommandCollection[ ++this._index ];
+		return this._parserCollection[ ++this._index ];
 	}
 
 	public function hasNext() : Bool
 	{
-		return _parserCommandCollection.length > this._index + 1;
+		return this._parserCollection.length > this._index + 1;
 	}
 
 	public function reset() : Void

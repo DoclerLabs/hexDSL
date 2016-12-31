@@ -3,6 +3,7 @@ package hex.runtime;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
+import hex.factory.BuildRequest;
 import hex.ioc.core.ContextFactory;
 import hex.metadata.AnnotationProvider;
 
@@ -14,28 +15,33 @@ class ApplicationAssembler implements IApplicationAssembler
 {
 	public function new() 
 	{
-		
+		this._test( BuildRequest );
 	}
 	
 	var _mApplicationContext 			= new Map<String, IApplicationContext>();
-	var _mContextFactories 				= new Map<IApplicationContext, ContextFactory>();
+	var _mContextFactories 				= new Map<IApplicationContext, IBuilder<Dynamic>>();
 	
-	public function getBuilder<T>( applicationContext : IApplicationContext ) : IBuilder<T>
+	public function getBuilder<T>( en : Enum<T>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
 		return cast this._mContextFactories.get( applicationContext );
+	}
+	
+	function _test<T>( o : Enum<T> ) : Void
+	{
+		
 	}
 	
 	public function buildEverything() : Void
 	{
 		var itFactory = this._mContextFactories.iterator();
 		var contextFactories = [ while ( itFactory.hasNext() ) itFactory.next() ];
-		contextFactories.map( function( factory ) { factory.buildEverything(); } );
+		contextFactories.map( function( factory ) { factory.finalize(); } );
 	}
 
 	public function release() : Void
 	{
 		var itFactory = this._mContextFactories.iterator();
-		while ( itFactory.hasNext() ) itFactory.next().release();
+		while ( itFactory.hasNext() ) itFactory.next().dispose();
 		
 		this._mApplicationContext = new Map();
 		this._mContextFactories = new Map();

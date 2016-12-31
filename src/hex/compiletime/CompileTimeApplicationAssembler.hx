@@ -14,7 +14,7 @@ import hex.util.MacroUtil;
 class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssembler
 {
 	var _mApplicationContext 	= new Map<String, IApplicationContext>();
-	var _mContextFactories 		= new Map<IApplicationContext, CompileTimeContextFactory>();
+	var _mContextFactories 		= new Map<IApplicationContext, IBuilder<Dynamic>>();
 	var _expressions 			= [ macro { } ];
 	
 	var _assemblerExpression : Expr;
@@ -37,7 +37,7 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		}
 	}
 	
-	public function getBuilder<T>( applicationContext : IApplicationContext ) : IBuilder<T>
+	public function getBuilder<T>( en : Enum<T>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
 		return cast this._mContextFactories.get( applicationContext );
 	}
@@ -46,11 +46,14 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 	{
 		var itFactory = this._mContextFactories.iterator();
 		var contextFactories = [ while ( itFactory.hasNext() ) itFactory.next() ];
-		contextFactories.map( function( factory ) { factory.buildEverything(); } );
+		contextFactories.map( function( factory ) { factory.finalize(); } );
 	}
 	
 	public function release() : Void
 	{
+		var itFactory = this._mContextFactories.iterator();
+		while ( itFactory.hasNext() ) itFactory.next().dispose();
+		
 		this._mApplicationContext = new Map();
 		this._mContextFactories = new Map();
 		this._expressions = [ macro {} ];
