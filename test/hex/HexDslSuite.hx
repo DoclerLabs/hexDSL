@@ -11,5 +11,5 @@ import hex.runtime.RuntimeSuite;
 class HexIoCSuite
 {
 	@Suite( "HexDsl suite" )
-    public var list : Array<Class<Dynamic>> = [ CompilerSuite, CoreSuite, RuntimeSuite ];
+    public var list : Array<Class<Dynamic>> = [ CompiletimeSuite, CoreSuite, RuntimeSuite ];
 }
