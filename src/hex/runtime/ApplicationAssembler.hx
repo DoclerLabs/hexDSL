@@ -15,7 +15,7 @@ class ApplicationAssembler implements IApplicationAssembler
 {
 	public function new() 
 	{
-		this._test( BuildRequest );
+		
 	}
 	
 	var _mApplicationContext 			= new Map<String, IApplicationContext>();
@@ -24,11 +24,6 @@ class ApplicationAssembler implements IApplicationAssembler
 	public function getBuilder<T>( en : Enum<T>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
 		return cast this._mContextFactories.get( applicationContext );
-	}
-	
-	function _test<T>( o : Enum<T> ) : Void
-	{
-		
 	}
 	
 	public function buildEverything() : Void
