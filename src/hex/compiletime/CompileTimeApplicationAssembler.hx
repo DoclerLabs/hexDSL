@@ -22,7 +22,7 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 	public function new( assemblerExpression : Expr = null  )
 	{
 		//Create runtime applicationAssembler
-		var applicationAssemblerTypePath 	= MacroUtil.getTypePath( Type.getClassName( hex.runtime.ApplicationAssembler ) );
+		var applicationAssemblerTypePath 	= MacroUtil.getTypePath( "hex.runtime.ApplicationAssembler" );
 		var applicationAssemblerVarName 	= "";
 		
 		if ( assemblerExpression == null )
