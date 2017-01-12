@@ -1,0 +1,18 @@
+{
+  "name": "hexdsl",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": ["hexmachina", "dsl", "oop"],
+  "description": "hexDsl contains DSL toolkit written in Haxe",
+  "contributors": ["doclerlabs"],
+  "releasenote": "First release. Still alpha testing",
+  "version": "0.1.0",
+  "url": "https://github.com/DoclerLabs/hexDsl",
+  "dependencies":
+  {
+    "hexcore": "git:https://github.com/DoclerLabs/hexCore.git",
+	"hexreflection": "git:https://github.com/DoclerLabs/hexReflection.git",
+    "hexannotation": "git:https://github.com/DoclerLabs/hexAnnotation.git",
+    "hexinject": "git:https://github.com/DoclerLabs/hexInject.git"
+  }
+}
