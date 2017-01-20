@@ -9,4 +9,5 @@ interface IBuilder<RequestType>
 	function build( request : RequestType ) : Void;
 	function finalize() : Void;
 	function dispose() : Void;
+	function getApplicationContext() : IApplicationContext;
 }

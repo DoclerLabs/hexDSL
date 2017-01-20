@@ -3,7 +3,6 @@ package hex.runtime;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.factory.BuildRequest;
 import hex.ioc.core.ContextFactory;
 import hex.metadata.AnnotationProvider;
 
