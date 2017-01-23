@@ -7,7 +7,7 @@ import hex.core.IBuilder;
  */
 interface IApplicationAssembler
 {
-	function getBuilder<T>( en : Enum<T>, applicationContext : IApplicationContext ) : IBuilder<T>;
+	function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IBuilder<T>;
 	function buildEverything() : Void;
 	function release() : Void;
 	function getApplicationContext( applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IApplicationContext;

@@ -5,7 +5,7 @@ package hex.core;
  */
 interface IBuilder<RequestType> 
 {
-	function init( applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : Void;
+	function init( applicationContext : IApplicationContext ) : Void;
 	function build( request : RequestType ) : Void;
 	function finalize() : Void;
 	function dispose() : Void;

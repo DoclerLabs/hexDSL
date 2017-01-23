@@ -2,9 +2,10 @@ package hex.compiletime;
 
 #if macro
 import haxe.macro.Expr;
-import hex.compiler.core.CompileTimeContextFactory;
-import hex.core.IBuilder;
+import hex.compiler.core.CompileTimeCoreFactory;
 import hex.core.IApplicationContext;
+import hex.core.IBuilder;
+import hex.ioc.assembler.AbstractApplicationContext;
 import hex.util.MacroUtil;
 
 /**
@@ -37,9 +38,23 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		}
 	}
 	
-	public function getBuilder<T>( en : Enum<T>, applicationContext : IApplicationContext ) : IBuilder<T>
+	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IBuilder<T>
 	{
-		return cast this._mContextFactories.get( applicationContext );
+		var contextFactory : IBuilder<T> = null;
+		var applicationContext = this.getApplicationContext( applicationContextName, applicationContextClass );
+		
+		if ( this._mContextFactories.exists( applicationContext ) )
+		{
+			contextFactory = cast this._mContextFactories.get( applicationContext );
+		}
+		else
+		{
+			contextFactory = Type.createInstance( factoryClass, [ this._expressions ] );
+			contextFactory.init( applicationContext );
+			this._mContextFactories.set( applicationContext, contextFactory );
+		}
+			
+		return contextFactory;
 	}
 	
 	public function buildEverything() : Void
@@ -69,12 +84,8 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 
 		} else
 		{
-			var contextFactory = new CompileTimeContextFactory( this._expressions );
-			contextFactory.init( applicationContextName, applicationContextClass );
-			applicationContext = contextFactory.getApplicationContext();
-			
-			this._mApplicationContext.set( applicationContextName, applicationContext);
-			this._mContextFactories.set( applicationContext, contextFactory );
+			applicationContext = new AbstractApplicationContext( new CompileTimeCoreFactory( this._expressions ), applicationContextName );
+			this._mApplicationContext.set( applicationContextName, applicationContext );
 		}
 
 		return applicationContext;
