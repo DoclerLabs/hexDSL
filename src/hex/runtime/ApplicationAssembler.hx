@@ -3,7 +3,6 @@ package hex.runtime;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.ioc.assembler.ApplicationContextUtil;
 import hex.metadata.AnnotationProvider;
 
 /**
@@ -20,7 +19,7 @@ class ApplicationAssembler implements IApplicationAssembler
 	var _mApplicationContext 			= new Map<String, IApplicationContext>();
 	var _mContextFactories 				= new Map<IApplicationContext, IBuilder<Dynamic>>();
 	
-	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IBuilder<T>
+	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> ) : IBuilder<T>
 	{
 		var contextFactory : IBuilder<T> = null;
 		var applicationContext = this.getApplicationContext( applicationContextName, applicationContextClass );
@@ -56,17 +55,17 @@ class ApplicationAssembler implements IApplicationAssembler
 		AnnotationProvider.release();
 	}
 	
-	public function getApplicationContext( applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IApplicationContext
+	public function getApplicationContext<T:IApplicationContext>( applicationContextName : String, applicationContextClass : Class<T> ) : T
 	{
-		var applicationContext : IApplicationContext = null;
+		var applicationContext : T = null;
 
 		if ( this._mApplicationContext.exists( applicationContextName ) )
 		{
-			applicationContext = this._mApplicationContext.get( applicationContextName );
+			applicationContext = cast this._mApplicationContext.get( applicationContextName );
 
 		} else
 		{
-			applicationContext = ApplicationContextUtil.create( applicationContextName, applicationContextClass );
+			applicationContext = Type.createInstance( applicationContextClass, [ applicationContextName ] );
 			this._mApplicationContext.set( applicationContextName, applicationContext );
 		}
 

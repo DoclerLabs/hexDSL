@@ -2,10 +2,8 @@ package hex.compiletime;
 
 #if macro
 import haxe.macro.Expr;
-import hex.compiler.core.CompileTimeCoreFactory;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.ioc.assembler.AbstractApplicationContext;
 import hex.util.MacroUtil;
 
 /**
@@ -38,7 +36,7 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		}
 	}
 	
-	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IBuilder<T>
+	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> ) : IBuilder<T>
 	{
 		var contextFactory : IBuilder<T> = null;
 		var applicationContext = this.getApplicationContext( applicationContextName, applicationContextClass );
@@ -74,17 +72,17 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		this._expressions = [ macro {} ];
 	}
 
-	public function getApplicationContext( applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IApplicationContext
+	public function getApplicationContext<T:IApplicationContext>( applicationContextName : String, applicationContextClass : Class<T> ) : T
 	{
-		var applicationContext : IApplicationContext;
+		var applicationContext : T;
 
 		if ( this._mApplicationContext.exists( applicationContextName ) )
 		{
-			applicationContext = this._mApplicationContext.get( applicationContextName );
+			applicationContext = cast this._mApplicationContext.get( applicationContextName );
 
 		} else
 		{
-			applicationContext = new AbstractApplicationContext( new CompileTimeCoreFactory( this._expressions ), applicationContextName );
+			applicationContext = Type.createInstance( applicationContextClass, [ applicationContextName ] );
 			this._mApplicationContext.set( applicationContextName, applicationContext );
 		}
 
