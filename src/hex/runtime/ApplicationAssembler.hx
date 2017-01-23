@@ -3,8 +3,6 @@ package hex.runtime;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.factory.BuildRequest;
-import hex.ioc.core.ContextFactory;
 import hex.metadata.AnnotationProvider;
 
 /**
@@ -21,9 +19,23 @@ class ApplicationAssembler implements IApplicationAssembler
 	var _mApplicationContext 			= new Map<String, IApplicationContext>();
 	var _mContextFactories 				= new Map<IApplicationContext, IBuilder<Dynamic>>();
 	
-	public function getBuilder<T>( en : Enum<T>, applicationContext : IApplicationContext ) : IBuilder<T>
+	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> ) : IBuilder<T>
 	{
-		return cast this._mContextFactories.get( applicationContext );
+		var contextFactory : IBuilder<T> = null;
+		var applicationContext = this.getApplicationContext( applicationContextName, applicationContextClass );
+		
+		if ( this._mContextFactories.exists( applicationContext ) )
+		{
+			contextFactory = cast this._mContextFactories.get( applicationContext );
+		}
+		else
+		{
+			contextFactory = cast Type.createInstance( factoryClass, [] );
+			contextFactory.init( applicationContext );
+			this._mContextFactories.set( applicationContext, contextFactory );
+		}
+		
+		return contextFactory;
 	}
 	
 	public function buildEverything() : Void
@@ -43,22 +55,18 @@ class ApplicationAssembler implements IApplicationAssembler
 		AnnotationProvider.release();
 	}
 	
-	public function getApplicationContext( applicationContextName : String, applicationContextClass : Class<IApplicationContext> = null ) : IApplicationContext
+	public function getApplicationContext<T:IApplicationContext>( applicationContextName : String, applicationContextClass : Class<T> ) : T
 	{
-		var applicationContext : IApplicationContext;
+		var applicationContext : T = null;
 
 		if ( this._mApplicationContext.exists( applicationContextName ) )
 		{
-			applicationContext = this._mApplicationContext.get( applicationContextName );
+			applicationContext = cast this._mApplicationContext.get( applicationContextName );
 
 		} else
 		{
-			var contextFactory = new ContextFactory();
-			contextFactory.init( applicationContextName, applicationContextClass );
-			applicationContext = contextFactory.getApplicationContext();
-			
-			this._mApplicationContext.set( applicationContextName, applicationContext);
-			this._mContextFactories.set( applicationContext, contextFactory );
+			applicationContext = Type.createInstance( applicationContextClass, [ applicationContextName ] );
+			this._mApplicationContext.set( applicationContextName, applicationContext );
 		}
 
 		return applicationContext;
