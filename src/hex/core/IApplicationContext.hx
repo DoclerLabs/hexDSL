@@ -19,4 +19,6 @@ interface IApplicationContext extends IContextOwner
 	function getCoreFactory() : ICoreFactory;
 	
 	function getInjector() : IDependencyInjector;
+	
+	function dispose() : Void;
 }
