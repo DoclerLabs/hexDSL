@@ -3,7 +3,6 @@ package hex.runtime;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.metadata.AnnotationProvider;
 
 /**
  * ...
@@ -47,12 +46,17 @@ class ApplicationAssembler implements IApplicationAssembler
 
 	public function release() : Void
 	{
+		//dispose factories
 		var itFactory = this._mContextFactories.iterator();
 		while ( itFactory.hasNext() ) itFactory.next().dispose();
 		
+		//dispose application contexts
+		var itContext = this._mApplicationContext.iterator();
+		while ( itContext.hasNext() ) itContext.next().dispose();
+		
+		//create new collections
 		this._mApplicationContext = new Map();
 		this._mContextFactories = new Map();
-		AnnotationProvider.release();
 	}
 	
 	public function getApplicationContext<T:IApplicationContext>( applicationContextName : String, applicationContextClass : Class<T> ) : T
