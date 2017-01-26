@@ -1,7 +1,7 @@
 {
-  "name": "hexservice",
+  "name": "hexdsl",
   "version": "1.0.0",
-  "description": "hexDsl contains DSL toolkit written in Haxe",
+  "description": "hexDSL contains DSL toolkit written in Haxe",
   
   "directories": {
     "src": "src",
@@ -12,19 +12,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DoclerLabs/hexDsl.git"
+    "url": "git+https://github.com/DoclerLabs/hexDSL.git"
   },
   "keywords": [
     "haxe",
-    "service",
+    "dsl",
     "hexmachina"
   ],
   "author": "DoclerLabs",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DoclerLabs/hexDsl/issues"
+    "url": "https://github.com/DoclerLabs/hexDSL/issues"
   },
-  "homepage": "https://github.com/DoclerLabs/hexDsl#readme",
+  "homepage": "https://github.com/DoclerLabs/hexDSL#readme",
 
   "devDependencies": {
     "hexcore": "git+https://github.com/DoclerLabs/hexCore.git#master",
