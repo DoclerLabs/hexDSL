@@ -21,7 +21,7 @@ class AbstractParserCollection<ParserType:AbstractContextParser<ContentType>, Co
 
 	function _buildParserList() : Void
 	{
-		throw new VirtualMethodException( "'setParserList'  must be overridden" );
+		throw new VirtualMethodException();
 	}
 
 	public function next() : ParserType

@@ -38,16 +38,16 @@ class AbstractContextParser<ContentType> implements IContextParser<ContentType>
 
 	public function parse() : Void
 	{
-		throw new VirtualMethodException( "parse must be implemented in concrete class." );
+		throw new VirtualMethodException();
 	}
 
 	public function setContextData( data : ContentType ) : Void
 	{
-		throw new VirtualMethodException( "setContextData must be implemented in concrete class." );
+		throw new VirtualMethodException();
 	}
 	
 	public function getApplicationContext() : IApplicationContext
 	{
-		throw new VirtualMethodException( "getApplicationContext must be implemented in concrete class." );
+		throw new VirtualMethodException();
 	}
 }
