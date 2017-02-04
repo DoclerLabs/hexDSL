@@ -1,8 +1,6 @@
 package hex.compiletime.util;
 
 import hex.core.IApplicationAssembler;
-import hex.ioc.assembler.ApplicationAssembler;
-import hex.ioc.assembler.IApplicationAssembler;
 import hex.runtime.ApplicationAssembler;
 
 /**
