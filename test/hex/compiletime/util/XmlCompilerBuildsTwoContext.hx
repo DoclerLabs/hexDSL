@@ -1,6 +1,5 @@
 package hex.compiletime.util;
 
-import hex.compiler.util.ContextUtil;
 import hex.core.IApplicationAssembler;
 import hex.ioc.assembler.ApplicationAssembler;
 import hex.ioc.assembler.IApplicationAssembler;
@@ -43,7 +42,7 @@ class XmlCompilerBuildsTwoContext
 		//XmlCompiler.readXmlFileWithAssembler( this._applicationAssembler, "context/referenceAnotherContext.xml" );
 	}
 	
-	macro static function test()
+	/*macro static function test()
 	{
 		var id = ContextUtil.buildInstanceField( "id", "hex.compiler.parser.xml.XmlCompilerBuildsTwoContext" );
 		
@@ -61,5 +60,5 @@ class XmlCompilerBuildsTwoContext
 
 		//
 		return ContextUtil.instantiateContextDefinition( testClass );
-	}
+	}*/
 }
