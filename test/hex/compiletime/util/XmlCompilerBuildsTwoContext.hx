@@ -1,4 +1,4 @@
-package hex.compiler.parser.xml;
+package hex.compiletime.util;
 
 import hex.compiler.util.ContextUtil;
 import hex.core.IApplicationAssembler;
@@ -27,10 +27,10 @@ class XmlCompilerBuildsTwoContext
 		assembleContext1();
 		assembleContext2();
 		
-		var o = test();
+		/*var o = test();
 		o.filename();
 		o.id = this;
-		o.filename();
+		o.filename();*/
 	}
 	
 	function assembleContext1() : Void
