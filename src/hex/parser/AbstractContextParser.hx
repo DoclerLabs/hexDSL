@@ -2,6 +2,7 @@ package hex.parser;
 
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
+import hex.core.IBuilder;
 import hex.error.VirtualMethodException;
 
 /**
@@ -10,12 +11,30 @@ import hex.error.VirtualMethodException;
  */
 class AbstractContextParser<ContentType> implements IContextParser<ContentType>
 {
-	var _applicationAssembler 	: IApplicationAssembler;
-	var _contextData 			: ContentType;
+	var _applicationAssembler 			: IApplicationAssembler;
+	var _contextData 					: ContentType;
+	var _factoryClass 					: Class<IBuilder<Dynamic>>;
+	var _applicationContextDefaultClass : Class<IApplicationContext>;
 
 	function new() 
 	{
 		//
+	}
+	
+	public function parse() : Void
+	{
+		throw new VirtualMethodException();
+	}
+	
+	@final
+	public function getContextData() : ContentType
+	{
+		return this._contextData;
+	}
+
+	public function setContextData( data : ContentType ) : Void
+	{
+		throw new VirtualMethodException();
 	}
 	
 	@final
@@ -29,25 +48,16 @@ class AbstractContextParser<ContentType> implements IContextParser<ContentType>
 	{
 		return this._applicationAssembler;
 	}
-
+	
 	@final
-	public function getContextData() : ContentType
+	public function setFactoryClass( factoryClass: Class<IBuilder<Dynamic>> ) : Void
 	{
-		return this._contextData;
-	}
-
-	public function parse() : Void
-	{
-		throw new VirtualMethodException();
-	}
-
-	public function setContextData( data : ContentType ) : Void
-	{
-		throw new VirtualMethodException();
+		this._factoryClass = factoryClass;
 	}
 	
-	public function getApplicationContext() : IApplicationContext
+	@final
+	public function setApplicationContextDefaultClass( applicationContextDefaultClass : Class<IApplicationContext> ) : Void
 	{
-		throw new VirtualMethodException();
+		this._applicationContextDefaultClass = applicationContextDefaultClass;
 	}
 }
