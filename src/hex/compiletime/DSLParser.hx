@@ -1,7 +1,7 @@
 package hex.compiletime;
 
-import hex.compiletime.util.ClassImportHelper;
 import hex.compiletime.error.IExceptionReporter;
+import hex.compiletime.util.ClassImportHelper;
 import hex.parser.AbstractContextParser;
 
 /**

@@ -5,8 +5,8 @@ import hex.core.IBuilder;
 import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
 import hex.factory.BuildRequest;
-import hex.runtime.error.ParsingException;
 import hex.parser.AbstractContextParser;
+import hex.runtime.error.ParsingException;
 
 /**
  * ...
@@ -16,9 +16,7 @@ class AbstractXMLParser extends AbstractContextParser<Xml>
 {
 	var _builder 						: IBuilder<BuildRequest>;
 	var _applicationContextName 		: String;
-	var _applicationContextClassName 	: String;
-	var _applicationContextClass 		: Class<IApplicationContext>;
-	
+
 	function new()
 	{
 		super();
@@ -27,7 +25,7 @@ class AbstractXMLParser extends AbstractContextParser<Xml>
 	@final
 	public function getApplicationContext() : IApplicationContext
 	{
-		return this._applicationAssembler.getApplicationContext( this._applicationContextName, this._applicationContextClass );
+		return this._applicationAssembler.getApplicationContext( this._applicationContextName, this._applicationContextDefaultClass );
 	}
 	
 	@final
@@ -40,7 +38,9 @@ class AbstractXMLParser extends AbstractContextParser<Xml>
 				this._contextData = data;
 				this._findApplicationContextName( data );
 				this._findApplicationContextClassName( data );
-				this._builder = this._applicationAssembler.getFactory( this._factoryClass, this._applicationContextName, this._applicationContextDefaultClass );
+				
+				var applicationContext = this._applicationAssembler.getApplicationContext( this._applicationContextName, this._applicationContextDefaultClass );
+				this._builder = this._applicationAssembler.getFactory( this._factoryClass, applicationContext );
 			}
 			else
 			{
@@ -64,24 +64,18 @@ class AbstractXMLParser extends AbstractContextParser<Xml>
 	
 	function _findApplicationContextClassName( xml : Xml ) : Void
 	{
-		this._applicationContextClassName = this._contextData.firstElement().get( "type" );
+		var applicationContextClassName = this._contextData.firstElement().get( "type" );
 
-		if ( this._applicationContextClassName != null )
+		if ( applicationContextClassName != null )
 		{
 			try
 			{
-				//Build applicationContext class for the 1st time
-				this._applicationContextClass = cast Type.resolveClass( this._applicationContextClassName );
-				this._applicationAssembler.getApplicationContext( this._applicationContextName, this._applicationContextClass );
+				this._applicationContextDefaultClass = cast Type.resolveClass( applicationContextClassName ); 
 			}
 			catch ( error : Dynamic )
 			{
-				throw new ParsingException( "Fails to instantiate applicationContext class named '" + this._applicationContextClassName + "'." );
+				throw new ParsingException( "Fails to instantiate applicationContext class named '" + applicationContextClassName + "'." );
 			}
-		}
-		else
-		{
-			this._applicationAssembler.getApplicationContext( this._applicationContextName, this._applicationContextDefaultClass );
 		}
 	}
 }
