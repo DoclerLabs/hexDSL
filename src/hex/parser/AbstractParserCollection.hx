@@ -6,8 +6,8 @@ import hex.error.VirtualMethodException;
  * ...
  * @author Francis Bourre
  */
-class AbstractParserCollection<ParserType:AbstractContextParser<ContentType>, ContentType> 
-	implements IParserCollection<AbstractContextParser<ContentType>, ContentType>
+class AbstractParserCollection<ParserType:AbstractParserDef> 
+	implements IParserCollection<AbstractParserDef>
 {
 	var _index 				: Int;
 	var _parserCollection 	: Array<ParserType>;

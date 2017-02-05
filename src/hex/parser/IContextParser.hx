@@ -7,7 +7,7 @@ import hex.core.IBuilder;
 /**
  * @author Francis Bourre
  */
-interface IContextParser<ContentType> 
+interface IContextParser<ContentType, RequestType> 
 {
 	function parse() : Void;
 	
@@ -17,7 +17,7 @@ interface IContextParser<ContentType>
 	
 	function setApplicationAssembler( applicationAssembler : IApplicationAssembler ) : Void;
 	
-	function setFactoryClass( factoryClass: Class<IBuilder<Dynamic>> ) : Void;
+	function setFactoryClass( factoryClass: Class<IBuilder<RequestType>> ) : Void;
 	
 	function setApplicationContextDefaultClass( applicationContextDefaultClass : Class<IApplicationContext> ) : Void;
 }

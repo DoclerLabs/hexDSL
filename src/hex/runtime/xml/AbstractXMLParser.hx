@@ -4,7 +4,6 @@ import hex.core.IApplicationContext;
 import hex.core.IBuilder;
 import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
-import hex.factory.BuildRequest;
 import hex.parser.AbstractContextParser;
 import hex.runtime.error.ParsingException;
 
@@ -12,9 +11,9 @@ import hex.runtime.error.ParsingException;
  * ...
  * @author Francis Bourre
  */
-class AbstractXMLParser extends AbstractContextParser<Xml>
+class AbstractXMLParser<RequestType> extends AbstractContextParser<Xml, RequestType>
 {
-	var _builder 						: IBuilder<BuildRequest>;
+	var _builder 						: IBuilder<RequestType>;
 	var _applicationContextName 		: String;
 
 	function new()

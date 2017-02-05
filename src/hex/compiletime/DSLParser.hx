@@ -8,7 +8,7 @@ import hex.parser.AbstractContextParser;
  * ...
  * @author Francis Bourre
  */
-class DSLParser<ContentType> extends AbstractContextParser<ContentType>
+class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentType, RequestType>
 {
 	var _importHelper 		: ClassImportHelper;
 	var _exceptionReporter 	: IExceptionReporter<ContentType>;

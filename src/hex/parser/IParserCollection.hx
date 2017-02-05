@@ -3,7 +3,7 @@ package hex.parser;
 /**
  * @author Francis Bourre
  */
-interface IParserCollection<T:IContextParser<ContentType>, ContentType>
+interface IParserCollection<T:AbstractParserDef>
 {
 	function next() : T;
 	

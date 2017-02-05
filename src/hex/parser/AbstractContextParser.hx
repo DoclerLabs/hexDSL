@@ -9,11 +9,11 @@ import hex.error.VirtualMethodException;
  * ...
  * @author Francis Bourre
  */
-class AbstractContextParser<ContentType> implements IContextParser<ContentType>
+class AbstractContextParser<ContentType, RequestType> implements IContextParser<ContentType, RequestType>
 {
 	var _applicationAssembler 			: IApplicationAssembler;
 	var _contextData 					: ContentType;
-	var _factoryClass 					: Class<IBuilder<Dynamic>>;
+	var _factoryClass 					: Class<IBuilder<RequestType>>;
 	var _applicationContextDefaultClass : Class<IApplicationContext>;
 
 	function new() 
@@ -50,7 +50,7 @@ class AbstractContextParser<ContentType> implements IContextParser<ContentType>
 	}
 	
 	@final
-	public function setFactoryClass( factoryClass: Class<IBuilder<Dynamic>> ) : Void
+	public function setFactoryClass( factoryClass: Class<IBuilder<RequestType>> ) : Void
 	{
 		this._factoryClass = factoryClass;
 	}
