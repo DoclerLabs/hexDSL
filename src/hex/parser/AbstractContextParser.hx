@@ -15,6 +15,7 @@ class AbstractContextParser<ContentType, RequestType> implements IContextParser<
 	var _contextData 					: ContentType;
 	var _factoryClass 					: Class<IBuilder<RequestType>>;
 	var _applicationContextDefaultClass : Class<IApplicationContext>;
+	var _builder 						: IBuilder<RequestType>;
 
 	function new() 
 	{
