@@ -9,4 +9,5 @@ import hex.di.IDependencyInjector;
 interface ICoreFactory extends ILocator<String, Dynamic>
 {
 	function getInjector() : IDependencyInjector;
+	function clear() : Void;
 }
