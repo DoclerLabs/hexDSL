@@ -26,7 +26,6 @@ class FloatFactory
 		var idVar 				= constructorVO.ID;
 		var args 				= constructorVO.arguments;
 		
-
 		if ( args != null && args.length > 0 ) 
 		{
 			result = Std.parseFloat( args[ 0 ] );

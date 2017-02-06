@@ -1,9 +1,10 @@
 package hex.compiletime.factory;
 
+#if macro
 import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
 import hex.core.ContextTypeList;
-import hex.ioc.core.IContextFactory;
+import hex.error.PrivateConstructorException;
+import hex.core.IContextFactory;
 import hex.vo.ConstructorVO;
 import hex.vo.PropertyVO;
 
@@ -19,7 +20,7 @@ class PropertyFactory
         throw new PrivateConstructorException();
     }
 
-	#if macro
+	
 	static public function build( factory : IContextFactory, property : PropertyVO ) : Expr
 	{
 		var e 				: Expr 		= null;
@@ -59,5 +60,5 @@ class PropertyFactory
 		
 		return e;
 	}
-	#end
 }
+#end

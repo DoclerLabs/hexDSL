@@ -1,6 +1,6 @@
 package hex.vo;
 
-import hex.ioc.core.IContextFactory;
+import hex.core.IContextFactory;
 
 /**
  * @author Francis Bourre

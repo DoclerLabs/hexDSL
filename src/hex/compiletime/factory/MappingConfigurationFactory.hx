@@ -1,9 +1,9 @@
 package hex.compiletime.factory;
-import hex.compiletime.factory.MapArgumentFactory;
 
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
+import hex.compiletime.factory.MapArgumentFactory;
 import hex.error.PrivateConstructorException;
 import hex.ioc.di.MappingConfiguration;
 import hex.util.MacroUtil;
