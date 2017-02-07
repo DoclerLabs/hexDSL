@@ -5,7 +5,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.compiletime.factory.MapArgumentFactory;
 import hex.error.PrivateConstructorException;
-import hex.ioc.di.MappingConfiguration;
+import hex.di.mapping.MappingConfiguration;
 import hex.util.MacroUtil;
 import hex.vo.FactoryVODef;
 
