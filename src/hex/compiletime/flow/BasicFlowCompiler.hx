@@ -1,14 +1,16 @@
 package hex.compiletime.flow;
 
+import hex.core.IApplicationAssembler;
+
 #if macro
 import haxe.macro.Expr;
 import hex.compiletime.CompileTimeApplicationAssembler;
 import hex.compiletime.CompileTimeParser;
 import hex.compiletime.basic.CompileTimeApplicationContext;
 import hex.compiletime.basic.CompileTimeContextFactory;
+import hex.compiletime.flow.DSLReader;
 import hex.compiletime.flow.FlowAssemblingExceptionReporter;
 import hex.compiletime.util.ClassImportHelper;
-import hex.core.IApplicationAssembler;
 #end
 
 /**
@@ -36,11 +38,11 @@ class BasicFlowCompiler
 
 	macro public static function compile( fileName : String, ?preprocessingVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
-		return FlowCompiler._readFile( fileName, preprocessingVariables );
+		return BasicFlowCompiler._readFile( fileName, preprocessingVariables );
 	}
 	
 	macro public static function compileWithAssembler( assemblerExpr : Expr, fileName : String, ?preprocessingVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
-		return FlowCompiler._readFile( fileName, preprocessingVariables, assemblerExpr );
+		return BasicFlowCompiler._readFile( fileName, preprocessingVariables, assemblerExpr );
 	}
 }

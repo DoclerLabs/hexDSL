@@ -4,12 +4,12 @@ import hex.core.AbstractApplicationContext;
 import hex.core.IApplicationContext;
 import hex.di.IBasicInjector;
 import hex.di.IDependencyInjector;
+import hex.di.Injector;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.domain.DomainUtil;
 import hex.event.IDispatcher;
 import hex.event.MessageType;
-import hex.ioc.core.CoreFactory;
 import hex.log.DomainLogger;
 import hex.log.ILogger;
 
@@ -35,7 +35,7 @@ class ApplicationContext extends AbstractApplicationContext
 		this._dispatcher = ApplicationDomainDispatcher.getInstance().getDomainDispatcher( domain );
 		
 		//build injector
-		var injector : IDependencyInjector = cast Type.createInstance( Type.resolveClass( 'hex.di.Injector' ), [] );
+		var injector : IDependencyInjector = new Injector();
 		injector.mapToValue( IBasicInjector, injector );
 		injector.mapToValue( IDependencyInjector, injector );
 		
@@ -43,7 +43,7 @@ class ApplicationContext extends AbstractApplicationContext
 		injector.mapToValue( ILogger, logger );
 		
 		//build coreFactory
-		var coreFactory = new CoreFactory( injector, annotationProvider );
+		var coreFactory = new CoreFactory( injector );
 		
 		//register applicationContext
 		injector.mapToValue( IApplicationContext, this );
@@ -52,7 +52,6 @@ class ApplicationContext extends AbstractApplicationContext
 		super( coreFactory, applicationContextName );
 		
 		coreFactory.getInjector().mapClassNameToValue( "hex.event.IDispatcher<{}>", this._dispatcher );
-		this._initStateMachine();
 	}
 	
 	override public function dispose() : Void

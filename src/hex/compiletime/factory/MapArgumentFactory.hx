@@ -2,7 +2,7 @@ package hex.compiletime.factory;
 
 #if macro
 import hex.error.PrivateConstructorException;
-import hex.ioc.vo.MapVO;
+import hex.vo.MapVO;
 import hex.vo.FactoryVODef;
 
 /**

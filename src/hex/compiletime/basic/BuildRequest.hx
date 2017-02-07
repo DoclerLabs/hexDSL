@@ -1,6 +1,7 @@
 package hex.compiletime.basic;
 
 import hex.vo.ConstructorVO;
+import hex.vo.MethodCallVO;
 import hex.vo.PropertyVO;
 
 /**

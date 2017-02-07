@@ -28,7 +28,6 @@ class CoreFactory implements ICoreFactory
 	public function new( injector : IDependencyInjector ) 
 	{
 		this._injector 				= injector;
-		this._annotationProvider 	= annotationProvider;
 		this._dispatcher 			= new ClosureDispatcher();
 		this._map 					= new Map();
 		this._classPaths 			= new Map();

@@ -7,7 +7,7 @@ import hex.compiletime.DSLParser;
 import hex.core.IApplicationContext;
 
 using hex.util.MacroUtil;
-using hex.compiler.parser.flow.ExpressionUtil;
+using hex.compiletime.flow.parser.ExpressionUtil;
 
 /**
  * ...

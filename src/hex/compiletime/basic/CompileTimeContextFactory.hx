@@ -64,8 +64,6 @@ class CompileTimeContextFactory
 			this._propertyVOLocator 				= new Locator();
 			this._methodCallVOLocator 				= new Locator();
 			
-			DomainListenerFactory.domainLocator = new Map();
-			
 			this._factoryMap.set( ContextTypeList.ARRAY, 			hex.compiletime.factory.ArrayFactory.build );
 			this._factoryMap.set( ContextTypeList.BOOLEAN, 			hex.compiletime.factory.BoolFactory.build );
 			this._factoryMap.set( ContextTypeList.INT, 				hex.compiletime.factory.IntFactory.build );
@@ -98,10 +96,8 @@ class CompileTimeContextFactory
 	
 	public function finalize() : Void
 	{
-		this.buildAllStateTransitions();
 		this.dispatchAssemblingStart();
 		this.buildAllObjects();
-		this.assignAllDomainListeners();
 		this.callAllMethods();
 		this.dispatchAssemblingEnd();
 	}
@@ -267,7 +263,6 @@ class CompileTimeContextFactory
 		{
 			var finalResult = result;
 			finalResult = this._parseInjectInto( constructorVO, finalResult );
-			finalResult = this._parseAnnotation( constructorVO, finalResult );
 			finalResult = this._parseMapTypes( constructorVO, finalResult );
 
 			this._expressions.push( macro @:mergeBlock { $finalResult;  coreFactory.register( $v { id }, $i { id } ); } );

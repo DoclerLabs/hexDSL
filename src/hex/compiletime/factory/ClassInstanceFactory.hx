@@ -78,7 +78,7 @@ class ClassInstanceFactory
 					Context.typeof( 
 						Context.parseInlineString( '( null : ${constructorVO.type})', constructorVO.filePosition ) ) );
 			
-			var result = macro @:pos( constructorVO.filePosition )
+			result = macro @:pos( constructorVO.filePosition )
 								var $idVar : $varType = new $typePath( $a { constructorArgs } ); 
 							
 
