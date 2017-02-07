@@ -20,7 +20,6 @@ class PropertyFactory
         throw new PrivateConstructorException();
     }
 
-	
 	static public function build( factory : IContextFactory, property : PropertyVO ) : Expr
 	{
 		var e 				: Expr 		= null;

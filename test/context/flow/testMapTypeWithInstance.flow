@@ -1,0 +1,11 @@
+@context( name = 'applicationContext' )
+{
+	i = 3;
+	
+	@map_type( 	'hex.mock.IMockInterfaceWithGeneric<Int>', 
+				'hex.mock.IMockInterfaceWithGeneric<UInt>' ) 
+		intInstance = new hex.mock.MockClassWithIntGeneric( i );
+		
+	@map_type( 'hex.mock.IMockInterfaceWithGeneric<String>' ) 
+		stringInstance = new hex.mock.MockClassWithStringGeneric( 's' );
+}

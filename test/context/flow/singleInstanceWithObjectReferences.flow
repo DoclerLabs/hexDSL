@@ -1,0 +1,7 @@
+@context( name = 'applicationContext' )
+{
+	chat 			= new hex.mock.MockChat();
+	receiver 		= new hex.mock.MockReceiver();
+	proxyChat 		= new hex.mock.MockProxy( chat, chat.onTranslation );
+	proxyReceiver 	= new hex.mock.MockProxy( receiver, receiver.onMessage );
+}
