@@ -103,6 +103,7 @@ var myString = factory.locate( 'myString' );
 	i = -3;
 }
 ```
+</details>
 
 <details>
 <summary>UInt value assignment to an ID</summary>
