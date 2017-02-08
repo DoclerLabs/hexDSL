@@ -47,6 +47,21 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 ]);
 ```
 
+## Use the basic Flow compiler
+```haxe
+@context( name = 'myContextName' )
+{
+    myString = 'hello world';
+}
+```
+```haxe
+var assembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
+```
+```haxe
+factory = assembler.getApplicationContext( "myContextName", ApplicationContext ).getCoreFactory();
+var myString = factory.locate( 'myString' );
+```
+
 ## More Flow examples
 
 ### Null value assignment to an ID
