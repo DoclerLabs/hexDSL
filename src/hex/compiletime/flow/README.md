@@ -64,31 +64,39 @@ var myString = factory.locate( 'myString' );
 
 ## More Flow examples
 
-### Null value assignment to an ID
+### Primitive value assignment
+<details>
+<summary>Null value assignment to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	value = null;
 }
 ```
+</details>
 
-### Boolean value assignment to an ID
+<details>
+<summary>Boolean value assignment to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	b = true;
 }
 ```
+</details>
 
-### String value assignment to an ID
+<details>
+<summary>String value assignment to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	s = 'hello';
 }
 ```
+</details>
 
-### Int value assignment to an ID
+<details>
+<summary>Int value assignment to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -96,31 +104,38 @@ var myString = factory.locate( 'myString' );
 }
 ```
 
-### UInt value assignment to an ID
+<details>
+<summary>UInt value assignment to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	i = 3;
 }
 ```
+</details>
 
-### Hexadecimal value assignment to an ID
+<details>
+<summary>Hexadecimal value assignment to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	i = 0xFFFFFF;
 }
 ```
+</details>
 
-### Anonymous object
+<details>
+<summary>Anonymous object</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	obj = { name: "Francis", age: 44, height: 1.75, isWorking: true, isSleeping: false };
 }
 ```
+</details>
 
-### Use a custom application context class
+<details>
+<summary>Use a custom application context class</summary>
 ```haxe
 @context( 
 			name = 'applicationContext', 
@@ -129,8 +144,10 @@ var myString = factory.locate( 'myString' );
 	test = 'Hola Mundo';
 }
 ```
+</details>
 
-### Assign an array filled with references to an ID
+<details>
+<summary>Assign an array filled with references to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -143,8 +160,10 @@ var myString = factory.locate( 'myString' );
 	fruit2 = new hex.mock.MockFruitVO( "banana" );
 }
 ```
+</details>
 
-### Assign class reference to an ID
+<details>
+<summary>Assign class reference to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -152,8 +171,10 @@ var myString = factory.locate( 'myString' );
 	classContainer = { AnotherRectangleClass: RectangleClass };
 }
 ```
+</details>
 
-### Assign an hashmap filled with references to an ID
+<details>
+<summary>Assign an hashmap filled with references to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -171,8 +192,10 @@ var myString = factory.locate( 'myString' );
 	stubKey = new hex.structures.Point();
 }
 ```
+</details>
 
-### HashMap with mapped type
+<details>
+<summary>HashMap with mapped type</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -187,8 +210,10 @@ var myString = factory.locate( 'myString' );
 	fruit1 = new hex.mock.MockFruitVO( "apple" );
 }
 ```
+</details>
 
-### Conditional parsing
+<details>
+<summary>Conditional parsing</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -201,24 +226,30 @@ var myString = factory.locate( 'myString' );
 	#end
 }
 ```
+</details>
 
-### Inject into an instance
+<details>
+<summary>Inject into an instance</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	@inject_into(a, b, c) instance = new hex.mock.MockClassWithInjectedProperty();
 }
 ```
+</details>
 
-### Create an instance using context's injector
+<details>
+<summary>Create an instance using context's injector</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	@injector_creation instance = new hex.mock.MockClassWithInjectedProperty();
 }
 ```
+</details>
 
-### Properties assignment
+<details>
+<summary>Properties assignment</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -233,8 +264,10 @@ var myString = factory.locate( 'myString' );
 	height = 20;
 }
 ```
+</details>
 
-### Get instance from static method
+<details>
+<summary>Get instance from static method</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -243,32 +276,40 @@ var myString = factory.locate( 'myString' );
 	service.setGateway( gateway );
 }
 ```
+</details>
 
-### Get instance from static method with arguments
+<details>
+<summary>Get instance from static method with arguments</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	rect = hex.mock.MockRectangleFactory.getRectangle( 10, 20, 30, 40 );
 }
 ```
+</details>
 
-### Get instance from object's method call returned by static method
+<details>
+<summary>Get instance from object's method call returned by static method</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	point = hex.mock.MockPointFactory.getInstance().getPoint( 10, 20 );
 }
 ```
+</details>
 
-### Class instance with its abstract type mapped to context's injector
+<details>
+<summary>Class instance with its abstract type mapped to context's injector</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	@map_type( 'hex.mock.IMockInterface' ) instance = new hex.mock.MockClass();
 }
 ```
+</details>
 
-### Method call with argument typed from class with type paramemeters
+<details>
+<summary>Method call with argument typed from class with type paramemeters</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -282,8 +323,10 @@ var myString = factory.locate( 'myString' );
 	caller.callArray( fruitsInterfaces );
 }
 ```
+</details>
 
-### Class instance mapped to 2 abstract types in context's injector
+<details>
+<summary>Class instance mapped to 2 abstract types in context's injector</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -292,8 +335,10 @@ var myString = factory.locate( 'myString' );
 		instance = new hex.mock.MockClass();
 }
 ```
+</details>
 
-### Building multiple instances with arguments
+<details>
+<summary>Building multiple instances with arguments</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -302,8 +347,10 @@ var myString = factory.locate( 'myString' );
 	position = new hex.structures.Point( 35, 45 );
 }
 ```
+</details>
 
-### Building multiple instances and call methods on them
+<details>
+<summary>Building multiple instances and call methods on them</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -322,8 +369,10 @@ var myString = factory.locate( 'myString' );
 	anotherRect.reset();
 }
 ```
+</details>
 
-### Building multiple instances and pass some of them as constructor arguments
+<details>
+<summary>Building multiple instances and pass some of them as constructor arguments</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -337,32 +386,40 @@ var myString = factory.locate( 'myString' );
 	rectPosition.y = 20;
 }
 ```
+</details>
 
-### Example with DSL preprocessing
+<details>
+<summary>Example with DSL preprocessing</summary>
 ```haxe
 @context( ${context} )
 {
 	${node};
 }
 ```
+</details>
 
-### Simple class instance
+<details>
+<summary>Simple class instance</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	instance = new hex.mock.MockClassWithoutArgument();
 }
 ```
+</details>
 
-### Simple class instance with primitive arguments passed to the constructor
+<details>
+<summary>Simple class instance with primitive arguments passed to the constructor</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	size = new hex.structures.Size( 10, 20 );
 }
 ```
+</details>
 
-### Simple method call on an instance
+<details>
+<summary>Simple method call on an instance</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -370,8 +427,10 @@ var myString = factory.locate( 'myString' );
 	caller.call( "hello", "world" );
 }
 ```
+</details>
 
-### Building instances with multiple references passed to the constructor
+<details>
+<summary>Building instances with multiple references passed to the constructor</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -381,8 +440,10 @@ var myString = factory.locate( 'myString' );
 	proxyReceiver 	= new hex.mock.MockProxy( receiver, receiver.onMessage );
 }
 ```
+</details>
 
-### Building an instance with primitive references passed to its constructor
+<details>
+<summary>Building an instance with primitive references passed to its constructor</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -391,16 +452,20 @@ var myString = factory.locate( 'myString' );
 	position = new hex.structures.Point( x, y );
 }
 ```
+</details>
 
-### Assign static variable to an ID
+<details>
+<summary>Assign static variable to an ID</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
 	constant = hex.mock.MockClass.MESSAGE_TYPE;
 }
 ```
+</details>
 
-### Pass static variable as a constructor argument
+<details>
+<summary>Pass static variable as a constructor argument</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -408,8 +473,10 @@ var myString = factory.locate( 'myString' );
 		( hex.mock.MockClass.MESSAGE_TYPE );
 }
 ```
+</details>
 
-### Pass a static variable as a method call argument
+<details>
+<summary>Pass a static variable as a method call argument</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -417,8 +484,10 @@ var myString = factory.locate( 'myString' );
 	instance.call( hex.mock.MockMethodCaller.staticVar );
 }
 ```
+</details>
 
-### Assign class reference and static variable as object property
+<details>
+<summary>Assign class reference and static variable as object property</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -429,8 +498,10 @@ var myString = factory.locate( 'myString' );
 		( hex.mock.MockClass.MESSAGE_TYPE );
 }
 ```
+</details>
 
-### Array instanciation mapped to abstact types thorugh context's injector
+<details>
+<summary>Array instanciation mapped to abstact types thorugh context's injector</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -438,8 +509,10 @@ var myString = factory.locate( 'myString' );
 	@map_type( 'Array<String>' ) stringCollection = new Array<String>();
 }
 ```
+</details>
 
-### Instances mapped to abstract types with type params
+<details>
+<summary>Instances mapped to abstract types with type params</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -453,8 +526,10 @@ var myString = factory.locate( 'myString' );
 		stringInstance = new hex.mock.MockClassWithStringGeneric( 's' );
 }
 ```
+</details>
 
-### Parse and make Xml object
+<details>
+<summary>Parse and make Xml object</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -468,8 +543,10 @@ var myString = factory.locate( 'myString' );
 	);
 }
 ```
+</details>
 
-### Parse Xml with custom parser and make custom instance
+<details>
+<summary>Parse Xml with custom parser and make custom instance</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -483,3 +560,4 @@ var myString = factory.locate( 'myString' );
 	);
 }
 ```
+</details>
