@@ -13,7 +13,7 @@ hexDSL contains DSL toolkit written in Haxe
 
 ## Anonymous object
 ```haxe
-	@context( name = 'applicationContext' )
+@context( name = 'applicationContext' )
 {
 	obj = { name: "Francis", age: 44, height: 1.75, isWorking: true, isSleeping: false };
 }
