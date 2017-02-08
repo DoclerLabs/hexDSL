@@ -1,5 +1,4 @@
 @context( name = 'applicationContext' )
 {
-	@map_type( 'hex.ioc.parser.xml.mock.IMockMappedModule' ) 
-		myModule = new hex.ioc.parser.xml.mock.MockMappedModule();
+	@map_type( 'hex.mock.IMockInterface' ) instance = new hex.mock.MockClass();
 }

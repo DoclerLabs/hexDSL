@@ -1,8 +1,8 @@
 @context( name = 'applicationContext' )
 {
-	object = { property: hex.ioc.parser.xml.mock.MockStubStatefulService.INT_VO_UPDATE };
-	object2 = { property: hex.ioc.parser.xml.mock.MockStubStatefulService };
+	object = { property: hex.mock.MockClass.MESSAGE_TYPE };
+	object2 = { property: hex.mock.MockClass };
 	
-	instance = new hex.ioc.parser.xml.mock.ClassWithConstantConstantArgument
-		( hex.ioc.parser.xml.mock.MockStubStatefulService.INT_VO_UPDATE );
+	instance = new hex.mock.ClassWithConstantConstantArgument
+		( hex.mock.MockClass.MESSAGE_TYPE );
 }

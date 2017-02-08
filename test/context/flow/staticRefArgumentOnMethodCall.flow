@@ -1,5 +1,5 @@
 @context( name = 'applicationContext' )
 {
-	instance = new hex.ioc.parser.xml.mock.MockMethodCaller();
-	instance.call( hex.ioc.parser.xml.mock.MockMethodCaller.staticVar );
+	instance = new hex.mock.MockMethodCaller();
+	instance.call( hex.mock.MockMethodCaller.staticVar );
 }
