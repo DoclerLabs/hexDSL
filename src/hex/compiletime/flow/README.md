@@ -1,4 +1,4 @@
-### Flow DSL
+# Flow DSL
 Flow dsl is a DSL designed to mimic haxe language syntax and remove some Xml syntax weirdness.
 
 Lets's begin first by summarizing why we want to have an alternative to xml protocol:
@@ -10,7 +10,7 @@ Lets's begin first by summarizing why we want to have an alternative to xml prot
 
 Now, let me add a few quick comparisons beetween the both DSL formats (Xml and Flow).
 
-# Simple anonymous Object
+## Simple anonymous Object
 
 Xml first:
 ```Xml
@@ -22,7 +22,7 @@ And now, the Flow version:
 age = 45;
 ```
 
-# Simple hashmap
+## Simple hashmap
 
 Xml first:
 ```Xml
@@ -49,7 +49,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 
 ## More Flow examples
 
-# Null value assignment to an ID
+### Null value assignment to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -57,7 +57,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Boolean value assignment to an ID
+### Boolean value assignment to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -65,7 +65,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# String value assignment to an ID
+### String value assignment to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -73,7 +73,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Int value assignment to an ID
+### Int value assignment to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -81,7 +81,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# UInt value assignment to an ID
+### UInt value assignment to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -89,7 +89,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Hexadecimal value assignment to an ID
+### Hexadecimal value assignment to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -97,7 +97,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Anonymous object
+### Anonymous object
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -105,7 +105,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Use a custom application context class
+### Use a custom application context class
 ```haxe
 @context( 
 			name = 'applicationContext', 
@@ -115,7 +115,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Assign an array filled with references to an ID
+### Assign an array filled with references to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -129,7 +129,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Assign class reference to an ID
+### Assign class reference to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -138,7 +138,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Assign an hashmap filled with references to an ID
+### Assign an hashmap filled with references to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -157,7 +157,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# HashMap with mapped type
+### HashMap with mapped type
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -173,7 +173,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Conditional parsing
+### Conditional parsing
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -187,7 +187,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Inject into an instance
+### Inject into an instance
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -195,7 +195,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Create an instance using context's injector
+### Create an instance using context's injector
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -203,7 +203,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Properties assignment
+### Properties assignment
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -219,7 +219,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Get instance from static method
+### Get instance from static method
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -229,7 +229,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Get instance from static method with arguments
+### Get instance from static method with arguments
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -237,7 +237,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Get instance from object's method call returned by static method
+### Get instance from object's method call returned by static method
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -245,7 +245,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Class instance with its abstract type mapped to context's injector
+### Class instance with its abstract type mapped to context's injector
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -253,7 +253,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Method call with argument typed from class with type paramemeters
+### Method call with argument typed from class with type paramemeters
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -268,7 +268,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Class instance mapped to 2 abstract types in context's injector
+### Class instance mapped to 2 abstract types in context's injector
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -278,7 +278,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Building multiple instances with arguments
+### Building multiple instances with arguments
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -288,7 +288,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Building multiple instances and call methods on them
+### Building multiple instances and call methods on them
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -308,7 +308,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Building multiple instances and pass some of them as constructor arguments
+### Building multiple instances and pass some of them as constructor arguments
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -323,7 +323,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Example with DSL preprocessing
+### Example with DSL preprocessing
 ```haxe
 @context( ${context} )
 {
@@ -331,7 +331,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Simple class instance
+### Simple class instance
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -339,7 +339,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Simple class instance with primitive arguments passed to the constructor
+### Simple class instance with primitive arguments passed to the constructor
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -347,7 +347,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Simple method call on an instance
+### Simple method call on an instance
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -356,7 +356,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Building instances with multiple references passed to the constructor
+### Building instances with multiple references passed to the constructor
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -367,7 +367,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Building an instance with primitive references passed to its constructor
+### Building an instance with primitive references passed to its constructor
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -377,7 +377,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Assign static variable to an ID
+### Assign static variable to an ID
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -385,7 +385,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Pass static variable as a constructor argument
+### Pass static variable as a constructor argument
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -394,7 +394,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-## Pass a static variable as a method call argument
+### Pass a static variable as a method call argument
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -403,7 +403,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Assign class reference and static variable as object property
+### Assign class reference and static variable as object property
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -415,7 +415,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Array instanciation mapped to abstact types thorugh context's injector
+### Array instanciation mapped to abstact types thorugh context's injector
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -424,7 +424,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Instances mapped to abstract types with type params
+### Instances mapped to abstract types with type params
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -439,7 +439,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Parse and make Xml object
+### Parse and make Xml object
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -454,7 +454,7 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 }
 ```
 
-# Parse Xml with custom parser and make custom instance
+### Parse Xml with custom parser and make custom instance
 ```haxe
 @context( name = 'applicationContext' )
 {
