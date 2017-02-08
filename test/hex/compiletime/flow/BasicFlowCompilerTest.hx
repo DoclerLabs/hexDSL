@@ -176,6 +176,12 @@ class BasicFlowCompilerTest
 	public function testBuildingMultipleInstancesWithArguments() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/multipleInstancesWithArguments.flow" );
+		
+		var rect : MockRectangle = this._getCoreFactory().locate( "rect" );
+		Assert.equals( 10, rect.x );
+		Assert.equals( 20, rect.y );
+		Assert.equals( 30, rect.width );
+		Assert.equals( 40, rect.height );
 
 		var size : Size = this._getCoreFactory().locate( "size" );
 		Assert.isInstanceOf( size, Size );
