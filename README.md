@@ -20,15 +20,17 @@ hexDSL contains DSL toolkit written in Haxe
 ```
 
 ## Custom application context class
+```haxe
 @context( 
 			name = 'applicationContext', 
 			type = hex.ioc.parser.xml.context.mock.MockApplicationContext )
 {
 	test = 'Hola Mundo';
 }
-##
+```
 
 ## Array filled with references
+```haxe
 @context( name = 'applicationContext' )
 {
 	fruits = new Array<hex.mock.MockFruitVO>( fruit0, fruit1, fruit2 );
@@ -39,17 +41,19 @@ hexDSL contains DSL toolkit written in Haxe
 	fruit1 = new hex.mock.MockFruitVO( "apple" );
 	fruit2 = new hex.mock.MockFruitVO( "banana" );
 }
-##
+```
 
 ## Class reference
+```haxe
 @context( name = 'applicationContext' )
 {
 	RectangleClass = hex.mock.MockRectangle;
 	classContainer = { AnotherRectangleClass: RectangleClass };
 }
-##
+```
 
 ## HashMap filled with references
+```haxe
 @context( name = 'applicationContext' )
 {
 	fruits = new hex.collection.HashMap<Dynamic, hex.mock.MockFruitVO>
@@ -65,9 +69,10 @@ hexDSL contains DSL toolkit written in Haxe
 	
 	stubKey = new hex.structures.Point();
 }
-##
+```
 
 ## HashMap with mapped type
+```haxe
 @context( name = 'applicationContext' )
 {
 	@map_type( 'hex.collection.HashMap<String, hex.mock.MockFruitVO>' ) 
@@ -80,9 +85,10 @@ hexDSL contains DSL toolkit written in Haxe
 	fruit0 = new hex.mock.MockFruitVO( "orange" );
 	fruit1 = new hex.mock.MockFruitVO( "apple" );
 }
-##
+```
 
 ## Conditional parsing
+```haxe
 @context( name = 'applicationContext' )
 {
 	#if ( test || release )
@@ -93,23 +99,26 @@ hexDSL contains DSL toolkit written in Haxe
 	message = "hello message";
 	#end
 }
-##
+```
 
 ## Inject into an instance
+```haxe
 @context( name = 'applicationContext' )
 {
 	@inject_into(a, b, c) instance = new hex.mock.MockClassWithInjectedProperty();
 }
-##
+```
 
 ## Injector's instantiation
+```haxe
 @context( name = 'applicationContext' )
 {
 	@injector_creation instance = new hex.mock.MockClassWithInjectedProperty();
 }
-##
+```
 
 ## Properties assignment
+```haxe
 @context( name = 'applicationContext' )
 {
 	rect = new hex.mock.MockRectangle();
@@ -122,39 +131,44 @@ hexDSL contains DSL toolkit written in Haxe
 	width = 10;
 	height = 20;
 }
-##
+```
 
 ## Get instance from static method
+```haxe
 @context( name = 'applicationContext' )
 {
 	gateway = "http://localhost/amfphp/gateway.php";
 	service = hex.mock.MockServiceProvider.getInstance();
 	service.setGateway( gateway );
 }
-##
+```
 
 ## Get instance from static method with arguments
+```haxe
 @context( name = 'applicationContext' )
 {
 	rect = hex.mock.MockRectangleFactory.getRectangle( 10, 20, 30, 40 );
 }
-##
+```
 
 ## Get instance from object's method call returned by static method
+```haxe
 @context( name = 'applicationContext' )
 {
 	point = hex.mock.MockPointFactory.getInstance().getPoint( 10, 20 );
 }
-##
+```
 
 ## Class instance with its abstract type mapped to context's injector
+```haxe
 @context( name = 'applicationContext' )
 {
 	@map_type( 'hex.mock.IMockInterface' ) instance = new hex.mock.MockClass();
 }
-##
+```
 
 ## Method call with argument typed from class with type paramemeters
+```haxe
 @context( name = 'applicationContext' )
 {
 	fruitsInterfaces = new Array<hex.mock.IMockFruit>( fruit0, fruit1, fruit2 );
@@ -166,27 +180,30 @@ hexDSL contains DSL toolkit written in Haxe
 	caller = new hex.mock.MockCaller();
 	caller.callArray( fruitsInterfaces );
 }
-##
+```
 
 ## Class instance mapped to 2 abstract types in context's injector
+```haxe
 @context( name = 'applicationContext' )
 {
 	@map_type( 	'hex.mock.IMockInterface',
 				'hex.mock.IAnotherMockInterface' ) 
 		instance = new hex.mock.MockClass();
 }
-##
+```
 
 ## Building multiple instances with arguments
+```haxe
 @context( name = 'applicationContext' )
 {
 	rect = new hex.mock.MockRectangle( 10, 20, 30, 40 );
 	size = new hex.structures.Size( 15, 25 );
 	position = new hex.structures.Point( 35, 45 );
 }
-##
+```
 
 ## Building multiple instances and call methods on them
+```haxe
 @context( name = 'applicationContext' )
 {
 	rect = new hex.mock.MockRectangle();
@@ -203,9 +220,10 @@ hexDSL contains DSL toolkit written in Haxe
 	anotherRect.size = rectSize;
 	anotherRect.reset();
 }
-##
+```
 
 ## Building multiple instances and pass some of them as constructor arguments
+```haxe
 @context( name = 'applicationContext' )
 {
 	rect = new hex.mock.MockRectangle( rectPosition.x, rectPosition.y );
@@ -217,38 +235,43 @@ hexDSL contains DSL toolkit written in Haxe
 	rectPosition.x = 10;
 	rectPosition.y = 20;
 }
-##
+```
 
 ## Example with DSL preprocessing
+```haxe
 @context( ${context} )
 {
 	${node};
 }
-##
+```
 
 ## Simple class instance
+```haxe
 @context( name = 'applicationContext' )
 {
 	instance = new hex.mock.MockClassWithoutArgument();
 }
-##
+```
 
 ## Simple class instance with primitive arguments passed to the constructor
+```haxe
 @context( name = 'applicationContext' )
 {
 	size = new hex.structures.Size( 10, 20 );
 }
-##
+```
 
 ## Simple method call on an instance
+```haxe
 @context( name = 'applicationContext' )
 {
 	caller = new hex.mock.MockCaller();
 	caller.call( "hello", "world" );
 }
-##
+```
 
 ## Building instances with multiple references passed to the constructor
+```haxe
 @context( name = 'applicationContext' )
 {
 	chat 			= new hex.mock.MockChat();
@@ -256,41 +279,46 @@ hexDSL contains DSL toolkit written in Haxe
 	proxyChat 		= new hex.mock.MockProxy( chat, chat.onTranslation );
 	proxyReceiver 	= new hex.mock.MockProxy( receiver, receiver.onMessage );
 }
-##
+```
 
 ## Building an instance with primitive references passed to its constructor
+```haxe
 @context( name = 'applicationContext' )
 {
 	x = 1;
 	y = 2;
 	position = new hex.structures.Point( x, y );
 }
-##
+```
 
 ## Assign static variable to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	constant = hex.mock.MockClass.MESSAGE_TYPE;
 }
-##
+```
 
 ## Pass static variable as a constructor argument
+```haxe
 @context( name = 'applicationContext' )
 {
 	instance = new hex.mock.ClassWithConstantConstantArgument
 		( hex.mock.MockClass.MESSAGE_TYPE );
 }
-##
+```
 
 ## Pass a static variable as a method call argument
+```haxe
 @context( name = 'applicationContext' )
 {
 	instance = new hex.mock.MockMethodCaller();
 	instance.call( hex.mock.MockMethodCaller.staticVar );
 }
-##
+```
 
 ## Assign class reference and static variable as object property
+```haxe
 @context( name = 'applicationContext' )
 {
 	object = { property: hex.mock.MockClass.MESSAGE_TYPE };
@@ -299,59 +327,67 @@ hexDSL contains DSL toolkit written in Haxe
 	instance = new hex.mock.ClassWithConstantConstantArgument
 		( hex.mock.MockClass.MESSAGE_TYPE );
 }
-##
+```
 
 ## Boolean value assignment to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	b = true;
 }
-##
+```
 
 ## Hexadecimal value assignment to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	i = 0xFFFFFF;
 }
-##
+```
 
 ## Int value assignment to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	i = -3;
 }
-##
+```
 
 ## Null value assignment to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	value = null;
 }
-##
+```
 
 ## String value assignment to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	s = 'hello';
 }
-##
+```
 
 ## Int value assignment to an ID
+```haxe
 @context( name = 'applicationContext' )
 {
 	i = 3;
 }
-##
+```
 
 ## Array instanciation mapped to abstact types thorugh context's injector
+```haxe
 @context( name = 'applicationContext' )
 {
 	@map_type( 'Array<Int>', 'Array<UInt>' ) intCollection = new Array<Int>();
 	@map_type( 'Array<String>' ) stringCollection = new Array<String>();
 }
-##
+```
 
 ## Instances mapped to abstract types with type params
+```haxe
 @context( name = 'applicationContext' )
 {
 	i = 3;
@@ -363,9 +399,10 @@ hexDSL contains DSL toolkit written in Haxe
 	@map_type( 'hex.mock.IMockInterfaceWithGeneric<String>' ) 
 		stringInstance = new hex.mock.MockClassWithStringGeneric( 's' );
 }
-##
+```
 
 ## Parse and make Xml object
+```haxe
 @context( name = 'applicationContext' )
 {
 	fruits = Xml.parse
@@ -377,9 +414,10 @@ hexDSL contains DSL toolkit written in Haxe
 		</root>'
 	);
 }
-##
+```
 
 ## Parse Xml with custom parser and make custom instance
+```haxe
 @context( name = 'applicationContext' )
 {
 	fruits = Xml.parse
@@ -391,4 +429,4 @@ hexDSL contains DSL toolkit written in Haxe
 		</root>'
 	);
 }
-##
+```
