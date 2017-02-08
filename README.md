@@ -1,4 +1,4 @@
-# hexDSL [![TravisCI Build Status](https://travis-ci.org/DoclerLabs/hexDsl.svg?branch=master)](https://travis-ci.org/DoclerLabs/hexDsl)
+# hexDSL [![TravisCI Build Status](https://travis-ci.org/DoclerLabs/hexDSL.svg?branch=master)](https://travis-ci.org/DoclerLabs/hexDSL)
 
 hexDSL contains DSL toolkit written in Haxe
 
