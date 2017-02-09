@@ -32,7 +32,8 @@ age = 45;
 
 ### Simple hashmap
 
-Xml first:
+<details>
+<summary>Xml first:</summary>
 ```Xml
 <serviceLocator id="serviceLocator" type="hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>">
     <item> 
@@ -45,8 +46,10 @@ Xml first:
     </item>
 </serviceLocator>
 ```
+</details>
 
-And now, the Flow version:
+<details>
+<summary>And now, the Flow version:</summary>
 ```haxe
 serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 ([ 
@@ -54,21 +57,34 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
     mock.IAnotherMockService => mock.AnotherMockService 
 ]);
 ```
+</details>
 
 ## Use the basic Flow compiler
 ```haxe
+
+<details>
+<summary>Defining context</summary>
 @context( name = 'myContextName' )
 {
     myString = 'hello world';
 }
 ```
+</details>
+
+<details>
+<summary>File compilation</summary>
 ```haxe
 var assembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
 ```
+</details>
+
+<details>
+<summary>Locate ID</summary>
 ```haxe
 factory = assembler.getApplicationContext( "myContextName", ApplicationContext ).getCoreFactory();
 var myString = factory.locate( 'myString' );
 ```
+</details>
 
 ## More Flow examples
 
