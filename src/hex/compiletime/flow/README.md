@@ -60,9 +60,9 @@ serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
 </details>
 
 ## Use the basic Flow compiler
-```haxe
 
 <details>
+```haxe
 <summary>Defining context</summary>
 @context( name = 'myContextName' )
 {
