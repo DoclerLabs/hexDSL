@@ -1,5 +1,6 @@
 package hex.compiletime.factory;
 
+#if macro
 import haxe.macro.Context;
 import hex.error.PrivateConstructorException;
 import hex.util.ArrayUtil;
@@ -31,3 +32,4 @@ class FactoryUtil
 		}
 	}
 }
+#end
