@@ -1,6 +1,8 @@
 # Flow DSL
 Flow dsl is a DSL designed to mimic haxe language syntax and remove some Xml syntax weirdness.
 
+## Introduction
+
 Lets's begin first by summarizing why we want to have an alternative to xml protocol:
 
 - Xml uses a tree hierarchy to define informations hierarchy, but hexMachina final grammar uses a flat hierarchy. So, Xml nodes structure (parent/children) brings more complexity than real advantages.
@@ -8,21 +10,27 @@ Lets's begin first by summarizing why we want to have an alternative to xml prot
 - Xml is hard to read by its node redundancy structure, and as well, for the reasons I listed above.
 - Xml is not the best protocol to express complex engineering structures/informations. Let's take a common example: Class definition.
 
+## Comparisons beetween both DSL: Flow and Xml
+
 Now, let me add a few quick comparisons beetween the both DSL formats (Xml and Flow).
 
-## Simple anonymous Object
+### Simple anonymous Object
 
-Xml first:
+<details>
+<summary>Xml first:</summary>
 ```Xml
 <test id="age" type="Int" value="45"/>
 ```
+</details>
 
-And now, the Flow version:
+<details>
+<summary>And now, the Flow version:</summary>
 ```haxe
 age = 45;
 ```
+</details>
 
-## Simple hashmap
+### Simple hashmap
 
 Xml first:
 ```Xml
