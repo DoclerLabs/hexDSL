@@ -15,7 +15,25 @@ Xml dsl is designed to use Xml syntax. The main advantage is that you can use th
 <details>
 <summary>File compilation</summary>
 ```haxe
-var assembler = BasicXmlCompiler.compile( "context/flow/testBuildingString.xml" );
+var assembler = BasicXmlCompiler.compile( "context/xml/testBuildingString.xml" );
+```
+</details>
+
+## Use the basic Xml reader
+
+<details>
+<summary>Defining context</summary>
+```xml
+<root name="myContextName">
+    <test id="myString" value="hello world"/>
+</root>
+```
+</details>
+
+<details>
+<summary>File reading</summary>
+```haxe
+var assembler = BasicXmlReader.read( "context/xml/testBuildingString.xml" );
 ```
 </details>
 
