@@ -21,6 +21,14 @@ var assembler = BasicXmlCompiler.compile( "context/xml/testBuildingString.xml" )
 ```
 </details>
 
+<details>
+<summary>Locate ID</summary>
+```haxe
+factory = assembler.getApplicationContext( "myContextName", ApplicationContext ).getCoreFactory();
+var myString = factory.locate( 'myString' );
+```
+</details>
+
 ## Use the basic Xml reader
 
 <details>
