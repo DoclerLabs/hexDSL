@@ -1,0 +1,3 @@
+<root name="applicationContext">
+    <bean id="instance" type="hex.mock.MockClassWithoutArgument"/>
+</root>

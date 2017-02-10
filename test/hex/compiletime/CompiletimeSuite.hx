@@ -1,6 +1,8 @@
 package hex.compiletime;
 
+import hex.compiletime.flow.ApplicationContextBuildingTest;
 import hex.compiletime.flow.BasicFlowCompilerTest;
+import hex.compiletime.xml.BasicXmlCompilerTest;
 
 /**
  * ...
@@ -9,5 +11,5 @@ import hex.compiletime.flow.BasicFlowCompilerTest;
 class CompiletimeSuite
 {
 	@Suite( "Compiletime" )
-    public var list : Array<Class<Dynamic>> = [BasicFlowCompilerTest];
+    public var list : Array<Class<Dynamic>> = [ ApplicationContextBuildingTest, BasicFlowCompilerTest, BasicXmlCompilerTest ];
 }

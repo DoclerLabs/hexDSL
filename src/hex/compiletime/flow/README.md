@@ -51,7 +51,7 @@ age = 45;
 <details>
 <summary>And now, the Flow version:</summary>
 ```haxe
-serviceLocator = new hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>>
+serviceLocator = new hex.collection.HashMap<Class<IService>, Class<IService>>
 ([ 
     mock.IMockService => mock.MockService, 
     mock.IAnotherMockService => mock.AnotherMockService 

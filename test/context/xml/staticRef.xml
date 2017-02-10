@@ -1,0 +1,3 @@
+<root name="applicationContext">
+    <constant id="constant" static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+</root>

@@ -1,25 +1,27 @@
-package hex.compiletime.flow;
+package hex.compiletime.xml;
 
 import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.error.Exception;
+import hex.error.NoSuchElementException;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
+import hex.mock.MockCaller;
 import hex.mock.MockChat;
 import hex.mock.MockClass;
+import hex.mock.MockClassWithGeneric;
+import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockFruitVO;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
-import hex.mock.MockCaller;
-import hex.mock.MockClassWithGeneric;
-import hex.mock.MockClassWithInjectedProperty;
-import hex.mock.MockFruitVO;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -30,7 +32,7 @@ import hex.unittest.assertion.Assert;
  * ...
  * @author Francis Bourre
  */
-class BasicFlowCompilerTest 
+class BasicXmlCompilerTest 
 {
 	var _applicationAssembler 		: IApplicationAssembler;
 	
@@ -54,13 +56,18 @@ class BasicFlowCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
+	function _locate( key : String ) : Dynamic
+	{
+		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( key );
+	}
+	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
 	{
 		var assembler = new ApplicationAssembler();
 		assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().register( "s2", "bonjour" );
 		
-		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( assembler, "context/flow/testBuildingString.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/testBuildingString.xml" );
 
 		Assert.equals( "hello", this._getCoreFactory().locate( "s" ) );
 		Assert.equals( "bonjour", this._getCoreFactory().locate( "s2" ) );
@@ -70,7 +77,7 @@ class BasicFlowCompilerTest
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingString.xml" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -79,7 +86,7 @@ class BasicFlowCompilerTest
 	public function testBuildingStringWithAssemblerProperty() : Void
 	{
 		this._applicationAssembler = new ApplicationAssembler();
-		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/testBuildingString.flow" );
+		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/testBuildingString.xml" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -87,8 +94,8 @@ class BasicFlowCompilerTest
 	@Ignore( "test building String with assembler static property" )
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
-		BasicFlowCompilerTest.applicationAssembler = new ApplicationAssembler();
-		BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow" );
+		BasicXmlCompilerTest.applicationAssembler = new ApplicationAssembler();
+		BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -96,7 +103,7 @@ class BasicFlowCompilerTest
 	@Test( "test building Int" )
 	public function testBuildingInt() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingInt.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingInt.xml" );
 		var i : Int = this._getCoreFactory().locate( "i" );
 		Assert.equals( -3, i );
 	}
@@ -104,14 +111,14 @@ class BasicFlowCompilerTest
 	@Test( "test building Hex" )
 	public function testBuildingHex() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingHex.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingHex.xml" );
 		Assert.equals( 0xFFFFFF, this._getCoreFactory().locate( "i" ) );
 	}
 	
 	@Test( "test building Bool" )
 	public function testBuildingBool() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingBool.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingBool.xml" );
 		var b : Bool = this._getCoreFactory().locate( "b" );
 		Assert.isTrue( b );
 	}
@@ -119,7 +126,7 @@ class BasicFlowCompilerTest
 	@Test( "test building UInt" )
 	public function testBuildingUInt() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingUInt.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingUInt.xml" );
 		var i : UInt = this._getCoreFactory().locate( "i" );
 		Assert.equals( 3, i );
 	}
@@ -127,7 +134,7 @@ class BasicFlowCompilerTest
 	@Test( "test building null" )
 	public function testBuildingNull() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingNull.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingNull.xml" );
 		var result : Dynamic = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
@@ -135,7 +142,7 @@ class BasicFlowCompilerTest
 	@Test( "test building anonymous object" )
 	public function testBuildingAnonymousObject() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/anonymousObject.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/anonymousObject.xml" );
 		var obj : Dynamic = this._getCoreFactory().locate( "obj" );
 
 		Assert.equals( "Francis", obj.name );
@@ -149,7 +156,7 @@ class BasicFlowCompilerTest
 	@Test( "test building simple instance without arguments" )
 	public function testBuildingSimpleInstanceWithoutArguments() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/simpleInstanceWithoutArguments.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/simpleInstanceWithoutArguments.xml" );
 
 		var instance : MockClassWithoutArgument = this._getCoreFactory().locate( "instance" );
 		Assert.isInstanceOf( instance, MockClassWithoutArgument );
@@ -158,7 +165,7 @@ class BasicFlowCompilerTest
 	@Test( "test building simple instance with arguments" )
 	public function testBuildingSimpleInstanceWithArguments() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/simpleInstanceWithArguments.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/simpleInstanceWithArguments.xml" );
 
 		var size : Size = this._getCoreFactory().locate( "size" );
 		Assert.isInstanceOf( size, Size );
@@ -169,7 +176,7 @@ class BasicFlowCompilerTest
 	@Test( "test building multiple instances with arguments" )
 	public function testBuildingMultipleInstancesWithArguments() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/multipleInstancesWithArguments.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/multipleInstancesWithArguments.xml" );
 		
 		var rect : MockRectangle = this._getCoreFactory().locate( "rect" );
 		Assert.equals( 10, rect.x );
@@ -190,7 +197,7 @@ class BasicFlowCompilerTest
 	@Test( "test building single instance with primitives references" )
 	public function testBuildingSingleInstanceWithPrimitivesReferences() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/singleInstanceWithPrimReferences.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/singleInstanceWithPrimReferences.xml" );
 		
 		var x : Int = this._getCoreFactory().locate( "x" );
 		Assert.equals( 1, x );
@@ -206,7 +213,7 @@ class BasicFlowCompilerTest
 	@Test( "test building single instance with object references" )
 	public function testBuildingSingleInstanceWithObjectReferences() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/singleInstanceWithObjectReferences.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/singleInstanceWithObjectReferences.xml" );
 		
 		var chat : MockChat = this._getCoreFactory().locate( "chat" );
 		Assert.isInstanceOf( chat, MockChat );
@@ -230,7 +237,7 @@ class BasicFlowCompilerTest
 	@Test( "test building multiple instances with references" )
 	public function testAssignInstancePropertyWithReference() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/instancePropertyWithReference.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/instancePropertyWithReference.xml" );
 		
 		var width : Int = this._getCoreFactory().locate( "width" );
 		Assert.equals( 10, width );
@@ -250,7 +257,7 @@ class BasicFlowCompilerTest
 	@Test( "test building multiple instances with references" )
 	public function testBuildingMultipleInstancesWithReferences() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/multipleInstancesWithReferences.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/multipleInstancesWithReferences.xml" );
 
 		var rectSize : Point = this._getCoreFactory().locate( "rectSize" );
 		Assert.equals( 30, rectSize.x );
@@ -271,7 +278,7 @@ class BasicFlowCompilerTest
 	@Test( "test simple method call" )
 	public function testSimpleMethodCall() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/simpleMethodCall.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/simpleMethodCall.xml" );
 
 		var caller : MockCaller = this._getCoreFactory().locate( "caller" );
 		Assert.isInstanceOf( caller, MockCaller );
@@ -281,7 +288,7 @@ class BasicFlowCompilerTest
 	@Test( "test method call with type params" )
 	public function testCallWithTypeParams() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/methodCallWithTypeParams.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/methodCallWithTypeParams.xml" );
 
 		var caller : MockCaller = this._getCoreFactory().locate( "caller" );
 		Assert.isInstanceOf( caller, MockCaller, "" );
@@ -291,7 +298,7 @@ class BasicFlowCompilerTest
 	@Test( "test building multiple instances with method calls" )
 	public function testBuildingMultipleInstancesWithMethodCall() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/multipleInstancesWithMethodCall.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/multipleInstancesWithMethodCall.xml" );
 
 		var rectSize : Point = this._getCoreFactory().locate( "rectSize" );
 		Assert.equals( 30, rectSize.x );
@@ -321,7 +328,7 @@ class BasicFlowCompilerTest
 	@Test( "test building instance with static method" )
 	public function testBuildingInstanceWithStaticMethod() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/instanceWithStaticMethod.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/instanceWithStaticMethod.xml" );
 
 		var service : MockServiceProvider = this._getCoreFactory().locate( "service" );
 		Assert.isInstanceOf( service, MockServiceProvider );
@@ -331,7 +338,7 @@ class BasicFlowCompilerTest
 	@Test( "test building instance with static method and arguments" )
 	public function testBuildingInstanceWithStaticMethodAndArguments() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/instanceWithStaticMethodAndArguments.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/instanceWithStaticMethodAndArguments.xml" );
 
 		var rect : MockRectangle = this._getCoreFactory().locate( "rect" );
 		Assert.isInstanceOf( rect, MockRectangle );
@@ -344,7 +351,7 @@ class BasicFlowCompilerTest
 	@Test( "test building instance with static method and factory method" )
 	public function testBuildingInstanceWithStaticMethodAndFactoryMethod() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/instanceWithStaticMethodAndFactoryMethod.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/instanceWithStaticMethodAndFactoryMethod.xml" );
 		var point : Point = this._getCoreFactory().locate( "point" );
 
 		Assert.equals( 10, point.x );
@@ -358,7 +365,7 @@ class BasicFlowCompilerTest
 		var injector = assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().getInjector();
 		injector.mapToValue( String, 'hola mundo' );
 		
-		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( assembler, "context/flow/injectorCreationAttribute.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/injectorCreationAttribute.xml" );
 
 		var instance : MockClassWithInjectedProperty = this._getCoreFactory().locate( "instance" );
 		Assert.isInstanceOf( instance, MockClassWithInjectedProperty, "" );
@@ -373,7 +380,7 @@ class BasicFlowCompilerTest
 		var injector = assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().getInjector();
 		injector.mapToValue( String, 'hola mundo' );
 
-		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( assembler, "context/flow/injectIntoAttribute.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/injectIntoAttribute.xml" );
 
 		var instance : MockClassWithInjectedProperty = this._getCoreFactory().locate( "instance" );
 		Assert.isInstanceOf( instance, MockClassWithInjectedProperty, "" );
@@ -384,7 +391,7 @@ class BasicFlowCompilerTest
 	@Test( "test building XML without parser class" )
 	public function testBuildingXMLWithoutParserClass() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/xmlWithoutParserClass.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/xmlWithoutParserClass.xml" );
 
 		var fruits : Xml = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
@@ -394,7 +401,7 @@ class BasicFlowCompilerTest
 	@Test( "test building XML with parser class" )
 	public function testBuildingXMLWithParserClass() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/xmlWithParserClass.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/xmlWithParserClass.xml" );
 
 		var fruits : Array<MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.equals( 3, fruits.length, "" );
@@ -411,7 +418,7 @@ class BasicFlowCompilerTest
 	@Test( "test building Arrays" )
 	public function testBuildingArrays() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/arrayFilledWithReferences.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/arrayFilledWithReferences.xml" );
 		
 		var text : Array<String> = this._getCoreFactory().locate( "text" );
 		Assert.equals( 2, text.length );
@@ -436,7 +443,7 @@ class BasicFlowCompilerTest
 	@Test( "test building Map filled with references" )
 	public function testBuildingMapFilledWithReferences() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapFilledWithReferences.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapFilledWithReferences.xml" );
 
 		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
@@ -456,7 +463,7 @@ class BasicFlowCompilerTest
 	@Test( "test building HashMap with map-type" )
 	public function testBuildingHashMapWithMapType() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapWithMapType.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapWithMapType.xml" );
 
 		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits, "" );
@@ -474,7 +481,7 @@ class BasicFlowCompilerTest
 	@Test( "test map-type attribute with Array" )
 	public function testMapTypeWithArray() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testMapTypeWithArray.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testMapTypeWithArray.xml" );
 		
 		var intCollection = this._getCoreFactory().getInjector().getInstanceWithClassName( "Array<Int>", "intCollection" );
 		var uintCollection = this._getCoreFactory().getInjector().getInstanceWithClassName( "Array<UInt>", "intCollection" );
@@ -491,7 +498,7 @@ class BasicFlowCompilerTest
 	@Test( "test map-type attribute with instance" )
 	public function testMapTypeWithInstance() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testMapTypeWithInstance.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testMapTypeWithInstance.xml" );
 		
 		var intInstance = this._getCoreFactory().getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<Int>", "intInstance" );
 		var uintInstance = this._getCoreFactory().getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<UInt>", "intInstance" );
@@ -508,7 +515,7 @@ class BasicFlowCompilerTest
 	@Test( "test building class reference" )
 	public function testBuildingClassReference() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/classReference.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/classReference.xml" );
 
 		var rectangleClass : Class<MockRectangle> = this._getCoreFactory().locate( "RectangleClass" );
 		Assert.isInstanceOf( rectangleClass, Class, "" );
@@ -527,11 +534,10 @@ class BasicFlowCompilerTest
 		Assert.equals( anotherRectangleClass, anotherRectangleClassRef, "" );
 	}
 	
-	//
 	@Test( "test static-ref" )
 	public function testStaticRef() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/staticRef.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/staticRef.xml" );
 
 		var messageType : String = this._getCoreFactory().locate( "constant" );
 		Assert.isNotNull( messageType );
@@ -541,7 +547,7 @@ class BasicFlowCompilerTest
 	@Test( "test static-ref property" )
 	public function testStaticProperty() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/staticRefProperty.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/staticRefProperty.xml" );
 
 		var object : Dynamic = this._getCoreFactory().locate( "object" );
 		Assert.isNotNull( object );
@@ -555,7 +561,7 @@ class BasicFlowCompilerTest
 	@Test( "test static-ref argument" )
 	public function testStaticArgument() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/staticRefArgument.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/staticRefArgument.xml" );
 
 		var instance : ClassWithConstantConstantArgument = this._getCoreFactory().locate( "instance" );
 		Assert.isNotNull( instance, "" );
@@ -565,7 +571,7 @@ class BasicFlowCompilerTest
 	@Test( "test static-ref argument on method-call" )
 	public function testStaticArgumentOnMethodCall() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/staticRefArgumentOnMethodCall.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/staticRefArgumentOnMethodCall.xml" );
 
 		var instance : MockMethodCaller = this._getCoreFactory().locate( "instance" );
 		Assert.isNotNull( instance, "" );
@@ -575,7 +581,7 @@ class BasicFlowCompilerTest
 	@Test( "test map-type attribute" )
 	public function testMapTypeAttribute() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/mapTypeAttribute.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mapTypeAttribute.xml" );
 
 		var instance : MockClass = this._getCoreFactory().locate( "instance" );
 		Assert.isNotNull( instance );
@@ -587,7 +593,7 @@ class BasicFlowCompilerTest
 	@Test( "test multi map-type attributes" )
 	public function testMultiMapTypeAttributes() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/multiMapTypeAttributes.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/multiMapTypeAttributes.xml" );
 
 		var instance : MockClass = this._getCoreFactory().locate( "instance" );
 		Assert.isNotNull( instance );
@@ -602,9 +608,9 @@ class BasicFlowCompilerTest
 	@Test( "test building Map with class reference" )
 	public function testBuildingMapWithClassReference() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapWithClassReference.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapWithClassReference.xml" );
 
-		var map : HashMap<Class<IMockInterface>, Class<MockClass>> = this._getCoreFactory().locate( "map" );
+		var map : HashMap<Class<IMockInterface>, Class<MockClass>> = this._locate( "map" );
 		Assert.isNotNull( map );
 		
 		var amazonServiceClass : Class<MockClass> = map.get( IMockInterface );
@@ -612,33 +618,144 @@ class BasicFlowCompilerTest
 		Assert.equals( MockClass, amazonServiceClass );
 	}
 	
-	//TODO implement
-	@Ignore( "test target sub property" )
+	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/targetSubProperty.flow" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/targetSubProperty.xml" );
 
-		var mockObject : MockObjectWithRegtangleProperty = this._getCoreFactory().locate( "mockObject" );
+		var mockObject : MockObjectWithRegtangleProperty = this._locate( "mockObject" );
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}
 	
-	@Test( "test file preprocessor with flow file" )
-	public function testFilePreprocessorWithFlowFile() : Void
+	//Mapping configurations
+	/*@Test( "test building mapping configuration" )
+	public function testBuildingMappingConfiguration() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/preprocessor.flow", 
-															[	"hello" 		=> "bonjour",
-																"contextName" 	=> 'applicationContext',
-																"context" 		=> 'name="${contextName}"',
-																"node" 			=> 'message = "${hello}"' ] );
+		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfiguration.xml" );
 
-		Assert.equals( "bonjour", this._getCoreFactory().locate( "message" ), "message value should equal 'bonjour'" );
+		var config : MappingConfiguration = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration, "" );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		Assert.isInstanceOf( injector.getInstance( IMockAmazonService ), MockAmazonService, "" );
+		Assert.isInstanceOf( injector.getInstance( IMockFacebookService ), MockFacebookService, "" );
+		Assert.equals( this._locate( "facebookService" ), injector.getInstance( IMockFacebookService ), "" );
 	}
 	
+	@Test( "test building mapping configuration with map names" )
+	public function testBuildingMappingConfigurationWithMapNames() : Void
+	{
+		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfigurationWithMapNames.xml" );
+
+		var config : MappingConfiguration = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration, "" );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		Assert.isInstanceOf( injector.getInstance( IMockAmazonService, "amazon0" ),  MockAmazonService, "" );
+		Assert.isInstanceOf( injector.getInstance( IMockAmazonService, "amazon1" ), AnotherMockAmazonService, "" );
+	}
+	
+	@Test( "test building mapping configuration with singleton" )
+	public function testBuildingMappingConfigurationWithSingleton() : Void
+	{
+		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfigurationWithSingleton.xml" );
+
+		var config = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration, "" );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		var amazon0 = injector.getInstance( IMockAmazonService, "amazon0" );
+		Assert.isInstanceOf( amazon0,  MockAmazonService, "" );
+		
+		var copyOfAmazon0 = injector.getInstance( IMockAmazonService, "amazon0" );
+		Assert.isInstanceOf( copyOfAmazon0,  MockAmazonService, "" );
+		Assert.equals( amazon0, copyOfAmazon0, "" );
+		
+		var amazon1 = injector.getInstance( IMockAmazonService, "amazon1" );
+		Assert.isInstanceOf( amazon1, AnotherMockAmazonService, "" );
+		
+		var copyOfAmazon1 = injector.getInstance( IMockAmazonService, "amazon1" );
+		Assert.isInstanceOf( copyOfAmazon1,  AnotherMockAmazonService, "" );
+		Assert.notEquals( amazon1, copyOfAmazon1, "" );
+	}
+	
+	@Test( "test building mapping configuration with inject-into" )
+	public function testBuildingMappingConfigurationWithInjectInto() : Void
+	{
+		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfigurationWithInjectInto.xml" );
+
+		var config = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration, "" );
+
+		var injector = new Injector();
+		var domain = DomainUtil.getDomain( 'testBuildingMappingConfigurationWithInjectInto', Domain );
+		injector.mapToValue( Domain, domain );
+		
+		config.configure( injector, new Dispatcher(), null );
+
+		var mock0 = injector.getInstance( IMockInjectee, "mock0" );
+		Assert.isInstanceOf( mock0,  MockInjectee, "" );
+		Assert.equals( domain, mock0.domain, "" );
+		
+		var mock1 = injector.getInstance( IMockInjectee, "mock1" );
+		Assert.isInstanceOf( mock1, MockInjectee, "" );
+		Assert.equals( domain, mock1.domain, "" );
+	}*/
+
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/ifAttribute.flow" );
-		Assert.equals( "hello message", this._getCoreFactory().locate( "message" ), "message value should equal 'hello production'" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/ifAttribute.xml", null, [ "production" => true, "test" => false, "release" => false ] );
+		Assert.equals( "hello production", this._locate( "message" ), "message value should equal 'hello production'" );
+	}
+
+	@Test( "test include with if attribute" )
+	public function testIncludeWithIfAttribute() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, [ "production" => true, "test" => false, "release" => false ] );
+		Assert.equals( "hello production", this._locate( "message" ), "message value should equal 'hello production'" );
+	}
+
+	@Test( "test include fails with if attribute" )
+	public function testIncludeFailsWithIfAttribute() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, [ "production" => false, "test" => true, "release" => true ] );
+		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._locate, [ "message" ], "'NoSuchElementException' should be thrown" );
+	}
+
+	@Test( "test file preprocessor with Xml file" )
+	public function testFilePreprocessorWithXmlFile() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/preprocessor.xml", [	"hello" 		=> "bonjour",
+																					"contextName" 	=> 'applicationContext',
+																					"context" 		=> 'name="${contextName}"',
+																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );
+
+		Assert.equals( "bonjour", this._locate( "message" ), "message value should equal 'bonjour'" );
+	}
+
+	@Test( "test file preprocessor with Xml file and include" )
+	public function testFilePreprocessorWithXmlFileAndInclude() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/preprocessorWithInclude.xml", [	"hello" 		=> "bonjour",
+																					"contextName" 	=> 'applicationContext',
+																					"context" 		=> 'name="${contextName}"',
+																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );
+
+		try
+        {
+			Assert.equals( "bonjour", this._locate( "message" ), "message value should equal 'bonjour'" );
+		}
+		catch ( e : Exception )
+        {
+            Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
+        }
 	}
 }

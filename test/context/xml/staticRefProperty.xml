@@ -1,0 +1,15 @@
+<root name="applicationContext">
+
+    <object id="object" type="Object">
+        <property name="property" static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+    </object>
+	
+	<object id="object2" type="Object">
+        <property name="property" type="Class" value="hex.mock.MockClass"/>
+    </object>
+
+    <instance id="instance" type="hex.mock.ClassWithConstantConstantArgument">
+        <argument static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+    </instance>
+
+</root>
