@@ -1,5 +1,5 @@
 # Flow DSL
-Flow dsl is a DSL designed to mimic haxe language syntax and remove some Xml syntax weirdness.
+Flow DSL is designed to mimic haxe language syntax and remove some Xml syntax weirdness.
 
 ## Introduction
 
@@ -376,7 +376,7 @@ var myString = factory.locate( 'myString' );
 </details>
 
 <details>
-<summary>Array instanciation mapped to abstact types thorugh context's injector</summary>
+<summary>Array instanciation mapped to abstract types thorugh context's injector</summary>
 ```haxe
 @context( name = 'applicationContext' )
 {

@@ -5,7 +5,7 @@ Xml dsl is designed to use Xml syntax. The main advantage is that you can use th
 
 <details>
 <summary>Defining context</summary>
-```haxe
+```xml
 <root name="myContextName">
     <test id="myString" value="hello world"/>
 </root>
@@ -77,7 +77,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Hexadecimal value assignment to an ID</summary>
-```haxe
+```xml
 <root name="applicationContext">
     <test id="i" type="Int" value="0xFFFFFF"/>
 </root>
@@ -187,7 +187,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Array filled with references</summary>
-```haxe
+```xml
 <root name="applicationContext">
 
     <collection id="fruits" type="Array<hex.mock.MockFruitVO>">
@@ -213,355 +213,412 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Assign class reference to an ID</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	RectangleClass = hex.mock.MockRectangle;
-	classContainer = { AnotherRectangleClass: RectangleClass };
-}
+```xml
+<root name="applicationContext">
+
+    <RectangleClass id="RectangleClass" type="Class" value="hex.mock.MockRectangle"/>
+
+    <test id="classContainer" type="Object">
+        <property name="AnotherRectangleClass" ref="RectangleClass"/>
+    </test>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Hashmap filled with references</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	fruits = new hex.collection.HashMap<Dynamic, hex.mock.MockFruitVO>
-	([ 
-		"0" => fruit0,
-		1 => fruit1,
-		stubKey => fruit2
-	]);
+```xml
+<root name="applicationContext">
 	
-	fruit0 = new hex.mock.MockFruitVO( "orange" );
-	fruit1 = new hex.mock.MockFruitVO( "apple" );
-	fruit2 = new hex.mock.MockFruitVO( "banana" );
+    <collection id="fruits" type="hex.collection.HashMap<Dynamic, hex.mock.MockFruitVO>">
+        <item> <key value="0"/> <value ref="fruit0"/></item>
+        <item> <key type="Int" value="1"/> <value ref="fruit1"/></item>
+        <item> <key ref="stubKey"/> <value ref="fruit2"/></item>
+    </collection>
 	
-	stubKey = new hex.structures.Point();
-}
+    <fruit id="fruit0" type="hex.mock.MockFruitVO"><argument value="orange"/></fruit>
+    <fruit id="fruit1" type="hex.mock.MockFruitVO"><argument value="apple"/></fruit>
+    <fruit id="fruit2" type="hex.mock.MockFruitVO"><argument value="banana"/></fruit>
+    <point id="stubKey" type="hex.structures.Point"/>
+	
+</root>
 ```
 </details>
 
 <details>
 <summary>Get instance from static method</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	gateway = "http://localhost/amfphp/gateway.php";
-	service = hex.mock.MockServiceProvider.getInstance();
-	service.setGateway( gateway );
-}
+```xml
+<root name="applicationContext">
+	
+    <gateway id="gateway" value="http://localhost/amfphp/gateway.php"/>
+
+    <service id="service" type="hex.mock.MockServiceProvider" static-call="getInstance">
+        <method-call name="setGateway">
+            <argument ref="gateway" />
+        </method-call>
+    </service>
+	
+</root>
 ```
 </details>
 
 <details>
 <summary>Get instance from static method with arguments</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	rect = hex.mock.MockRectangleFactory.getRectangle( 10, 20, 30, 40 );
-}
+```xml
+<root name="applicationContext">
+	
+    <rectangle id="rect" type="hex.mock.MockRectangleFactory" static-call="getRectangle">
+        <argument type="Int" value="10"/><argument type="Int" value="20"/>
+        <argument type="Int" value="30"/><argument type="Int" value="40"/>
+    </rectangle>
+	
+</root>
 ```
 </details>
 
 <details>
 <summary>Get instance from object's method call returned by static method</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	point = hex.mock.MockPointFactory.getInstance().getPoint( 10, 20 );
-}
+```xml
+<root name="applicationContext">
+	
+    <point id="point" type="hex.mock.MockPointFactory" static-call="getInstance" factory-method="getPoint">
+        <argument type="Int" value="10"/>
+        <argument type="Int" value="20"/>
+    </point>
+	
+</root>
 ```
 </details>
 
 <details>
 <summary>Building multiple instances with arguments</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	rect = new hex.mock.MockRectangle( 10, 20, 30, 40 );
-	size = new hex.structures.Size( 15, 25 );
-	position = new hex.structures.Point( 35, 45 );
-}
+```xml
+<root name="applicationContext">
+	
+	<rectangle id="rect" type="hex.mock.MockRectangle">
+		<argument type="Int" value="10"/>
+        <argument type="Int" value="20"/>
+		<argument type="Int" value="30"/>
+        <argument type="Int" value="40"/>
+    </rectangle>
+
+    <bean id="size" type="hex.structures.Size">
+        <argument type="Int" value="15"/>
+        <argument type="Int" value="25"/>
+    </bean>
+	
+	<bean id="position" type="hex.structures.Point">
+        <argument type="Int" value="35"/>
+        <argument type="Int" value="45"/>
+    </bean>
+	
+</root>
 ```
 </details>
 
 ### Injection and mapping
 <details>
 <summary>Inject into an instance</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	@inject_into(a, b, c) instance = new hex.mock.MockClassWithInjectedProperty();
-}
+```xml
+<root name="applicationContext">
+    <instance id="instance" type="hex.mock.MockClassWithInjectedProperty" inject-into="true"/>
+</root>
 ```
 </details>
 
 <details>
 <summary>Create an instance using context's injector</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	@injector_creation instance = new hex.mock.MockClassWithInjectedProperty();
-}
+```xml
+<root name="applicationContext">
+    <instance id="instance" type="hex.mock.MockClassWithInjectedProperty" injector-creation="true"/>
+</root>
 ```
 </details>
 
 <details>
 <summary>Class instance with its abstract type mapped to context's injector</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	@map_type( 'hex.mock.IMockInterface' ) instance = new hex.mock.MockClass();
-}
+```xml
+<root name="applicationContext">
+
+    <module id="instance" type="hex.mock.MockClass" map-type="hex.mock.IMockInterface"/>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Class instance mapped to 2 abstract types in context's injector</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	@map_type( 	'hex.mock.IMockInterface',
-				'hex.mock.IAnotherMockInterface' ) 
-		instance = new hex.mock.MockClass();
-}
+```xml
+<root name="applicationContext">
+    <module id="instance" type="hex.mock.MockClass" map-type="hex.mock.IMockInterface; hex.mock.IAnotherMockInterface"/>
+</root>
 ```
 </details>
 
 <details>
 <summary>HashMap with mapped type</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	@map_type( 'hex.collection.HashMap<String, hex.mock.MockFruitVO>' ) 
-	fruits = new hex.collection.HashMap<Dynamic, hex.mock.MockFruitVO>
-	([ 
-		"0" => fruit0,
-		"1" => fruit1
-	]);
+```xml
+<root name="applicationContext">
 	
-	fruit0 = new hex.mock.MockFruitVO( "orange" );
-	fruit1 = new hex.mock.MockFruitVO( "apple" );
-}
+    <collection id="fruits" type="hex.collection.HashMap" map-type="hex.collection.HashMap<String, hex.mock.MockFruitVO>">
+        <item> <key value="0"/> <value ref="fruit0"/></item>
+        <item> <key value="1"/> <value ref="fruit1"/></item>
+    </collection>
+	
+    <fruit id="fruit0" type="hex.mock.MockFruitVO"><argument value="orange"/></fruit>
+    <fruit id="fruit1" type="hex.mock.MockFruitVO"><argument value="apple"/></fruit>
+	
+</root>
 ```
 </details>
 
 <details>
-<summary>Array instanciation mapped to abstact types thorugh context's injector</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	@map_type( 'Array<Int>', 'Array<UInt>' ) intCollection = new Array<Int>();
-	@map_type( 'Array<String>' ) stringCollection = new Array<String>();
-}
+<summary>Array instanciation mapped to abstract types thorugh context's injector</summary>
+```xml
+<root name="applicationContext">
+    <test id="intCollection" type="Array<Int>" map-type="Array<Int>; Array<UInt>"/>
+    <test id="stringCollection" type="Array<String>" map-type="Array<String>"/>
+</root>
 ```
 </details>
 
 <details>
 <summary>Instances mapped to abstract types with type params</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	i = 3;
+```xml
+<root name="applicationContext">
+   
+    <i id="i"  type="Int"  value="3"/>
+	<intInstance id="intInstance" type="hex.mock.MockClassWithIntGeneric" map-type="hex.mock.IMockInterfaceWithGeneric<Int>; hex.mock.IMockInterfaceWithGeneric<UInt>">
+		<argument ref="i"/>
+	</intInstance>
 	
-	@map_type( 	'hex.mock.IMockInterfaceWithGeneric<Int>', 
-				'hex.mock.IMockInterfaceWithGeneric<UInt>' ) 
-		intInstance = new hex.mock.MockClassWithIntGeneric( i );
-		
-	@map_type( 'hex.mock.IMockInterfaceWithGeneric<String>' ) 
-		stringInstance = new hex.mock.MockClassWithStringGeneric( 's' );
-}
+	<s id="s"  value="test"/>
+	<stringInstance id="stringInstance" type="hex.mock.MockClassWithStringGeneric" map-type="hex.mock.IMockInterfaceWithGeneric<String>">
+		<argument ref="s"/>
+	</stringInstance>
+	
+</root>
 ```
 </details>
 
 ### Properties
 <details>
 <summary>Properties assignment</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	rect = new hex.mock.MockRectangle();
-	rect.size = size;
+```xml
+<root name="applicationContext">
 	
-	size = new hex.structures.Point();
-	size.x = width;
-	size.y = height;
+	<rectangle id="rect" type="hex.mock.MockRectangle">
+        <property name="size" ref="size" />
+    </rectangle>
 	
-	width = 10;
-	height = 20;
-}
+    <size id="size" type="hex.structures.Point">
+        <property name="x" ref="width" />
+        <property name="y" ref="height" />
+    </size>
+	
+	<bean id="width" type="Int" value="10"/>
+	<bean id="height" type="Int" value="20"/>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Assign class reference and static variable as object's property</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	object = { property: hex.mock.MockClass.MESSAGE_TYPE };
-	object2 = { property: hex.mock.MockClass };
+```xml
+<root name="applicationContext">
+
+    <object id="object" type="Object">
+        <property name="property" static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+    </object>
 	
-	instance = new hex.mock.ClassWithConstantConstantArgument
-		( hex.mock.MockClass.MESSAGE_TYPE );
-}
+	<object id="object2" type="Object">
+        <property name="property" type="Class" value="hex.mock.MockClass"/>
+    </object>
+
+    <instance id="instance" type="hex.mock.ClassWithConstantConstantArgument">
+        <argument static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+    </instance>
+
+</root>
 ```
 </details>
 
 ### Method call
 <details>
 <summary>Simple method call on an instance</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	caller = new hex.mock.MockCaller();
-	caller.call( "hello", "world" );
-}
+```xml
+<root name="applicationContext">
+
+    <caller id="caller" type="hex.mock.MockCaller">
+        <method-call name="call">
+            <argument value="hello"/>
+            <argument value="world"/>
+        </method-call>
+    </caller>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Method call with argument typed from class with type paramemeters</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	fruitsInterfaces = new Array<hex.mock.IMockFruit>( fruit0, fruit1, fruit2 );
+```xml
+<root name="applicationContext">
+
+    <caller id="caller" type="hex.mock.MockCaller">
+        <method-call name="callArray">
+            <argument ref="fruitsInterfaces"/>
+        </method-call>
+    </caller>
+
+    <collection id="fruitsInterfaces" type="Array<hex.mock.IMockFruit>">
+        <argument ref="fruit0" />
+        <argument ref="fruit1" />
+        <argument ref="fruit2" />
+    </collection>
 	
-	fruit0 = new hex.mock.MockFruitVO( "orange" );
-	fruit1 = new hex.mock.MockFruitVO( "apple" );
-	fruit2 = new hex.mock.MockFruitVO( "banana" );
+    <fruit id="fruit0" type="hex.mock.MockFruitVO"><argument value="orange"/></fruit>
+    <fruit id="fruit1" type="hex.mock.MockFruitVO"><argument value="apple"/></fruit>
+    <fruit id="fruit2" type="hex.mock.MockFruitVO"><argument value="banana"/></fruit>
 	
-	caller = new hex.mock.MockCaller();
-	caller.callArray( fruitsInterfaces );
-}
+</root>
 ```
 </details>
 
 <details>
 <summary>Building multiple instances and call methods on them</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	rect = new hex.mock.MockRectangle();
-	rect.size = rectSize;
-	rect.offsetPoint( rectPosition );
+```xml
+<root name="applicationContext">
 	
-	rectSize = new hex.structures.Point( 30, 40 );
+    <rectangle id="rect" type="hex.mock.MockRectangle">
+        <property name="size" ref="rectSize" />
+        <method-call name="offsetPoint">
+            <argument ref="rectPosition"/>
+        </method-call>
+	</rectangle>
+
+    <size id="rectSize" type="hex.structures.Point">
+        <argument type="Int" value="30"/>
+        <argument type="Int" value="40"/>
+    </size>
+
+    <position id="rectPosition" type="hex.structures.Point">
+        <property type="Int" name="x" value="10"/>
+        <property type="Int" name="y" value="20"/>
+    </position>
+
+    <rectangle id="anotherRect" type="hex.mock.MockRectangle">
+        <property name="size" ref="rectSize" />
+        <method-call name="reset"/>
+    </rectangle>
 	
-	rectPosition = new hex.structures.Point();
-	rectPosition.x = 10;
-	rectPosition.y = 20;
-	
-	anotherRect = new hex.mock.MockRectangle();
-	anotherRect.size = rectSize;
-	anotherRect.reset();
-}
+</root>
 ```
 </details>
 
 ### Static variable
 <details>
 <summary>Assign static variable to an ID</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	constant = hex.mock.MockClass.MESSAGE_TYPE;
-}
+```xml
+<root name="applicationContext">
+    <constant id="constant" static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+</root>
 ```
 </details>
 
 <details>
 <summary>Pass static variable as a constructor argument</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	instance = new hex.mock.ClassWithConstantConstantArgument
-		( hex.mock.MockClass.MESSAGE_TYPE );
-}
+```xml
+<root name="applicationContext">
+
+    <instance id="instance" type="hex.mock.ClassWithConstantConstantArgument">
+        <argument static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
+    </instance>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Pass a static variable as a method call argument</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	instance = new hex.mock.MockMethodCaller();
-	instance.call( hex.mock.MockMethodCaller.staticVar );
-}
+```xml
+<root name="applicationContext">
+
+    <instance id="instance" type="hex.mock.MockMethodCaller">
+		<method-call name="call">
+			<argument static-ref="hex.mock.MockMethodCaller.staticVar"/>
+		</method-call>
+    </instance>
+
+</root>
 ```
 </details>
 
 ### Misc
 <details>
 <summary>Example with DSL preprocessing</summary>
-```haxe
-@context( ${context} )
-{
-	${node};
-}
+```xml
+<root ${context}>
+
+    ${node}
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Parse and make Xml object</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	fruits = Xml.parse
-	(
-		'<root>
-			<node>orange</node>
-			<node>apple</node>
-			<node>banana</node>
-		</root>'
-	);
-}
+```xml
+<root name="applicationContext">
+
+    <data id="fruits" type="XML">
+        <root>
+            <node>orange</node>
+            <node>apple</node>
+            <node>banana</node>
+        </root>
+    </data>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Parse Xml with custom parser and make custom instance</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	fruits = Xml.parse
-	(
-		'<root>
-			<node>orange</node>
-			<node>apple</node>
-			<node>banana</node>
-		</root>'
-	);
-}
+```xml
+<root name="applicationContext">
+
+    <data id="fruits" type="XML" parser-class="hex.mock.MockXmlParser">
+        <root>
+            <node>orange</node>
+            <node>apple</node>
+            <node>banana</node>
+        </root>
+    </data>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Conditional parsing</summary>
-```haxe
-@context( name = 'applicationContext' )
-{
-	#if ( test || release )
-	message = "hello debug";
-	#elseif production
-	message = "hello production";
-	#else
-	message = "hello message";
-	#end
-}
+```xml
+<root name="applicationContext">
+
+    <msg id="message" value="hello debug" if="test,release"/>
+    <msg id="message" value="hello production" if="production"/>
+
+</root>
 ```
 </details>
 
 <details>
 <summary>Use a custom application context class</summary>
-```haxe
-@context( 
-			name = 'applicationContext', 
-			type = hex.ioc.parser.xml.context.mock.MockApplicationContext )
-{
-	test = 'Hola Mundo';
-}
+```xml
+<root name="applicationContext" type="hex.ioc.parser.xml.context.mock.MockApplicationContext">
+	<test id="test" value="Hola Mundo"/>
+</root>
 ```
 </details>

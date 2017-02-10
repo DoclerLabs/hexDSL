@@ -1,4 +1,5 @@
 <root name="applicationContext">
+	
     <rectangle id="rect" type="hex.mock.MockRectangle">
         <property name="size" ref="rectSize" />
         <method-call name="offsetPoint">
@@ -20,4 +21,5 @@
         <property name="size" ref="rectSize" />
         <method-call name="reset"/>
     </rectangle>
+	
 </root>

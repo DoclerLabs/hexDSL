@@ -1,4 +1,5 @@
 <root name="applicationContext">
+	
     <gateway id="gateway" value="http://localhost/amfphp/gateway.php"/>
 
     <service id="service" type="hex.mock.MockServiceProvider" static-call="getInstance">
@@ -6,4 +7,5 @@
             <argument ref="gateway" />
         </method-call>
     </service>
+	
 </root>
