@@ -25,6 +25,7 @@ class ContextAttributeList
 	public static inline var AS_SINGLETON 			: String = "as-singleton";
 	public static inline var IF 					: String = "if";
 	public static inline var IF_NOT 				: String = "if-not";
+	public static inline var FILE 					: String = "file";
 	
 	/** @private */
 	function new() 

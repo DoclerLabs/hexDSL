@@ -7,7 +7,6 @@ import hex.compiletime.DSLData;
 import hex.compiletime.xml.PositionTracker;
 import hex.compiletime.xml.XmlParser;
 import hex.compiletime.xml.XmlUtil;
-import hex.ioc.core.ContextAttributeList;
 import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.MacroPreprocessor;
 
