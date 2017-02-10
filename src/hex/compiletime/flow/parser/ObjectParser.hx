@@ -74,7 +74,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				this._builder.build( OBJECT( constructorVO ) );
 				
 			case _:
-				trace( e.expr );
+				//TODO remove
+				//trace( e.expr );
 		}
 	}
 	
