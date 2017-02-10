@@ -8,7 +8,7 @@ class MockChat
 {
 	public function new() {}
 
-	public function onTranslation( translatedMessage : String, ?date : Date ) : Void
+	public function onTranslation() : Void
 	{
 
 	}

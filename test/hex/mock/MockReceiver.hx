@@ -8,7 +8,7 @@ class MockReceiver
 {
 	public function new() {}
 
-	public function onMessage( message : String ) : Void
+	public function onMessage() : Void
 	{
 
 	}
