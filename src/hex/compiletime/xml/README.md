@@ -1,5 +1,7 @@
 # Xml DSL
-Xml dsl is designed to use Xml syntax. The main advantage is that you can use the same syntax at runtime and at compile time.
+Xml DSL, as you can guess, is designed to use Xml syntax for building your application. The main advantage is that you can use the same syntax/files at runtime and at compiletime as shown below.
+- To compile DSL (and generate code for targeted platform at compiletime), use `BasicXmlCompiler` class.
+- To read DSL at runtime, use `BasicXmlReader` class.
 
 ## Use the basic Xml compiler
 
