@@ -11,7 +11,7 @@ import hex.compiletime.xml.DSLReader;
 import hex.compiletime.xml.ExceptionReporter;
 import hex.compiletime.basic.CompileTimeApplicationContext;
 import hex.compiletime.basic.CompileTimeContextFactory;
-import hex.ioc.assembler.ConditionalVariablesChecker;
+import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.MacroConditionalVariablesProcessor;
 
 using StringTools;
