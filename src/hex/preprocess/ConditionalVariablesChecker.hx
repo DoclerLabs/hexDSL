@@ -1,7 +1,7 @@
 package hex.preprocess;
 
+import hex.error.Exception;
 import hex.error.IllegalArgumentException;
-import hex.ioc.error.BuildingException;
 
 /**
  * ...
@@ -63,7 +63,7 @@ class ConditionalVariablesChecker
 				}
 				else if ( this._strictMode )
 				{
-					throw new BuildingException( "'" + ifItem + "' was not found in application assembler" );
+					throw new Exception( "'" + ifItem + "' was not found in application assembler" );
 				}
 			}
 		}
@@ -90,7 +90,7 @@ class ConditionalVariablesChecker
 				}
 				else if ( this._strictMode )
 				{
-					throw new BuildingException( "'" + ifNotItem + "' was not found in application assembler" );
+					throw new Exception( "'" + ifNotItem + "' was not found in application assembler" );
 				}
 			}
 		}
