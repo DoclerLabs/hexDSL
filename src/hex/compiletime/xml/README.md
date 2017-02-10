@@ -4,12 +4,11 @@ Xml dsl is designed to use Xml syntax. The main advantage is that you can use th
 ## Use the basic Xml compiler
 
 <details>
-```haxe
 <summary>Defining context</summary>
-@context( name = 'myContextName' )
-{
-    myString = 'hello world';
-}
+```haxe
+<root name="myContextName">
+    <test id="myString" value="hello world"/>
+</root>
 ```
 </details>
 
