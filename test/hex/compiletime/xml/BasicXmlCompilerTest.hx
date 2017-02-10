@@ -210,10 +210,10 @@ class BasicXmlCompilerTest
 		Assert.equals( 2, position.y );
 	}
 
-	@Test( "test building single instance with object references" )
-	public function testBuildingSingleInstanceWithObjectReferences() : Void
+	@Test( "test building single instance with method references" )
+	public function testBuildingSingleInstanceWithMethodReferences() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/singleInstanceWithObjectReferences.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/singleInstanceWithMethodReferences.xml" );
 		
 		var chat : MockChat = this._getCoreFactory().locate( "chat" );
 		Assert.isInstanceOf( chat, MockChat );
@@ -707,7 +707,38 @@ class BasicXmlCompilerTest
 		var mock1 = injector.getInstance( IMockInjectee, "mock1" );
 		Assert.isInstanceOf( mock1, MockInjectee, "" );
 		Assert.equals( domain, mock1.domain, "" );
+	}
+	
+	@Test( "test parsing twice" )
+	public function testParsingTwice() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/parsingOnce.xml" );
+		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/parsingTwice.xml" );
+
+		var rect0 : MockRectangle = this._locate( "rect0" );
+		Assert.isInstanceOf( rect0, MockRectangle );
+		Assert.equals( 10, rect0.x );
+		Assert.equals( 20, rect0.y );
+		Assert.equals( 30, rect0.width );
+		Assert.equals( 40, rect0.height );
+
+		var rect1 : MockRectangle = this._locate( "rect1" );
+		Assert.isInstanceOf( rect1, MockRectangle );
+		Assert.equals( 50, rect1.x );
+		Assert.equals( 60, rect1.y );
+		Assert.equals( 70, rect1.width );
+		Assert.equals( 40, rect1.height );
 	}*/
+	
+	@Test( "test simple method call from another node" )
+	public function testSimpleMethodCallFromAnotherNode() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/simpleMethodCallFromAnotherNode.xml" );
+
+		var caller : MockCaller = this._locate( "caller" );
+		Assert.isInstanceOf( caller, MockCaller, "" );
+		Assert.deepEquals( [ "hello", "world" ], MockCaller.passedArguments, "" );
+	}
 
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void

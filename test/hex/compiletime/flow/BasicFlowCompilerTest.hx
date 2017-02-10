@@ -203,10 +203,10 @@ class BasicFlowCompilerTest
 		Assert.equals( 2, position.y );
 	}
 
-	@Test( "test building single instance with object references" )
-	public function testBuildingSingleInstanceWithObjectReferences() : Void
+	@Test( "test building single instance with method references" )
+	public function testBuildingSingleInstanceWithMethodReferences() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/singleInstanceWithObjectReferences.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/singleInstanceWithMethodReferences.flow" );
 		
 		var chat : MockChat = this._getCoreFactory().locate( "chat" );
 		Assert.isInstanceOf( chat, MockChat );
