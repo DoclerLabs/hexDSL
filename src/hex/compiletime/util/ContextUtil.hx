@@ -1,5 +1,6 @@
 package hex.compiletime.util;
 
+#if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Expr.Field;
@@ -21,8 +22,7 @@ class ContextUtil
     {
         throw new PrivateConstructorException();
     }
-	
-	#if macro
+
 	public static function instantiateContextDefinition( definition : TypeDefinition ) : Expr
 	{
 		Context.defineType( definition );
@@ -103,6 +103,5 @@ class ContextUtil
 				
 		}
 	}
-	#end
-	
 }
+#end

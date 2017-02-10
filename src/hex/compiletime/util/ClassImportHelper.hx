@@ -1,5 +1,6 @@
 package hex.compiletime.util;
 
+#if macro
 import haxe.macro.Context;
 import hex.core.ContextTypeList;
 
@@ -28,7 +29,6 @@ class ClassImportHelper
 		this._compiledClass = [];
 	}
 	
-	#if macro
 	public function forceCompilation( type : String ) : Bool
 	{
 		if ( type != null )
@@ -88,5 +88,5 @@ class ClassImportHelper
 			return false;
 		}
 	}
-	#end
 }
+#end

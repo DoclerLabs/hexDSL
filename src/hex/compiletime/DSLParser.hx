@@ -1,5 +1,6 @@
 package hex.compiletime;
 
+#if macro
 import hex.compiletime.error.IExceptionReporter;
 import hex.compiletime.util.ClassImportHelper;
 import hex.error.VirtualMethodException;
@@ -60,3 +61,4 @@ class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentT
 		throw new VirtualMethodException();
 	}
 }
+#end
