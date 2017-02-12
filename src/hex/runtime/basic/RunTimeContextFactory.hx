@@ -37,7 +37,7 @@ import hex.vo.PropertyVO;
  */
 @:keepSub
 class RunTimeContextFactory 
-	implements IBuilder<hex.compiletime.basic.uildRequest>
+	implements IBuilder<hex.compiletime.basic.BuildRequest>
 	implements IRunTimeContextFactory 
 	implements ILocatorListener<String, Dynamic>
 {
