@@ -5,7 +5,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.TypeTools;
 import hex.error.PrivateConstructorException;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -19,7 +19,7 @@ class HashMapFactory
         throw new PrivateConstructorException();
     }
 	
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Expr
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;

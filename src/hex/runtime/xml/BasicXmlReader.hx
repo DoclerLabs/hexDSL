@@ -1,6 +1,7 @@
 package hex.runtime.xml;
 
 import hex.core.IApplicationAssembler;
+import hex.parser.xml.ParserUtil;
 import hex.util.MacroUtil;
 
 #if macro
@@ -23,7 +24,7 @@ using StringTools;
  * ...
  * @author Francis Bourre
  */
-class XmlReader
+class BasicXmlReader
 {
 	#if macro
 	static var _importHelper : ClassImportHelper;
@@ -35,14 +36,14 @@ class XmlReader
 		var identifier : String = xml.get( ContextAttributeList.ID );
 		if ( identifier == null )
 		{
-			identifier = XMLAttributeUtil.getRef( xml );
+			identifier = xml.get( ContextAttributeList.REF );
 			if ( identifier != null )
 			{
 				shouldConstruct = false;
 			}
 			else
 			{
-				Context.error( "XmlReader parsing error with '" + xml.nodeName + "' node, 'id' attribute not found.", positionTracker.makePositionFromNode( xml ) );
+				Context.error( "BasicXmlReader parsing error with '" + xml.nodeName + "' node, 'id' attribute not found.", positionTracker.makePositionFromNode( xml ) );
 			}
 		}
 
@@ -56,21 +57,21 @@ class XmlReader
 
 		if ( type == ContextTypeList.XML )
 		{
-			XmlReader._importHelper.forceCompilation( xml.get( ContextAttributeList.PARSER_CLASS ) );
+			BasicXmlReader._importHelper.forceCompilation( xml.get( ContextAttributeList.PARSER_CLASS ) );
 		}
 		else
 		{
 			var strippedType = type != null ? type.split( '<' )[ 0 ] : type;
 			if ( strippedType == ContextTypeList.HASHMAP || strippedType == ContextTypeList.MAPPING_CONFIG )
 			{
-				args = XMLParserUtil.getMapArguments( identifier, xml );
+				args = ParserUtil.getMapArguments( identifier, xml );
 				for ( arg in args )
 				{
 					if ( arg.getPropertyKey() != null )
 					{
 						if ( arg.getPropertyKey().type == ContextTypeList.CLASS )
 						{
-							XmlReader._importHelper.forceCompilation( arg.getPropertyKey().arguments[0] );
+							BasicXmlReader._importHelper.forceCompilation( arg.getPropertyKey().arguments[0] );
 						}
 					}
 					
@@ -78,57 +79,57 @@ class XmlReader
 					{
 						if ( arg.getPropertyValue().type == ContextTypeList.CLASS )
 						{
-							XmlReader._importHelper.forceCompilation( arg.getPropertyValue().arguments[0] );
+							BasicXmlReader._importHelper.forceCompilation( arg.getPropertyValue().arguments[0] );
 						}
 					}
 				}
 			}
 			else
 			{
-				args = XMLParserUtil.getArguments( identifier, xml, type );
+				args = ParserUtil.getArguments( identifier, xml, type );
 				for ( arg in args )
 				{
-					if ( !XmlReader._importHelper.includeStaticRef( arg.staticRef ) )
+					if ( !BasicXmlReader._importHelper.includeStaticRef( arg.staticRef ) )
 					{
-						XmlReader._importHelper.includeClass( arg );
+						BasicXmlReader._importHelper.includeClass( arg );
 					}
 				}
 			}
 
 			try
 			{
-				XmlReader._importHelper.forceCompilation( type );
+				BasicXmlReader._importHelper.forceCompilation( type );
 			}
 			catch ( e : String )
 			{
-				Context.error( "XmlReader parsing error with '" + xml.nodeName + "' node, '" + type + "' type not found.", positionTracker.makePositionFromAttribute( xml, ContextAttributeList.TYPE ) );
+				Context.error( "BasicXmlReader parsing error with '" + xml.nodeName + "' node, '" + type + "' type not found.", positionTracker.makePositionFromAttribute( xml, ContextAttributeList.TYPE ) );
 			}
 			
 			//map-type
-			var mapTypes = XMLParserUtil.getMapType( xml );
+			var mapTypes = ParserUtil.getMapType( xml );
 			if ( mapTypes != null )
 			{
 				for ( mapType in mapTypes )
 				{
-					XmlReader._importHelper.forceCompilation( mapType.split( '<' )[ 0 ] );
+					BasicXmlReader._importHelper.forceCompilation( mapType.split( '<' )[ 0 ] );
 				}
 			}
 	
 			if ( xml.get( ContextAttributeList.FACTORY_METHOD ) == null ) 
 			{
-				XmlReader._importHelper.includeStaticRef( xml.get( ContextAttributeList.STATIC_REF ) );
+				BasicXmlReader._importHelper.includeStaticRef( xml.get( ContextAttributeList.STATIC_REF ) );
 			}
 			
 			if ( type == ContextTypeList.CLASS )
 			{
-				XmlReader._importHelper.forceCompilation( args[ 0 ] );
+				BasicXmlReader._importHelper.forceCompilation( args[ 0 ] );
 			}
 
 			// Build property.
 			var propertyIterator = xml.elementsNamed( ContextNodeNameList.PROPERTY );
 			while ( propertyIterator.hasNext() )
 			{
-				XmlReader._importHelper.includeStaticRef( propertyIterator.next().get( ContextAttributeList.STATIC_REF ) );
+				BasicXmlReader._importHelper.includeStaticRef( propertyIterator.next().get( ContextAttributeList.STATIC_REF ) );
 			}
 
 			// Build method call.
@@ -137,20 +138,20 @@ class XmlReader
 			{
 				var methodCallItem = methodCallIterator.next();
 
-				args = XMLParserUtil.getMethodCallArguments( identifier, methodCallItem );
+				args = ParserUtil.getMethodCallArguments( identifier, methodCallItem );
 				for ( arg in args )
 				{
-					if ( !XmlReader._importHelper.includeStaticRef( arg.staticRef ) )
+					if ( !BasicXmlReader._importHelper.includeStaticRef( arg.staticRef ) )
 					{
-						XmlReader._importHelper.includeClass( arg );
+						BasicXmlReader._importHelper.includeClass( arg );
 					}
 					else if ( arg.type == ContextTypeList.CLASS )
 					{
-						XmlReader._importHelper.forceCompilation( arg.value );
+						BasicXmlReader._importHelper.forceCompilation( arg.value );
 					}
 					else if( arg.staticRef != null )
 					{
-						XmlReader._importHelper.includeStaticRef( arg.staticRef );
+						BasicXmlReader._importHelper.includeStaticRef( arg.staticRef );
 					}
 				}
 			}
@@ -166,13 +167,13 @@ class XmlReader
 		var document 					= reader.read( fileName, preprocessingVariables, conditionalVariablesChecker );
 		var data 						= document.toString();
 		
-		XmlReader._importHelper 		= new ClassImportHelper();
+		BasicXmlReader._importHelper 		= new ClassImportHelper();
 		
 		//DSL parsing
 		var iterator = document.firstElement().elements();
 		while ( iterator.hasNext() )
 		{
-			XmlReader._parseNode( iterator.next(), reader.positionTracker );
+			BasicXmlReader._parseNode( iterator.next(), reader.positionTracker );
 		}
 		
 		return macro $v{ data };
@@ -181,13 +182,13 @@ class XmlReader
 	
 	macro public static function getXmlFileContent( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariables : Expr ) : ExprOf<String>
 	{
-		return XmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
+		return BasicXmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
 	}
 	
 	macro public static function getXml( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariables : Expr ) : ExprOf<Xml>
 	{
 		var tp = MacroUtil.getPack( Type.getClassName( Xml ) );
-		var data = XmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
+		var data = BasicXmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
 		return macro @:pos( Context.currentPos() ){ $p { tp }.parse( $data ); }
 	}
 	
@@ -195,9 +196,8 @@ class XmlReader
 	{
 		var xmlPack = MacroUtil.getPack( Type.getClassName( Xml ) );
 		var applicationAssemblerTypePath = MacroUtil.getTypePath( "hex.runtime.ApplicationAssembler" );
-		//TODO implement
-		//var applicationXMLParserTypePath = MacroUtil.getTypePath( Type.getClassName( ApplicationXMLParser ) );
-		var data = XmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
+		var applicationXMLParserTypePath = MacroUtil.getTypePath( Type.getClassName( ApplicationParser ) );
+		var data = BasicXmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
 		
 		return macro @:pos( Context.currentPos() )
 		{ 

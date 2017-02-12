@@ -3,21 +3,20 @@ package hex.compiletime.basic;
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import haxe.macro.Type.ClassType;
 import hex.collection.ILocatorListener;
 import hex.collection.Locator;
+import hex.compiletime.basic.IContextFactory;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 import hex.compiletime.factory.FactoryUtil;
 import hex.compiletime.factory.PropertyFactory;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.core.IContextFactory;
 import hex.core.ICoreFactory;
 import hex.di.IInjectorContainer;
 import hex.event.IDispatcher;
 import hex.util.MacroUtil;
 import hex.vo.ConstructorVO;
-import hex.vo.FactoryVODef;
 import hex.vo.MethodCallVO;
 import hex.vo.PropertyVO;
 
@@ -37,7 +36,7 @@ class CompileTimeContextFactory
 	
 	var _contextDispatcher			: IDispatcher<{}>;
 	var _applicationContext 		: IApplicationContext;
-	var _factoryMap 				: Map<String, FactoryVODef->Dynamic>;
+	var _factoryMap 				: Map<String, FactoryVOTypeDef->Dynamic>;
 	var _coreFactory 				: ICoreFactory;
 	var _constructorVOLocator 		: Locator<String, ConstructorVO>;
 	var _propertyVOLocator 			: Locator<String, Array<PropertyVO>>;
@@ -56,9 +55,8 @@ class CompileTimeContextFactory
 			this._isInitialized = true;
 			
 			this._applicationContext 				= applicationContext;
-			this._coreFactory 						= cast ( applicationContext.getCoreFactory(), CompileTimeCoreFactory );
-		
-		//
+			this._coreFactory 						= applicationContext.getCoreFactory();
+
 			this._factoryMap 						= new Map();
 			this._constructorVOLocator 				= new Locator();
 			this._propertyVOLocator 				= new Locator();
@@ -242,7 +240,7 @@ class CompileTimeContextFactory
 		constructorVO.shouldAssign 	= id != null;
 		
 		var type = constructorVO.className;
-		var buildMethod : FactoryVODef->Dynamic = null;
+		var buildMethod : FactoryVOTypeDef->Dynamic = null;
 		
 		if ( this._factoryMap.exists( type ) )
 		{
@@ -316,13 +314,13 @@ class CompileTimeContextFactory
 		return result;
 	}
 	
-	function _getFactoryVO( constructorVO : ConstructorVO = null ) : FactoryVODef
+	function _getFactoryVO( constructorVO : ConstructorVO = null ) : FactoryVOTypeDef
 	{
 		return { constructorVO : constructorVO, contextFactory : this };
 	}
 	
 	//helper
-	function _getClassType( className : String ) : ClassType
+	function _getClassType( className : String ) : haxe.macro.Type.ClassType
 	{
 		try
 		{

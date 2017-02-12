@@ -4,7 +4,7 @@ package hex.compiletime.factory;
 import haxe.macro.Expr;
 import hex.error.PrivateConstructorException;
 import hex.vo.ConstructorVO;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -18,7 +18,7 @@ class ArgumentFactory
         throw new PrivateConstructorException( );
     }
 	
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Array<Expr>
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Array<Expr>
 	{
 		var result 			= [];
 		var factory 		= factoryVO.contextFactory;

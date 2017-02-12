@@ -4,7 +4,7 @@ package hex.compiletime.factory;
 import haxe.macro.Expr;
 import hex.error.PrivateConstructorException;
 import hex.util.MacroUtil;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -18,7 +18,7 @@ class ClassFactory
         throw new PrivateConstructorException();
     }
 	
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Expr
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var qualifiedClassName 	= "";
 		

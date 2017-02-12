@@ -1,13 +1,12 @@
-package hex.core;
+package hex.runtime.basic;
 
 import hex.core.IApplicationContext;
-import hex.core.ICoreFactory;
 import hex.vo.ConstructorVO;
 
 /**
  * @author Francis Bourre
  */
-interface IContextFactory
+interface IRunTimeContextFactory
 {
 	function buildVO( constructorVO : ConstructorVO, ?id : String ) : Dynamic;
 	
@@ -15,5 +14,5 @@ interface IContextFactory
 	
 	function getApplicationContext() : IApplicationContext;
 	
-	function getCoreFactory() : ICoreFactory;
+	function getCoreFactory() : IRunTimeCoreFactory;
 }

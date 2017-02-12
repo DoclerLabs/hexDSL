@@ -8,7 +8,7 @@ import hex.compiletime.xml.BasicXmlCompilerTest;
  * ...
  * @author Francis Bourre
  */
-class CompiletimeSuite
+class DSLCompiletimeSuite
 {
 	@Suite( "Compiletime" )
     public var list : Array<Class<Dynamic>> = [ ApplicationContextBuildingTest, BasicFlowCompilerTest, BasicXmlCompilerTest ];

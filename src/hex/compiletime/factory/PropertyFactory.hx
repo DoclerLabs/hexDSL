@@ -4,7 +4,7 @@ package hex.compiletime.factory;
 import haxe.macro.Expr;
 import hex.core.ContextTypeList;
 import hex.error.PrivateConstructorException;
-import hex.core.IContextFactory;
+import hex.compiletime.basic.IContextFactory;
 import hex.vo.ConstructorVO;
 import hex.vo.PropertyVO;
 

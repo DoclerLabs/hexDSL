@@ -5,7 +5,7 @@ import haxe.macro.Expr;
 import hex.error.Exception;
 import hex.error.PrivateConstructorException;
 import hex.vo.ConstructorVO;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -19,7 +19,7 @@ class FunctionFactory
         throw new PrivateConstructorException();
     }
 	
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Expr
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var constructorVO 	= factoryVO.constructorVO;
 		var coreFactory		= factoryVO.contextFactory.getCoreFactory();

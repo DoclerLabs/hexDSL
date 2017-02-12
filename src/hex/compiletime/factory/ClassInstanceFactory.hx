@@ -8,7 +8,7 @@ import hex.compiletime.factory.ArgumentFactory;
 import hex.di.IInjectorContainer;
 import hex.error.PrivateConstructorException;
 import hex.util.MacroUtil;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -22,7 +22,7 @@ class ClassInstanceFactory
         throw new PrivateConstructorException();
     }
 		
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Expr
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var result : Expr 	= null;
 		var constructorVO 	= factoryVO.constructorVO;

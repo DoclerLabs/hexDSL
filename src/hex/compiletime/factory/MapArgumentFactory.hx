@@ -3,7 +3,7 @@ package hex.compiletime.factory;
 #if macro
 import hex.error.PrivateConstructorException;
 import hex.vo.MapVO;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -17,7 +17,7 @@ class MapArgumentFactory
         throw new PrivateConstructorException();
     }
 
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Array<MapVO>
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Array<MapVO>
 	{
 		var result 				= [];
 		var factory 			= factoryVO.contextFactory;

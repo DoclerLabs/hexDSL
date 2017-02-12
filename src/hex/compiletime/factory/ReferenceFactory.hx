@@ -3,7 +3,7 @@ package hex.compiletime.factory;
 #if macro
 import haxe.macro.Expr;
 import hex.error.PrivateConstructorException;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -17,7 +17,7 @@ class ReferenceFactory
         throw new PrivateConstructorException();
     }
 	
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Expr
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var result : Expr 	= null;
 		var constructorVO 	= factoryVO.constructorVO;

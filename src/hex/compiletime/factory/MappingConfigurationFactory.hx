@@ -7,7 +7,7 @@ import hex.compiletime.factory.MapArgumentFactory;
 import hex.error.PrivateConstructorException;
 import hex.di.mapping.MappingConfiguration;
 import hex.util.MacroUtil;
-import hex.vo.FactoryVODef;
+import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -21,7 +21,7 @@ class MappingConfigurationFactory
         throw new PrivateConstructorException();
     }
 	
-	static public function build<T:FactoryVODef>( factoryVO : T ) : Expr
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;

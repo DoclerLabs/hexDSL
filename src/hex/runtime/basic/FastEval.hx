@@ -1,7 +1,5 @@
 package hex.runtime.basic;
 
-import hex.core.ICoreFactory;
-
 /**
  * ...
  * @author Francis Bourre
@@ -13,7 +11,7 @@ class FastEval
 		
 	}
 	
-	static public function fromTarget( target : Dynamic, toEval : String, coreFactory : ICoreFactory ) : Dynamic
+	static public function fromTarget( target : Dynamic, toEval : String, coreFactory : IRunTimeCoreFactory ) : Dynamic
 	{
 		var members : Array<String> = toEval.split( "." );
 		var result 	: Dynamic;
