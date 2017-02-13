@@ -9,7 +9,6 @@ import hex.core.IApplicationContext;
 import hex.core.IBuilder;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.event.IDispatcher;
-import hex.ioc.vo.TransitionVO;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.runtime.factory.ArrayFactory;
 import hex.runtime.factory.BoolFactory;
@@ -50,8 +49,6 @@ class RunTimeContextFactory
 	var _constructorVOLocator 		: Locator<String, ConstructorVO>;
 	var _propertyVOLocator 			: Locator<String, Array<PropertyVO>>;
 	var _methodCallVOLocator 		: Locator<String, MethodCallVO>;
-	
-	var _transitions				: Array<TransitionVO>;
 
 	public function new()
 	{
