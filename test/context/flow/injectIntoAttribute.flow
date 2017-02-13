@@ -1,4 +1,4 @@
 @context( name = 'applicationContext' )
 {
-	@inject_into(a, b, c) instance = new hex.mock.MockClassWithInjectedProperty();
+	@inject_into instance = new hex.mock.MockClassWithInjectedProperty();
 }
