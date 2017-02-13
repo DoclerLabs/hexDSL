@@ -8,8 +8,8 @@ class MockChat
 {
 	public function new() {}
 
-	public function onTranslation() : Void
+	public function onTranslation() : Dynamic
 	{
-
+		return this;
 	}
 }

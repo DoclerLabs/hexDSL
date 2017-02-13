@@ -7,11 +7,16 @@ package hex.mock;
 class MockProxy 
 {
 	public var scope 						: Dynamic;
-	public var callback 					: Void->Void;
+	public var callback 					: Void->Dynamic;
 	
-	public function new( scope : Dynamic, callback : Void->Void ) 
+	public function new( scope : Dynamic, callback : Void->Dynamic ) 
 	{
 		this.scope 				= scope;
 		this.callback 			= callback;
+	}
+	
+	public function call() : Dynamic
+	{
+		return Reflect.callMethod( this.scope, this.callback, [] );
 	}
 }

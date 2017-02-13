@@ -8,8 +8,8 @@ class MockReceiver
 {
 	public function new() {}
 
-	public function onMessage() : Void
+	public function onMessage() : Dynamic
 	{
-
+		return this;
 	}
 }
