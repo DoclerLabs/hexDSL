@@ -3,7 +3,11 @@ package hex.compiletime.flow;
 import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
+import hex.di.Injector;
+import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.event.Dispatcher;
+import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
@@ -640,5 +644,21 @@ class BasicFlowCompilerTest
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/ifAttribute.flow" );
 		Assert.equals( "hello message", this._getCoreFactory().locate( "message" ), "message value should equal 'hello production'" );
+	}
+	
+	@Test( "test building mapping configuration" )
+	public function testBuildingMappingConfiguration() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/mappingConfiguration.flow" );
+
+		var config : MappingConfiguration = this._getCoreFactory().locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
+		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
+		Assert.equals( this._getCoreFactory().locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
 	}
 }
