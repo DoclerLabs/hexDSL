@@ -642,7 +642,7 @@ class BasicXmlReaderTest
 	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		this.build(  BasicXmlReader.getXml( "context/xml/targetSubProperty.xml" ) );
+		this.build( BasicXmlReader.getXml( "context/xml/targetSubProperty.xml" ) );
 
 		var mockObject : MockObjectWithRegtangleProperty = this._locate( "mockObject" );
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
@@ -652,7 +652,7 @@ class BasicXmlReaderTest
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
 	{
-		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfiguration.xml" ) );
+		this.build( BasicXmlReader.getXml( "context/xml/mappingConfiguration.xml" ) );
 
 		var config : MappingConfiguration = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
@@ -668,7 +668,7 @@ class BasicXmlReaderTest
 	@Test( "test building mapping configuration with map names" )
 	public function testBuildingMappingConfigurationWithMapNames() : Void
 	{
-		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfigurationWithMapNames.xml" ) );
+		this.build( BasicXmlReader.getXml( "context/xml/mappingConfigurationWithMapNames.xml" ) );
 
 		var config : MappingConfiguration = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
@@ -683,7 +683,7 @@ class BasicXmlReaderTest
 	@Test( "test building mapping configuration with singleton" )
 	public function testBuildingMappingConfigurationWithSingleton() : Void
 	{
-		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfigurationWithSingleton.xml" ) );
+		this.build( BasicXmlReader.getXml( "context/xml/mappingConfigurationWithSingleton.xml" ) );
 
 		var config = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
@@ -702,18 +702,17 @@ class BasicXmlReaderTest
 		Assert.isInstanceOf( instance2, AnotherMockClass );
 		
 		var copyOfInstance2 = injector.getInstance( IAnotherMockInterface, "name2" );
-		Assert.isInstanceOf( copyOfInstance2,  AnotherMockClass, "" );
+		Assert.isInstanceOf( copyOfInstance2,  AnotherMockClass );
 		Assert.notEquals( instance2, copyOfInstance2 );
 	}
-	
-	//TODO fix it
-	@Ignore( "test building mapping configuration with inject-into" )
+
+	@Test( "test building mapping configuration with inject-into" )
 	public function testBuildingMappingConfigurationWithInjectInto() : Void
 	{
 		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfigurationWithInjectInto.xml" ) );
 
 		var config = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration, "" );
+		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
 		var domain = DomainUtil.getDomain( 'BasicXmlReaderTest.testBuildingMappingConfigurationWithInjectInto', Domain );
@@ -721,12 +720,12 @@ class BasicXmlReaderTest
 		
 		config.configure( injector, new Dispatcher(), null );
 
-		var mock0 = injector.getInstance( IMockInjectee );
-		Assert.isInstanceOf( mock0,  MockInjectee, "" );
-		Assert.equals( domain, mock0.domain, "" );
+		var mock0 = injector.getInstance( IMockInjectee, "name1" );
+		Assert.isInstanceOf( mock0,  MockInjectee );
+		Assert.equals( domain, mock0.domain  );
 		
-		var mock1 = injector.getInstance( IMockInjectee );
-		Assert.isInstanceOf( mock1, MockInjectee, "" );
+		var mock1 = injector.getInstance( IMockInjectee, "name2" );
+		Assert.isInstanceOf( mock1, MockInjectee );
 		Assert.equals( domain, mock1.domain );
 	}
 }

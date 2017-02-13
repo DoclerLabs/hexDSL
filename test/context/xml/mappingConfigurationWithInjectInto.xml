@@ -4,12 +4,12 @@
 	
     <config id="config" type="hex.di.mapping.MappingConfiguration">
 		
-        <item map-name="mock0"> 
+        <item map-name="name1" inject-into="true"> 
 			<key type="Class" value="hex.mock.IMockInjectee"/> 
 			<value type="Class" value="hex.mock.MockInjectee"/>
 		</item>
 		
-        <item map-name="mock1"> 
+        <item map-name="name2" inject-into="true"> 
 			<key type="Class" value="hex.mock.IMockInjectee"/> 
 			<value ref="instance"/>
 		</item>
