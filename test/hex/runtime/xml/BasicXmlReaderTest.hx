@@ -3,11 +3,18 @@ package hex.runtime.xml;
 import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
+import hex.di.Injector;
+import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.domain.Domain;
+import hex.domain.DomainUtil;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
+import hex.event.Dispatcher;
+import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
+import hex.mock.IMockInjectee;
 import hex.mock.IMockInterface;
 import hex.mock.MockCaller;
 import hex.mock.MockChat;
@@ -15,7 +22,9 @@ import hex.mock.MockClass;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockFruitVO;
+import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
@@ -618,5 +627,106 @@ class BasicXmlReaderTest
         {
             Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
         }
+	}
+	
+	@Test( "test simple method call from another node" )
+	public function testSimpleMethodCallFromAnotherNode() : Void
+	{
+		this.build( BasicXmlReader.getXml( "context/xml/simpleMethodCallFromAnotherNode.xml" ) );
+
+		var caller : MockCaller = this._locate( "caller" );
+		Assert.isInstanceOf( caller, MockCaller, "" );
+		Assert.deepEquals( [ "hello", "world" ], MockCaller.passedArguments, "" );
+	}
+	
+	@Test( "test target sub property" )
+	public function testTargetSubProperty() : Void
+	{
+		this.build(  BasicXmlReader.getXml( "context/xml/targetSubProperty.xml" ) );
+
+		var mockObject : MockObjectWithRegtangleProperty = this._locate( "mockObject" );
+		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
+		Assert.equals( 1.5, mockObject.rectangle.x );
+	}
+	
+	@Test( "test building mapping configuration" )
+	public function testBuildingMappingConfiguration() : Void
+	{
+		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfiguration.xml" ) );
+
+		var config : MappingConfiguration = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
+		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
+		Assert.equals( this._locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
+	}
+	
+	@Test( "test building mapping configuration with map names" )
+	public function testBuildingMappingConfigurationWithMapNames() : Void
+	{
+		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfigurationWithMapNames.xml" ) );
+
+		var config : MappingConfiguration = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name1" ),  MockClass );
+		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name2" ), AnotherMockClass );
+	}
+	
+	@Test( "test building mapping configuration with singleton" )
+	public function testBuildingMappingConfigurationWithSingleton() : Void
+	{
+		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfigurationWithSingleton.xml" ) );
+
+		var config = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration );
+
+		var injector = new Injector();
+		config.configure( injector, new Dispatcher(), null );
+
+		var instance1 = injector.getInstance( IAnotherMockInterface, "name1" );
+		Assert.isInstanceOf( instance1,  MockClass );
+		
+		var copyOfInstance1 = injector.getInstance( IAnotherMockInterface, "name1" );
+		Assert.isInstanceOf( copyOfInstance1,  MockClass, "" );
+		Assert.equals( instance1, copyOfInstance1 );
+		
+		var instance2 = injector.getInstance( IAnotherMockInterface, "name2" );
+		Assert.isInstanceOf( instance2, AnotherMockClass );
+		
+		var copyOfInstance2 = injector.getInstance( IAnotherMockInterface, "name2" );
+		Assert.isInstanceOf( copyOfInstance2,  AnotherMockClass, "" );
+		Assert.notEquals( instance2, copyOfInstance2 );
+	}
+	
+	//TODO fix it
+	@Ignore( "test building mapping configuration with inject-into" )
+	public function testBuildingMappingConfigurationWithInjectInto() : Void
+	{
+		this.build(  BasicXmlReader.getXml( "context/xml/mappingConfigurationWithInjectInto.xml" ) );
+
+		var config = this._locate( "config" );
+		Assert.isInstanceOf( config, MappingConfiguration, "" );
+
+		var injector = new Injector();
+		var domain = DomainUtil.getDomain( 'BasicXmlReaderTest.testBuildingMappingConfigurationWithInjectInto', Domain );
+		injector.mapToValue( Domain, domain );
+		
+		config.configure( injector, new Dispatcher(), null );
+
+		var mock0 = injector.getInstance( IMockInjectee );
+		Assert.isInstanceOf( mock0,  MockInjectee, "" );
+		Assert.equals( domain, mock0.domain, "" );
+		
+		var mock1 = injector.getInstance( IMockInjectee );
+		Assert.isInstanceOf( mock1, MockInjectee, "" );
+		Assert.equals( domain, mock1.domain );
 	}
 }

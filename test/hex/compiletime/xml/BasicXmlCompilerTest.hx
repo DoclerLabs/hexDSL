@@ -639,7 +639,7 @@ class BasicXmlCompilerTest
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/mappingConfiguration.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfiguration.xml" );
 
 		var config : MappingConfiguration = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
@@ -655,7 +655,7 @@ class BasicXmlCompilerTest
 	@Test( "test building mapping configuration with map names" )
 	public function testBuildingMappingConfigurationWithMapNames() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/mappingConfigurationWithMapNames.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithMapNames.xml" );
 
 		var config : MappingConfiguration = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
@@ -670,7 +670,7 @@ class BasicXmlCompilerTest
 	@Test( "test building mapping configuration with singleton" )
 	public function testBuildingMappingConfigurationWithSingleton() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/mappingConfigurationWithSingleton.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithSingleton.xml" );
 
 		var config = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
@@ -697,7 +697,7 @@ class BasicXmlCompilerTest
 	@Ignore( "test building mapping configuration with inject-into" )
 	public function testBuildingMappingConfigurationWithInjectInto() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/mappingConfigurationWithInjectInto.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithInjectInto.xml" );
 
 		var config = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration, "" );
