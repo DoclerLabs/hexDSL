@@ -5,7 +5,6 @@ import hex.compiletime.xml.ContextNodeNameList;
 import hex.compiletime.xml.XmlUtil;
 import hex.core.ContextTypeList;
 import hex.error.Exception;
-import hex.ioc.vo.DomainListenerVO;
 import hex.parser.xml.ParserUtil;
 import hex.runtime.error.ParsingException;
 import hex.runtime.xml.AbstractXMLParser;
