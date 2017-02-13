@@ -1,0 +1,6 @@
+@context( 
+			name = 'applicationContext', 
+			type = hex.mock.MockApplicationContext )
+{
+	test = 'Hola Mundo';
+}

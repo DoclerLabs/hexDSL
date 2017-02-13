@@ -1,0 +1,8 @@
+@context( name = 'applicationContext' )
+{
+	object = { property: hex.mock.MockClass.MESSAGE_TYPE };
+	object2 = { property: hex.mock.MockClass };
+	
+	instance = new hex.mock.ClassWithConstantConstantArgument
+		( hex.mock.MockClass.MESSAGE_TYPE );
+}

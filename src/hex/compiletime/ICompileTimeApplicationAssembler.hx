@@ -1,5 +1,6 @@
 package hex.compiletime;
 
+#if macro
 import haxe.macro.Expr;
 import hex.core.IApplicationAssembler;
 
@@ -14,3 +15,4 @@ interface ICompileTimeApplicationAssembler extends IApplicationAssembler
 
 	function getAssemblerExpression() : Expr;
 }
+#end

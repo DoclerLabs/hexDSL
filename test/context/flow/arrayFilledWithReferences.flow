@@ -1,0 +1,10 @@
+@context( name = 'applicationContext' )
+{
+	fruits = new Array<hex.mock.MockFruitVO>( fruit0, fruit1, fruit2 );
+	empty = [];
+	text = [ "hello", "world" ];
+	
+	fruit0 = new hex.mock.MockFruitVO( "orange" );
+	fruit1 = new hex.mock.MockFruitVO( "apple" );
+	fruit2 = new hex.mock.MockFruitVO( "banana" );
+}

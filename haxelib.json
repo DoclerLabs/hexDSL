@@ -3,11 +3,11 @@
   "license": "MIT",
   "classPath": "src",
   "tags": ["hexmachina", "dsl", "oop"],
-  "description": "hexDsl contains DSL toolkit written in Haxe",
+  "description": "hexDSL contains DSL toolkit written in Haxe",
   "contributors": ["doclerlabs"],
   "releasenote": "First release. Still alpha testing",
   "version": "0.1.0",
-  "url": "https://github.com/DoclerLabs/hexDsl",
+  "url": "https://github.com/DoclerLabs/hexDSL",
   "dependencies":
   {
     "hexcore": "git:https://github.com/DoclerLabs/hexCore.git",

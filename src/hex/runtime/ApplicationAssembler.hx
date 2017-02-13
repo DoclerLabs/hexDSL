@@ -10,19 +10,15 @@ import hex.core.IBuilder;
  */
 class ApplicationAssembler implements IApplicationAssembler
 {
-	public function new() 
-	{
-		
-	}
+	public function new() {}
 	
 	var _mApplicationContext 			= new Map<String, IApplicationContext>();
 	var _mContextFactories 				= new Map<IApplicationContext, IBuilder<Dynamic>>();
 	
-	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> ) : IBuilder<T>
+	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
-		var contextFactory : IBuilder<T> = null;
-		var applicationContext = this.getApplicationContext( applicationContextName, applicationContextClass );
-		
+		var contextFactory 		: IBuilder<T> 			= null;
+
 		if ( this._mContextFactories.exists( applicationContext ) )
 		{
 			contextFactory = cast this._mContextFactories.get( applicationContext );

@@ -1,0 +1,5 @@
+@context( name = 'applicationContext' )
+{
+	caller = new hex.mock.MockCaller();
+	caller.call( "hello", "world" );
+}

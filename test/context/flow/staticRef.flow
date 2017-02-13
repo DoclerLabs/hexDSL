@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	constant = hex.mock.MockClass.MESSAGE_TYPE;
+}

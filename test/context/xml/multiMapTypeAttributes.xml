@@ -1,0 +1,3 @@
+<root name="applicationContext">
+    <module id="instance" type="hex.mock.MockClass" map-type="hex.mock.IMockInterface; hex.mock.IAnotherMockInterface"/>
+</root>

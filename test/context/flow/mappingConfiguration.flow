@@ -1,0 +1,10 @@
+@context( name = 'applicationContext' )
+{
+	config = new hex.di.mapping.MappingConfiguration
+	([ 
+		hex.mock.IMockInterface => hex.mock.MockClass,
+		hex.mock.IAnotherMockInterface => instance
+	]);
+	
+	instance = new hex.mock.AnotherMockClass();
+}

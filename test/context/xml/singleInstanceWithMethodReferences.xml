@@ -1,0 +1,16 @@
+<root name="applicationContext">
+	
+	<chat id="chat" type="hex.mock.MockChat"/>
+    <receiver id="receiver" type="hex.mock.MockReceiver"/>
+	
+	<proxy id="proxyChat" type="hex.mock.MockProxy">
+        <argument ref="chat" />
+        <argument ref="chat.onTranslation"/>
+    </proxy>
+
+    <proxy id="proxyReceiver" type="hex.mock.MockProxy">
+        <argument ref="receiver" />
+        <argument ref="receiver.onMessage"/>
+    </proxy>
+	
+</root>

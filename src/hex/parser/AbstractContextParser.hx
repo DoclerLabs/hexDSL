@@ -2,20 +2,40 @@ package hex.parser;
 
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
+import hex.core.IBuilder;
 import hex.error.VirtualMethodException;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class AbstractContextParser<ContentType> implements IContextParser<ContentType>
+class AbstractContextParser<ContentType, RequestType> implements IContextParser<ContentType, RequestType>
 {
-	var _applicationAssembler 	: IApplicationAssembler;
-	var _contextData 			: ContentType;
+	var _applicationAssembler 			: IApplicationAssembler;
+	var _contextData 					: ContentType;
+	var _factoryClass 					: Class<IBuilder<RequestType>>;
+	var _applicationContextDefaultClass : Class<IApplicationContext>;
+	var _builder 						: IBuilder<RequestType>;
 
 	function new() 
 	{
 		//
+	}
+	
+	public function parse() : Void
+	{
+		throw new VirtualMethodException();
+	}
+	
+	@final
+	public function getContextData() : ContentType
+	{
+		return this._contextData;
+	}
+
+	public function setContextData( data : ContentType ) : Void
+	{
+		throw new VirtualMethodException();
 	}
 	
 	@final
@@ -29,25 +49,16 @@ class AbstractContextParser<ContentType> implements IContextParser<ContentType>
 	{
 		return this._applicationAssembler;
 	}
-
+	
 	@final
-	public function getContextData() : ContentType
+	public function setFactoryClass( factoryClass: Class<IBuilder<RequestType>> ) : Void
 	{
-		return this._contextData;
-	}
-
-	public function parse() : Void
-	{
-		throw new VirtualMethodException( "parse must be implemented in concrete class." );
-	}
-
-	public function setContextData( data : ContentType ) : Void
-	{
-		throw new VirtualMethodException( "setContextData must be implemented in concrete class." );
+		this._factoryClass = factoryClass;
 	}
 	
-	public function getApplicationContext() : IApplicationContext
+	@final
+	public function setApplicationContextDefaultClass( applicationContextDefaultClass : Class<IApplicationContext> ) : Void
 	{
-		throw new VirtualMethodException( "getApplicationContext must be implemented in concrete class." );
+		this._applicationContextDefaultClass = applicationContextDefaultClass;
 	}
 }

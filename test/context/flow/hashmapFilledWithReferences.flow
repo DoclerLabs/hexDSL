@@ -1,0 +1,15 @@
+@context( name = 'applicationContext' )
+{
+	fruits = new hex.collection.HashMap<Dynamic, hex.mock.MockFruitVO>
+	([ 
+		"0" => fruit0,
+		1 => fruit1,
+		stubKey => fruit2
+	]);
+	
+	fruit0 = new hex.mock.MockFruitVO( "orange" );
+	fruit1 = new hex.mock.MockFruitVO( "apple" );
+	fruit2 = new hex.mock.MockFruitVO( "banana" );
+	
+	stubKey = new hex.structures.Point();
+}

@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	@map_type( 'hex.mock.IMockInterface' ) instance = new hex.mock.MockClass();
+}

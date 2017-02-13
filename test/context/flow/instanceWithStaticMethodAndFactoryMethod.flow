@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	point = hex.mock.MockPointFactory.getInstance().getPoint( 10, 20 );
+}

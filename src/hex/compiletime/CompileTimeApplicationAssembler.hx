@@ -36,10 +36,9 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		}
 	}
 	
-	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContextName : String, applicationContextClass : Class<IApplicationContext> ) : IBuilder<T>
+	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
 		var contextFactory : IBuilder<T> = null;
-		var applicationContext = this.getApplicationContext( applicationContextName, applicationContextClass );
 		
 		if ( this._mContextFactories.exists( applicationContext ) )
 		{

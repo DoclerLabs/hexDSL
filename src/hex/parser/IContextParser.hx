@@ -1,22 +1,23 @@
 package hex.parser;
 
-import hex.core.IApplicationContext;
 import hex.core.IApplicationAssembler;
+import hex.core.IApplicationContext;
+import hex.core.IBuilder;
 
 /**
  * @author Francis Bourre
  */
-interface IContextParser<ContentType> 
+interface IContextParser<ContentType, RequestType> 
 {
 	function parse() : Void;
+	
+	function getContextData() : ContentType;
 
 	function setContextData( data : ContentType ) : Void;
 	
-	function getContextData() : ContentType;
-	
-	function getApplicationContext() : IApplicationContext;
-
-	function getApplicationAssembler() : IApplicationAssembler;
-	
 	function setApplicationAssembler( applicationAssembler : IApplicationAssembler ) : Void;
+	
+	function setFactoryClass( factoryClass: Class<IBuilder<RequestType>> ) : Void;
+	
+	function setApplicationContextDefaultClass( applicationContextDefaultClass : Class<IApplicationContext> ) : Void;
 }
