@@ -2,7 +2,7 @@ package hex.compiletime.xml;
 
 import hex.compiletime.DSLPosition;
 
-#if (macro || doc_gen)
+#if macro
 
 import haxe.macro.Expr.Position;
 
