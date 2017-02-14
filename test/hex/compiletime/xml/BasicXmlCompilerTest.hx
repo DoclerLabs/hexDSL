@@ -25,11 +25,13 @@ import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockFruitVO;
 import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
+import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -877,4 +879,36 @@ class BasicXmlCompilerTest
             Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
         }
 	}
+	
+	/*@Test( "test trigger method connection" )
+	public function testTriggerMethodConnection() : Void
+	{
+		MockTriggerListener.callbackCount = 0;
+		MockTriggerListener.message = '';
+		
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/trigger.xml" );
+
+		var model : MockModelWithTrigger = this._locate( "model" );
+		Assert.isInstanceOf( model, MockModelWithTrigger );
+		
+		model.callbacks.trigger( 'hello world' );
+		Assert.equals( 1, MockTriggerListener.callbackCount );
+		Assert.equals( 'hello world', MockTriggerListener.message );
+	}
+	
+	@Test( "test Trigger interface connection" )
+	public function testTriggerInterfaceConnection() : Void
+	{
+		MockTriggerListener.callbackCount = 0;
+		MockTriggerListener.message = '';
+		
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/trigger.xml" );
+
+		var model : MockModelWithTrigger = this._locate( "model" );
+		Assert.isInstanceOf( model, MockModelWithTrigger );
+		
+		model.trigger.onTrigger( 'hello world' );
+		Assert.equals( 1, MockTriggerListener.callbackCount );
+		Assert.equals( 'hello world', MockTriggerListener.message );
+	}*/
 }

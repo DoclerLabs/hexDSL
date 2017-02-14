@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data name="applicationContext">
+	
+	<model id="model" type="hex.mock.MockModelWithTrigger"/>
+
+	<trigger ref="model.trigger">
+		<listener ref="listenerInterface"/>
+		<listener ref="listenerInterface"/>
+		<listener ref="listenerInterface"/>
+	</trigger>
+	
+	<trigger ref="model.callbacks">
+		<listener ref="leristenerMethod.onTrigger"/>
+	</trigger>
+	
+	<listener id="listenerInterface" type="hex.mock.MockTriggerListener"/>
+	<listener id="listenerMethod" type="hex.mock.MockTriggerListener"/>
+	
+</data>

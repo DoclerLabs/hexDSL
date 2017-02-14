@@ -1,0 +1,9 @@
+@context( name = 'applicationContext' )
+{
+	model = new hex.mock.MockModelWithTrigger();
+	model.trigger.connect( listenerInterface );
+	model.callbacks.connect( listenerMethod.onTrigger );
+	
+	listenerInterface = new hex.mock.MockTriggerListener();
+	listenerMethod = new hex.mock.MockTriggerListener();
+}
