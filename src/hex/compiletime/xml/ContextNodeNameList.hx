@@ -8,6 +8,7 @@ import hex.error.PrivateConstructorException;
  */
 class ContextNodeNameList 
 {
+	static public inline var INCLUDE 		= "include";
 	static public inline var PROPERTY 		= "property";
 	static public inline var ARGUMENT 		= "argument";
 	static public inline var METHOD_CALL 	= "method-call";

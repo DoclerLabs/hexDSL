@@ -77,7 +77,7 @@ class DSLReader
 	function _getIncludeList( root : Xml, ?conditionalVariablesChecker: ConditionalVariablesChecker ) : Array<Xml>
 	{
 		var includeList : Array<Xml> = [];
-		var includes = root.elementsNamed( "include" );
+		var includes = root.elementsNamed( ContextNodeNameList.INCLUDE );
 		while ( includes.hasNext() )
 		{
 			var node : Xml = includes.next();
