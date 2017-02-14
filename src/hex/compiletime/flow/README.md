@@ -592,3 +592,19 @@ var myString = factory.locate( 'myString' );
 }
 ```
 </details>
+
+<details>
+<summary>Instantiate mapping configuration</summary>
+```haxe
+@context( name = 'applicationContext' )
+{
+	config = new hex.di.mapping.MappingConfiguration
+	([ 
+		hex.mock.IMockInterface => hex.mock.MockClass,
+		hex.mock.IAnotherMockInterface => instance
+	]);
+	
+	instance = new hex.mock.AnotherMockClass();
+}
+```
+</details>
