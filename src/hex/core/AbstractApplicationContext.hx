@@ -22,7 +22,7 @@ class AbstractApplicationContext implements IApplicationContext
 	{
 		this._coreFactory	= coreFactory;
 		this._name			= name;
-		this._domain		= DomainUtil.getDomain( name, Domain );
+		this._domain		= DomainUtil.getDomain( name );
 	}
 	
 	public function getName() : String

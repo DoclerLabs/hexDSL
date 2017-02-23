@@ -704,7 +704,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		var domain = DomainUtil.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto', Domain );
+		var domain = DomainUtil.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
 		injector.mapToValue( Domain, domain );
 		
 		config.configure( injector, new Dispatcher(), null );

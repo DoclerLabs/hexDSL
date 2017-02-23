@@ -709,7 +709,7 @@ class BasicXmlReaderTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		var domain = DomainUtil.getDomain( 'BasicXmlReaderTest.testBuildingMappingConfigurationWithInjectInto', Domain );
+		var domain = DomainUtil.getDomain( 'BasicXmlReaderTest.testBuildingMappingConfigurationWithInjectInto' );
 		injector.mapToValue( Domain, domain );
 		
 		config.configure( injector, new Dispatcher(), null );

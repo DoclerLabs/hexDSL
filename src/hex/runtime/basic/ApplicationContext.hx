@@ -31,7 +31,7 @@ class ApplicationContext extends AbstractApplicationContext
 	function new( applicationContextName : String )
 	{
 		//build contextDispatcher
-		var domain = DomainUtil.getDomain( applicationContextName, Domain );
+		var domain = DomainUtil.getDomain( applicationContextName );
 		this._dispatcher = ApplicationDomainDispatcher.getInstance().getDomainDispatcher( domain );
 		
 		//build injector
