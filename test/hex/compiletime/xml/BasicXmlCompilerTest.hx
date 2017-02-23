@@ -7,7 +7,6 @@ import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
-import hex.domain.DomainUtil;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
 import hex.event.Dispatcher;
@@ -704,7 +703,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		var domain = DomainUtil.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
+		var domain = Domain.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
 		injector.mapToValue( Domain, domain );
 		
 		config.configure( injector, new Dispatcher(), null );
