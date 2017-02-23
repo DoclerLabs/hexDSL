@@ -9,7 +9,7 @@ import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
 import hex.event.ClosureDispatcher;
 import hex.event.MessageType;
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...
