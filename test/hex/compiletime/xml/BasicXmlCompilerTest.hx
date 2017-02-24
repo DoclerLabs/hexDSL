@@ -24,6 +24,7 @@ import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockFruitVO;
 import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModel;
 import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
@@ -878,6 +879,19 @@ class BasicXmlCompilerTest
             Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
         }
 	}
+	
+	/*@Test( "test trigger injection" )
+	public function testTriggerInjection() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/triggerInjection.xml" );
+
+		var model : MockModel = this._locate( "model" );
+		Assert.isInstanceOf( model, MockModel );
+		
+		model.temperature.trigger( 13 );
+		model.weather.trigger( 'sunny' );
+		
+	}*/
 	
 	/*@Test( "test trigger method connection" )
 	public function testTriggerMethodConnection() : Void
