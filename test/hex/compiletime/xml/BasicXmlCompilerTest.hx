@@ -26,6 +26,7 @@ import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockModel;
 import hex.mock.MockModelWithTrigger;
+import hex.mock.MockModuleListener;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
@@ -880,7 +881,7 @@ class BasicXmlCompilerTest
         }
 	}
 	
-	/*@Test( "test trigger injection" )
+	@Test( "test trigger injection" )
 	public function testTriggerInjection() : Void
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/triggerInjection.xml" );
@@ -888,10 +889,16 @@ class BasicXmlCompilerTest
 		var model : MockModel = this._locate( "model" );
 		Assert.isInstanceOf( model, MockModel );
 		
+		var module : MockModuleListener = this._locate( "module" );
+		
 		model.temperature.trigger( 13 );
 		model.weather.trigger( 'sunny' );
 		
-	}*/
+		
+		Assert.equals( 13, module.temperature );
+		Assert.equals( 'sunny', module.weather );
+		
+	}
 	
 	/*@Test( "test trigger method connection" )
 	public function testTriggerMethodConnection() : Void

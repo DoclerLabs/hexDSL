@@ -11,29 +11,30 @@ import hex.module.Module;
  */
 class MockModuleListener extends Module
 {
+	public var temperature	: Int;
+	public var weather		: String;
+	
 	public function new( config : IStatefulConfig ) 
 	{
 		super();
 		
 		this._addStatefulConfigs( [config] );
-		//this._get( ITrigger, 'temperature' ).connect( this.setTemperature );
-		//this._get( ITrigger, 'weather' ).connect( this.setWeather );
+
+		//
+		var temperatureTrigger = this._getDependency( new Dependency<ITrigger<Int->Void>>(), 'temperature' )
+			.connect( this.setTemperature );
 		
-		//this._test();
-		this._getDependency( new Dependency<ITrigger<String->Void>>(), 'weather' ).dowhatever( this.setTemperature );
-		//this._getDependency( new Dependency<ITrigger<Int->Void>>, 'weather'  ).connect( this.setTemperature );
-		
-		//this._injector.getInstanceWithClassName( 'ITrigger<String->Void>' )
+		var weatherTrigger = this._getDependency( new Dependency<ITrigger<String->Void>>(), 'weather' )
+			.connect( this.setWeather );
 	}
 	
-	public function setTemperature( s : String ) : Void
+	public function setTemperature( temperature : Int ) : Void
 	{
-		
+		this.temperature = temperature;
 	}
 	
-	public function setWeather( i : Int ) : Void
+	public function setWeather( weather : String ) : Void
 	{
-		
+		this.weather = weather;
 	}
-	
 }
