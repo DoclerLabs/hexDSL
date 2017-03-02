@@ -2,9 +2,11 @@ package hex.runtime.factory;
 
 import hex.collection.HashMap;
 import hex.error.PrivateConstructorException;
-import hex.log.Logger;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 
+#if debug
+import hex.log.HexLog.*;
+#end
 /**
  * ...
  * @author Francis Bourre
@@ -26,7 +28,7 @@ class HashMapFactory
 		if ( args.length == 0 )
 		{
 			#if debug
-			Logger.warn( "HashMapFactory.build(" + args + ") returns an empty HashMap." );
+			warn( "HashMapFactory.build(" + args + ") returns an empty HashMap." );
 			#end
 
 		} else
@@ -39,7 +41,9 @@ class HashMapFactory
 
 				} else
 				{
-					trace( "HashMapFactory.build() adds item with a 'null' key for '"  + item.value +"' value." );
+					#if debug
+					info( "HashMapFactory.build() adds item with a 'null' key for '"  + item.value +"' value." );
+					#end
 				}
 			}
 			
