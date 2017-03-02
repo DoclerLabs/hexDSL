@@ -9,8 +9,8 @@ import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.event.IDispatcher;
 import hex.event.MessageType;
-import hex.log.DomainLogger;
 import hex.log.ILogger;
+import hex.log.LogManager;
 
 /**
  * ...
@@ -38,7 +38,7 @@ class ApplicationContext extends AbstractApplicationContext
 		injector.mapToValue( IBasicInjector, injector );
 		injector.mapToValue( IDependencyInjector, injector );
 		
-		var logger = new DomainLogger( domain );
+		var logger = LogManager.getLogger( domain.getName() );
 		injector.mapToValue( ILogger, logger );
 		
 		//build coreFactory
