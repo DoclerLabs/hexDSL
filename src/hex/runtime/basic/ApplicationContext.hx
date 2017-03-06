@@ -7,11 +7,10 @@ import hex.di.IDependencyInjector;
 import hex.di.Injector;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
-import hex.domain.DomainUtil;
 import hex.event.IDispatcher;
 import hex.event.MessageType;
-import hex.log.DomainLogger;
 import hex.log.ILogger;
+import hex.log.LogManager;
 
 /**
  * ...
@@ -31,7 +30,7 @@ class ApplicationContext extends AbstractApplicationContext
 	function new( applicationContextName : String )
 	{
 		//build contextDispatcher
-		var domain = DomainUtil.getDomain( applicationContextName, Domain );
+		var domain = Domain.getDomain( applicationContextName );
 		this._dispatcher = ApplicationDomainDispatcher.getInstance().getDomainDispatcher( domain );
 		
 		//build injector
@@ -39,7 +38,7 @@ class ApplicationContext extends AbstractApplicationContext
 		injector.mapToValue( IBasicInjector, injector );
 		injector.mapToValue( IDependencyInjector, injector );
 		
-		var logger = new DomainLogger( domain );
+		var logger = LogManager.getLogger( domain.getName() );
 		injector.mapToValue( ILogger, logger );
 		
 		//build coreFactory

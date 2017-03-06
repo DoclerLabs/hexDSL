@@ -6,13 +6,10 @@
   "description": "hexDSL contains DSL toolkit written in Haxe",
   "contributors": ["doclerlabs"],
   "releasenote": "First release. Still alpha testing",
-  "version": "0.1.0",
+  "version": "git",
   "url": "https://github.com/DoclerLabs/hexDSL",
   "dependencies":
   {
-    "hexcore": "git:https://github.com/DoclerLabs/hexCore.git",
-	"hexreflection": "git:https://github.com/DoclerLabs/hexReflection.git",
-    "hexannotation": "git:https://github.com/DoclerLabs/hexAnnotation.git",
     "hexinject": "git:https://github.com/DoclerLabs/hexInject.git"
   }
 }

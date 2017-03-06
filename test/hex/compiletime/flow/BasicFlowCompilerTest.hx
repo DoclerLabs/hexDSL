@@ -15,6 +15,7 @@ import hex.mock.MockChat;
 import hex.mock.MockClass;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
@@ -24,6 +25,7 @@ import hex.mock.MockCaller;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockFruitVO;
+import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -661,4 +663,36 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
 		Assert.equals( this._getCoreFactory().locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
 	}
+	
+	/*@Test( "test trigger method connection" )
+	public function testTriggerMethodConnection() : Void
+	{
+		MockTriggerListener.callbackCount = 0;
+		MockTriggerListener.message = '';
+		
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
+
+		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
+		Assert.isInstanceOf( model, MockModelWithTrigger );
+		
+		model.callbacks.trigger( 'hello world' );
+		Assert.equals( 1, MockTriggerListener.callbackCount );
+		Assert.equals( 'hello world', MockTriggerListener.message );
+	}
+	
+	@Test( "test Trigger interface connection" )
+	public function testTriggerInterfaceConnection() : Void
+	{
+		MockTriggerListener.callbackCount = 0;
+		MockTriggerListener.message = '';
+		
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
+
+		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
+		Assert.isInstanceOf( model, MockModelWithTrigger );
+		
+		model.trigger.onTrigger( 'hello world' );
+		Assert.equals( 1, MockTriggerListener.callbackCount );
+		Assert.equals( 'hello world', MockTriggerListener.message );
+	}*/
 }

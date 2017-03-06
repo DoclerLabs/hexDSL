@@ -23,7 +23,7 @@ class ClassImportHelper
 											ContextTypeList.ARRAY];
 													
 	var _compiledClass : Array<String>;
-													
+
 	public function new() 
 	{
 		this._compiledClass = [];
@@ -44,7 +44,7 @@ class ClassImportHelper
 				}
 				catch ( e : Dynamic )
 				{
-					Context.error( e.message, e.pos );
+					Context.error( "Failed to get type '" + type + "': " + e.message, e.pos );
 				}
 				
 				return true;

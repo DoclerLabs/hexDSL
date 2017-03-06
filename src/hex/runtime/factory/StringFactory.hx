@@ -2,9 +2,11 @@ package hex.runtime.factory;
 
 import hex.error.IllegalArgumentException;
 import hex.error.PrivateConstructorException;
-import hex.log.Logger;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 
+#if debug
+import hex.log.HexLog.*;
+#end
 /**
  * ...
  * @author Francis Bourre
@@ -36,7 +38,7 @@ class StringFactory
 		{
 			result = "";
 			#if debug
-			Logger.warn( "StringFactory.build(" + result + ") returns empty String." );
+			warn( "StringFactory.build(" + result + ") returns empty String." );
 			#end
 		}
 

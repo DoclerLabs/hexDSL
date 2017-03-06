@@ -7,7 +7,6 @@ import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
-import hex.domain.DomainUtil;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
 import hex.event.Dispatcher;
@@ -702,7 +701,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		var domain = DomainUtil.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto', Domain );
+		var domain = Domain.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
 		injector.mapToValue( Domain, domain );
 		
 		config.configure( injector, new Dispatcher(), null );
@@ -715,88 +714,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( mock1, MockInjectee );
 		Assert.equals( domain, mock1.domain );
 	}
-	
-	/*
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfiguration.xml" );
 
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration, "" );
-
-		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockAmazonService ), MockAmazonService, "" );
-		Assert.isInstanceOf( injector.getInstance( IMockFacebookService ), MockFacebookService, "" );
-		Assert.equals( this._locate( "facebookService" ), injector.getInstance( IMockFacebookService ), "" );
-	}
-	
-	@Test( "test building mapping configuration with map names" )
-	public function testBuildingMappingConfigurationWithMapNames() : Void
-	{
-		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfigurationWithMapNames.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration, "" );
-
-		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockAmazonService, "amazon0" ),  MockAmazonService, "" );
-		Assert.isInstanceOf( injector.getInstance( IMockAmazonService, "amazon1" ), AnotherMockAmazonService, "" );
-	}
-	
-	@Test( "test building mapping configuration with singleton" )
-	public function testBuildingMappingConfigurationWithSingleton() : Void
-	{
-		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfigurationWithSingleton.xml" );
-
-		var config = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration, "" );
-
-		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
-
-		var amazon0 = injector.getInstance( IMockAmazonService, "amazon0" );
-		Assert.isInstanceOf( amazon0,  MockAmazonService, "" );
-		
-		var copyOfAmazon0 = injector.getInstance( IMockAmazonService, "amazon0" );
-		Assert.isInstanceOf( copyOfAmazon0,  MockAmazonService, "" );
-		Assert.equals( amazon0, copyOfAmazon0, "" );
-		
-		var amazon1 = injector.getInstance( IMockAmazonService, "amazon1" );
-		Assert.isInstanceOf( amazon1, AnotherMockAmazonService, "" );
-		
-		var copyOfAmazon1 = injector.getInstance( IMockAmazonService, "amazon1" );
-		Assert.isInstanceOf( copyOfAmazon1,  AnotherMockAmazonService, "" );
-		Assert.notEquals( amazon1, copyOfAmazon1, "" );
-	}
-	
-	@Test( "test building mapping configuration with inject-into" )
-	public function testBuildingMappingConfigurationWithInjectInto() : Void
-	{
-		this._applicationAssembler = XmlCompiler.readXmlFile( "context/mappingConfigurationWithInjectInto.xml" );
-
-		var config = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration, "" );
-
-		var injector = new Injector();
-		var domain = DomainUtil.getDomain( 'testBuildingMappingConfigurationWithInjectInto', Domain );
-		injector.mapToValue( Domain, domain );
-		
-		config.configure( injector, new Dispatcher(), null );
-
-		var mock0 = injector.getInstance( IMockInjectee, "mock0" );
-		Assert.isInstanceOf( mock0,  MockInjectee, "" );
-		Assert.equals( domain, mock0.domain, "" );
-		
-		var mock1 = injector.getInstance( IMockInjectee, "mock1" );
-		Assert.isInstanceOf( mock1, MockInjectee, "" );
-		Assert.equals( domain, mock1.domain, "" );
-	}*/
-	
 	/*@Test( "test parsing twice" )
 	public function testParsingTwice() : Void
 	{
@@ -877,4 +795,36 @@ class BasicXmlCompilerTest
             Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
         }
 	}
+	
+	/*@Test( "test trigger method connection" )
+	public function testTriggerMethodConnection() : Void
+	{
+		MockTriggerListener.callbackCount = 0;
+		MockTriggerListener.message = '';
+		
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/trigger.xml" );
+
+		var model : MockModelWithTrigger = this._locate( "model" );
+		Assert.isInstanceOf( model, MockModelWithTrigger );
+		
+		model.callbacks.trigger( 'hello world' );
+		Assert.equals( 1, MockTriggerListener.callbackCount );
+		Assert.equals( 'hello world', MockTriggerListener.message );
+	}
+	
+	@Test( "test Trigger interface connection" )
+	public function testTriggerInterfaceConnection() : Void
+	{
+		MockTriggerListener.callbackCount = 0;
+		MockTriggerListener.message = '';
+		
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/trigger.xml" );
+
+		var model : MockModelWithTrigger = this._locate( "model" );
+		Assert.isInstanceOf( model, MockModelWithTrigger );
+		
+		model.trigger.onTrigger( 'hello world' );
+		Assert.equals( 1, MockTriggerListener.callbackCount );
+		Assert.equals( 'hello world', MockTriggerListener.message );
+	}*/
 }

@@ -1,14 +1,7 @@
 -main MainDslTest
--cp src
+
+-lib hexdsl
+-lib hexunit
+
 -cp test
--cp hexcore/src
--cp hexreflection/src
--cp hexreflection/test
--cp hexreflect/test
--cp hexannotation/src
--cp hexannotation/test
--cp hexinject/src
--cp hexinject/test
--cp hexunit/src
--cp hexunit/test
 -D debug=true

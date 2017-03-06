@@ -4,7 +4,6 @@ import hex.core.IApplicationContext;
 import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
 import hex.domain.Domain;
-import hex.domain.DomainUtil;
 import hex.error.VirtualMethodException;
 import hex.event.MessageType;
 
@@ -22,7 +21,7 @@ class AbstractApplicationContext implements IApplicationContext
 	{
 		this._coreFactory	= coreFactory;
 		this._name			= name;
-		this._domain		= DomainUtil.getDomain( name, Domain );
+		this._domain		= Domain.getDomain( name );
 	}
 	
 	public function getName() : String
