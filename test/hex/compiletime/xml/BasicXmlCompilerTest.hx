@@ -107,6 +107,26 @@ class BasicXmlCompilerTest
 		Assert.equals( "hello", s );
 	}
 	
+	@Test( "test read twice the same context" )
+	public function testReadTwiceTheSameContext() : Void
+	{
+		var applicationAssembler = new ApplicationAssembler();
+		this._applicationAssembler = new ApplicationAssembler();
+		
+		BasicXmlCompiler.compileWithAssembler( applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml" );
+		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml" );
+		
+		var localCoreFactory = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
+
+		var instance1 = localCoreFactory.locate( "instance" );
+		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
+		
+		var instance2 = this._getCoreFactory().locate( "instance" );
+		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
+		
+		Assert.notEquals( instance1, instance2 );
+	}
+	
 	@Test( "test building Int" )
 	public function testBuildingInt() : Void
 	{
