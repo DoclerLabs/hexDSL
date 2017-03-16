@@ -30,19 +30,31 @@ class ContextUtil
 		return { expr: MacroUtil.instantiate( typePath ), pos: Context.currentPos() };
 	}
 	
+	/**
+	 * Build class container  context with class representation.
+	 * @param	applicationAssembler ID
+	 * @param	applicationContext name
+	 * @return TypeDefinition
+	 */
 	public static function buildContextDefintion( assemblerID : String, contextName : String ) : TypeDefinition
 	{
-		var className = "ContextNamed_" + contextName + "_WithAssemblerID_" + assemblerID;
+		var className = "Context_" + contextName + "_WithAssembler_" + assemblerID;
 		var classExpr = macro class $className
 		{ 
 			public function new()
 			{}
 		};
 		
-		classExpr.pack = [ "hex", "compiler", "util" ];
+		classExpr.pack = [ "hex", "compiletime", "util" ];
 		return classExpr;
 	}
 	
+	/**
+	 * Build a public class property
+	 * @param	name of the property
+	 * @param	type of the property
+	 * @return class property as Field
+	 */
 	public static function buildInstanceField( instanceID : String, instanceClassName : String ) : Field
 	{
 		var newField : Field = 
@@ -60,6 +72,12 @@ class ContextUtil
 		return newField;
 	}
 	
+	/**
+	 * Make a virtual applicationContext through class representation.
+	 * Each property will reference a defined ID.
+	 * @param	applicationContext's name
+	 * @return ContextExecution
+	 */
 	public static function buildContextExecution( fileName : String ) : ContextExecution
 	{
 		var newField : Field = 
