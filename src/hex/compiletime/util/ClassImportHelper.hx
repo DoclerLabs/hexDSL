@@ -44,7 +44,14 @@ class ClassImportHelper
 				}
 				catch ( e : Dynamic )
 				{
-					Context.error( "Failed to get type '" + type + "': " + e.message, e.pos );
+					if ( Std.is( e, hex.error.Exception ) )
+					{
+						Context.error( "Failed to get type '" + type + "': " + e.message, e.pos );
+					}
+					else
+					{
+						Context.error( "Failed to get type '" + type + "': " + e, Context.currentPos() );
+					}
 				}
 				
 				return true;
