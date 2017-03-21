@@ -2,7 +2,7 @@ package hex.compiletime;
 
 #if macro
 import haxe.macro.Expr;
-import hex.compiler.util.ContextUtil;
+//import hex.compiler.util.ContextUtil;
 import hex.core.HashCodeFactory;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
