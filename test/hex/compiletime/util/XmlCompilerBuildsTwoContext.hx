@@ -2,6 +2,7 @@ package hex.compiletime.util;
 
 import hex.core.IApplicationAssembler;
 import hex.runtime.ApplicationAssembler;
+import hex.util.Stringifier;
 
 /**
  * ...
@@ -24,10 +25,9 @@ class XmlCompilerBuildsTwoContext
 		assembleContext1();
 		assembleContext2();
 		
-		/*var o = test();
-		o.filename();
-		o.id = this;
-		o.filename();*/
+		var o = getContext( "contextName", "applicationContextFilename" );
+		o.applicationContextFilename();
+		trace( Stringifier.stringify( o.id ) );
 	}
 	
 	function assembleContext1() : Void
@@ -40,23 +40,22 @@ class XmlCompilerBuildsTwoContext
 		//XmlCompiler.readXmlFileWithAssembler( this._applicationAssembler, "context/referenceAnotherContext.xml" );
 	}
 	
-	/*macro static function test()
+	macro static function getContext( applicationContextName : String, fileName : String )
 	{
-		var id = ContextUtil.buildInstanceField( "id", "hex.compiler.parser.xml.XmlCompilerBuildsTwoContext" );
+		var id = ContextUtil.buildInstanceField( "id", "hex.compiletime.util.XmlCompilerBuildsTwoContext" );
 		
-		var contextExecution = ContextUtil.buildContextExecution( "filename" );
+		var contextBuildingExecution = ContextUtil.buildContextExecution( fileName );
 		
-		ContextUtil.appendContextExecution( contextExecution, macro @:mergeBlock @:position( contextExecution.body.pos )
+		ContextUtil.appendContextExecution( contextBuildingExecution, macro @:mergeBlock @:position( contextBuildingExecution.body.pos )
 		{
-			trace( "FuCk" );
-			trace( this.id );
+			this.id = new XmlCompilerBuildsTwoContext();
 		} );
 		
-		var testClass = ContextUtil.buildContextDefintion( "assemblerID", "contextName" );
-		testClass.fields.push( id );
-		testClass.fields.push( contextExecution.field );
+		var contextClass = ContextUtil.buildContextDefintion( "assemblerID", applicationContextName );
+		contextClass.fields.push( id );
+		contextClass.fields.push( contextBuildingExecution.field );
 
 		//
-		return ContextUtil.instantiateContextDefinition( testClass );
-	}*/
+		return ContextUtil.instantiateContextDefinition( contextClass );
+	}
 }

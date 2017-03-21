@@ -15,6 +15,7 @@ import hex.core.IBuilder;
 import hex.core.ICoreFactory;
 import hex.di.IInjectorContainer;
 import hex.event.IDispatcher;
+import hex.module.IContextModule;
 import hex.util.MacroUtil;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
@@ -30,11 +31,13 @@ class CompileTimeContextFactory
 	implements ILocatorListener<String, Dynamic>
 {
 	static var _injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( IInjectorContainer ) );
+	static var _moduleInterface 			= MacroUtil.getClassType( Type.getClassName( IContextModule ) );
 	
 	var _isInitialized				: Bool;
 	var _expressions 				: Array<Expr>;
 	
 	var _contextDispatcher			: IDispatcher<{}>;
+	var _moduleLocator				: Locator<String, String>;
 	var _applicationContext 		: IApplicationContext;
 	var _factoryMap 				: Map<String, FactoryVOTypeDef->Dynamic>;
 	var _coreFactory 				: ICoreFactory;
@@ -61,6 +64,7 @@ class CompileTimeContextFactory
 			this._constructorVOLocator 				= new Locator();
 			this._propertyVOLocator 				= new Locator();
 			this._methodCallVOLocator 				= new Locator();
+			this._moduleLocator 					= new Locator();
 			
 			this._factoryMap.set( ContextTypeList.ARRAY, 			hex.compiletime.factory.ArrayFactory.build );
 			this._factoryMap.set( ContextTypeList.BOOLEAN, 			hex.compiletime.factory.BoolFactory.build );
@@ -97,6 +101,7 @@ class CompileTimeContextFactory
 		this.dispatchAssemblingStart();
 		this.buildAllObjects();
 		this.callAllMethods();
+		this.callModuleInitialisation();
 		this.dispatchAssemblingEnd();
 	}
 	
@@ -107,6 +112,7 @@ class CompileTimeContextFactory
 		this._constructorVOLocator.release();
 		this._propertyVOLocator.release();
 		this._methodCallVOLocator.release();
+		this._moduleLocator.release();
 		this._factoryMap = new Map();
 	}
 	
@@ -229,6 +235,20 @@ class CompileTimeContextFactory
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.METHODS_CALLED" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
+	
+	public function callModuleInitialisation() : Void
+	{
+		var domains = this._moduleLocator.values();
+		for ( moduleName in domains )
+		{
+			this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(); } );
+		}
+		
+		this._moduleLocator.clear();
+		
+		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.MODULES_INITIALIZED" );
+		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+	}
 
 	public function getApplicationContext() : IApplicationContext
 	{
@@ -259,6 +279,8 @@ class CompileTimeContextFactory
 
 		if ( id != null )
 		{
+			this._tryToRegisterModule( constructorVO );
+			
 			var finalResult = result;
 			finalResult = this._parseInjectInto( constructorVO, finalResult );
 			finalResult = this._parseMapTypes( constructorVO, finalResult );
@@ -268,6 +290,14 @@ class CompileTimeContextFactory
 		}
 
 		return result;
+	}
+	
+	function _tryToRegisterModule( constructorVO : ConstructorVO ) : Void
+	{
+		if ( MacroUtil.implementsInterface( this._getClassType( constructorVO.className ), _moduleInterface ) )
+		{
+			this._moduleLocator.register( constructorVO.ID, constructorVO.ID );
+		}
 	}
 	
 	function _parseInjectInto( constructorVO : ConstructorVO, result : Expr ) : Expr
