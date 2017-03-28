@@ -60,7 +60,8 @@ class CompileTimeParser<ContentType, RequestType, ParserType : DSLParser<Content
 							applicationAssembler 			: IApplicationAssembler, 
 							contextData 					: ContentType, 
 							factoryClass					: Class<IBuilder<RequestType>>,
-							applicationContextDefaultClass 	: Class<IApplicationContext>
+							applicationContextDefaultClass 	: Class<IApplicationContext>,
+							?applicationContextName			: String
 						) : Void
 	{
 		if ( this._exceptionReporter == null )
@@ -107,6 +108,7 @@ class CompileTimeParser<ContentType, RequestType, ParserType : DSLParser<Content
 			var parser = this._parserCollection.next();
 			
 			//Initialize settings
+			if ( applicationContextName != null ) parser.setApplicationContextName( applicationContextName );
 			parser.setFactoryClass( factoryClass );
 			parser.setApplicationContextDefaultClass( applicationContextDefaultClass );
 			parser.setImportHelper( this._importHelper );

@@ -50,9 +50,23 @@ class AbstractXMLParser<RequestType> extends AbstractContextParser<Xml, RequestT
 		}
 	}
 	
+	@final
+	override public function setApplicationContextName( name : String ) : Void
+	{
+		if ( this._applicationContextName == null )
+		{
+			this._applicationContextName = name;
+		}
+		else
+		{
+			trace( "Warning: Application context cannot be set to '" + name + "' name. "
+				+ " It's already forced previously to '" +  this._applicationContextName + "'" );
+		}
+	}
+	
 	function _findApplicationContextName( xml : Xml ) : Void
 	{
-		this._applicationContextName = xml.firstElement().get( "name" );
+		this.setApplicationContextName( xml.firstElement().get( "name" ) );
 		if ( this._applicationContextName == null )
 		{
 			throw new ParsingException( "Fails to retrieve applicationContext name. Attribute 'name' is missing in the root node of your context." );
