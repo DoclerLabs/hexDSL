@@ -98,12 +98,12 @@ class BasicXmlCompilerTest
 		Assert.equals( "hello", s );
 	}
 	
-	@Ignore( "test building String with assembler static property" )
+	@Test( "test building String with assembler static property" )
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicXmlCompilerTest.applicationAssembler = new ApplicationAssembler();
-		BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml" );
-		var s : String = this._getCoreFactory().locate( "s" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml" );
+		var s : String = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
 	
