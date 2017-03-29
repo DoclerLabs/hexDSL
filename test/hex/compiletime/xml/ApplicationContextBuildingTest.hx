@@ -2,9 +2,9 @@ package hex.compiletime.xml;
 
 import hex.core.ICoreFactory;
 import hex.domain.ApplicationDomainDispatcher;
-import hex.ioc.assembler.ApplicationContext;
-import hex.ioc.parser.xml.context.mock.MockApplicationContext;
+import hex.mock.MockApplicationContext;
 import hex.runtime.ApplicationAssembler;
+import hex.runtime.basic.ApplicationContext;
 import hex.unittest.assertion.Assert;
 
 /**
@@ -36,7 +36,7 @@ class ApplicationContextBuildingTest
 	@Test( "test applicationContext building" )
 	public function testApplicationContextBuilding() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/extendApplicationContextTest.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/applicationContextBuildingTest.xml" );
 		
 		var applicationContext = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
 		Assert.isNotNull( applicationContext, "applicationContext shouldn't be null" );
