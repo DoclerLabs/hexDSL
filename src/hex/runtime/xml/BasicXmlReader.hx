@@ -158,7 +158,10 @@ class BasicXmlReader
 		}
 	}
 	
-	static function _readXmlFile( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariables : Expr ) : ExprOf<String>
+	static function _readXmlFile( 	fileName : String, 
+									applicationContextName : String = "applicationContext",
+									?preprocessingVariables : Expr, 
+									?conditionalVariables : Expr ) : ExprOf<String>
 	{
 		var conditionalVariablesMap 	= MacroConditionalVariablesProcessor.parse( conditionalVariables );
 		var conditionalVariablesChecker = new ConditionalVariablesChecker( conditionalVariablesMap );
@@ -192,12 +195,15 @@ class BasicXmlReader
 		return macro @:pos( Context.currentPos() ){ $p { tp }.parse( $data ); }
 	}
 	
-	macro public static function read( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariables : Expr ) : ExprOf<IApplicationAssembler>
+	macro public static function read( 	fileName : String, 
+										applicationContextName : String = "applicationContext",
+										?preprocessingVariables : Expr, 
+										?conditionalVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
 		var xmlPack = MacroUtil.getPack( Type.getClassName( Xml ) );
 		var applicationAssemblerTypePath = MacroUtil.getTypePath( "hex.runtime.ApplicationAssembler" );
 		var applicationXMLParserTypePath = MacroUtil.getTypePath( Type.getClassName( ApplicationParser ) );
-		var data = BasicXmlReader._readXmlFile( fileName, preprocessingVariables, conditionalVariables );
+		var data = BasicXmlReader._readXmlFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
 		
 		return macro @:pos( Context.currentPos() )
 		{ 

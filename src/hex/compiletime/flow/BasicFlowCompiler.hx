@@ -21,9 +21,9 @@ class BasicFlowCompiler
 {
 	#if macro
 	static function _readFile(	fileName : String, 
+								applicationContextName : String = "applicationContext",
 								?preprocessingVariables : Expr, 
-								?applicationAssemblerExpr : Expr,
-								?applicationContextName : String ) : ExprOf<IApplicationAssembler>
+								?applicationAssemblerExpr : Expr ) : ExprOf<IApplicationAssembler>
 	{
 		var reader						= new DSLReader();
 		var document 					= reader.read( fileName, preprocessingVariables );
@@ -39,13 +39,18 @@ class BasicFlowCompiler
 	}
 	#end
 
-	macro public static function compile( fileName : String, ?preprocessingVariables : Expr, ?applicationContextName : String ) : ExprOf<IApplicationAssembler>
+	macro public static function compile( 	fileName : String, 
+											applicationContextName : String = "applicationContext",
+											?preprocessingVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
-		return BasicFlowCompiler._readFile( fileName, preprocessingVariables, applicationContextName );
+		return BasicFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables );
 	}
 	
-	macro public static function compileWithAssembler( assemblerExpr : Expr, fileName : String, ?preprocessingVariables : Expr, ?applicationContextName : String ) : ExprOf<IApplicationAssembler>
+	macro public static function compileWithAssembler( 	assemblerExpr : Expr, 
+														fileName : String,
+														applicationContextName : String = "applicationContext",
+														?preprocessingVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
-		return BasicFlowCompiler._readFile( fileName, preprocessingVariables, assemblerExpr, applicationContextName );
+		return BasicFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, assemblerExpr );
 	}
 }
