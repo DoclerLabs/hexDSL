@@ -14,6 +14,7 @@ import hex.mock.IMockInterface;
 import hex.mock.MockChat;
 import hex.mock.MockClass;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockContextHolder;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
@@ -58,6 +59,15 @@ class BasicFlowCompilerTest
 	function _getCoreFactory() : ICoreFactory
 	{
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
+	}
+	
+	@Test( "test context reference" )
+	public function testContextReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextReference.flow" );
+		var contextHolder : MockContextHolder = this._getCoreFactory().locate( "contextHolder" );
+		var context = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
+		Assert.equals( context, contextHolder.context );
 	}
 	
 	@Test( "test building String without context name" )

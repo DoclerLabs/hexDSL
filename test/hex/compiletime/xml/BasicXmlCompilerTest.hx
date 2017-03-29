@@ -21,6 +21,7 @@ import hex.mock.MockClass;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockContextHolder;
 import hex.mock.MockFruitVO;
 import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
@@ -66,6 +67,15 @@ class BasicXmlCompilerTest
 	function _locate( key : String ) : Dynamic
 	{
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( key );
+	}
+	
+	@Test( "test context reference" )
+	public function testContextReference() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/contextReference.xml" );
+		var contextHolder : MockContextHolder = this._getCoreFactory().locate( "contextHolder" );
+		var context = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
+		Assert.equals( context, contextHolder.context );
 	}
 	
 	@Test( "test building String without context name" )
