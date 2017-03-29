@@ -21,7 +21,7 @@ class BasicFlowCompiler
 {
 	#if macro
 	static function _readFile(	fileName : String, 
-								applicationContextName : String = "applicationContext",
+								?applicationContextName : String,
 								?preprocessingVariables : Expr, 
 								?applicationAssemblerExpr : Expr ) : ExprOf<IApplicationAssembler>
 	{
@@ -40,7 +40,7 @@ class BasicFlowCompiler
 	#end
 
 	macro public static function compile( 	fileName : String, 
-											applicationContextName : String = "applicationContext",
+											?applicationContextName : String,
 											?preprocessingVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
 		return BasicFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables );
@@ -48,7 +48,7 @@ class BasicFlowCompiler
 	
 	macro public static function compileWithAssembler( 	assemblerExpr : Expr, 
 														fileName : String,
-														applicationContextName : String = "applicationContext",
+														?applicationContextName : String,
 														?preprocessingVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
 		return BasicFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, assemblerExpr );

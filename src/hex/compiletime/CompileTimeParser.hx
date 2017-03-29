@@ -108,7 +108,10 @@ class CompileTimeParser<ContentType, RequestType, ParserType : DSLParser<Content
 			var parser = this._parserCollection.next();
 			
 			//Initialize settings
-			if ( applicationContextName != null ) parser.setApplicationContextName( applicationContextName );
+			if ( applicationContextName != null ) 
+			{
+				parser.setApplicationContextName( applicationContextName, true );
+			}
 			parser.setFactoryClass( factoryClass );
 			parser.setApplicationContextDefaultClass( applicationContextDefaultClass );
 			parser.setImportHelper( this._importHelper );

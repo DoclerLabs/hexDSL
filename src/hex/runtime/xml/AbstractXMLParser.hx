@@ -12,8 +12,9 @@ import hex.runtime.error.ParsingException;
  */
 class AbstractXMLParser<RequestType> extends AbstractContextParser<Xml, RequestType>
 {
-	var _applicationContextName 		: String;
-
+	var _applicationContextName : String = 'applicationContext';
+	var _isContextNameLocked 	: Bool = false;
+	
 	function new()
 	{
 		super();
@@ -51,16 +52,19 @@ class AbstractXMLParser<RequestType> extends AbstractContextParser<Xml, RequestT
 	}
 	
 	@final
-	override public function setApplicationContextName( name : String ) : Void
+	override public function setApplicationContextName( name : String, locked : Bool = false ) : Void
 	{
-		if ( this._applicationContextName == null )
+		if ( !this._isContextNameLocked )
 		{
+			this._isContextNameLocked = locked;
 			this._applicationContextName = name;
 		}
 		else
 		{
+			/*#if debug
 			trace( "Warning: Application context cannot be set to '" + name + "' name. "
-				+ " It's already forced previously to '" +  this._applicationContextName + "'" );
+				+ " It's already locked previously to '" +  this._applicationContextName + "'" );
+			#end*/
 		}
 	}
 	

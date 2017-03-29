@@ -62,7 +62,7 @@ class AbstractContextParser<ContentType, RequestType> implements IContextParser<
 		this._applicationContextDefaultClass = applicationContextDefaultClass;
 	}
 	
-	public function setApplicationContextName( name : String ) : Void
+	public function setApplicationContextName( name : String, locked : Bool = false ) : Void
 	{
 		throw new VirtualMethodException();
 	}

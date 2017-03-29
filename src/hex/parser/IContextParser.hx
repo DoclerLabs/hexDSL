@@ -21,5 +21,5 @@ interface IContextParser<ContentType, RequestType>
 	
 	function setApplicationContextDefaultClass( applicationContextDefaultClass : Class<IApplicationContext> ) : Void;
 
-	function setApplicationContextName( name : String ) : Void;
+	function setApplicationContextName( name : String, locked : Bool = false ) : Void;
 }

@@ -12,7 +12,9 @@ import hex.parser.AbstractContextParser;
  */
 class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentType, RequestType>
 {
-	var _applicationContextName 	: String;
+	var _applicationContextName 	: String = 'applicationContext';
+	var _isContextNameLocked 		: Bool = false;
+	
 	var _applicationContextClass 	: {name: String, pos: haxe.macro.Expr.Position};
 	var _importHelper 				: ClassImportHelper;
 	var _exceptionReporter 			: IExceptionReporter<ContentType>;
@@ -52,17 +54,18 @@ class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentT
 	}
 	
 	@final
-	override public function setApplicationContextName( name : String ) : Void
+	override public function setApplicationContextName( name : String, locked : Bool = false ) : Void
 	{
-		if ( this._applicationContextName == null )
+		if ( !this._isContextNameLocked )
 		{
+			this._isContextNameLocked = locked;
 			this._applicationContextName = name;
 		}
 		else
 		{
 			/*#if debug
 			trace( "Warning: Application context cannot be set to '" + name + "' name. "
-				+ " It's already forced previously to '" +  this._applicationContextName + "'" );
+				+ " It's already locked previously to '" +  this._applicationContextName + "'" );
 			#end*/
 		}
 	}

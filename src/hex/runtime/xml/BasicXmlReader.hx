@@ -159,7 +159,7 @@ class BasicXmlReader
 	}
 	
 	static function _readXmlFile( 	fileName : String, 
-									applicationContextName : String = "applicationContext",
+									?applicationContextName : String,
 									?preprocessingVariables : Expr, 
 									?conditionalVariables : Expr ) : ExprOf<String>
 	{
@@ -196,7 +196,7 @@ class BasicXmlReader
 	}
 	
 	macro public static function read( 	fileName : String, 
-										applicationContextName : String = "applicationContext",
+										?applicationContextName : String,
 										?preprocessingVariables : Expr, 
 										?conditionalVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
