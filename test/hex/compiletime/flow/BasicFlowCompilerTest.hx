@@ -60,6 +60,14 @@ class BasicFlowCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
+	@Test( "test building String without context name" )
+	public function testBuildingStringWithoutContextName() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextWithoutName.flow" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
+	}
+	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
 	{

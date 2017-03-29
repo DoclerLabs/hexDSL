@@ -56,7 +56,7 @@ class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentT
 	@final
 	override public function setApplicationContextName( name : String, locked : Bool = false ) : Void
 	{
-		if ( !this._isContextNameLocked )
+		if ( !this._isContextNameLocked && name != null )
 		{
 			this._isContextNameLocked = locked;
 			this._applicationContextName = name;

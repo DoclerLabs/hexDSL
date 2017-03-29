@@ -68,6 +68,14 @@ class BasicXmlCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( key );
 	}
 	
+	@Test( "test building String without context name" )
+	public function testBuildingStringWithoutContextName() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/contextWithoutName.xml" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
+	}
+	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
 	{
