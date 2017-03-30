@@ -52,9 +52,4 @@ class ApplicationContext extends AbstractApplicationContext
 		
 		coreFactory.getInjector().mapClassNameToValue( "hex.event.IDispatcher<{}>", this._dispatcher );
 	}
-	
-	override public function dispose() : Void
-	{
-		
-	}
 }
