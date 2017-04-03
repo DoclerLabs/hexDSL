@@ -2,6 +2,7 @@ package hex.runtime.factory;
 
 import hex.data.IParser;
 import hex.error.PrivateConstructorException;
+import hex.log.LogManager;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.runtime.error.ParsingException;
 import hex.vo.ConstructorVO;
@@ -51,7 +52,7 @@ class XmlFactory
 			else
 			{
 				#if debug
-				trace( "XmlFactory returns an empty XML." );
+				LogManager.getLoggerByClass(XmlFactory).warn( "XmlFactory returns an empty XML." );
 				#end
 
 				result = Xml.parse( "" );
@@ -60,7 +61,7 @@ class XmlFactory
 		else
 		{
 			#if debug
-			trace( "XmlFactory returns an empty XML." );
+			LogManager.getLoggerByClass(XmlFactory).warn( "XmlFactory returns an empty XML." );
 			#end
 
 			result = Xml.parse( "" );

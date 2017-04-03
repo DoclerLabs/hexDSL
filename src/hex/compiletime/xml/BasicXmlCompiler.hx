@@ -13,6 +13,8 @@ import hex.compiletime.basic.CompileTimeApplicationContext;
 import hex.compiletime.basic.CompileTimeContextFactory;
 import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.MacroConditionalVariablesProcessor;
+import hex.log.LogManager;
+import hex.log.MacroLoggerContext;
 
 using StringTools;
 #end
@@ -26,6 +28,8 @@ class BasicXmlCompiler
 	#if macro
 	static function _readXmlFile( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariables : Expr, ?applicationAssemblerExpr : Expr ) : ExprOf<IApplicationAssembler>
 	{
+		LogManager.context = new MacroLoggerContext();
+		
 		var conditionalVariablesMap 	= MacroConditionalVariablesProcessor.parse( conditionalVariables );
 		var conditionalVariablesChecker = new ConditionalVariablesChecker( conditionalVariablesMap );
 		
