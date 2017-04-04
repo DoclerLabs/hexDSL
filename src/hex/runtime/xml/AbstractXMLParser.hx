@@ -12,8 +12,9 @@ import hex.runtime.error.ParsingException;
  */
 class AbstractXMLParser<RequestType> extends AbstractContextParser<Xml, RequestType>
 {
-	var _applicationContextName 		: String;
-
+	var _applicationContextName : String = 'applicationContext';
+	var _isContextNameLocked 	: Bool = false;
+	
 	function new()
 	{
 		super();
@@ -50,9 +51,26 @@ class AbstractXMLParser<RequestType> extends AbstractContextParser<Xml, RequestT
 		}
 	}
 	
+	@final
+	override public function setApplicationContextName( name : String, locked : Bool = false ) : Void
+	{
+		if ( !this._isContextNameLocked && name != null )
+		{
+			this._isContextNameLocked = locked;
+			this._applicationContextName = name;
+		}
+		else
+		{
+			/*#if debug
+			trace( "Warning: Application context cannot be set to '" + name + "' name. "
+				+ " It's already locked previously to '" +  this._applicationContextName + "'" );
+			#end*/
+		}
+	}
+	
 	function _findApplicationContextName( xml : Xml ) : Void
 	{
-		this._applicationContextName = xml.firstElement().get( "name" );
+		this.setApplicationContextName( xml.firstElement().get( "name" ) );
 		if ( this._applicationContextName == null )
 		{
 			throw new ParsingException( "Fails to retrieve applicationContext name. Attribute 'name' is missing in the root node of your context." );

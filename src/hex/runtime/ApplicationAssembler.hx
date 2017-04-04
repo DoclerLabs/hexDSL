@@ -48,7 +48,7 @@ class ApplicationAssembler implements IApplicationAssembler
 		
 		//dispose application contexts
 		var itContext = this._mApplicationContext.iterator();
-		while ( itContext.hasNext() ) itContext.next().dispose();
+		while ( itContext.hasNext() ) itContext.next().release();
 		
 		//create new collections
 		this._mApplicationContext = new Map();

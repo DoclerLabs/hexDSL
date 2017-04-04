@@ -59,6 +59,7 @@ class CompileTimeContextFactory
 			
 			this._applicationContext 				= applicationContext;
 			this._coreFactory 						= applicationContext.getCoreFactory();
+			this._coreFactory.register( this._applicationContext.getName(), this._applicationContext );
 
 			this._factoryMap 						= new Map();
 			this._constructorVOLocator 				= new Locator();

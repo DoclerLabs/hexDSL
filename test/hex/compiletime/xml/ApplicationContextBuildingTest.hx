@@ -1,4 +1,4 @@
-package hex.compiletime.flow;
+package hex.compiletime.xml;
 
 import hex.core.ICoreFactory;
 import hex.domain.ApplicationDomainDispatcher;
@@ -36,8 +36,8 @@ class ApplicationContextBuildingTest
 	@Test( "test applicationContext building" )
 	public function testApplicationContextBuilding() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/applicationContextBuildingTest.flow" );
-
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/applicationContextBuildingTest.xml" );
+		
 		var applicationContext = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
 		Assert.isNotNull( applicationContext, "applicationContext shouldn't be null" );
 		Assert.isInstanceOf( applicationContext, MockApplicationContext, "applicationContext shouldn't be an instance of 'MockApplicationContext'" );

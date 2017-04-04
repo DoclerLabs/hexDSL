@@ -1,14 +1,14 @@
 package hex.core;
 
-import hex.di.IContextOwner;
 import hex.di.IDependencyInjector;
 import hex.domain.Domain;
 import hex.event.MessageType;
+import hex.module.IContextModule;
 
 /**
  * @author Francis Bourre
  */
-interface IApplicationContext extends IContextOwner
+interface IApplicationContext extends IContextModule
 {
 	function getName() : String;
 	
@@ -19,6 +19,4 @@ interface IApplicationContext extends IContextOwner
 	function getCoreFactory() : ICoreFactory;
 	
 	function getInjector() : IDependencyInjector;
-	
-	function dispose() : Void;
 }

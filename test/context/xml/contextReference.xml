@@ -1,0 +1,5 @@
+<root>
+    <bean id="contextHolder" type="hex.mock.MockContextHolder">
+        <argument ref="this"/>
+    </bean>
+</root>

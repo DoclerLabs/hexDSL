@@ -14,6 +14,7 @@ import hex.mock.IMockInterface;
 import hex.mock.MockChat;
 import hex.mock.MockClass;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockContextHolder;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
@@ -60,6 +61,23 @@ class BasicFlowCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
+	@Test( "test context reference" )
+	public function testContextReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextReference.flow" );
+		var contextHolder : MockContextHolder = this._getCoreFactory().locate( "contextHolder" );
+		var context = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
+		Assert.equals( context, contextHolder.context );
+	}
+	
+	@Test( "test building String without context name" )
+	public function testBuildingStringWithoutContextName() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextWithoutName.flow" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
+	}
+	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
 	{
@@ -90,12 +108,12 @@ class BasicFlowCompilerTest
 		Assert.equals( "hello", s );
 	}
 	
-	@Ignore( "test building String with assembler static property" )
+	@Test( "test building String with assembler static property" )
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicFlowCompilerTest.applicationAssembler = new ApplicationAssembler();
-		BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow" );
-		var s : String = this._getCoreFactory().locate( "s" );
+		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow" );
+		var s : String = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
 	
@@ -114,6 +132,26 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
 		
 		var instance2 = this._getCoreFactory().locate( "instance" );
+		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
+		
+		Assert.notEquals( instance1, instance2 );
+	}
+	
+	@Test( "test overriding context name" )
+	public function testOverridingContextName() : Void
+	{
+		this._applicationAssembler = new ApplicationAssembler();
+		
+		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", 'name1' );
+		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", 'name2' );
+		
+		var factory1 = this._applicationAssembler.getApplicationContext( "name1", ApplicationContext ).getCoreFactory();
+		var factory2 = this._applicationAssembler.getApplicationContext( "name2", ApplicationContext ).getCoreFactory();
+
+		var instance1 = factory1.locate( "instance" );
+		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
+		
+		var instance2 = factory2.locate( "instance" );
 		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
 		
 		Assert.notEquals( instance1, instance2 );
