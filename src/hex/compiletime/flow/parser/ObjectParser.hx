@@ -1,5 +1,6 @@
 package hex.compiletime.flow.parser;
 
+
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -8,6 +9,8 @@ import hex.compiletime.flow.AbstractExprParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
+import hex.log.ILogger;
+import hex.log.LogManager;
 
 /**
  * ...
@@ -15,9 +18,12 @@ import hex.vo.MethodCallVO;
  */
 class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 {
+	var logger:ILogger;
+	
 	public function new() 
 	{
 		super();
+		logger = LogManager.getLoggerByInstance(this);
 	}
 	
 	override public function parse() : Void
@@ -75,10 +81,13 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 			case _:
 				//TODO remove
-				//trace( e.expr );
+				//logger.error("Unknown expression");
+				//logger.debug(e);
+				//logger.debug(e.expr);
 		}
+		//logger.debug(e);
 	}
-	
+
 	function _getConstructorVO( ident : String, value : Expr ) : ConstructorVO 
 	{
 		var constructorVO : ConstructorVO;
@@ -102,7 +111,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						constructorVO = new ConstructorVO( ident, ContextTypeList.BOOLEAN, [ v ] );
 						
 					case _:
-						trace( v );
+						logger.error( v );
 				}
 				
 			case ENew( t, params ):
@@ -147,7 +156,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						}
 						
 					case _:
-						trace( exp );
+						logger.error( exp );
 				}
 				
 			case ECall( _.expr => EField( e, field ), params ):
@@ -191,12 +200,12 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 									
 									
 								case _:
-									trace( params[ 0 ].expr );
+									logger.error( params[ 0 ].expr );
 							}
 						}
 						
 					case _:
-						trace( e.expr );
+						logger.error( e.expr );
 				}
 				
 				if ( params.length > 0 )
@@ -207,7 +216,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				
 			case _:
-				trace( value.expr );
+				logger.error( value.expr );
 				constructorVO = new ConstructorVO( ident );
 				//break;
 				
@@ -237,7 +246,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 							constructorVO = new ConstructorVO( ident, ExpressionUtil.getFullClassDeclaration( t ), ExpressionUtil.getMapArguments( ident, values ) );
 							
 						case _:
-							trace( params[ 0 ].expr );
+							logger.error( params[ 0 ].expr );
 					}
 					//
 				}

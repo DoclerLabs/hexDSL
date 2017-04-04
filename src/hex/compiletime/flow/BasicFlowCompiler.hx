@@ -11,6 +11,8 @@ import hex.compiletime.basic.CompileTimeContextFactory;
 import hex.compiletime.flow.DSLReader;
 import hex.compiletime.flow.FlowAssemblingExceptionReporter;
 import hex.compiletime.util.ClassImportHelper;
+import hex.log.MacroLoggerContext;
+import hex.log.LogManager;
 #end
 
 /**
@@ -25,6 +27,8 @@ class BasicFlowCompiler
 								?preprocessingVariables : Expr, 
 								?applicationAssemblerExpr : Expr ) : ExprOf<IApplicationAssembler>
 	{
+		LogManager.context = new MacroLoggerContext();
+		
 		var reader						= new DSLReader();
 		var document 					= reader.read( fileName, preprocessingVariables );
 		
