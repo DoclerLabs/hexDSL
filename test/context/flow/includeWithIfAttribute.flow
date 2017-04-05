@@ -1,0 +1,5 @@
+@context( name = 'applicationContext' )
+@include( 'context/flow/ifAttribute.flow' )
+{
+	test = 'hello world';
+}
