@@ -139,7 +139,7 @@ class DSLReader
 			
 			return result;
 		}
-		catch ( error : Dynamic )
+		catch ( error : Any )
 		{
 			return Context.error( 'File loading failed @$fileName $error', pos == null ? Context.currentPos() : pos );
 		}

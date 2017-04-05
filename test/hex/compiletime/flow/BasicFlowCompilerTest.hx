@@ -192,7 +192,7 @@ class BasicFlowCompilerTest
 	public function testBuildingNull() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingNull.flow" );
-		var result : Dynamic = this._getCoreFactory().locate( "value" );
+		var result = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
 	
@@ -502,7 +502,7 @@ class BasicFlowCompilerTest
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapFilledWithReferences.flow" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._getCoreFactory().locate( "stubKey" );
@@ -522,7 +522,7 @@ class BasicFlowCompilerTest
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapWithMapType.flow" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits, "" );
 
 		var orange 	: MockFruitVO = fruits.get( '0' );

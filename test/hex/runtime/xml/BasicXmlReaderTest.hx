@@ -413,7 +413,7 @@ class BasicXmlReaderTest
 	{
 		this.build( BasicXmlReader.getXml( "context/xml/hashmapFilledWithReferences.xml" ) );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._locate( "stubKey" );
@@ -433,7 +433,7 @@ class BasicXmlReaderTest
 	{
 		this.build( BasicXmlReader.getXml( "context/xml/hashmapWithMapType.xml" ) );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var orange 	: MockFruitVO = fruits.get( '0' );

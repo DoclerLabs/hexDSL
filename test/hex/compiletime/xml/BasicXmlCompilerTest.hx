@@ -64,7 +64,7 @@ class BasicXmlCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
-	function _locate( key : String ) : Dynamic
+	function _locate( key : String ) : Any
 	{
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( key );
 	}
@@ -200,7 +200,7 @@ class BasicXmlCompilerTest
 	public function testBuildingNull() : Void
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingNull.xml" );
-		var result : Dynamic = this._getCoreFactory().locate( "value" );
+		var result = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
 	
@@ -510,7 +510,7 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapFilledWithReferences.xml" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._getCoreFactory().locate( "stubKey" );
@@ -530,7 +530,7 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapWithMapType.xml" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits, "" );
 
 		var orange 	: MockFruitVO = fruits.get( '0' );
