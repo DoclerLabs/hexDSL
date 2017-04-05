@@ -20,6 +20,6 @@ class ContextTypeList
 	public inline static var DEFAULT 			: String = "Default";
 	public inline static var HASHMAP 			: String = "hex.collection.HashMap";
 	public inline static var CLASS 				: String = "Class";
-	public inline static var XML 				: String = "XML";
+	public inline static var XML 				: String = "Xml";
 	public inline static var FUNCTION 			: String = "Function";
 }

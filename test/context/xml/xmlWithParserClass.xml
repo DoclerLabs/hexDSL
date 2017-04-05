@@ -1,6 +1,6 @@
 <root name="applicationContext">
 
-    <data id="fruits" type="XML" parser-class="hex.mock.MockXmlParser">
+    <data id="fruits" type="Xml" parser-class="hex.mock.MockXmlParser">
         <root>
             <node>orange</node>
             <node>apple</node>
