@@ -36,32 +36,40 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 	{
 		return switch( data.expr )
 		{
-			case EMeta( entry, e ) if ( entry.name == "context" ):
+			case EMeta( entry, e ):
 
-				var name = null;
-				
-				var a = Lambda.filter( entry.params, function ( p ) 
-					{ 
-						return switch( p.expr ) 
-						{
-							case EBinop( OpAssign, _.expr => EConst(CIdent(ContextKeywordList.NAME)), e2 ) : true;
-							case _: false;
-						}
-					} );
-
-				if ( a.length == 1 )
+				if ( entry.name == ContextKeywordList.CONTEXT )
 				{
-					name = switch( a.first().expr )
-					{
-						case EBinop( OpAssign, e1, _.expr => EConst(CString(id)) ) :
-							id;
-							
-						case _:
-							null;
-					}
-				}
+					var name = null;
+				
+					var a = Lambda.filter( entry.params, function ( p ) 
+						{ 
+							return switch( p.expr ) 
+							{
+								case EBinop( OpAssign, _.expr => EConst(CIdent(ContextKeywordList.NAME)), e2 ) : true;
+								case _: false;
+							}
+						} );
 
-				name;
+					if ( a.length == 1 )
+					{
+						name = switch( a.first().expr )
+						{
+							case EBinop( OpAssign, e1, _.expr => EConst(CString(id)) ) :
+								id;
+								
+							case _:
+								null;
+						}
+					}
+
+					name;
+				}
+				else
+				{
+					this._findApplicationContextName( e );
+				}
+				
 				
 			case _ :
 				null;
@@ -72,32 +80,41 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 	{
 		return switch( data.expr )
 		{
-			case EMeta( entry, e ) if ( entry.name == ContextKeywordList.CONTEXT ):
-
-				var name = null;
+			case EMeta( entry, e ):
 				
-				var a = Lambda.filter( entry.params, function ( p ) 
-					{ 
-						return switch( p.expr ) 
-						{
-							case EBinop( OpAssign, _.expr => EConst(CIdent(ContextKeywordList.TYPE)), e2 ) : true;
-							case _: false;
-						}
-					} );
-
-				if ( a.length == 1 )
+				if ( entry.name == ContextKeywordList.CONTEXT )
 				{
-					name = switch( a.first().expr )
+					var name = null;
+				
+					var a = Lambda.filter( entry.params, function ( p ) 
+						{ 
+							return switch( p.expr ) 
+							{
+								case EBinop( OpAssign, _.expr => EConst(CIdent(ContextKeywordList.TYPE)), e2 ) : true;
+								case _: false;
+							}
+						} );
+
+					if ( a.length == 1 )
 					{
-						case EBinop( OpAssign, e1, e2 ) :
-							e2.expr.compressField();
-							
-						case _:
-							null;
+						name = switch( a.first().expr )
+						{
+							case EBinop( OpAssign, e1, e2 ) :
+								e2.expr.compressField();
+								
+							case _:
+								null;
+						}
 					}
+
+					{name: name, pos: e.pos};
+				}
+				else
+				{
+					this._findApplicationContextClass( e );
 				}
 
-				{name: name, pos: e.pos};
+				
 				
 			case _ :
 				null;
