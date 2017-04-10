@@ -80,6 +80,9 @@ class ClassInstanceFactory
 			
 			result = macro @:pos( constructorVO.filePosition )
 								var $idVar : $varType = new $typePath( $a { constructorArgs } ); 
+			
+			hex.compiletime.util.ContextBuilder.getInstance( factoryVO.contextFactory )
+				.addField( idVar, constructorVO.type );
 							
 
 		}

@@ -22,15 +22,15 @@ class XmlCompilerBuildsTwoContext
 	{
 		this._applicationAssembler = new ApplicationAssembler();
 		
-		assembleContext1();
+		/*assembleContext1();
 		assembleContext2();
 		
 		var o = getContext( "contextName", "applicationContextFilename" );
 		o.applicationContextFilename();
-		trace( Stringifier.stringify( o.id ) );
+		trace( Stringifier.stringify( o.id ) );*/
 	}
 	
-	function assembleContext1() : Void
+	/*function assembleContext1() : Void
 	{
 		//XmlCompiler.readXmlFileWithAssembler( this._applicationAssembler, "context/simpleInstanceWithArguments.xml" );
 	}
@@ -57,5 +57,5 @@ class XmlCompilerBuildsTwoContext
 
 		//
 		return ContextUtil.instantiateContextDefinition( contextClass );
-	}
+	}*/
 }

@@ -26,7 +26,22 @@ class DynamicObjectFactory
 		//Building result
 		return constructorVO.shouldAssign ?
 			macro @:pos( constructorVO.filePosition ) var $idVar : Dynamic = {}:
-			macro @:pos( constructorVO.filePosition ) {};
+			macro @:pos( constructorVO.filePosition ) { };
+			
+			
+		/*
+		//Building result
+		if ( constructorVO.shouldAssign )
+		{
+			hex.compiletime.util.ContextBuilder.getInstance( factoryVO.contextFactory )
+				.addField( idVar, 'Dynamic' );
+			return macro @:pos( constructorVO.filePosition ) var $idVar : Dynamic = {};
+		}
+		else
+		{
+			return macro @:pos( constructorVO.filePosition ) {};
+		}
+		*/
 	}
 }
 #end

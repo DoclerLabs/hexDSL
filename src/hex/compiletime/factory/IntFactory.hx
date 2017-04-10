@@ -38,9 +38,16 @@ class IntFactory
 		}
 		
 		//Building result
-		return constructorVO.shouldAssign ?
-			macro @:pos( constructorVO.filePosition ) var $idVar = $v{ result }:
-			macro @:pos( constructorVO.filePosition ) $v{ result };	
+		if ( constructorVO.shouldAssign )
+		{
+			hex.compiletime.util.ContextBuilder.getInstance( factoryVO.contextFactory )
+				.addField( idVar, 'Int' );
+			return macro @:pos( constructorVO.filePosition ) var $idVar = $v { result };
+		}
+		else
+		{
+			return macro @:pos( constructorVO.filePosition ) $v { result };
+		}
 	}
 }
 #end
