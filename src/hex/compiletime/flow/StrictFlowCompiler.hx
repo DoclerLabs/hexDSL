@@ -64,11 +64,11 @@ class StrictFlowCompiler
 	
 	macro public static function extend<T>( context 				: ExprOf<T>, 
 											fileName 				: String, 
-											?applicationContextName : String,
 											?preprocessingVariables : Expr, 
 											?conditionalVariables 	: Expr ) : ExprOf<T>
 	{
-		return StrictFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
+		var contextName = StrictFlowCompiler._getContextName( context );
+		return StrictFlowCompiler._readFile( fileName, contextName, preprocessingVariables, conditionalVariables );
 	}
 	
 	macro public static function compileWithAssembler( 	assemblerExpr 			: Expr, 
@@ -79,6 +79,28 @@ class StrictFlowCompiler
 	{
 		return StrictFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr );
 	}
+	
+	#if macro
+	static function _getContextName( context )
+	{
+		var ident = switch( context.expr ) 
+		{ 
+			case EConst( CIdent( s ) ): "" + s; 
+			case _: ""; 
+		}
+		var localVar = haxe.macro.Context.getLocalVars().get( ident );
+		var interfaceName = switch ( localVar )
+		{
+			case TInst( a, b ):
+				Std.string( a ).split( '.' ).pop();
+				
+			case _:
+				null;
+		}
+		
+		return ContextBuilder.getApplicationContextName( interfaceName );
+	}
+	#end
 }
 
 #if macro

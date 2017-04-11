@@ -36,8 +36,8 @@ class ContextBuilder
 		
 		if ( !ContextBuilder._Iteration.exists( applicationContextName ) )
 		{
-			var definition = ContextUtil.buildClassDefintion( applicationContextName + 0 );
-			var iDefinition = ContextUtil.buildInterfaceDefintion( applicationContextName + 0 );
+			var definition = ContextUtil.buildClassDefintion( getIterationName( applicationContextName, 0 ) );
+			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ) );
 			contextIteration = { iteration: 0, definition: definition, iDefinition: iDefinition, contextName: applicationContextName, defined: false };
 			ContextBuilder._Iteration.set( applicationContextName, contextIteration );
 		}
@@ -45,11 +45,22 @@ class ContextBuilder
 		{
 			contextIteration = ContextBuilder._Iteration.get( applicationContextName );
 			contextIteration.iteration++;
-			contextIteration.definition = ContextUtil.updateClassDefintion( applicationContextName + contextIteration.iteration, contextIteration.definition );
-			contextIteration.iDefinition = ContextUtil.extendInterfaceDefintion( applicationContextName + contextIteration.iteration, contextIteration.iDefinition );
+			var iterationName = getIterationName( applicationContextName, contextIteration.iteration );
+			contextIteration.definition = ContextUtil.updateClassDefintion( iterationName, contextIteration.definition );
+			contextIteration.iDefinition = ContextUtil.extendInterfaceDefintion( iterationName, contextIteration.iDefinition );
 		}
 
 		return contextIteration;
+	}
+	
+	public static function getIterationName( applicationContextName : String, iteration : Int )
+	{
+		return applicationContextName + '_' + iteration;
+	}
+	
+	public static function getApplicationContextName( interfaceIterationName : String ) : String
+	{
+		return interfaceIterationName.substring( 1, interfaceIterationName.lastIndexOf( '_' ) );
 	}
 	
 	static public function getInstance( owner : ApplicationContextOwner ) : ContextBuilder
