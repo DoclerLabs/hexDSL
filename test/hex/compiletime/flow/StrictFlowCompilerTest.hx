@@ -143,8 +143,8 @@ class StrictFlowCompilerTest
 	public function testBuildingMultipleInstancesWithReferences() : Void
 	{
 		var context = StrictFlowCompiler.compile( "context/flow/multipleInstancesWithReferences.flow", "testBuildingMultipleInstancesWithReferences" );
-		var context2 = StrictFlowCompiler.compile( "context/flow/simpleInstanceWithoutArguments.flow", "testBuildingMultipleInstancesWithReferences" );
-		var context3 = StrictFlowCompiler.compile( "context/flow/multipleInstancesWithReferencesReferenced.flow", "testBuildingMultipleInstancesWithReferences" );
+		var context2 = StrictFlowCompiler.extend( context, "context/flow/simpleInstanceWithoutArguments.flow", "testBuildingMultipleInstancesWithReferences" );
+		var context3 = StrictFlowCompiler.extend( context2, "context/flow/multipleInstancesWithReferencesReferenced.flow", "testBuildingMultipleInstancesWithReferences" );
 		
 		Assert.equals( context.rectSize, context2.rectSize );
 		

@@ -62,6 +62,15 @@ class StrictFlowCompiler
 		return StrictFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
 	}
 	
+	macro public static function extend<T>( context 				: ExprOf<T>, 
+											fileName 				: String, 
+											?applicationContextName : String,
+											?preprocessingVariables : Expr, 
+											?conditionalVariables 	: Expr ) : ExprOf<T>
+	{
+		return StrictFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
+	}
+	
 	macro public static function compileWithAssembler( 	assemblerExpr 			: Expr, 
 														fileName 				: String,
 														?applicationContextName : String,
@@ -125,8 +134,8 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		
 		var contextName = this._applicationContextName;
 		var varType = builder.getType();
-		var ee = macro @:mergeBlock { var locator : $varType = hex.compiletime.ContextLocator.getContext( $v{contextName} ); };
-		assembler.setMainExpression( macro @:mergeBlock { $ee; locator.$file(); locator; }  );
+		var ee = macro @:mergeBlock { var locator = hex.compiletime.ContextLocator.getContext( $v{contextName} ); };
+		assembler.setMainExpression( macro @:mergeBlock { $ee; locator.$file(); (locator:$varType); }  );
 	}
 }
 #end
