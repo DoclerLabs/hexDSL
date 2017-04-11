@@ -116,7 +116,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 			case ENew( t, params ):
 				constructorVO = this._getVOFromNewExpr( ident, t, params );
-				constructorVO.type = ExprTools.toString( value ).split( 'new' )[ 1 ].split( '(' )[ 0 ];
+				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				
 			case EObjectDecl( fields ):
 				constructorVO = new ConstructorVO( ident, ContextTypeList.OBJECT, [] );

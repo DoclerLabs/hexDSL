@@ -1,8 +1,8 @@
 @context( name = 'applicationContext' )
 {
-	#if ( testing || releasing )
+	#if ( testing == 'true' ) || ( releasing == 'true' )
 	message = "hello debug";
-	#elseif prodz
+	#elseif ( prodz == 'true' )
 	message = "hello prod";
 	#else
 	message = "hello message";

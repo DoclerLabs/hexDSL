@@ -123,16 +123,20 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 	
 	function _getExpressions() : Array<Expr>
 	{
-		var e = this._contextData;
-
-		switch( e.expr )
+		return this._searchForMainBlock( this._contextData );
+	}
+	
+	function _searchForMainBlock( e )
+	{
+		return switch( e.expr )
 		{
-			case EMeta( entry, _.expr => EBlock( exprs ) ) if ( entry.name == ContextKeywordList.CONTEXT ):
-				return exprs;
+			case EMeta( entry, e ):
+				_searchForMainBlock( e );
+			case EBlock( exprs ):
+				exprs;
 			case _:
+				null;
 		}
-		
-		return [];
 	}
 }
 #end

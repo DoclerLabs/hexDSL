@@ -2,7 +2,6 @@ package hex.compiletime;
 
 #if macro
 import haxe.macro.Expr;
-//import hex.compiler.util.ContextUtil;
 import hex.core.HashCodeFactory;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
@@ -22,8 +21,6 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 
 	public function new( assemblerExpression : Expr = null  )
 	{
-		//Context.onAfterTyping( this._onAfterTyping );
-		
 		//Create runtime applicationAssembler
 		var applicationAssemblerTypePath 	= MacroUtil.getTypePath( "hex.runtime.ApplicationAssembler" );
 		var applicationAssemblerVarName 	= "";
@@ -40,11 +37,6 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		}
 	}
 	
-	/*function _onAfterTyping( moduleTypes : Array<ModuleType> ) : Void
-	{
-		trace( moduleTypes );
-	}*/
-	
 	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
 		var contextFactory : IBuilder<T> = null;
@@ -55,9 +47,6 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		}
 		else
 		{
-			//Build context definition
-			//ContextUtil.buildContextDefintion( HashCodeFactory.getKey( this ), applicationContextName );
-			
 			contextFactory = Type.createInstance( factoryClass, [ this._expressions ] );
 			contextFactory.init( applicationContext );
 			this._mContextFactories.set( applicationContext, contextFactory );
@@ -113,6 +102,11 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 	public function getAssemblerExpression() : Expr
 	{
 		return this._assemblerExpression;
+	}
+	
+	public function setMainExpression( e : Expr ) : Void
+	{
+		this._expressions = [ e ];
 	}
 }
 #end

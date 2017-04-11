@@ -14,7 +14,7 @@ import hex.compiletime.util.ClassImportHelper;
 import hex.log.MacroLoggerContext;
 import hex.log.LogManager;
 import hex.preprocess.ConditionalVariablesChecker;
-import hex.preprocess.MacroConditionalVariablesProcessor;
+import hex.preprocess.flow.MacroConditionalVariablesProcessor;
 #end
 
 /**

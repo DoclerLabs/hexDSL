@@ -6,6 +6,7 @@ import hex.core.ICoreFactory;
 import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.error.NoSuchElementException;
 import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
@@ -702,8 +703,23 @@ class BasicFlowCompilerTest
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/ifAttribute.flow" );
-		Assert.equals( "hello message", this._getCoreFactory().locate( "message" ), "message value should equal 'hello production'" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/ifAttribute.flow", null, null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		Assert.equals( "hello prod", this._getCoreFactory().locate( "message" ), "message value should equal 'hello prod'" );
+	}
+
+	
+	@Test( "test include with if attribute" )
+	public function testIncludeWithIfAttribute() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/includeWithIfAttribute.flow", null, null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		Assert.equals( "hello prod", this._getCoreFactory().locate( "message" ), "message value should equal 'hello prod'" );
+	}
+
+	@Test( "test include fails with if attribute" )
+	public function testIncludeFailsWithIfAttribute() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/includeWithIfAttribute.flow", null, null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
+		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._getCoreFactory().locate, [ "message" ], "'NoSuchElementException' should be thrown" );
 	}
 	
 	@Test( "test building mapping configuration" )

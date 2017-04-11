@@ -14,5 +14,7 @@ interface ICompileTimeApplicationAssembler extends IApplicationAssembler
 	function getMainExpression() : Expr;
 
 	function getAssemblerExpression() : Expr;
+	
+	function setMainExpression( e : Expr ) : Void;
 }
 #end
