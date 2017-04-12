@@ -26,14 +26,14 @@ import hex.util.MacroUtil;
  * ...
  * @author Francis Bourre
  */
-class StrictFlowCompiler 
+class BasicStaticFlowCompiler 
 {
 	#if macro
 	static function _readFile(	fileName 					: String, 
 								?applicationContextName 	: String,
 								?preprocessingVariables 	: Expr, 
 								?conditionalVariables 		: Expr, 
-								?applicationAssemblerExpr 	: Expr ) : ExprOf<IApplicationAssembler>
+								?applicationAssemblerExpr 	: Expr ) : Expr
 	{
 		LogManager.context 				= new MacroLoggerContext();
 		
@@ -57,9 +57,9 @@ class StrictFlowCompiler
 	macro public static function compile( 	fileName 				: String, 
 											?applicationContextName : String,
 											?preprocessingVariables : Expr, 
-											?conditionalVariables 	: Expr ) : ExprOf<IApplicationAssembler>
+											?conditionalVariables 	: Expr ) : Expr
 	{
-		return StrictFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
+		return BasicStaticFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
 	}
 	
 	macro public static function extend<T>( context 				: ExprOf<T>, 
@@ -67,17 +67,17 @@ class StrictFlowCompiler
 											?preprocessingVariables : Expr, 
 											?conditionalVariables 	: Expr ) : ExprOf<T>
 	{
-		var contextName = StrictFlowCompiler._getContextName( context );
-		return StrictFlowCompiler._readFile( fileName, contextName, preprocessingVariables, conditionalVariables );
+		var contextName = BasicStaticFlowCompiler._getContextName( context );
+		return BasicStaticFlowCompiler._readFile( fileName, contextName, preprocessingVariables, conditionalVariables );
 	}
 	
 	macro public static function compileWithAssembler( 	assemblerExpr 			: Expr, 
 														fileName 				: String,
 														?applicationContextName : String,
 														?preprocessingVariables : Expr, 
-														?conditionalVariables 	: Expr ) : ExprOf<IApplicationAssembler>
+														?conditionalVariables 	: Expr ) : Expr
 	{
-		return StrictFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr );
+		return BasicStaticFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr );
 	}
 	
 	#if macro
@@ -89,6 +89,7 @@ class StrictFlowCompiler
 			case _: ""; 
 		}
 		var localVar = haxe.macro.Context.getLocalVars().get( ident );
+
 		var interfaceName = switch ( localVar )
 		{
 			case TInst( a, b ):
@@ -156,8 +157,38 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		
 		var contextName = this._applicationContextName;
 		var varType = builder.getType();
-		var ee = macro @:mergeBlock { var locator = hex.compiletime.ContextLocator.getContext( $v{contextName} ); };
-		assembler.setMainExpression( macro @:mergeBlock { $ee; locator.$file(); (locator:$varType); }  );
+		
+		var className = builder._iteration.definition.name;
+		var classExpr = macro class $className { public function new()
+		{
+			this.locator = hex.compiletime.ContextLocator.getContext( $v { contextName } );
+		} };
+		
+		classExpr.pack = [ "hex", "context" ];
+		
+		classExpr.fields.push(
+		{
+			name: 'locator',
+			pos: haxe.macro.Context.currentPos(),
+			kind: FVar( varType ),
+			access: [ APublic ]
+		});
+		
+		classExpr.fields.push(
+		{
+			name: 'execute',
+			pos: haxe.macro.Context.currentPos(),
+			kind: FFun( 
+			{
+				args: [],
+				ret: macro : Void,
+				expr: macro { hex.compiletime.ContextLocator.getContext( $v { contextName } ).$file();  }
+			}),
+			access: [ APublic ]
+		});
+		
+		var instance = hex.compiletime.util.ContextUtil.instantiateContextDefinition( classExpr );
+		assembler.setMainExpression( macro @:mergeBlock { $instance; }  );
 	}
 }
 #end

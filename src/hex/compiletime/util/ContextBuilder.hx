@@ -22,7 +22,7 @@ class ContextBuilder
 	
 	
 	var _owner 						: ApplicationContextOwner;
-	var _iteration 					: BuildIteration;
+	public var _iteration 			: BuildIteration;
 
 	public function new( owner : ApplicationContextOwner ) 
 	{
@@ -60,7 +60,7 @@ class ContextBuilder
 	
 	public static function getApplicationContextName( interfaceIterationName : String ) : String
 	{
-		return interfaceIterationName.substring( 1, interfaceIterationName.lastIndexOf( '_' ) );
+		return interfaceIterationName.substring( 0, interfaceIterationName.lastIndexOf( '_' ) );
 	}
 	
 	static public function getInstance( owner : ApplicationContextOwner ) : ContextBuilder
@@ -118,7 +118,7 @@ class ContextBuilder
 						interfaceExpr.fields.push( { name: field.name, kind: FVar( t, e ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
 						
 					case FFun( f ):
-						interfaceExpr.fields.push( { name: field.name, kind: FFun( {args: f.args, ret:macro:Void, expr:null, params:f.params} ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
+						interfaceExpr.fields.push( { name: field.name, meta: [ { name: ":noCompletion", params: [], pos: haxe.macro.Context.currentPos() } ], kind: FFun( {args: f.args, ret:macro:Void, expr:null, params:f.params} ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
 
 					case _:
 						haxe.macro.Context.error( 'field not handled here', haxe.macro.Context.currentPos() );
