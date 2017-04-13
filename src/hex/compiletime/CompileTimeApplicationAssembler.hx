@@ -19,23 +19,7 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 	
 	var _assemblerExpression : Expr;
 
-	public function new( assemblerExpression : Expr = null  )
-	{
-		//Create runtime applicationAssembler
-		var applicationAssemblerTypePath 	= MacroUtil.getTypePath( "hex.runtime.ApplicationAssembler" );
-		var applicationAssemblerVarName 	= "";
-		
-		if ( assemblerExpression == null )
-		{
-			applicationAssemblerVarName = 'applicationAssembler';
-			this.addExpression( macro @:mergeBlock { var $applicationAssemblerVarName = new $applicationAssemblerTypePath(); } );
-			this._assemblerExpression = macro $i { applicationAssemblerVarName };
-		}
-		else
-		{
-			this._assemblerExpression = assemblerExpression;
-		}
-	}
+	public function new(){}
 	
 	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
@@ -97,11 +81,6 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 	public function getMainExpression() : Expr
 	{
 		return return macro $b{ this._expressions };
-	}
-	
-	public function getAssemblerExpression() : Expr
-	{
-		return this._assemblerExpression;
 	}
 	
 	public function setMainExpression( e : Expr ) : Void

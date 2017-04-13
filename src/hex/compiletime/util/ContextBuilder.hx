@@ -1,10 +1,10 @@
 package hex.compiletime.util;
-import haxe.macro.Compiler;
 
 #if macro
 import haxe.macro.Expr.TypeDefinition;
 import hex.core.IApplicationContext;
 import hex.core.HashCodeFactory;
+import hex.compiletime.ICompileTimeApplicationAssembler;
 import hex.compiletime.util.ContextBuilder;
 
 /**
@@ -20,11 +20,11 @@ class ContextBuilder
 	//Each application context owner got its own context builder
 	static var _Map 				: Map<ApplicationContextOwner, ContextBuilder>;
 	
-	
 	var _owner 						: ApplicationContextOwner;
+	
 	public var _iteration 			: BuildIteration;
 
-	public function new( owner : ApplicationContextOwner ) 
+	function new( owner : ApplicationContextOwner ) 
 	{
 		this._owner = owner;
 		this._iteration = ContextBuilder._getContextIteration( owner.getApplicationContext().getName() );
@@ -65,18 +65,23 @@ class ContextBuilder
 	
 	static public function getInstance( owner : ApplicationContextOwner ) : ContextBuilder
 	{
+		if ( !ContextBuilder._Map.exists( owner ) )
+		{
+			haxe.macro.Context.error( 'ContextBuilder not found for this owner.', haxe.macro.Context.currentPos() );
+		}
+		
+		return ContextBuilder._Map.get( owner );
+	}
+	
+	static public function register( owner : ApplicationContextOwner ) 
+	{
 		if ( ContextBuilder._Map == null )
 		{
 			ContextBuilder._Map = new Map();
 			haxe.macro.Context.onAfterTyping( ContextBuilder._onAfterTyping );
 		}
 		
-		if ( !ContextBuilder._Map.exists( owner ) )
-		{
-			ContextBuilder._Map.set( owner, new ContextBuilder( owner ) );
-		}
-		
-		return ContextBuilder._Map.get( owner );
+		ContextBuilder._Map.set( owner, new ContextBuilder( owner ) );
 	}
 	
 	//Each instance of the DSL is reprezented by a class property

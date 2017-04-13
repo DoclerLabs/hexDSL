@@ -107,10 +107,24 @@ class ContextUtil
 		
 		var interfaceName = 'I' + previous.name;
 		var tp = MacroUtil.getTypePath( 'hex.context.I' + previous.name );
+		var assemblerCT = macro:hex.core.IApplicationAssembler;
 		
-		var classExpr = macro class $className implements $tp { public function new() { } };
+		var classExpr = macro class $className implements $tp { public function new( applicationAssembler : $assemblerCT ) 
+		{ 
+			this._applicationAssembler = applicationAssembler;
+			//this.applicationContext = $assemblerExpr.getApplicationContext( $v { this._applicationContextName }, $p { applicationContextClass } ); };
+		} };
 		
 		var fields =  previous.fields;
+		
+		fields.push(
+		{
+			name: '_applicationAssembler',
+			pos: haxe.macro.Context.currentPos(),
+			kind: FVar( assemblerCT ),
+			access: [ APrivate ]
+		});
+		
 		for ( field in fields )
 		{
 			if ( field.name != 'new' )

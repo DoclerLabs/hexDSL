@@ -62,7 +62,7 @@ class BasicFlowCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
-	@Test( "test context reference" )
+	/*@Test( "test context reference" )
 	public function testContextReference() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextReference.flow" );
@@ -77,7 +77,7 @@ class BasicFlowCompilerTest
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextWithoutName.flow" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
-	}
+	}*/
 	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
@@ -92,7 +92,7 @@ class BasicFlowCompilerTest
 		Assert.equals( assembler, this._applicationAssembler );
 	}
 	
-	@Test( "test building String" )
+	/*@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
@@ -736,7 +736,7 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
 		Assert.equals( this._getCoreFactory().locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
-	}
+	}*/
 	
 	/*@Test( "test trigger method connection" )
 	public function testTriggerMethodConnection() : Void

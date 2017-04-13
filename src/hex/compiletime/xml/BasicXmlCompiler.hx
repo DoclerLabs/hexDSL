@@ -26,11 +26,11 @@ using StringTools;
 class BasicXmlCompiler
 {
 	#if macro
-	static function _readXmlFile( 	fileName : String, 
-									?applicationContextName : String,
-									?preprocessingVariables : Expr, 
-									?conditionalVariables : Expr, 
-									?applicationAssemblerExpr : Expr ) : ExprOf<IApplicationAssembler>
+	static function _readXmlFile( 	fileName 						: String, 
+									?applicationContextName 		: String,
+									?preprocessingVariables 		: Expr, 
+									?conditionalVariables 			: Expr, 
+									?applicationAssemblerExpression : Expr ) : ExprOf<IApplicationAssembler>
 	{
 		LogManager.context = new MacroLoggerContext();
 		
@@ -40,8 +40,9 @@ class BasicXmlCompiler
 		var dslReader					= new DSLReader();
 		var document 					= dslReader.read( fileName, preprocessingVariables, conditionalVariablesChecker );
 		
-		var assembler 					= new CompileTimeApplicationAssembler( applicationAssemblerExpr );
-		var parser 						= new CompileTimeParser( new hex.compiletime.xml.parser.ParserCollection() );
+		var assembler 					= new CompileTimeApplicationAssembler();
+		var assemblerExpression			= { name: '', expression: applicationAssemblerExpression };
+		var parser 						= new CompileTimeParser( new hex.compiletime.xml.parser.ParserCollection( assemblerExpression ) );
 		
 		parser.setImportHelper( new ClassImportHelper() );
 		parser.setExceptionReporter( new ExceptionReporter( dslReader.positionTracker ) );

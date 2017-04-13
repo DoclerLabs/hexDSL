@@ -5,6 +5,7 @@ import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
+import hex.runtime.ApplicationAssembler;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
@@ -17,7 +18,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/testBuildingString.flow", "testBuildingString" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/testBuildingString.flow", "testBuildingString" );
 		
 		var locator = code.locator;
 		Assert.isNull( locator.s );
@@ -30,7 +32,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building simple instance with arguments" )
 	public function testBuildingSimpleInstanceWithArguments() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/simpleInstanceWithArguments.flow", "testBuildingSimpleInstanceWithArguments" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/simpleInstanceWithArguments.flow", "testBuildingSimpleInstanceWithArguments" );
 		
 		var locator = code.locator;
 		Assert.isNull( locator.size );
@@ -45,7 +48,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building multiple instances with arguments" )
 	public function testBuildingMultipleInstancesWithArguments() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/multipleInstancesWithArguments.flow", "testBuildingMultipleInstancesWithArguments" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/multipleInstancesWithArguments.flow", "testBuildingMultipleInstancesWithArguments" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -69,7 +73,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building single instance with primitives references" )
 	public function testBuildingSingleInstanceWithPrimitivesReferences() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/singleInstanceWithPrimReferences.flow", "testBuildingSingleInstanceWithPrimitivesReferences" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/singleInstanceWithPrimReferences.flow", "testBuildingSingleInstanceWithPrimitivesReferences" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -87,7 +92,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building single instance with method references" )
 	public function testBuildingSingleInstanceWithMethodReferences() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/singleInstanceWithMethodReferences.flow", "testBuildingSingleInstanceWithMethodReferences" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/singleInstanceWithMethodReferences.flow", "testBuildingSingleInstanceWithMethodReferences" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -113,7 +119,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building multiple instances with references" )
 	public function testAssignInstancePropertyWithReference() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/instancePropertyWithReference.flow", "testAssignInstancePropertyWithReference" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/instancePropertyWithReference.flow", "testAssignInstancePropertyWithReference" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -135,9 +142,10 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building multiple instances with references" )
 	public function testBuildingMultipleInstancesWithReferences() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( "context/flow/multipleInstancesWithReferences.flow", "testBuildingMultipleInstancesWithReferences" );
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/multipleInstancesWithReferences.flow", "testBuildingMultipleInstancesWithReferences" );
 		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleInstanceWithoutArguments.flow" );
-		var code3 = BasicStaticFlowCompiler.extend( code2, "context/flow/multipleInstancesWithReferencesReferenced.flow" );
+		var code3 = BasicStaticFlowCompiler.extend( code, "context/flow/multipleInstancesWithReferencesReferenced.flow" );
 		
 		var locator = code.locator;
 		var locator2 = code2.locator;
@@ -178,6 +186,7 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 30, anotherRect.size.x );
 		Assert.equals( 40, anotherRect.size.y );
 		
+		//Check data synchronisation/integrity
 		locator.rectSize = null;
 		Assert.isNull( locator2.rectSize );
 		Assert.isNull( locator3.rectSize );

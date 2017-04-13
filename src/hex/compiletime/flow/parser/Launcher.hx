@@ -2,17 +2,20 @@ package hex.compiletime.flow.parser;
 
 #if macro
 import hex.compiletime.ICompileTimeApplicationAssembler;
-import hex.compiletime.flow.AbstractExprParser;
+import hex.core.VariableExpression;
 import hex.util.MacroUtil;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
+class Launcher extends hex.compiletime.flow.AbstractExprParser<hex.compiletime.basic.BuildRequest>
 {
-	public function new() 
+	var _assemblerVariable : VariableExpression;
+	
+	public function new( assemblerVar : VariableExpression ) 
 	{
+		this._assemblerVariable = assemblerVar;
 		super();
 	}
 	
@@ -34,7 +37,7 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		assembler.buildEverything();
 		
 		//return program
-		assembler.addExpression( assembler.getAssemblerExpression() );
+		assembler.addExpression( this._assemblerVariable.expression );
 	}
 }
 #end
