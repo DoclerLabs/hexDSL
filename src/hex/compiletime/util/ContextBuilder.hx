@@ -24,13 +24,13 @@ class ContextBuilder
 	
 	public var _iteration 			: BuildIteration;
 
-	function new( owner : ApplicationContextOwner ) 
+	function new( owner : ApplicationContextOwner, applicationContextClassName : String ) 
 	{
 		this._owner = owner;
-		this._iteration = ContextBuilder._getContextIteration( owner.getApplicationContext().getName() );
+		this._iteration = ContextBuilder._getContextIteration( owner.getApplicationContext().getName(), applicationContextClassName );
 	}
 	
-	static private function _getContextIteration( applicationContextName : String ) : BuildIteration
+	static private function _getContextIteration( applicationContextName : String, applicationContextClassName : String ) : BuildIteration
 	{
 		var contextIteration;
 		
@@ -38,7 +38,11 @@ class ContextBuilder
 		{
 			var definition = ContextUtil.buildClassDefintion( getIterationName( applicationContextName, 0 ) );
 			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ) );
-			contextIteration = { iteration: 0, definition: definition, iDefinition: iDefinition, contextName: applicationContextName, defined: false };
+			
+			//Add a field for applicationContext with the name of the context.
+			definition.fields.push( ContextUtil.buildInstanceField( applicationContextName, applicationContextClassName ) );
+			
+			contextIteration = { iteration: 0, definition: definition, iDefinition: iDefinition, contextName: applicationContextName, contextClassName: applicationContextClassName, defined: false };
 			ContextBuilder._Iteration.set( applicationContextName, contextIteration );
 		}
 		else
@@ -73,7 +77,7 @@ class ContextBuilder
 		return ContextBuilder._Map.get( owner );
 	}
 	
-	static public function register( owner : ApplicationContextOwner ) 
+	static public function register( owner : ApplicationContextOwner, applicationContextClassName : String ) 
 	{
 		if ( ContextBuilder._Map == null )
 		{
@@ -81,7 +85,7 @@ class ContextBuilder
 			haxe.macro.Context.onAfterTyping( ContextBuilder._onAfterTyping );
 		}
 		
-		ContextBuilder._Map.set( owner, new ContextBuilder( owner ) );
+		ContextBuilder._Map.set( owner, new ContextBuilder( owner, applicationContextClassName ) );
 	}
 	
 	//Each instance of the DSL is reprezented by a class property
@@ -151,8 +155,7 @@ class ContextBuilder
 			if ( !contextIteration.defined )
 			{
 				contextIteration.defined = true;
-				
-				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition );
+				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
 				haxe.macro.Context.defineType( td );
 			}
 		}
@@ -161,11 +164,12 @@ class ContextBuilder
 
 typedef BuildIteration =
 {
-	var iteration 	: Int;
-	var definition 	: TypeDefinition;
-	var iDefinition : TypeDefinition;
-	var contextName : String;
-	var defined		: Bool;
+	var iteration 			: Int;
+	var definition 			: TypeDefinition;
+	var iDefinition 		: TypeDefinition;
+	var contextName 		: String;
+	var contextClassName 	: String;
+	var defined				: Bool;
 }
 
 typedef ApplicationContextOwner =

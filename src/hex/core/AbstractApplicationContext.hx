@@ -19,8 +19,6 @@ class AbstractApplicationContext implements IApplicationContext
 	var _coreFactory 			: ICoreFactory;
 	var _domain 				: Domain;
 	
-	public var test = 'test';
-	
 	public function new( coreFactory : ICoreFactory, name : String ) 
 	{
 		this._coreFactory	= coreFactory;

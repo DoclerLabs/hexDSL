@@ -150,7 +150,7 @@ class BasicStaticFlowCompilerTest
 		var locator = code.locator;
 		var locator2 = code2.locator;
 		var locator3 = code3.locator;
-
+		
 		//1st pass
 		code.execute();
 
@@ -197,5 +197,50 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( locator, locator2 );
 		Assert.equals( locator, locator3 );
 		Assert.equals( locator2, locator3 );
+	}
+	
+	@Test( "test applicationContext building" )
+	public function testApplicationContextBuilding() : Void
+	{
+		var applicationAssembler = new ApplicationAssembler();
+		var code1 = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/applicationContextBuildingTest.flow", "testApplicationContextBuilding1" );
+		
+		//application assembler reference stored
+		Assert.equals( applicationAssembler, code1.applicationAssembler );
+		
+		//Custom application context is available before code execution
+		Assert.equals( code1.applicationContext, code1.locator.testApplicationContextBuilding1 );
+		
+		//auto-completion is woking on custom applicationContext's class
+		Assert.equals( 'test', code1.applicationContext.getTest() );
+		Assert.equals( 'test', code1.locator.testApplicationContextBuilding1.getTest() );
+		
+		//
+		code1.execute();
+
+		//
+		Assert.isInstanceOf( code1.locator.testApplicationContextBuilding1, hex.mock.MockApplicationContext );
+		Assert.equals( "Hola Mundo", code1.locator.test );
+		
+		//
+		var code2 = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/applicationContextBuildingTest.flow", "testApplicationContextBuilding2" );
+		Assert.isInstanceOf( code2.locator.testApplicationContextBuilding2, hex.mock.MockApplicationContext );
+		Assert.equals( "Hola Mundo", code1.locator.test );
+		
+		//Parallel duplicated code generations and contexts are not the same
+		Assert.notEquals( code1, code2 );
+		Assert.notEquals( code1.applicationContext, code2.applicationContext );
+		Assert.notEquals( code1.locator.testApplicationContextBuilding1, code2.locator.testApplicationContextBuilding2 );
+		
+		//Extended code generation uses the same application context
+		var code3 = BasicStaticFlowCompiler.extend( code2, "context/flow/simpleInstanceWithoutArguments.flow", "testApplicationContextBuilding2" );
+		Assert.notEquals( code2, code3 );
+		Assert.equals( code2.applicationContext, code3.applicationContext );
+		Assert.equals( code2.locator.testApplicationContextBuilding2, code3.locator.testApplicationContextBuilding2 );
+	
+		//Compare assemblers
+		Assert.equals( code1.applicationAssembler, code2.applicationAssembler );
+		Assert.equals( code1.applicationAssembler, code3.applicationAssembler );
+		Assert.equals( code2.applicationAssembler, code3.applicationAssembler );
 	}
 }

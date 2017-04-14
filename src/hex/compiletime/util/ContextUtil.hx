@@ -101,18 +101,20 @@ class ContextUtil
 	 * @param	TypeDefinition Previous class to copy definition from.
 	 * @return TypeDefinition
 	 */
-	public static function makeFinalClassDefintion( id : String, previous : TypeDefinition ) : TypeDefinition
+	public static function makeFinalClassDefintion( id : String, previous : TypeDefinition, applicationContextClassName : String ) : TypeDefinition
 	{
-		var className = id;
+		var className 					= id;
 		
-		var interfaceName = 'I' + previous.name;
-		var tp = MacroUtil.getTypePath( 'hex.context.I' + previous.name );
-		var assemblerCT = macro:hex.core.IApplicationAssembler;
+		var interfaceName 				= 'I' + previous.name;
+		var tp 							= MacroUtil.getTypePath( 'hex.context.I' + previous.name );
+		var assemblerCT 				= macro:hex.core.IApplicationAssembler;
+		var applicationContextCT		= TypeTools.toComplexType( Context.getType( applicationContextClassName ) );
+		var applicationContextClassPack = MacroUtil.getPack( applicationContextClassName );
 		
 		var classExpr = macro class $className implements $tp { public function new( applicationAssembler : $assemblerCT ) 
 		{ 
 			this._applicationAssembler = applicationAssembler;
-			//this.applicationContext = $assemblerExpr.getApplicationContext( $v { this._applicationContextName }, $p { applicationContextClass } ); };
+			this.$className = _applicationAssembler.getApplicationContext( $v{className}, $p{applicationContextClassPack} );
 		} };
 		
 		var fields =  previous.fields;
@@ -120,9 +122,10 @@ class ContextUtil
 		fields.push(
 		{
 			name: '_applicationAssembler',
+			meta: [ { name: ":noCompletion", params: [], pos: haxe.macro.Context.currentPos() } ],
 			pos: haxe.macro.Context.currentPos(),
 			kind: FVar( assemblerCT ),
-			access: [ APrivate ]
+			access: [ APublic ]
 		});
 		
 		for ( field in fields )
