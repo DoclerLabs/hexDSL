@@ -1,4 +1,4 @@
-package hex.compiletime.flow;
+package hex.compiletime.xml;
 
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
@@ -28,7 +28,7 @@ import hex.unittest.assertion.Assert;
  * ...
  * @author Francis Bourre
  */
-class BasicStaticFlowCompilerTest 
+class BasicStaticXmlCompilerTest 
 {
 	var _applicationAssembler : IApplicationAssembler;
 	static var applicationAssembler : IApplicationAssembler;
@@ -45,11 +45,11 @@ class BasicStaticFlowCompilerTest
 		ApplicationDomainDispatcher.getInstance().clear();
 		this._applicationAssembler.release();
 	}
-	
+
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingString.flow", "BasicStaticFlowCompiler_testBuildingString" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testBuildingString.xml", "BasicStaticXmlCompiler_testBuildingString" );
 		
 		var locator = code.locator;
 		Assert.isNull( locator.s );
@@ -62,7 +62,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test context reference" )
 	public function testContextReference() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/contextReference.flow", "BasicStaticFlowCompiler_testContextReference" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/contextReference.xml", "BasicStaticXmlCompiler_testContextReference" );
 		code.execute();
 		Assert.equals( code.applicationContext, code.locator.contextHolder.context );
 	}
@@ -70,7 +70,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building String without context name" )
 	public function testBuildingStringWithoutContextName() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/contextWithoutName.flow", "BasicStaticFlowCompiler_testBuildingStringWithoutContextName" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/contextWithoutName.xml", "BasicStaticXmlCompiler_testBuildingStringWithoutContextName" );
 		code.execute();
 		Assert.equals( "hello", code.locator.s );
 	}
@@ -78,11 +78,11 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building String with assembler static property" )
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
-		BasicStaticFlowCompilerTest.applicationAssembler = new ApplicationAssembler();
-		var code = BasicStaticFlowCompiler.compile( BasicStaticFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow", "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty" );
+		BasicStaticXmlCompilerTest.applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticXmlCompiler.compile( BasicStaticXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml", "BasicStaticXmlCompiler_testBuildingStringWithAssemblerStaticProperty" );
 		code.execute();
 		
-		var s : String = BasicStaticFlowCompilerTest.applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty", ApplicationContext ).getCoreFactory().locate( "s" );
+		var s : String = BasicStaticXmlCompilerTest.applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testBuildingStringWithAssemblerStaticProperty", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
 	
@@ -91,8 +91,8 @@ class BasicStaticFlowCompilerTest
 	@Test( "test overriding context name" )
 	public function testOverridingContextName() : Void
 	{
-		var code1 = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testOverridingContextName1" );
-		var code2 = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testOverridingContextName2" );
+		var code1 = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", "BasicStaticXmlCompiler_testOverridingContextName1" );
+		var code2 = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", "BasicStaticXmlCompiler_testOverridingContextName2" );
 		
 		code1.execute();
 		code2.execute();
@@ -106,7 +106,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Int" )
 	public function testBuildingInt() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingInt.flow", "BasicStaticFlowCompiler_testBuildingInt" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testBuildingInt.xml", "BasicStaticXmlCompiler_testBuildingInt" );
 		code.execute();
 		Assert.equals( -3, code.locator.i );
 	}
@@ -114,7 +114,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Hex" )
 	public function testBuildingHex() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingHex.flow", "BasicStaticFlowCompiler_testBuildingHex" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testBuildingHex.xml", "BasicStaticXmlCompiler_testBuildingHex" );
 		code.execute();
 		Assert.equals( 0xFFFFFF, code.locator.i );
 	}
@@ -122,7 +122,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Bool" )
 	public function testBuildingBool() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingBool.flow", "BasicStaticFlowCompiler_testBuildingBool" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testBuildingBool.xml", "BasicStaticXmlCompiler_testBuildingBool" );
 		code.execute();
 		Assert.isTrue( code.locator.b );
 	}
@@ -130,7 +130,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building UInt" )
 	public function testBuildingUInt() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingUInt.flow", "BasicStaticFlowCompiler_testBuildingUInt" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testBuildingUInt.xml", "BasicStaticXmlCompiler_testBuildingUInt" );
 		code.execute();
 		Assert.equals( 3, code.locator.i );
 	}
@@ -138,7 +138,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building null" )
 	public function testBuildingNull() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingNull.flow", "BasicStaticFlowCompiler_testBuildingNull" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testBuildingNull.xml", "BasicStaticXmlCompiler_testBuildingNull" );
 		code.execute();
 		Assert.isNull( code.locator.value );
 	}
@@ -146,7 +146,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building anonymous object" )
 	public function testBuildingAnonymousObject() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/anonymousObject.flow", "BasicStaticFlowCompiler_testBuildingAnonymousObject" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/anonymousObject.xml", "BasicStaticXmlCompiler_testBuildingAnonymousObject" );
 		code.execute();
 		
 		//TODO make structure with typed properties
@@ -162,7 +162,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building simple instance without arguments" )
 	public function testBuildingSimpleInstanceWithoutArguments() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testBuildingSimpleInstanceWithoutArguments" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", "BasicStaticXmlCompiler_testBuildingSimpleInstanceWithoutArguments" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClassWithoutArgument );
@@ -171,7 +171,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building simple instance with arguments" )
 	public function testBuildingSimpleInstanceWithArguments() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/simpleInstanceWithArguments.flow", "BasicStaticFlowCompiler_testBuildingSimpleInstanceWithArguments" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithArguments.xml", "BasicStaticXmlCompiler_testBuildingSimpleInstanceWithArguments" );
 		
 		var locator = code.locator;
 		Assert.isNull( locator.size );
@@ -186,7 +186,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building multiple instances with arguments" )
 	public function testBuildingMultipleInstancesWithArguments() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/multipleInstancesWithArguments.flow", "BasicStaticFlowCompiler_testBuildingMultipleInstancesWithArguments" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multipleInstancesWithArguments.xml", "BasicStaticXmlCompiler_testBuildingMultipleInstancesWithArguments" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -211,7 +211,7 @@ class BasicStaticFlowCompilerTest
 	public function testBuildingSingleInstanceWithPrimitivesReferences() : Void
 	{
 		var applicationAssembler = new ApplicationAssembler();
-		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/singleInstanceWithPrimReferences.flow", "BasicStaticFlowCompiler_testBuildingSingleInstanceWithPrimitivesReferences" );
+		var code = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/singleInstanceWithPrimReferences.xml", "BasicStaticXmlCompiler_testBuildingSingleInstanceWithPrimitivesReferences" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -230,7 +230,7 @@ class BasicStaticFlowCompilerTest
 	public function testBuildingSingleInstanceWithMethodReferences() : Void
 	{
 		var applicationAssembler = new ApplicationAssembler();
-		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/singleInstanceWithMethodReferences.flow", "BasicStaticFlowCompiler_testBuildingSingleInstanceWithMethodReferences" );
+		var code = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/singleInstanceWithMethodReferences.xml", "BasicStaticXmlCompiler_testBuildingSingleInstanceWithMethodReferences" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -257,7 +257,7 @@ class BasicStaticFlowCompilerTest
 	public function testAssignInstancePropertyWithReference() : Void
 	{
 		var applicationAssembler = new ApplicationAssembler();
-		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/instancePropertyWithReference.flow", "BasicStaticFlowCompiler_testAssignInstancePropertyWithReference" );
+		var code = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/instancePropertyWithReference.xml", "BasicStaticXmlCompiler_testAssignInstancePropertyWithReference" );
 		var locator = code.locator;
 		code.execute();
 		
@@ -280,9 +280,9 @@ class BasicStaticFlowCompilerTest
 	public function testBuildingMultipleInstancesWithReferences() : Void
 	{
 		var applicationAssembler = new ApplicationAssembler();
-		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/multipleInstancesWithReferences.flow", "BasicStaticFlowCompiler_testBuildingMultipleInstancesWithReferences" );
-		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleInstanceWithoutArguments.flow" );
-		var code3 = BasicStaticFlowCompiler.extend( code, "context/flow/multipleInstancesWithReferencesReferenced.flow" );
+		var code = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/multipleInstancesWithReferences.xml", "BasicStaticXmlCompiler_testBuildingMultipleInstancesWithReferences" );
+		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/simpleInstanceWithoutArguments.xml" );
+		var code3 = BasicStaticXmlCompiler.extend( code, "context/xml/multipleInstancesWithReferencesReferenced.xml" );
 		
 		var locator = code.locator;
 		var locator2 = code2.locator;
@@ -340,40 +340,40 @@ class BasicStaticFlowCompilerTest
 	public function testApplicationContextBuilding() : Void
 	{
 		var applicationAssembler = new ApplicationAssembler();
-		var code1 = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/applicationContextBuildingTest.flow", "BasicStaticFlowCompiler_testApplicationContextBuilding1" );
+		var code1 = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/applicationContextBuildingTest.xml", "testApplicationContextBuilding1" );
 		
 		//application assembler reference stored
 		Assert.equals( applicationAssembler, code1.applicationAssembler );
 		
 		//Custom application context is available before code execution
-		Assert.equals( code1.applicationContext, code1.locator.BasicStaticFlowCompiler_testApplicationContextBuilding1 );
+		Assert.equals( code1.applicationContext, code1.locator.testApplicationContextBuilding1 );
 		
 		//auto-completion is woking on custom applicationContext's class
 		Assert.equals( 'test', code1.applicationContext.getTest() );
-		Assert.equals( 'test', code1.locator.BasicStaticFlowCompiler_testApplicationContextBuilding1.getTest() );
+		Assert.equals( 'test', code1.locator.testApplicationContextBuilding1.getTest() );
 		
 		//
 		code1.execute();
 
 		//
-		Assert.isInstanceOf( code1.locator.BasicStaticFlowCompiler_testApplicationContextBuilding1, hex.mock.MockApplicationContext );
+		Assert.isInstanceOf( code1.locator.testApplicationContextBuilding1, hex.mock.MockApplicationContext );
 		Assert.equals( "Hola Mundo", code1.locator.test );
 		
 		//
-		var code2 = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/applicationContextBuildingTest.flow", "BasicStaticFlowCompiler_testApplicationContextBuilding2" );
-		Assert.isInstanceOf( code2.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2, hex.mock.MockApplicationContext );
+		var code2 = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/applicationContextBuildingTest.xml", "testApplicationContextBuilding2" );
+		Assert.isInstanceOf( code2.locator.testApplicationContextBuilding2, hex.mock.MockApplicationContext );
 		Assert.equals( "Hola Mundo", code1.locator.test );
 		
 		//Parallel duplicated code generations and contexts are not the same
 		Assert.notEquals( code1, code2 );
 		Assert.notEquals( code1.applicationContext, code2.applicationContext );
-		Assert.notEquals( code1.locator.BasicStaticFlowCompiler_testApplicationContextBuilding1, code2.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2 );
+		Assert.notEquals( code1.locator.testApplicationContextBuilding1, code2.locator.testApplicationContextBuilding2 );
 		
 		//Extended code generation uses the same application context
-		var code3 = BasicStaticFlowCompiler.extend( code2, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testApplicationContextBuilding2" );
+		var code3 = BasicStaticXmlCompiler.extend( code2, "context/xml/simpleInstanceWithoutArguments.xml", "testApplicationContextBuilding2" );
 		Assert.notEquals( code2, code3 );
 		Assert.equals( code2.applicationContext, code3.applicationContext );
-		Assert.equals( code2.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2, code3.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2 );
+		Assert.equals( code2.locator.testApplicationContextBuilding2, code3.locator.testApplicationContextBuilding2 );
 	
 		//Compare assemblers
 		Assert.equals( code1.applicationAssembler, code2.applicationAssembler );
@@ -384,7 +384,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test simple method call" )
 	public function testSimpleMethodCall() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/simpleMethodCall.flow", "BasicStaticFlowCompiler_testSimpleMethodCall" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleMethodCall.xml", "BasicStaticXmlCompiler_testSimpleMethodCall" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.caller, MockCaller );
@@ -394,7 +394,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test method call with type params" )
 	public function testCallWithTypeParams() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/methodCallWithTypeParams.flow", "BasicStaticFlowCompiler_testCallWithTypeParams" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/methodCallWithTypeParams.xml", "BasicStaticXmlCompiler_testCallWithTypeParams" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.caller, MockCaller );
@@ -404,7 +404,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building multiple instances with method calls" )
 	public function testBuildingMultipleInstancesWithMethodCall() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/multipleInstancesWithMethodCall.flow", "BasicStaticFlowCompiler_testBuildingMultipleInstancesWithMethodCall" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multipleInstancesWithMethodCall.xml", "BasicStaticXmlCompiler_testBuildingMultipleInstancesWithMethodCall" );
 		code.execute();
 
 		Assert.equals( 30, code.locator.rectSize.x );
@@ -429,7 +429,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building instance with static method" )
 	public function testBuildingInstanceWithStaticMethod() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/instanceWithStaticMethod.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithStaticMethod" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/instanceWithStaticMethod.xml", "BasicStaticXmlCompiler_testBuildingInstanceWithStaticMethod" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.service, MockServiceProvider );
@@ -440,7 +440,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building instance with static method and arguments" )
 	public function testBuildingInstanceWithStaticMethodAndArguments() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/instanceWithStaticMethodAndArguments.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithStaticMethodAndArguments" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/instanceWithStaticMethodAndArguments.xml", "BasicStaticXmlCompiler_testBuildingInstanceWithStaticMethodAndArguments" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.rect, MockRectangle );
@@ -453,7 +453,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building instance with static method and factory method" )
 	public function testBuildingInstanceWithStaticMethodAndFactoryMethod() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/instanceWithStaticMethodAndFactoryMethod.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithStaticMethodAndFactoryMethod" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/instanceWithStaticMethodAndFactoryMethod.xml", "BasicStaticXmlCompiler_testBuildingInstanceWithStaticMethodAndFactoryMethod" );
 		code.execute();
 		
 		Assert.equals( 10, code.locator.point.x );
@@ -463,10 +463,10 @@ class BasicStaticFlowCompilerTest
 	@Test( "test 'injector-creation' attribute" )
 	public function testInjectorCreationAttribute() : Void
 	{
-		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testInjectorCreationAttribute", ApplicationContext ).getCoreFactory().getInjector();
+		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testInjectorCreationAttribute", ApplicationContext ).getCoreFactory().getInjector();
 		injector.mapToValue( String, 'hola mundo' );
 		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/injectorCreationAttribute.flow", "BasicStaticFlowCompiler_testInjectorCreationAttribute" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/injectorCreationAttribute.xml", "BasicStaticXmlCompiler_testInjectorCreationAttribute" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClassWithInjectedProperty );
@@ -477,10 +477,10 @@ class BasicStaticFlowCompilerTest
 	@Test( "test 'inject-into' attribute" )
 	public function testInjectIntoAttribute() : Void
 	{
-		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testInjectIntoAttribute", ApplicationContext ).getCoreFactory().getInjector();
+		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testInjectIntoAttribute", ApplicationContext ).getCoreFactory().getInjector();
 		injector.mapToValue( String, 'hola mundo' );
 		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/injectIntoAttribute.flow", "BasicStaticFlowCompiler_testInjectIntoAttribute" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/injectIntoAttribute.xml", "BasicStaticXmlCompiler_testInjectIntoAttribute" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClassWithInjectedProperty );
@@ -491,7 +491,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building XML without parser class" )
 	public function testBuildingXMLWithoutParserClass() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/xmlWithoutParserClass.flow", "BasicStaticFlowCompiler_testBuildingXMLWithoutParserClass" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/xmlWithoutParserClass.xml", "BasicStaticXmlCompiler_testBuildingXMLWithoutParserClass" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.fruits, Xml );
@@ -500,7 +500,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building XML with parser class" )
 	public function testBuildingXMLWithParserClass() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/xmlWithParserClass.flow", "BasicStaticFlowCompiler_testBuildingXMLWithParserClass" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/xmlWithParserClass.xml", "BasicStaticXmlCompiler_testBuildingXMLWithParserClass" );
 		code.execute();
 
 		Assert.equals( 3, code.locator.fruits.length );
@@ -517,7 +517,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Arrays" )
 	public function testBuildingArrays() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/arrayFilledWithReferences.flow", "BasicStaticFlowCompiler_testBuildingArrays" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/arrayFilledWithReferences.xml", "BasicStaticXmlCompiler_testBuildingArrays" );
 		code.execute();
 		
 		Assert.equals( 2, code.locator.text.length );
@@ -540,7 +540,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Map filled with references" )
 	public function testBuildingMapFilledWithReferences() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/hashmapFilledWithReferences.flow", "BasicStaticFlowCompiler_testBuildingMapFilledWithReferences" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/hashmapFilledWithReferences.xml", "BasicStaticXmlCompiler_testBuildingMapFilledWithReferences" );
 		code.execute();
 
 		var fruits = code.locator.fruits;
@@ -561,7 +561,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building HashMap with map-type" )
 	public function testBuildingHashMapWithMapType() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/hashmapWithMapType.flow", "BasicStaticFlowCompiler_testBuildingHashMapWithMapType" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/hashmapWithMapType.xml", "BasicStaticXmlCompiler_testBuildingHashMapWithMapType" );
 		code.execute();
 
 		Assert.isNotNull( code.locator.fruits );
@@ -579,7 +579,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test map-type attribute with Array" )
 	public function testMapTypeWithArray() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testMapTypeWithArray.flow", "BasicStaticFlowCompiler_testMapTypeWithArray" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testMapTypeWithArray.xml", "BasicStaticXmlCompiler_testMapTypeWithArray" );
 		code.execute();
 		
 		var intCollection = code.applicationContext.getInjector().getInstanceWithClassName( "Array<Int>", "intCollection" );
@@ -597,7 +597,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test map-type attribute with instance" )
 	public function testMapTypeWithInstance() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testMapTypeWithInstance.flow", "BasicStaticFlowCompiler_testMapTypeWithInstance" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/testMapTypeWithInstance.xml", "BasicStaticXmlCompiler_testMapTypeWithInstance" );
 		code.execute();
 		
 		var intInstance = code.applicationContext.getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<Int>", "intInstance" );
@@ -615,7 +615,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building class reference" )
 	public function testBuildingClassReference() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/classReference.flow", "BasicStaticFlowCompiler_testBuildingClassReference" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/classReference.xml", "BasicStaticXmlCompiler_testBuildingClassReference" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.RectangleClass, Class );
@@ -630,7 +630,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test static-ref" )
 	public function testStaticRef() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/staticRef.flow", "BasicStaticFlowCompiler_testStaticRef" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/staticRef.xml", "BasicStaticXmlCompiler_testStaticRef" );
 		code.execute();
 
 		Assert.equals( code.locator.constant, MockClass.MESSAGE_TYPE );
@@ -639,7 +639,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test static-ref property" )
 	public function testStaticProperty() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/staticRefProperty.flow", "BasicStaticFlowCompiler_testStaticProperty" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/staticRefProperty.xml", "BasicStaticXmlCompiler_testStaticProperty" );
 		code.execute();
 
 		Assert.equals( MockClass.MESSAGE_TYPE, code.locator.object.property );
@@ -649,7 +649,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test static-ref argument" )
 	public function testStaticArgument() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/staticRefArgument.flow", "BasicStaticFlowCompiler_testStaticArgument" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/staticRefArgument.xml", "BasicStaticXmlCompiler_testStaticArgument" );
 		code.execute();
 
 		Assert.equals( code.locator.instance.constant, MockClass.MESSAGE_TYPE );
@@ -658,7 +658,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test static-ref argument on method-call" )
 	public function testStaticArgumentOnMethodCall() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/staticRefArgumentOnMethodCall.flow", "BasicStaticFlowCompiler_testStaticArgumentOnMethodCall" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/staticRefArgumentOnMethodCall.xml", "BasicStaticXmlCompiler_testStaticArgumentOnMethodCall" );
 		code.execute();
 
 		Assert.equals( MockMethodCaller.staticVar, code.locator.instance.argument );
@@ -667,7 +667,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test map-type attribute" )
 	public function testMapTypeAttribute() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/mapTypeAttribute.flow", "BasicStaticFlowCompiler_testMapTypeAttribute" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/mapTypeAttribute.xml", "BasicStaticXmlCompiler_testMapTypeAttribute" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClass );
@@ -678,7 +678,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test multi map-type attributes" )
 	public function testMultiMapTypeAttributes() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/multiMapTypeAttributes.flow", "BasicStaticFlowCompiler_testMultiMapTypeAttributes" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multiMapTypeAttributes.xml", "BasicStaticXmlCompiler_testMultiMapTypeAttributes" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClass );
@@ -692,7 +692,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Map with class reference" )
 	public function testBuildingMapWithClassReference() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/hashmapWithClassReference.flow", "BasicStaticFlowCompiler_testBuildingMapWithClassReference" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/hashmapWithClassReference.xml", "BasicStaticXmlCompiler_testBuildingMapWithClassReference" );
 		code.execute();
 
 		Assert.equals( IMockInterface, code.locator.map.getKeys()[ 0 ] );
@@ -703,21 +703,21 @@ class BasicStaticFlowCompilerTest
 	/*@Ignore( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/targetSubProperty.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/xml/targetSubProperty.xml" );
 
 		var mockObject : MockObjectWithRegtangleProperty = this._getCoreFactory().locate( "mockObject" );
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}*/
 	
-	@Test( "test file preprocessor with flow file" )
-	public function testFilePreprocessorWithFlowFile() : Void
+	@Test( "test file preprocessor with Xml file" )
+	public function testFilePreprocessorWithXmlFile() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/preprocessor.flow", "BasicStaticFlowCompiler_testFilePreprocessorWithFlowFile", 
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/preprocessor.xml", "BasicStaticXmlCompiler_testFilePreprocessorWithXmlFile", 
 															[	"hello" 		=> "bonjour",
-																"contextName" 	=> 'applicationContext',
-																"context" 		=> 'name="${contextName}"',
-																"node" 			=> 'message = "${hello}"' ] );
+																					"contextName" 	=> 'applicationContext',
+																					"context" 		=> 'name="${contextName}"',
+																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );
 		code.execute();
 		
 		Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
@@ -726,35 +726,35 @@ class BasicStaticFlowCompilerTest
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/ifAttribute.flow", "BasicStaticFlowCompiler_testIfAttribute", null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/ifAttribute.xml", "BasicStaticXmlCompiler_testIfAttribute", null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
 		code.execute();
 		
-		Assert.equals( "hello prod", code.locator.message, "message value should equal 'hello prod'" );
+		Assert.equals( "hello prod", code.locator.message );
 	}
 	
 	@Test( "test include with if attribute" )
 	public function testIncludeWithIfAttribute() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/includeWithIfAttribute.flow", "BasicStaticFlowCompiler_testIncludeWithIfAttribute", null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeWithIfAttribute", null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
 		code.execute();
 		
-		Assert.equals( "hello prod", code.locator.message, "message value should equal 'hello prod'" );
+		Assert.equals( "hello prod", code.locator.message );
 	}
 
 	@Test( "test include fails with if attribute" )
 	public function testIncludeFailsWithIfAttribute() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/includeWithIfAttribute.flow", "BasicStaticFlowCompiler_testIncludeFailsWithIfAttribute", null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
 		code.execute();
 		
-		var coreFactory = this._applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testIncludeFailsWithIfAttribute", ApplicationContext ).getCoreFactory();
+		var coreFactory = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", ApplicationContext ).getCoreFactory();
 		Assert.methodCallThrows( NoSuchElementException, coreFactory, coreFactory.locate, [ "message" ], "'NoSuchElementException' should be thrown" );
 	}
 	
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/mappingConfiguration.flow", "BasicStaticFlowCompiler_testBuildingMappingConfiguration" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/mappingConfiguration.xml", "BasicStaticXmlCompiler_testBuildingMappingConfiguration" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.config, MappingConfiguration );
@@ -773,7 +773,7 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/xml/trigger.xml" );
 
 		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
 		Assert.isInstanceOf( model, MockModelWithTrigger );
@@ -789,7 +789,7 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/xml/trigger.xml" );
 
 		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
 		Assert.isInstanceOf( model, MockModelWithTrigger );

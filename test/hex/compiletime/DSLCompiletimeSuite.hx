@@ -13,6 +13,7 @@ class DSLCompiletimeSuite
 		hex.compiletime.xml.ApplicationContextBuildingTest, 
 		hex.compiletime.flow.BasicFlowCompilerTest, 
 		hex.compiletime.flow.BasicStaticFlowCompilerTest, 
+		hex.compiletime.xml.BasicStaticXmlCompilerTest,
 		hex.compiletime.xml.BasicXmlCompilerTest 
 	];
 }
