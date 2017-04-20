@@ -41,8 +41,13 @@ class XmlFactory
 				else
 				{
 					var typePath 	= MacroUtil.getTypePath( factory, constructorVO.filePosition );
+					
+					//Assign right type description
+					var xmlContent = macro Xml.parse( $v { source } );
+					constructorVO.type = MacroUtil.getFQCNFromExpression( macro ( new $typePath() ).parse( $xmlContent ) );
+
 					result = macro 	@:pos( constructorVO.filePosition ) 
-									( new $typePath() ).parse( Xml.parse( $v { source } ) );
+									( new $typePath() ).parse( $xmlContent );
 				}
 			}
 			else

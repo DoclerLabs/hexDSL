@@ -26,6 +26,9 @@ class StaticVariableFactory
 		//Building result
 		var result	= MacroUtil.getStaticVariable( constructorVO.staticRef, constructorVO.filePosition );
 		
+		//Assign right type description
+		constructorVO.type = MacroUtil.getFQCNFromExpression( result );
+		
 		return constructorVO.shouldAssign ?
 			macro @:pos( constructorVO.filePosition ) var $idVar = $result:
 			macro @:pos( constructorVO.filePosition ) $result;

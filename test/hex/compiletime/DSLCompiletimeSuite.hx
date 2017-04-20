@@ -1,8 +1,5 @@
 package hex.compiletime;
 
-import hex.compiletime.flow.BasicFlowCompilerTest;
-import hex.compiletime.xml.BasicXmlCompilerTest;
-
 /**
  * ...
  * @author Francis Bourre
@@ -14,7 +11,8 @@ class DSLCompiletimeSuite
 	[ 
 		hex.compiletime.flow.ApplicationContextBuildingTest, 
 		hex.compiletime.xml.ApplicationContextBuildingTest, 
-		BasicFlowCompilerTest, 
-		BasicXmlCompilerTest 
+		hex.compiletime.flow.BasicFlowCompilerTest, 
+		hex.compiletime.flow.BasicStaticFlowCompilerTest, 
+		hex.compiletime.xml.BasicXmlCompilerTest 
 	];
 }

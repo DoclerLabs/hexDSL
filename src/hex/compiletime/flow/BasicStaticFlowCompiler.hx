@@ -8,7 +8,7 @@ import hex.compiletime.CompileTimeApplicationAssembler;
 import hex.compiletime.CompileTimeParser;
 import hex.compiletime.ICompileTimeApplicationAssembler;
 import hex.compiletime.basic.CompileTimeApplicationContext;
-import hex.compiletime.basic.StrictCompileTimeContextFactory;
+import hex.compiletime.basic.StaticCompileTimeContextFactory;
 import hex.compiletime.flow.AbstractExprParser;
 import hex.compiletime.flow.DSLReader;
 import hex.compiletime.flow.FlowAssemblingExceptionReporter;
@@ -19,7 +19,7 @@ import hex.log.LogManager;
 import hex.log.MacroLoggerContext;
 import hex.parser.AbstractParserCollection;
 import hex.preprocess.ConditionalVariablesChecker;
-import hex.preprocess.MacroConditionalVariablesProcessor;
+import hex.preprocess.flow.MacroConditionalVariablesProcessor;
 import hex.util.MacroUtil;
 #end
 
@@ -51,7 +51,7 @@ class BasicStaticFlowCompiler
 		
 		parser.setImportHelper( new ClassImportHelper() );
 		parser.setExceptionReporter( new FlowAssemblingExceptionReporter() );
-		parser.parse( assembler, document, StrictCompileTimeContextFactory, CompileTimeApplicationContext, applicationContextName );
+		parser.parse( assembler, document, StaticCompileTimeContextFactory, CompileTimeApplicationContext, applicationContextName );
 		
 		return assembler.getMainExpression();
 	}

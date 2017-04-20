@@ -25,7 +25,7 @@ import hex.vo.PropertyVO;
  * ...
  * @author Francis Bourre
  */
-class StrictCompileTimeContextFactory 
+class StaticCompileTimeContextFactory 
 	implements IBuilder<BuildRequest>
 	implements IContextFactory 
 	implements ILocatorListener<String, Dynamic>
@@ -290,7 +290,7 @@ class StrictCompileTimeContextFactory
 			var finalResult = result;
 			finalResult = this._parseInjectInto( constructorVO, finalResult );
 			finalResult = this._parseMapTypes( constructorVO, finalResult );
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, type );
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, constructorVO.type );
 			this._expressions.push( macro @:mergeBlock { $finalResult;  coreFactory.register( $v { id }, $i { id } ); this.$id = $i { id }; } );
 			this._coreFactory.register( id, result );
 		}

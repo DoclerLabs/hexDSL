@@ -156,9 +156,16 @@ class ContextUtil
 			access: [ APublic ]
 		}
 		
-		var type = Context.getType( typeName );
-		var complexType = TypeTools.toComplexType( type );
-		newField.kind = FVar( complexType );
+		newField.kind = FVar( switch ( typeName.split('<')[0] )
+		{
+			case "Array": 	
+				typeName.indexOf( '<' ) != -1 ?
+					TypeTools.toComplexType( Context.typeof( Context.parseInlineString( "new " + typeName + "()", Context.currentPos() ) ) ):
+					macro:Array<Dynamic>;
+					
+			case "null" | "Object": macro:Dynamic;
+			case _: 				MacroUtil.getComplexTypeFromString( typeName );
+		} );
 		
 		return newField;
 	}

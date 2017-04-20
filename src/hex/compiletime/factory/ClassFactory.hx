@@ -34,6 +34,9 @@ class ClassFactory
 
 		//TODO correct file position. seems there's a bug with file inclusion
 		var tp = MacroUtil.getPack( qualifiedClassName, constructorVO.filePosition );
+		
+		//Assign right type description
+		constructorVO.type = "Class<" + qualifiedClassName + ">";
 
 		
 		//Building result

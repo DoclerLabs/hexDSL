@@ -62,7 +62,15 @@ class BasicFlowCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
-	/*@Test( "test context reference" )
+	@Test( "test building String" )
+	public function testBuildingString() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
+	}
+	
+	@Test( "test context reference" )
 	public function testContextReference() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextReference.flow" );
@@ -77,7 +85,7 @@ class BasicFlowCompilerTest
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextWithoutName.flow" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
-	}*/
+	}
 	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
@@ -90,14 +98,6 @@ class BasicFlowCompilerTest
 		Assert.equals( "hello", this._getCoreFactory().locate( "s" ) );
 		Assert.equals( "bonjour", this._getCoreFactory().locate( "s2" ) );
 		Assert.equals( assembler, this._applicationAssembler );
-	}
-	
-	/*@Test( "test building String" )
-	public function testBuildingString() : Void
-	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
-		var s : String = this._getCoreFactory().locate( "s" );
-		Assert.equals( "hello", s );
 	}
 	
 	@Test( "test building String with assembler property" )
@@ -349,8 +349,8 @@ class BasicFlowCompilerTest
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/methodCallWithTypeParams.flow" );
 
 		var caller : MockCaller = this._getCoreFactory().locate( "caller" );
-		Assert.isInstanceOf( caller, MockCaller, "" );
-		Assert.equals( 3, MockCaller.passedArray.length, "" );
+		Assert.isInstanceOf( caller, MockCaller );
+		Assert.equals( 3, MockCaller.passedArray.length );
 	}
 	
 	@Test( "test building multiple instances with method calls" )
@@ -381,7 +381,6 @@ class BasicFlowCompilerTest
 		Assert.equals( 0, anotherRect.width );
 		Assert.equals( 0, anotherRect.height );
 	}
-	
 	
 	@Test( "test building instance with static method" )
 	public function testBuildingInstanceWithStaticMethod() : Void
@@ -736,7 +735,7 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
 		Assert.equals( this._getCoreFactory().locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
-	}*/
+	}
 	
 	/*@Test( "test trigger method connection" )
 	public function testTriggerMethodConnection() : Void
