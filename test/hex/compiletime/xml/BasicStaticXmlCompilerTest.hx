@@ -4,6 +4,7 @@ import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.error.Exception;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.IAnotherMockInterface;
@@ -253,7 +254,7 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( receiver.onMessage, proxyReceiver.callback );
 	}
 	
-	@Test( "test building multiple instances with references" )
+	@Test( "test assign instance property with references" )
 	public function testAssignInstancePropertyWithReference() : Void
 	{
 		var applicationAssembler = new ApplicationAssembler();
@@ -710,19 +711,6 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}*/
 	
-	@Test( "test file preprocessor with Xml file" )
-	public function testFilePreprocessorWithXmlFile() : Void
-	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/preprocessor.xml", "BasicStaticXmlCompiler_testFilePreprocessorWithXmlFile", 
-															[	"hello" 		=> "bonjour",
-																					"contextName" 	=> 'applicationContext',
-																					"context" 		=> 'name="${contextName}"',
-																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );
-		code.execute();
-		
-		Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
-	}
-	
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
@@ -750,6 +738,39 @@ class BasicStaticXmlCompilerTest
 		var coreFactory = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", ApplicationContext ).getCoreFactory();
 		Assert.methodCallThrows( NoSuchElementException, coreFactory, coreFactory.locate, [ "message" ], "'NoSuchElementException' should be thrown" );
 	}
+	
+	@Test( "test file preprocessor with Xml file" )
+	public function testFilePreprocessorWithXmlFile() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/preprocessor.xml", "BasicStaticXmlCompiler_testFilePreprocessorWithXmlFile", 
+															[	"hello" 		=> "bonjour",
+																					"contextName" 	=> 'applicationContext',
+																					"context" 		=> 'name="${contextName}"',
+																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );
+		code.execute();
+		
+		Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
+	}
+	
+	/*@Test( "test file preprocessor with Xml file and include" )
+	public function testFilePreprocessorWithXmlFileAndInclude() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/preprocessorWithInclude.xml", "BasicStaticXmlCompiler_testFilePreprocessorWithXmlFileAndInclude", 
+																				[	"hello" 		=> "bonjour",
+																					"contextName" 	=> 'applicationContext',
+																					"context" 		=> 'name="${contextName}"',
+																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );
+		code.execute();
+		
+		try
+        {
+			Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
+		}
+		catch ( e : Exception )
+        {
+            Assert.fail( e.message, "Exception on this._builderFactory.getCoreFactory().locate( \"message\" ) call" );
+        }
+	}*/
 	
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
@@ -798,4 +819,25 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
+	
+	@Test( "test parsing twice" )
+	public function testParsingTwice() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/parsingOnce.xml", "BasicStaticXmlCompiler_testParsingTwice" );
+		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/parsingTwice.xml" );
+
+		code.execute();
+		Assert.isInstanceOf( code.locator.rect0, MockRectangle );
+		Assert.equals( 10, code.locator.rect0.x );
+		Assert.equals( 20, code.locator.rect0.y );
+		Assert.equals( 30, code.locator.rect0.width );
+		Assert.equals( 40, code.locator.rect0.height );
+
+		code2.execute();
+		Assert.isInstanceOf( code2.locator.rect1, MockRectangle );
+		Assert.equals( 50, code2.locator.rect1.x );
+		Assert.equals( 60, code2.locator.rect1.y );
+		Assert.equals( 70, code2.locator.rect1.width );
+		Assert.equals( 40, code2.locator.rect1.height );
+	}
 }

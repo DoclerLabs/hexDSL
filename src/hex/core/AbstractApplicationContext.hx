@@ -117,7 +117,7 @@ class AbstractApplicationContext implements IApplicationContext
 	 */
 	@:final 
 	@:isVar public var isReleased( get, null ) : Bool;
-	public function get_isReleased() : Bool
+	function get_isReleased() : Bool
 	{
 		return this.isReleased;
 	}
