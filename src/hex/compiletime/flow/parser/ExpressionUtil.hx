@@ -6,6 +6,7 @@ import haxe.macro.Expr;
 import haxe.macro.ExprTools;
 import hex.core.ContextTypeList;
 import hex.error.PrivateConstructorException;
+import hex.log.LogManager;
 import hex.vo.ConstructorVO;
 import hex.vo.MapVO;
 import hex.vo.PropertyVO;
@@ -23,6 +24,8 @@ class ExpressionUtil
         throw new PrivateConstructorException();
     }
 
+	static var logger = LogManager.getLoggerByClass(ExpressionUtil);
+	
 	static public function compressField( e : ExprDef, ?previousValue : String = "" ) : String
 	{
 		return switch( e )
@@ -81,7 +84,7 @@ class ExpressionUtil
 				vo =  new ConstructorVO( id, ContextTypeList.INSTANCE, [], null, null, null, compressField(e.expr) + '.' + field );
 
 			case _:
-				trace( e.expr );
+				logger.debug( e.expr );
 		}
 
 		vo.filePosition = e.pos;
@@ -147,11 +150,11 @@ class ExpressionUtil
 						
 					case _:
 						
-						trace( exp );
+						logger.debug( exp );
 				}
 				
 			case _:
-				trace( assigned.expr );
+				logger.debug( assigned.expr );
 		}
 			
 		propertyVO.filePosition = assigned.pos;
@@ -179,7 +182,7 @@ class ExpressionUtil
 					
 				case _:
 					
-					trace( param.expr );
+					logger.debug( param.expr );
 			}
 			
 		}

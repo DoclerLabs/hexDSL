@@ -1,6 +1,6 @@
 @context( name = 'applicationContext' )
 {
-	fruits = new hex.collection.HashMap<Dynamic, hex.mock.MockFruitVO>
+	fruits = new hex.collection.HashMap<Any, hex.mock.MockFruitVO>
 	([ 
 		"0" => fruit0,
 		1 => fruit1,

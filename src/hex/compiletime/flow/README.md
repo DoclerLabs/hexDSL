@@ -18,6 +18,7 @@ Now, let me add a few quick comparisons beetween the both DSL formats (Xml and F
 
 <details>
 <summary>Xml first:</summary>
+
 ```Xml
 <test id="age" type="Int" value="45"/>
 ```
@@ -25,6 +26,7 @@ Now, let me add a few quick comparisons beetween the both DSL formats (Xml and F
 
 <details>
 <summary>And now, the Flow version:</summary>
+
 ```haxe
 age = 45;
 ```
@@ -34,6 +36,7 @@ age = 45;
 
 <details>
 <summary>Xml first:</summary>
+
 ```Xml
 <serviceLocator id="serviceLocator" type="hex.collection.HashMap<Class<Dynamic>, Class<Dynamic>">
     <item> 
@@ -50,6 +53,7 @@ age = 45;
 
 <details>
 <summary>And now, the Flow version:</summary>
+
 ```haxe
 serviceLocator = new hex.collection.HashMap<Class<IService>, Class<IService>>
 ([ 
@@ -64,6 +68,7 @@ serviceLocator = new hex.collection.HashMap<Class<IService>, Class<IService>>
 <details>
 ```haxe
 <summary>Defining context</summary>
+
 @context( name = 'myContextName' )
 {
     myString = 'hello world';
@@ -73,6 +78,7 @@ serviceLocator = new hex.collection.HashMap<Class<IService>, Class<IService>>
 
 <details>
 <summary>File compilation</summary>
+
 ```haxe
 var assembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
 ```
@@ -80,6 +86,7 @@ var assembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow
 
 <details>
 <summary>Locate ID</summary>
+
 ```haxe
 factory = assembler.getApplicationContext( "myContextName", ApplicationContext ).getCoreFactory();
 var myString = factory.locate( 'myString' );
@@ -91,6 +98,7 @@ var myString = factory.locate( 'myString' );
 ### Primitive value assignment
 <details>
 <summary>Null value assignment to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -101,6 +109,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Boolean value assignment to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -111,6 +120,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>String value assignment to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -121,6 +131,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Int value assignment to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -131,6 +142,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>UInt value assignment to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -141,6 +153,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Hexadecimal value assignment to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -152,6 +165,7 @@ var myString = factory.locate( 'myString' );
 ### Instanciation and references
 <details>
 <summary>Anonymous object</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -162,6 +176,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Simple class instance</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -172,6 +187,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Simple class instance with primitive arguments passed to the constructor</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -182,6 +198,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building an instance with primitive references passed to its constructor</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -194,6 +211,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building multiple instances and pass some of them as constructor arguments</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -211,6 +229,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building instances with multiple references passed to the constructor</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -224,6 +243,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Array filled with references</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -240,6 +260,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Assign class reference to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -251,6 +272,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Hashmap filled with references</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -272,6 +294,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Get instance from static method</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -284,6 +307,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Get instance from static method with arguments</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -294,6 +318,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Get instance from object's method call returned by static method</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -304,6 +329,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building multiple instances with arguments</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -317,6 +343,7 @@ var myString = factory.locate( 'myString' );
 ### Injection and mapping
 <details>
 <summary>Inject into an instance</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -327,6 +354,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Create an instance using context's injector</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -337,6 +365,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Class instance with its abstract type mapped to context's injector</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -347,6 +376,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Class instance mapped to 2 abstract types in context's injector</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -359,6 +389,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>HashMap with mapped type</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -377,6 +408,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Array instanciation mapped to abstract types thorugh context's injector</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -388,6 +420,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Instances mapped to abstract types with type params</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -406,6 +439,7 @@ var myString = factory.locate( 'myString' );
 ### Properties
 <details>
 <summary>Properties assignment</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -424,6 +458,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Assign class reference and static variable as object's property</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -439,6 +474,7 @@ var myString = factory.locate( 'myString' );
 ### Method call
 <details>
 <summary>Simple method call on an instance</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -450,6 +486,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Method call with argument typed from class with type paramemeters</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -467,6 +504,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building multiple instances and call methods on them</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -490,6 +528,7 @@ var myString = factory.locate( 'myString' );
 ### Static variable
 <details>
 <summary>Assign static variable to an ID</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -500,6 +539,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Pass static variable as a constructor argument</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -511,6 +551,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Pass a static variable as a method call argument</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -523,6 +564,7 @@ var myString = factory.locate( 'myString' );
 ### Misc
 <details>
 <summary>Example with DSL preprocessing</summary>
+
 ```haxe
 @context( ${context} )
 {
@@ -533,6 +575,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Parse and make Xml object</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -550,6 +593,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Parse Xml with custom parser and make custom instance</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -567,6 +611,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Conditional parsing</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -583,6 +628,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Use a custom application context class</summary>
+
 ```haxe
 @context( 
 			name = 'applicationContext', 

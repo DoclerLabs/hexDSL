@@ -21,6 +21,7 @@ import hex.mock.MockClass;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockContextHolder;
 import hex.mock.MockFruitVO;
 import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
@@ -63,9 +64,26 @@ class BasicXmlCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
-	function _locate( key : String ) : Dynamic
+	function _locate( key : String ) : Any
 	{
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( key );
+	}
+	
+	@Test( "test context reference" )
+	public function testContextReference() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/contextReference.xml" );
+		var contextHolder : MockContextHolder = this._getCoreFactory().locate( "contextHolder" );
+		var context = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
+		Assert.equals( context, contextHolder.context );
+	}
+	
+	@Test( "test building String without context name" )
+	public function testBuildingStringWithoutContextName() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/contextWithoutName.xml" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
 	}
 	
 	@Test( "test building String with assembler" )
@@ -98,12 +116,12 @@ class BasicXmlCompilerTest
 		Assert.equals( "hello", s );
 	}
 	
-	@Ignore( "test building String with assembler static property" )
+	@Test( "test building String with assembler static property" )
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicXmlCompilerTest.applicationAssembler = new ApplicationAssembler();
-		BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml" );
-		var s : String = this._getCoreFactory().locate( "s" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml" );
+		var s : String = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
 	
@@ -122,6 +140,26 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
 		
 		var instance2 = this._getCoreFactory().locate( "instance" );
+		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
+		
+		Assert.notEquals( instance1, instance2 );
+	}
+	
+	@Test( "test overriding context name" )
+	public function testOverridingContextName() : Void
+	{
+		this._applicationAssembler = new ApplicationAssembler();
+		
+		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", 'name1', null, null );
+		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", 'name2', null, null );
+		
+		var factory1 = this._applicationAssembler.getApplicationContext( "name1", ApplicationContext ).getCoreFactory();
+		var factory2 = this._applicationAssembler.getApplicationContext( "name2", ApplicationContext ).getCoreFactory();
+
+		var instance1 = factory1.locate( "instance" );
+		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
+		
+		var instance2 = factory2.locate( "instance" );
 		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
 		
 		Assert.notEquals( instance1, instance2 );
@@ -162,7 +200,7 @@ class BasicXmlCompilerTest
 	public function testBuildingNull() : Void
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingNull.xml" );
-		var result : Dynamic = this._getCoreFactory().locate( "value" );
+		var result = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
 	
@@ -472,7 +510,7 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapFilledWithReferences.xml" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._getCoreFactory().locate( "stubKey" );
@@ -492,7 +530,7 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapWithMapType.xml" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits, "" );
 
 		var orange 	: MockFruitVO = fruits.get( '0' );
@@ -664,7 +702,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
+		config.configure( injector, null );
 
 		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
@@ -680,7 +718,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
+		config.configure( injector, null );
 
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name1" ),  MockClass );
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name2" ), AnotherMockClass );
@@ -691,11 +729,11 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithSingleton.xml" );
 
-		var config = this._locate( "config" );
+		var config : MappingConfiguration = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
+		config.configure( injector, null );
 
 		var instance1 = injector.getInstance( IAnotherMockInterface, "name1" );
 		Assert.isInstanceOf( instance1,  MockClass );
@@ -717,14 +755,14 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithInjectInto.xml" );
 
-		var config = this._locate( "config" );
+		var config : MappingConfiguration = this._locate( "config" );
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
 		var domain = Domain.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
 		injector.mapToValue( Domain, domain );
 		
-		config.configure( injector, new Dispatcher(), null );
+		config.configure( injector, null );
 
 		var mock0 = injector.getInstance( IMockInjectee, "name1" );
 		Assert.isInstanceOf( mock0,  MockInjectee );
@@ -769,21 +807,21 @@ class BasicXmlCompilerTest
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/ifAttribute.xml", null, [ "production" => true, "test" => false, "release" => false ] );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/ifAttribute.xml", null, null, [ "production" => true, "test" => false, "release" => false ] );
 		Assert.equals( "hello production", this._locate( "message" ), "message value should equal 'hello production'" );
 	}
 
 	@Test( "test include with if attribute" )
 	public function testIncludeWithIfAttribute() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, [ "production" => true, "test" => false, "release" => false ] );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, null, [ "production" => true, "test" => false, "release" => false ] );
 		Assert.equals( "hello production", this._locate( "message" ), "message value should equal 'hello production'" );
 	}
 
 	@Test( "test include fails with if attribute" )
 	public function testIncludeFailsWithIfAttribute() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, [ "production" => false, "test" => true, "release" => true ] );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, null, [ "production" => false, "test" => true, "release" => true ] );
 		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._locate, [ "message" ], "'NoSuchElementException' should be thrown" );
 	}
 
@@ -801,7 +839,7 @@ class BasicXmlCompilerTest
 	@Test( "test file preprocessor with Xml file and include" )
 	public function testFilePreprocessorWithXmlFileAndInclude() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/preprocessorWithInclude.xml", [	"hello" 		=> "bonjour",
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/preprocessorWithInclude.xml", null, [	"hello" 		=> "bonjour",
 																					"contextName" 	=> 'applicationContext',
 																					"context" 		=> 'name="${contextName}"',
 																					"node" 			=> '<msg id="message" value="${hello}"/>' ] );

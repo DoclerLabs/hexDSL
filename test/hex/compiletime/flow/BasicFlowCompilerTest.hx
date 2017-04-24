@@ -6,6 +6,7 @@ import hex.core.ICoreFactory;
 import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.error.NoSuchElementException;
 import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
@@ -14,6 +15,7 @@ import hex.mock.IMockInterface;
 import hex.mock.MockChat;
 import hex.mock.MockClass;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockContextHolder;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
@@ -60,6 +62,31 @@ class BasicFlowCompilerTest
 		return this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory();
 	}
 	
+	@Test( "test building String" )
+	public function testBuildingString() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
+	}
+	
+	@Test( "test context reference" )
+	public function testContextReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextReference.flow" );
+		var contextHolder : MockContextHolder = this._getCoreFactory().locate( "contextHolder" );
+		var context = this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
+		Assert.equals( context, contextHolder.context );
+	}
+	
+	@Test( "test building String without context name" )
+	public function testBuildingStringWithoutContextName() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/contextWithoutName.flow" );
+		var s : String = this._getCoreFactory().locate( "s" );
+		Assert.equals( "hello", s );
+	}
+	
 	@Test( "test building String with assembler" )
 	public function testBuildingStringWithAssembler() : Void
 	{
@@ -73,14 +100,6 @@ class BasicFlowCompilerTest
 		Assert.equals( assembler, this._applicationAssembler );
 	}
 	
-	@Test( "test building String" )
-	public function testBuildingString() : Void
-	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
-		var s : String = this._getCoreFactory().locate( "s" );
-		Assert.equals( "hello", s );
-	}
-	
 	@Test( "test building String with assembler property" )
 	public function testBuildingStringWithAssemblerProperty() : Void
 	{
@@ -90,12 +109,12 @@ class BasicFlowCompilerTest
 		Assert.equals( "hello", s );
 	}
 	
-	@Ignore( "test building String with assembler static property" )
+	@Test( "test building String with assembler static property" )
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicFlowCompilerTest.applicationAssembler = new ApplicationAssembler();
-		BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow" );
-		var s : String = this._getCoreFactory().locate( "s" );
+		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow" );
+		var s : String = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
 	
@@ -114,6 +133,26 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
 		
 		var instance2 = this._getCoreFactory().locate( "instance" );
+		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
+		
+		Assert.notEquals( instance1, instance2 );
+	}
+	
+	@Test( "test overriding context name" )
+	public function testOverridingContextName() : Void
+	{
+		this._applicationAssembler = new ApplicationAssembler();
+		
+		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", 'name1' );
+		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", 'name2' );
+		
+		var factory1 = this._applicationAssembler.getApplicationContext( "name1", ApplicationContext ).getCoreFactory();
+		var factory2 = this._applicationAssembler.getApplicationContext( "name2", ApplicationContext ).getCoreFactory();
+
+		var instance1 = factory1.locate( "instance" );
+		Assert.isInstanceOf( instance1, MockClassWithoutArgument );
+		
+		var instance2 = factory2.locate( "instance" );
 		Assert.isInstanceOf( instance2, MockClassWithoutArgument );
 		
 		Assert.notEquals( instance1, instance2 );
@@ -154,7 +193,7 @@ class BasicFlowCompilerTest
 	public function testBuildingNull() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingNull.flow" );
-		var result : Dynamic = this._getCoreFactory().locate( "value" );
+		var result = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
 	
@@ -310,8 +349,8 @@ class BasicFlowCompilerTest
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/methodCallWithTypeParams.flow" );
 
 		var caller : MockCaller = this._getCoreFactory().locate( "caller" );
-		Assert.isInstanceOf( caller, MockCaller, "" );
-		Assert.equals( 3, MockCaller.passedArray.length, "" );
+		Assert.isInstanceOf( caller, MockCaller );
+		Assert.equals( 3, MockCaller.passedArray.length );
 	}
 	
 	@Test( "test building multiple instances with method calls" )
@@ -342,7 +381,6 @@ class BasicFlowCompilerTest
 		Assert.equals( 0, anotherRect.width );
 		Assert.equals( 0, anotherRect.height );
 	}
-	
 	
 	@Test( "test building instance with static method" )
 	public function testBuildingInstanceWithStaticMethod() : Void
@@ -464,7 +502,7 @@ class BasicFlowCompilerTest
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapFilledWithReferences.flow" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._getCoreFactory().locate( "stubKey" );
@@ -484,7 +522,7 @@ class BasicFlowCompilerTest
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/hashmapWithMapType.flow" );
 
-		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits, "" );
 
 		var orange 	: MockFruitVO = fruits.get( '0' );
@@ -664,8 +702,23 @@ class BasicFlowCompilerTest
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/ifAttribute.flow" );
-		Assert.equals( "hello message", this._getCoreFactory().locate( "message" ), "message value should equal 'hello production'" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/ifAttribute.flow", null, null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		Assert.equals( "hello prod", this._getCoreFactory().locate( "message" ), "message value should equal 'hello prod'" );
+	}
+
+	
+	@Test( "test include with if attribute" )
+	public function testIncludeWithIfAttribute() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/includeWithIfAttribute.flow", null, null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		Assert.equals( "hello prod", this._getCoreFactory().locate( "message" ), "message value should equal 'hello prod'" );
+	}
+
+	@Test( "test include fails with if attribute" )
+	public function testIncludeFailsWithIfAttribute() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/includeWithIfAttribute.flow", null, null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
+		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._getCoreFactory().locate, [ "message" ], "'NoSuchElementException' should be thrown" );
 	}
 	
 	@Test( "test building mapping configuration" )
@@ -677,7 +730,7 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( config, MappingConfiguration );
 
 		var injector = new Injector();
-		config.configure( injector, new Dispatcher(), null );
+		config.configure( injector, null );
 
 		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
 		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );

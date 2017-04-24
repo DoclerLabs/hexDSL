@@ -12,7 +12,9 @@ import hex.parser.AbstractContextParser;
  */
 class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentType, RequestType>
 {
-	var _applicationContextName 	: String;
+	var _applicationContextName 	: String = 'applicationContext';
+	var _isContextNameLocked 		: Bool = false;
+	
 	var _applicationContextClass 	: {name: String, pos: haxe.macro.Expr.Position};
 	var _importHelper 				: ClassImportHelper;
 	var _exceptionReporter 			: IExceptionReporter<ContentType>;
@@ -27,7 +29,7 @@ class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentT
 		if ( data != null )
 		{
 			this._contextData = data;
-			this._applicationContextName = this._findApplicationContextName( data );
+			this.setApplicationContextName( this._findApplicationContextName( data ) );
 			this._applicationContextClass = this._findApplicationContextClass( data );
 					
 			var applicationContext = this._applicationAssembler.getApplicationContext( this._applicationContextName, this._applicationContextDefaultClass );
@@ -49,6 +51,23 @@ class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentT
 	public function setExceptionReporter( exceptionReporter : IExceptionReporter<ContentType> ) : Void
 	{
 		this._exceptionReporter = exceptionReporter;
+	}
+	
+	@final
+	override public function setApplicationContextName( name : String, locked : Bool = false ) : Void
+	{
+		if ( !this._isContextNameLocked && name != null )
+		{
+			this._isContextNameLocked = locked;
+			this._applicationContextName = name;
+		}
+		else
+		{
+			/*#if debug
+			trace( "Warning: Application context cannot be set to '" + name + "' name. "
+				+ " It's already locked previously to '" +  this._applicationContextName + "'" );
+			#end*/
+		}
 	}
 	
 	function _findApplicationContextName( data : ContentType ) : String

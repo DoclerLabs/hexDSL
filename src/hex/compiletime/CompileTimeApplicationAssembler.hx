@@ -2,6 +2,7 @@ package hex.compiletime;
 
 #if macro
 import haxe.macro.Expr;
+import hex.core.HashCodeFactory;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
 import hex.util.MacroUtil;
@@ -18,23 +19,7 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 	
 	var _assemblerExpression : Expr;
 
-	public function new( assemblerExpression : Expr = null  )
-	{
-		//Create runtime applicationAssembler
-		var applicationAssemblerTypePath 	= MacroUtil.getTypePath( "hex.runtime.ApplicationAssembler" );
-		var applicationAssemblerVarName 	= "";
-		
-		if ( assemblerExpression == null )
-		{
-			applicationAssemblerVarName = 'applicationAssembler';
-			this.addExpression( macro @:mergeBlock { var $applicationAssemblerVarName = new $applicationAssemblerTypePath(); } );
-			this._assemblerExpression = macro $i { applicationAssemblerVarName };
-		}
-		else
-		{
-			this._assemblerExpression = assemblerExpression;
-		}
-	}
+	public function new(){}
 	
 	public function getFactory<T>( factoryClass: Class<IBuilder<T>>, applicationContext : IApplicationContext ) : IBuilder<T>
 	{
@@ -98,9 +83,9 @@ class CompileTimeApplicationAssembler implements ICompileTimeApplicationAssemble
 		return return macro $b{ this._expressions };
 	}
 	
-	public function getAssemblerExpression() : Expr
+	public function setMainExpression( e : Expr ) : Void
 	{
-		return this._assemblerExpression;
+		this._expressions = [ e ];
 	}
 }
 #end

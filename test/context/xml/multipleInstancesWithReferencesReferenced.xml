@@ -1,0 +1,8 @@
+<root name="applicationContext">
+    <bean id="anotherRect" type="hex.mock.MockRectangle">
+		<argument ref="rectPosition.x"/>
+		<argument ref="rectPosition.y"/>
+		<argument ref="rectSize.x"/>
+		<argument ref="rectSize.y"/>
+	</bean>
+</root>

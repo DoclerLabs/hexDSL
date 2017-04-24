@@ -1,0 +1,3 @@
+<root name="applicationContext">
+	<include if="prodz" file="context/xml/static/ifAttribute.xml"/>
+</root>

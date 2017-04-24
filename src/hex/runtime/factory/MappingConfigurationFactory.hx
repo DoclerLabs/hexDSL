@@ -2,6 +2,7 @@ package hex.runtime.factory;
 
 import hex.di.mapping.MappingConfiguration;
 import hex.error.PrivateConstructorException;
+import hex.log.LogManager;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 
 /**
@@ -23,8 +24,7 @@ class MappingConfigurationFactory
 
 		if ( args.length <= 0 )
 		{
-			trace( "MappingConfigurationFactory.build(" + args + ") returns an empty congiuration." );
-
+			LogManager.getLoggerByClass(MappingConfigurationFactory).warn( "MappingConfigurationFactory.build(" + args + ") returns an empty congiuration." );
 		} else
 		{
 			for ( item in args )
@@ -35,7 +35,7 @@ class MappingConfigurationFactory
 
 				} else
 				{
-					trace( "MappingConfigurationFactory.build() adds item with a 'null' key for '"  + item.value +"' value." );
+					LogManager.getLoggerByClass(MappingConfigurationFactory).warn( "MappingConfigurationFactory.build() adds item with a 'null' key for '" + item.value + "' value." );
 				}
 			}
 		}

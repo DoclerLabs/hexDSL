@@ -7,6 +7,7 @@ Xml DSL, as you can guess, is designed to use Xml syntax for building your appli
 
 <details>
 <summary>Defining context</summary>
+
 ```xml
 <root name="myContextName">
     <test id="myString" value="hello world"/>
@@ -16,6 +17,7 @@ Xml DSL, as you can guess, is designed to use Xml syntax for building your appli
 
 <details>
 <summary>File compilation</summary>
+
 ```haxe
 var assembler = BasicXmlCompiler.compile( "context/xml/testBuildingString.xml" );
 ```
@@ -23,6 +25,7 @@ var assembler = BasicXmlCompiler.compile( "context/xml/testBuildingString.xml" )
 
 <details>
 <summary>Locate ID</summary>
+
 ```haxe
 factory = assembler.getApplicationContext( "myContextName", ApplicationContext ).getCoreFactory();
 var myString = factory.locate( 'myString' );
@@ -33,6 +36,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Defining context</summary>
+
 ```xml
 <root name="myContextName">
     <test id="myString" value="hello world"/>
@@ -42,6 +46,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>File reading</summary>
+
 ```haxe
 var assembler = BasicXmlReader.read( "context/xml/testBuildingString.xml" );
 ```
@@ -49,6 +54,7 @@ var assembler = BasicXmlReader.read( "context/xml/testBuildingString.xml" );
 
 <details>
 <summary>Locate ID</summary>
+
 ```haxe
 factory = assembler.getApplicationContext( "myContextName", ApplicationContext ).getCoreFactory();
 var myString = factory.locate( 'myString' );
@@ -60,6 +66,7 @@ var myString = factory.locate( 'myString' );
 ### Primitive value assignment
 <details>
 <summary>Null value assignment to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="value" type="null"/>
@@ -69,6 +76,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Boolean value assignment to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="b" type="Bool" value="true"/>
@@ -78,6 +86,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>String value assignment to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="s" value="hello"/>
@@ -87,6 +96,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Int value assignment to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="i" type="Int" value="-3"/>
@@ -96,6 +106,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>UInt value assignment to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="i" type="UInt" value="3"/>
@@ -105,6 +116,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Hexadecimal value assignment to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="i" type="Int" value="0xFFFFFF"/>
@@ -115,6 +127,7 @@ var myString = factory.locate( 'myString' );
 ### Instanciation and references
 <details>
 <summary>Anonymous object</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="obj" type="Object">
@@ -130,6 +143,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Simple class instance</summary>
+
 ```xml
 <root name="applicationContext">
     <bean id="instance" type="hex.mock.MockClassWithoutArgument"/>
@@ -139,6 +153,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Simple class instance with primitive arguments passed to the constructor</summary>
+
 ```xml
 <root name="applicationContext">
     <bean id="size" type="hex.structures.Size">
@@ -151,6 +166,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building an instance with primitive references passed to its constructor</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -168,6 +184,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building multiple instances and pass some of them as constructor arguments</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -193,6 +210,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building instances with multiple references passed to the constructor</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -215,6 +233,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Array filled with references</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -241,6 +260,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Assign class reference to an ID</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -256,6 +276,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Hashmap filled with references</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -276,6 +297,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Get instance from static method</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -293,6 +315,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Get instance from static method with arguments</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -307,6 +330,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Get instance from object's method call returned by static method</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -321,6 +345,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building multiple instances with arguments</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -348,6 +373,7 @@ var myString = factory.locate( 'myString' );
 ### Injection and mapping
 <details>
 <summary>Inject into an instance</summary>
+
 ```xml
 <root name="applicationContext">
     <instance id="instance" type="hex.mock.MockClassWithInjectedProperty" inject-into="true"/>
@@ -357,6 +383,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Create an instance using context's injector</summary>
+
 ```xml
 <root name="applicationContext">
     <instance id="instance" type="hex.mock.MockClassWithInjectedProperty" injector-creation="true"/>
@@ -366,6 +393,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Class instance with its abstract type mapped to context's injector</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -377,6 +405,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Class instance mapped to 2 abstract types in context's injector</summary>
+
 ```xml
 <root name="applicationContext">
     <module id="instance" type="hex.mock.MockClass" map-type="hex.mock.IMockInterface; hex.mock.IAnotherMockInterface"/>
@@ -386,6 +415,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>HashMap with mapped type</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -403,6 +433,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Array instanciation mapped to abstract types thorugh context's injector</summary>
+
 ```xml
 <root name="applicationContext">
     <test id="intCollection" type="Array<Int>" map-type="Array<Int>; Array<UInt>"/>
@@ -413,6 +444,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Instances mapped to abstract types with type params</summary>
+
 ```xml
 <root name="applicationContext">
    
@@ -433,6 +465,7 @@ var myString = factory.locate( 'myString' );
 ### Properties
 <details>
 <summary>Properties assignment</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -454,6 +487,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Assign class reference and static variable as object's property</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -476,6 +510,7 @@ var myString = factory.locate( 'myString' );
 ### Method call
 <details>
 <summary>Simple method call on an instance</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -492,6 +527,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Method call with argument typed from class with type paramemeters</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -517,6 +553,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Building multiple instances and call methods on them</summary>
+
 ```xml
 <root name="applicationContext">
 	
@@ -549,6 +586,7 @@ var myString = factory.locate( 'myString' );
 ### Static variable
 <details>
 <summary>Assign static variable to an ID</summary>
+
 ```xml
 <root name="applicationContext">
     <constant id="constant" static-ref="hex.mock.MockClass.MESSAGE_TYPE"/>
@@ -558,6 +596,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Pass static variable as a constructor argument</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -571,6 +610,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Pass a static variable as a method call argument</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -587,6 +627,7 @@ var myString = factory.locate( 'myString' );
 ### Misc
 <details>
 <summary>Example with DSL preprocessing</summary>
+
 ```xml
 <root ${context}>
 
@@ -598,6 +639,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Parse and make Xml object</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -615,6 +657,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Parse Xml with custom parser and make custom instance</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -632,6 +675,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Conditional parsing</summary>
+
 ```xml
 <root name="applicationContext">
 
@@ -644,6 +688,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Use a custom application context class</summary>
+
 ```xml
 <root name="applicationContext" type="hex.ioc.parser.xml.context.mock.MockApplicationContext">
 	<test id="test" value="Hola Mundo"/>

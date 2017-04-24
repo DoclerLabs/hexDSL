@@ -29,6 +29,11 @@ class ReferenceFactory
 		{
 			key = Std.string( ( key.split( "." ) ).shift() );
 		}
+		
+		if ( key == "this" )
+		{
+			key = factoryVO.contextFactory.getApplicationContext().getName();
+		}
 
 		if ( !( coreFactory.isRegisteredWithKey( key ) ) )
 		{

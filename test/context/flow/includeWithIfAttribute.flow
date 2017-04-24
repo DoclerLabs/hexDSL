@@ -1,0 +1,7 @@
+@context( name = 'applicationContext' )
+#if ( prodz == 'true' )
+@include( 'context/flow/ifAttribute.flow' )
+#end
+{
+	test = 'hello world';
+}

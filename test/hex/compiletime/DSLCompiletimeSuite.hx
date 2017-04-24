@@ -1,9 +1,5 @@
 package hex.compiletime;
 
-import hex.compiletime.flow.ApplicationContextBuildingTest;
-import hex.compiletime.flow.BasicFlowCompilerTest;
-import hex.compiletime.xml.BasicXmlCompilerTest;
-
 /**
  * ...
  * @author Francis Bourre
@@ -11,5 +7,13 @@ import hex.compiletime.xml.BasicXmlCompilerTest;
 class DSLCompiletimeSuite
 {
 	@Suite( "Compiletime" )
-    public var list : Array<Class<Dynamic>> = [ ApplicationContextBuildingTest, BasicFlowCompilerTest, BasicXmlCompilerTest ];
+    public var list : Array<Class<Dynamic>> = 
+	[ 
+		hex.compiletime.flow.ApplicationContextBuildingTest, 
+		hex.compiletime.xml.ApplicationContextBuildingTest, 
+		hex.compiletime.flow.BasicFlowCompilerTest, 
+		hex.compiletime.flow.BasicStaticFlowCompilerTest, 
+		hex.compiletime.xml.BasicStaticXmlCompilerTest,
+		hex.compiletime.xml.BasicXmlCompilerTest 
+	];
 }

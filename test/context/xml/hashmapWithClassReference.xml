@@ -1,5 +1,5 @@
 <root name="applicationContext">
-    <collection id="map" type="hex.collection.HashMap">
+    <collection id="map" type="hex.collection.HashMap<Class<hex.mock.IMockInterface>, Class<hex.mock.MockClass>>">
         <item> <key type="Class" value="hex.mock.IMockInterface"/> <value type="Class" value="hex.mock.MockClass"/></item>
     </collection>
 </root>

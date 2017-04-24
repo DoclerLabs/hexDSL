@@ -52,11 +52,17 @@ class ClassInstanceFactory
 			//TODO implement the same behavior @runtime issue#1
 			if ( staticRef != null )//static variable - with factory method
 			{
+				//Assign right type description
+				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ) );
+
 				result = macro 	@:pos( constructorVO.filePosition ) 
 								var $idVar = $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ); 
 			}
 			else if ( staticCall != null )//static method call - with factory method
 			{
+				//Assign right type description
+				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall().$factoryMethod( $a { constructorArgs } ) );
+			
 				result = macro 	@:pos( constructorVO.filePosition ) 
 								var $idVar = $p { tp }.$staticCall().$factoryMethod( $a{ constructorArgs } ); 
 			}
@@ -68,8 +74,11 @@ class ClassInstanceFactory
 		}
 		else if ( staticCall != null )//simple static method call
 		{
+			//Assign right type description
+			constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall( $a { constructorArgs } ) );
+			
 			result = macro 	@:pos( constructorVO.filePosition ) 
-							var $idVar = $p { tp }.$staticCall( $a{ constructorArgs } ); 
+							var $idVar = $p { tp } .$staticCall( $a { constructorArgs } );
 		}
 		else//Standard instantiation
 		{

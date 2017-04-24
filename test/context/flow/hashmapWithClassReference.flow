@@ -1,6 +1,6 @@
 @context( name = 'applicationContext' )
 {
-	map = new hex.collection.HashMap<Class<IMockInterface>, Class<MockClass>>
+	map = new hex.collection.HashMap<Class<hex.mock.IMockInterface>, Class<hex.mock.MockClass>>
 	([ 
 		hex.mock.IMockInterface => hex.mock.MockClass
 	]);

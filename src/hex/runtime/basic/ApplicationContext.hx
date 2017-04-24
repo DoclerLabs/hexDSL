@@ -11,6 +11,7 @@ import hex.event.IDispatcher;
 import hex.event.MessageType;
 import hex.log.ILogger;
 import hex.log.LogManager;
+import hex.module.IContextModule;
 
 /**
  * ...
@@ -46,6 +47,7 @@ class ApplicationContext extends AbstractApplicationContext
 		
 		//register applicationContext
 		injector.mapToValue( IApplicationContext, this );
+		injector.mapToValue( IContextModule, this );
 		coreFactory.register( applicationContextName, this );
 		
 		super( coreFactory, applicationContextName );
@@ -53,8 +55,8 @@ class ApplicationContext extends AbstractApplicationContext
 		coreFactory.getInjector().mapClassNameToValue( "hex.event.IDispatcher<{}>", this._dispatcher );
 	}
 	
-	override public function dispose() : Void
+	override public function getLogger() : ILogger 
 	{
-		
+		return this.getInjector().getInstance( ILogger );
 	}
 }

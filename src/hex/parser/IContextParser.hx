@@ -20,4 +20,6 @@ interface IContextParser<ContentType, RequestType>
 	function setFactoryClass( factoryClass: Class<IBuilder<RequestType>> ) : Void;
 	
 	function setApplicationContextDefaultClass( applicationContextDefaultClass : Class<IApplicationContext> ) : Void;
+
+	function setApplicationContextName( name : String, locked : Bool = false ) : Void;
 }

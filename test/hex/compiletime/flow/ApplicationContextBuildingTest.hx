@@ -1,6 +1,5 @@
 package hex.compiletime.flow;
 
-import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.mock.MockApplicationContext;
@@ -14,7 +13,7 @@ import hex.unittest.assertion.Assert;
  */
 class ApplicationContextBuildingTest
 {
-	var _applicationAssembler : IApplicationAssembler;
+	var _applicationAssembler : ApplicationAssembler;
 		
 	@Before
 	public function setUp() : Void
