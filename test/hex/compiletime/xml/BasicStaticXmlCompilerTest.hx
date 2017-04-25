@@ -4,6 +4,7 @@ import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.domain.Domain;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
@@ -752,7 +753,7 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
 	}
 	
-	/*@Test( "test file preprocessor with Xml file and include" )
+	@Test( "test file preprocessor with Xml file and include" )
 	public function testFilePreprocessorWithXmlFileAndInclude() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/preprocessorWithInclude.xml", "BasicStaticXmlCompiler_testFilePreprocessorWithXmlFileAndInclude", 
@@ -770,7 +771,7 @@ class BasicStaticXmlCompilerTest
         {
             Assert.fail( e.message, "Exception on this._builderFactory.getCoreFactory().locate( \"message\" ) call" );
         }
-	}*/
+	}
 	
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
@@ -839,5 +840,36 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 60, code2.locator.rect1.y );
 		Assert.equals( 70, code2.locator.rect1.width );
 		Assert.equals( 40, code2.locator.rect1.height );
+	}
+	
+	@Test( "test build domain" )
+	public function testBuildDomain() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/buildDomain.xml", "BasicStaticXmlCompiler_testBuildDomain" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
+	}
+	
+	@Test( "test recursive static calls" )
+	public function testRecursiveStaticCalls() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/instanceWithStaticMethodAndArguments.xml", "BasicStaticXmlCompiler_testRecursiveStaticCalls" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.rect, MockRectangle );
+		Assert.equals( 10, code.locator.rect.x );
+		Assert.equals( 20, code.locator.rect.y );
+		Assert.equals( 30, code.locator.rect.width );
+		Assert.equals( 40, code.locator.rect.height );
+		
+		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/testRecursiveStaticCalls.xml" );
+		code2.execute();
+		
+		Assert.isInstanceOf( code2.locator.rect2, MockRectangle );
+		Assert.equals( 10, code2.locator.rect2.x );
+		Assert.equals( 20, code2.locator.rect2.y );
+		Assert.equals( 30, code2.locator.rect2.width );
+		Assert.equals( 40, code2.locator.rect2.height );
 	}
 }

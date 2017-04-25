@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	rect2 = hex.mock.MockRectangleCloner.getRectangle( rect );
+}
