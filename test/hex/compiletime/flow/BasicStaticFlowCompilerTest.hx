@@ -4,6 +4,7 @@ import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.domain.Domain;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.IAnotherMockInterface;
@@ -798,4 +799,35 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
+	
+	@Test( "test build domain" )
+	public function testBuildDomain() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/buildDomain.flow", "BasicStaticFlowCompiler_testBuildDomain" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
+	}
+	
+	@Test( "test recursive static calls" )
+	public function testRecursiveStaticCalls() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/instanceWithStaticMethodAndArguments.flow", "BasicStaticFlowCompiler_testRecursiveStaticCalls" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.rect, MockRectangle );
+		Assert.equals( 10, code.locator.rect.x );
+		Assert.equals( 20, code.locator.rect.y );
+		Assert.equals( 30, code.locator.rect.width );
+		Assert.equals( 40, code.locator.rect.height );
+		
+		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/testRecursiveStaticCalls.flow" );
+		code2.execute();
+		
+		Assert.isInstanceOf( code2.locator.rect2, MockRectangle );
+		Assert.equals( 10, code2.locator.rect2.x );
+		Assert.equals( 20, code2.locator.rect2.y );
+		Assert.equals( 30, code2.locator.rect2.width );
+		Assert.equals( 40, code2.locator.rect2.height );
+	}
 }

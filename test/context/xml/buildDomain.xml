@@ -1,0 +1,7 @@
+<root>
+	
+    <domain id="applicationDomain" type="hex.domain.Domain" static-call="getDomain">
+		<argument value="BasicStaticXmlCompiler_testBuildDomain"/>
+	</domain>
+
+</root>

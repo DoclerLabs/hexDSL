@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<rectangle id="rect2" type="hex.mock.MockRectangleCloner" static-call="getRectangle">
+        <argument ref="rect"/>
+    </rectangle>
+</data>
