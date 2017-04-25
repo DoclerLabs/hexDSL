@@ -40,6 +40,8 @@ class ClassInstanceFactory
 		var staticRef 		= constructorVO.staticRef;
 		var classType 		= MacroUtil.getClassType( constructorVO.className, constructorVO.filePosition );
 		
+		var getNullArgsArray = function( length : UInt ) return  [ for ( i in 0...length ) macro null ];
+
 		if ( constructorVO.injectorCreation && 
 			MacroUtil.implementsInterface( classType, MacroUtil.getClassType( Type.getClassName( IInjectorContainer ) ) ) )
 		{
@@ -53,16 +55,34 @@ class ClassInstanceFactory
 			if ( staticRef != null )//static variable - with factory method
 			{
 				//Assign right type description
-				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ) );
-
+				try 
+				{
+					constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ) );
+				}
+				catch( e : Dynamic )
+				{
+					//TODO Find a better way
+					var args = getNullArgsArray( constructorArgs.length );
+					constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticRef.$factoryMethod( $a { args } ) );
+				}
+				
 				result = macro 	@:pos( constructorVO.filePosition ) 
 								var $idVar = $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ); 
 			}
 			else if ( staticCall != null )//static method call - with factory method
 			{
 				//Assign right type description
-				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall().$factoryMethod( $a { constructorArgs } ) );
-			
+				try 
+				{
+					constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall().$factoryMethod( $a { constructorArgs } ) );
+				}
+				catch( e : Dynamic )
+				{
+					//TODO Find a better way
+					var args = getNullArgsArray( constructorArgs.length );
+					constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall().$factoryMethod( $a { args } ) );
+				}
+				
 				result = macro 	@:pos( constructorVO.filePosition ) 
 								var $idVar = $p { tp }.$staticCall().$factoryMethod( $a{ constructorArgs } ); 
 			}
@@ -82,11 +102,10 @@ class ClassInstanceFactory
 			catch( e : Dynamic )
 			{
 				//TODO Find a better way
-				var args = [];
-				for ( i in 0...constructorArgs.length ) args.push( macro null );
+				var args = getNullArgsArray( constructorArgs.length );
 				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall( $a { args } ) );
 			}
-			
+
 			result = macro 	@:pos( constructorVO.filePosition ) 
 							var $idVar = $p { tp } .$staticCall( $a { constructorArgs } );
 		}
