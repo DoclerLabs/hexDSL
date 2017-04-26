@@ -5,9 +5,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.TypeTools;
 import hex.compiletime.factory.ArgumentFactory;
-import hex.error.PrivateConstructorException;
 import hex.util.MacroUtil;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -15,8 +13,7 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class ClassInstanceFactory
 {
-	/** @private */
-    function new() throw new PrivateConstructorException();
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
 	static var _fqcn = MacroUtil.getFQCNFromExpression;
 	static inline function _staticRefFactory( tp, staticRef, factoryMethod, args ) return macro $p{ tp }.$staticRef.$factoryMethod( $a{ args } );
@@ -27,9 +24,8 @@ class ClassInstanceFactory
 	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );
 	static inline function _result( e, id, type, position ) { var t = _varType( type, position ); return macro @:pos( position ) var $id : $t = $e; }
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
-		var result : Expr 	= null;
 		var vo 				= factoryVO.constructorVO;
 		var pos 			= vo.filePosition;
 		var id 				= vo.ID;
@@ -41,10 +37,11 @@ class ClassInstanceFactory
 		var factoryMethod 	= vo.factory;
 		var staticRef 		= vo.staticRef;
 		var classType 		= MacroUtil.getClassType( vo.className, pos );
-
+		
+		var result = //Assign result
 		if ( vo.injectorCreation && _implementsInterface( classType, hex.di.IInjectorContainer )  )
 		{
-			result = macro @:pos(pos) var $id = __applicationContextInjector.instantiateUnmapped( $p{ pack } ); 
+			macro @:pos(pos) var $id = __applicationContextInjector.instantiateUnmapped( $p{ pack } ); 
 		}
 		else if ( factoryMethod != null )//factory method
 		{
@@ -52,16 +49,16 @@ class ClassInstanceFactory
 			if ( staticRef != null )//static variable - with factory method
 			{
 				var e = _staticRefFactory( pack, staticRef, factoryMethod, args );
-				vo.type = try _fqcn( result ) 
+				vo.type = try _fqcn( e )//Assign right type description 
 					catch ( e : Dynamic ) _fqcn( _staticRefFactory( pack, staticRef, factoryMethod, _nullArray( argsLength ) ) );
-				result = _result( e, id, vo.type, pos );
+				_result( e, id, vo.type, pos );
 			}
 			else if ( staticCall != null )//static method call - with factory method
 			{
 				var e = _staticCallFactory( pack, staticCall, factoryMethod, args );
-				vo.type = try _fqcn( result ) 
+				vo.type = try _fqcn( e )//Assign right type description 
 					catch ( e : Dynamic ) _fqcn( _staticCallFactory( pack, staticCall, factoryMethod, _nullArray( argsLength ) ) );
-				result = _result( e, id, vo.type, pos );
+				_result( e, id, vo.type, pos );
 			}
 			else//factory method error
 			{
@@ -72,13 +69,13 @@ class ClassInstanceFactory
 		else if ( staticCall != null )//simple static method call
 		{
 			var e = _staticCall( pack, staticCall, args );
-			vo.type = try _fqcn( result ) 
+			vo.type = try _fqcn( e )//Assign right type description 
 				catch ( e : Dynamic ) _fqcn( _staticCall( pack, staticCall, _nullArray( argsLength ) ) );
-			result = _result( e, id, vo.type, pos );
+			_result( e, id, vo.type, pos );
 		}
 		else//Standard instantiation
 		{
-			result = _result( macro new $typePath( $a{ args } ), id, vo.type, pos );
+			_result( macro new $typePath( $a{ args } ), id, vo.type, pos );
 		}
 		
 		return macro @:pos(pos) $result;
