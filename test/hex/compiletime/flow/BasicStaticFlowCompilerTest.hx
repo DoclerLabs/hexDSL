@@ -22,6 +22,7 @@ import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
+import hex.structures.Point;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
@@ -829,5 +830,20 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 20, code2.locator.rect2.y );
 		Assert.equals( 30, code2.locator.rect2.width );
 		Assert.equals( 40, code2.locator.rect2.height );
+	}
+	
+	@Test( "test runtime arguments" )
+	public function testRuntimeArguments() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/runtimeArguments.flow", "BasicStaticFlowCompiler_testRuntimeArguments" );
+		code.execute( { x:10, y: 20, p: new Point( 30, 40 ) } );
+		
+		Assert.isInstanceOf( code.locator.size, Size );
+		Assert.equals( 10, code.locator.size.width );
+		Assert.equals( 20, code.locator.size.height );
+		
+		Assert.isInstanceOf( code.locator.anotherSize, Size );
+		Assert.equals( 30, code.locator.anotherSize.width );
+		Assert.equals( 40, code.locator.anotherSize.height );
 	}
 }

@@ -1,0 +1,6 @@
+@context( 	name = 'applicationContext',
+			params = {x: Float, y: Float, p:hex.structures.Point} )
+{
+	size = new hex.structures.Size( x, y );
+	anotherSize = new hex.structures.Size( p.x, p.y );
+}

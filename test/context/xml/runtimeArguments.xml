@@ -1,0 +1,19 @@
+<root name="applicationContext">
+	
+	<params>
+		<param id="x" type="Float"/>
+		<param id="y" type="Float"/>
+		<param id="p" type="hex.structures.Point"/>
+	</params>
+	
+    <bean id="size" type="hex.structures.Size">
+        <argument type="Int" ref="x"/>
+        <argument type="Int" ref="y"/>
+    </bean>
+	
+	<bean id="anotherSize" type="hex.structures.Size">
+        <argument type="Int" ref="p.x"/>
+        <argument type="Int" ref="p.y"/>
+    </bean>
+	
+</root>

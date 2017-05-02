@@ -6,6 +6,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.MacroPreprocessor;
+import hex.preprocess.RuntimeParametersPreprocessor;
 
 /**
  * ...
@@ -13,6 +14,8 @@ import hex.preprocess.MacroPreprocessor;
  */
 class DSLReader 
 {
+	var _runtimeParamsProcessor = new RuntimeParametersPreprocessor();
+	
 	public function new() {}
 
 	public function read( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariablesChecker : ConditionalVariablesChecker ) : Expr
@@ -21,6 +24,11 @@ class DSLReader
 		return e;  
 	}
 	
+	public function getRuntimeParam() : hex.preprocess.RuntimeParam
+	{
+		return this._runtimeParamsProcessor.param();
+	}
+
 	function _processFile( e : Expr, file : File, ?preprocessingVariables : Expr, ?conditionalVariablesChecker : ConditionalVariablesChecker )
 	{
 		//read file
@@ -28,10 +36,13 @@ class DSLReader
 
 		//preprocess
 		dsl.data = MacroPreprocessor.parse( dsl.data, preprocessingVariables );
-		
-		//parse/remove conditionals
-		
-		
+
+		//replace runtime parameters with whitespaces
+		if ( e == null )
+		{
+			dsl.data = this._runtimeParamsProcessor.parse( dsl );
+		}
+
 		//parse
 		var expr = Context.parseInlineString
 		( 

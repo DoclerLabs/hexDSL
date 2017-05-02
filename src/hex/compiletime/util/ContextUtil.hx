@@ -177,7 +177,7 @@ class ContextUtil
 	 * @param	file's name
 	 * @return ContextExecution
 	 */
-	public static function buildFileExecution( fileName : String, body : Expr ) : ContextExecution
+	public static function buildFileExecution( fileName : String, body : Expr, ?paramType : Null<ComplexType> ) : ContextExecution
 	{
 		var newField : Field = 
 		{
@@ -189,7 +189,7 @@ class ContextUtil
 		}
 		
 		var ret : ComplexType 			= macro : Void;
-		var args : Array<FunctionArg> 	= [];
+		var args : Array<FunctionArg> 	= paramType != null ? [ { name: 'param', type: paramType, opt: false } ] : [];
 							
 		newField.kind = FFun( 
 			{
