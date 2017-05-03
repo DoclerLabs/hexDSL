@@ -5,10 +5,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.TypeTools;
 import hex.compiletime.factory.ArgumentFactory;
-import hex.di.IInjectorContainer;
-import hex.error.PrivateConstructorException;
 import hex.util.MacroUtil;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -16,94 +13,72 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class ClassInstanceFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
-		
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
-	{
-		var result : Expr 	= null;
-		var constructorVO 	= factoryVO.constructorVO;
-		var idVar 			= constructorVO.ID;
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
-		//build arguments
-		var constructorArgs = ArgumentFactory.build( factoryVO );
+	static var _fqcn = MacroUtil.getFQCNFromExpression;
+	static inline function _staticRefFactory( tp, staticRef, factoryMethod, args ) return macro $p{ tp }.$staticRef.$factoryMethod( $a{ args } );
+	static inline function _staticCallFactory( tp, staticCall, factoryMethod, args ) return macro $p{ tp }.$staticCall().$factoryMethod( $a{ args } );
+	static inline function _staticCall( tp, staticCall, args ) return macro $p{ tp }.$staticCall( $a{ args } );
+	static inline function _nullArray( length : UInt ) return  [ for ( i in 0...length ) macro null ];
+	static inline function _implementsInterface( classRef, interfaceRef ) return  MacroUtil.implementsInterface( classRef, MacroUtil.getClassType( Type.getClassName( interfaceRef ) ) );
+	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );
+	static inline function _result( e, id, type, position ) { var t = _varType( type, position ); return macro @:pos( position ) var $id : $t = $e; }
 	
-		var tp 				= MacroUtil.getPack( constructorVO.className, constructorVO.filePosition );
-		var typePath 		= MacroUtil.getTypePath( constructorVO.className, constructorVO.filePosition );
-
-		//build instance
-		var staticCall 		= constructorVO.staticCall;
-		var factoryMethod 	= constructorVO.factory;
-		var staticRef 		= constructorVO.staticRef;
-		var classType 		= MacroUtil.getClassType( constructorVO.className, constructorVO.filePosition );
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
+	{
+		var vo 				= factoryVO.constructorVO;
+		var pos 			= vo.filePosition;
+		var id 				= vo.ID;
+		var args 			= ArgumentFactory.build( factoryVO );
+		var argsLength 		= args.length;
+		var pack 			= MacroUtil.getPack( vo.className, pos );
+		var typePath 		= MacroUtil.getTypePath( vo.className, pos );
+		var staticCall 		= vo.staticCall;
+		var factoryMethod 	= vo.factory;
+		var staticRef 		= vo.staticRef;
+		var classType 		= MacroUtil.getClassType( vo.className, pos );
 		
-		if ( constructorVO.injectorCreation && 
-			MacroUtil.implementsInterface( classType, MacroUtil.getClassType( Type.getClassName( IInjectorContainer ) ) ) )
+		var result = //Assign result
+		if ( vo.injectorCreation && _implementsInterface( classType, hex.di.IInjectorContainer )  )
 		{
-			result = macro 	@:pos( constructorVO.filePosition ) 
-				var $idVar = __applicationContextInjector.instantiateUnmapped( $p { tp } ); 
-
+			macro @:pos(pos) var $id = __applicationContextInjector.instantiateUnmapped( $p{ pack } ); 
 		}
 		else if ( factoryMethod != null )//factory method
 		{
 			//TODO implement the same behavior @runtime issue#1
 			if ( staticRef != null )//static variable - with factory method
 			{
-				//Assign right type description
-				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ) );
-
-				result = macro 	@:pos( constructorVO.filePosition ) 
-								var $idVar = $p { tp } .$staticRef.$factoryMethod( $a { constructorArgs } ); 
+				var e = _staticRefFactory( pack, staticRef, factoryMethod, args );
+				vo.type = try _fqcn( e )//Assign right type description 
+					catch ( e : Dynamic ) _fqcn( _staticRefFactory( pack, staticRef, factoryMethod, _nullArray( argsLength ) ) );
+				_result( e, id, vo.type, pos );
 			}
 			else if ( staticCall != null )//static method call - with factory method
 			{
-				//Assign right type description
-				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall().$factoryMethod( $a { constructorArgs } ) );
-			
-				result = macro 	@:pos( constructorVO.filePosition ) 
-								var $idVar = $p { tp }.$staticCall().$factoryMethod( $a{ constructorArgs } ); 
+				var e = _staticCallFactory( pack, staticCall, factoryMethod, args );
+				vo.type = try _fqcn( e )//Assign right type description 
+					catch ( e : Dynamic ) _fqcn( _staticCallFactory( pack, staticCall, factoryMethod, _nullArray( argsLength ) ) );
+				_result( e, id, vo.type, pos );
 			}
 			else//factory method error
 			{
-				Context.error( 	"'" + factoryMethod + "' method cannot be called on '" +  constructorVO.className + 
-								"' class. Add static method or variable to make it working.", constructorVO.filePosition );
+				Context.error( 	"'" + factoryMethod + "' method cannot be called on '" +  vo.className + 
+								"' class. Add static method or variable to make it working.", pos );
 			}
 		}
 		else if ( staticCall != null )//simple static method call
 		{
-			//Assign right type description
-			try 
-			{
-				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall( $a { constructorArgs } ) );
-			}
-			catch( e : Dynamic )
-			{
-				//TODO Find a better way
-				var args = [];
-				for ( i in 0...constructorArgs.length ) args.push( macro null );
-				constructorVO.type = MacroUtil.getFQCNFromExpression( macro $p { tp } .$staticCall( $a { args } ) );
-			}
-			
-			result = macro 	@:pos( constructorVO.filePosition ) 
-							var $idVar = $p { tp } .$staticCall( $a { constructorArgs } );
+			var e = _staticCall( pack, staticCall, args );
+			vo.type = try _fqcn( e )//Assign right type description 
+				catch ( e : Dynamic ) _fqcn( _staticCall( pack, staticCall, _nullArray( argsLength ) ) );
+			_result( e, id, vo.type, pos );
 		}
 		else//Standard instantiation
 		{
-			var varType = 
-				TypeTools.toComplexType( 
-					Context.typeof( 
-						Context.parseInlineString( '( null : ${constructorVO.type})', constructorVO.filePosition ) ) );
-			
-			result = macro @:pos( constructorVO.filePosition )
-								var $idVar : $varType = new $typePath( $a { constructorArgs } ); 
-							
-
+			_result( macro new $typePath( $a{ args } ), id, vo.type, pos );
 		}
 		
-		return macro @:pos( constructorVO.filePosition ) $result;
+		return macro @:pos(pos) $result;
 	}
 }
 #end

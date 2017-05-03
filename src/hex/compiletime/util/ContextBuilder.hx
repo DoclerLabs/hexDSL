@@ -102,11 +102,20 @@ class ContextBuilder
 	}
 	
 	//For each DSL building iteration we add a new method that encapsulates all the building process
-	public function buildFileExecution( fileName : String, e : haxe.macro.Expr ) : String
+	public function buildFileExecution( fileName : String, e : haxe.macro.Expr, runtimeParam : hex.preprocess.RuntimeParam ) : String
 	{
 		var methodName = 'm_' + haxe.crypto.Md5.encode( fileName );
-		var contextExecution = ContextUtil.buildFileExecution( methodName, e );
 		
+		//Put runtime params assignment at the start of the code execution block
+		switch( e.expr )
+		{
+			case EBlock( exprs ) if ( runtimeParam.type != null ):
+				e = { expr: EBlock( runtimeParam.block.concat( exprs ) ), pos: e.pos };
+				
+			case _:
+		}
+
+		var contextExecution = ContextUtil.buildFileExecution( methodName, e, runtimeParam.type );
 		this._iteration.definition.fields.push( contextExecution.field );
 		return methodName;
 	}
