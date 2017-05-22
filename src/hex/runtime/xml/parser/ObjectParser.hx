@@ -56,7 +56,6 @@ class ObjectParser extends AbstractXMLParser<hex.compiletime.basic.BuildRequest>
 		var factory 			: String;
 		var staticCall 			: String;
 		var injectInto			: Bool;
-		var injectorCreation	: Bool;
 		var mapType				: Array<String>;
 		var staticRef			: String;
 		var ifList				: Array<String>;
@@ -85,7 +84,6 @@ class ObjectParser extends AbstractXMLParser<hex.compiletime.basic.BuildRequest>
 				factory 			= xml.get( ContextAttributeList.FACTORY_METHOD );
 				staticCall 			= xml.get( ContextAttributeList.STATIC_CALL );
 				injectInto			= xml.get( ContextAttributeList.INJECT_INTO ) == "true";
-				injectorCreation	= xml.get( ContextAttributeList.INJECTOR_CREATION ) == "true";
 				mapType 			= ParserUtil.getMapType( xml );
 				staticRef 			= xml.get( ContextAttributeList.STATIC_REF );
 
@@ -94,7 +92,7 @@ class ObjectParser extends AbstractXMLParser<hex.compiletime.basic.BuildRequest>
 					type = staticRef != null ? ContextTypeList.STATIC_VARIABLE : ContextTypeList.STRING;
 				}
 				
-				var constructorVO 		= new ConstructorVO( identifier, type, args, factory, staticCall, injectInto, null, mapType, staticRef, injectorCreation );
+				var constructorVO 		= new ConstructorVO( identifier, type, args, factory, staticCall, injectInto, null, mapType, staticRef );
 				constructorVO.ifList 	= XmlUtil.getIfList( xml );
 				constructorVO.ifNotList = XmlUtil.getIfNotList( xml );
 

@@ -325,26 +325,9 @@ class BasicXmlReaderTest
 		Assert.equals( 20, point.y );
 	}
 
-	@Test( "test 'injector-creation' attribute" )
-	public function testInjectorCreationAttribute() : Void
-	{
-		var injector = this._applicationContext.getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-
-		this.build(  BasicXmlReader.getXml( "context/xml/injectorCreationAttribute.xml" ) );
-
-		var instance : MockClassWithInjectedProperty = this._locate( "instance" );
-		Assert.isInstanceOf( instance, MockClassWithInjectedProperty );
-		Assert.equals( "hola mundo", instance.property );
-		Assert.isTrue( instance.postConstructWasCalled );
-	}
-
 	@Test( "test 'inject-into' attribute" )
 	public function testInjectIntoAttribute() : Void
 	{
-		var injector = this._applicationContext.getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-
 		this.build(  BasicXmlReader.getXml( "context/xml/injectIntoAttribute.xml" ) );
 
 		var instance : MockClassWithInjectedProperty = this._locate( "instance" );

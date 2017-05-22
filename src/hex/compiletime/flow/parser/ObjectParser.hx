@@ -64,11 +64,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				var constructorVO = this._getConstructorVO( ident, value );
 				constructorVO.injectInto = true;
 				this._builder.build( OBJECT( constructorVO ) );
-						
-			case macro @injector_creation $i{ident} = $value:	
-				var constructorVO = this._getConstructorVO( ident, value );
-				constructorVO.injectorCreation = true;
-				this._builder.build( OBJECT( constructorVO ) );
 				
 			case macro @map_type($a{args}) $i{ident} = $value:
 				var constructorVO = this._getConstructorVO( ident, value );

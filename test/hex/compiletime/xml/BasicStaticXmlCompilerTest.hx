@@ -462,26 +462,9 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 20, code.locator.point.y );
 	}
 	
-	@Test( "test 'injector-creation' attribute" )
-	public function testInjectorCreationAttribute() : Void
-	{
-		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testInjectorCreationAttribute", ApplicationContext ).getCoreFactory().getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-		
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/injectorCreationAttribute.xml", "BasicStaticXmlCompiler_testInjectorCreationAttribute" );
-		code.execute();
-
-		Assert.isInstanceOf( code.locator.instance, MockClassWithInjectedProperty );
-		Assert.equals( "hola mundo", code.locator.instance.property );
-		Assert.isTrue( code.locator.instance.postConstructWasCalled );
-	}
-	
 	@Test( "test 'inject-into' attribute" )
 	public function testInjectIntoAttribute() : Void
 	{
-		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testInjectIntoAttribute", ApplicationContext ).getCoreFactory().getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-		
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/injectIntoAttribute.xml", "BasicStaticXmlCompiler_testInjectIntoAttribute" );
 		code.execute();
 
@@ -887,4 +870,12 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 30, code.locator.anotherSize.width );
 		Assert.equals( 40, code.locator.anotherSize.height );
 	}
+	
+	/*@Test( "test runtime context" )
+	public function testRuntimeContext() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/runtimeContext.xml" );
+		code.execute( {contextName:"BasicStaticXmlCompiler_testRuntimeContext"} );
+		code.execute( {contextName:"BasicStaticXmlCompiler_testRuntimeContext2" } );
+	}*/
 }

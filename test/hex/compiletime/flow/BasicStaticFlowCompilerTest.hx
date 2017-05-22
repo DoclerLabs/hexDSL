@@ -462,26 +462,9 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 20, code.locator.point.y );
 	}
 	
-	@Test( "test 'injector-creation' attribute" )
-	public function testInjectorCreationAttribute() : Void
-	{
-		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testInjectorCreationAttribute", ApplicationContext ).getCoreFactory().getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/injectorCreationAttribute.flow", "BasicStaticFlowCompiler_testInjectorCreationAttribute" );
-		code.execute();
-
-		Assert.isInstanceOf( code.locator.instance, MockClassWithInjectedProperty );
-		Assert.equals( "hola mundo", code.locator.instance.property );
-		Assert.isTrue( code.locator.instance.postConstructWasCalled );
-	}
-	
 	@Test( "test 'inject-into' attribute" )
 	public function testInjectIntoAttribute() : Void
 	{
-		var injector = this._applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testInjectIntoAttribute", ApplicationContext ).getCoreFactory().getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-		
 		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/injectIntoAttribute.flow", "BasicStaticFlowCompiler_testInjectIntoAttribute" );
 		code.execute();
 

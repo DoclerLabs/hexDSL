@@ -423,29 +423,10 @@ class BasicXmlCompilerTest
 		Assert.equals( 20, point.y );
 	}
 	
-	@Test( "test 'injector-creation' attribute" )
-	public function testInjectorCreationAttribute() : Void
-	{
-		var assembler = new ApplicationAssembler();
-		var injector = assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-		
-		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/injectorCreationAttribute.xml" );
-
-		var instance : MockClassWithInjectedProperty = this._getCoreFactory().locate( "instance" );
-		Assert.isInstanceOf( instance, MockClassWithInjectedProperty, "" );
-		Assert.equals( "hola mundo", instance.property, "" );
-		Assert.isTrue( instance.postConstructWasCalled, "" );
-	}
-	
 	@Test( "test 'inject-into' attribute" )
 	public function testInjectIntoAttribute() : Void
 	{
-		var assembler = new ApplicationAssembler();
-		var injector = assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().getInjector();
-		injector.mapToValue( String, 'hola mundo' );
-
-		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/injectIntoAttribute.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/injectIntoAttribute.xml" );
 
 		var instance : MockClassWithInjectedProperty = this._getCoreFactory().locate( "instance" );
 		Assert.isInstanceOf( instance, MockClassWithInjectedProperty, "" );

@@ -71,7 +71,6 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 		var factory 			: String;
 		var staticCall 			: String;
 		var injectInto			: Bool;
-		var injectorCreation	: Bool;
 		var ifList				: Array<String>;
 		var ifNotList			: Array<String>;
 
@@ -97,7 +96,6 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 				injectInto			= xml.get( ContextAttributeList.INJECT_INTO ) == "true";
 				mapType 			= this._getMapType( xml );
 				staticRef 			= xml.get( ContextAttributeList.STATIC_REF );
-				injectorCreation 	= xml.get( ContextAttributeList.INJECTOR_CREATION ) == "true";
 				ifList 				= XmlUtil.getIfList( xml );
 				ifNotList 			= XmlUtil.getIfNotList( xml );
 			
@@ -225,7 +223,7 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 					}
 				}
 
-				var constructorVO 			= new ConstructorVO( identifier, type, args, factory, staticCall, injectInto, null, mapType, staticRef, injectorCreation );
+				var constructorVO 			= new ConstructorVO( identifier, type, args, factory, staticCall, injectInto, null, mapType, staticRef );
 				constructorVO.ifList 		= ifList;
 				constructorVO.ifNotList 	= ifNotList;
 				constructorVO.filePosition 	= constructorVO.ref == null ? this._positionTracker.getPosition( xml ) : this._positionTracker.getPosition( xml, ContextAttributeList.REF );
