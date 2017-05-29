@@ -698,7 +698,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/ifAttribute.xml", "BasicStaticXmlCompiler_testIfAttribute", null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/ifAttribute.xml", "BasicStaticXmlCompiler_testIfAttribute", null, [ "prodz2" => true, "testing2" => false, "releasing2" => false ] );
 		code.execute();
 		
 		Assert.equals( "hello prod", code.locator.message );
@@ -707,7 +707,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test include with if attribute" )
 	public function testIncludeWithIfAttribute() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeWithIfAttribute", null, [ "prodz" => true, "testing" => false, "releasing" => false ] );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeWithIfAttribute", null, [ "prodz2" => true, "testing2" => false, "releasing2" => false ] );
 		code.execute();
 		
 		Assert.equals( "hello prod", code.locator.message );
@@ -716,7 +716,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test include fails with if attribute" )
 	public function testIncludeFailsWithIfAttribute() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", null, [ "prodz2" => false, "testing2" => true, "releasing2" => true ] );
 		code.execute();
 		
 		var coreFactory = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", ApplicationContext ).getCoreFactory();
