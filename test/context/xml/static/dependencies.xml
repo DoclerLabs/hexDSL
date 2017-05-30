@@ -1,0 +1,19 @@
+<root name="applicationContext">
+
+    <test id="mapping1" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="String"/>
+        <property name="toValue" value="test"/>
+    </test>
+	
+	<test id="mapping2" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="hex.mock.Interface"/>
+        <property name="toClass" type="Class" value="hex.mock.Clazz"/>
+        <property name="withName" value="id"/>
+    </test>
+	
+	<test id="owner" type="hex.mock.DependencyOwner">
+		<argument ref="mapping1"/>
+		<argument ref="mapping2"/>
+	</test>
+	
+</root>

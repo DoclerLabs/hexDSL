@@ -8,7 +8,7 @@ import hex.di.IInjectorContainer;
  */
 class MockClassWithInjectedProperty implements IInjectorContainer
 {
-	@Inject
+	@Inject( 'injected' )
 	public var property : String;
 	
 	public var postConstructWasCalled : Bool = false;

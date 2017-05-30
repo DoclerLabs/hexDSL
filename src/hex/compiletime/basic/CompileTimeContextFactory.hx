@@ -1,21 +1,18 @@
 package hex.compiletime.basic;
+import haxe.macro.ExprTools;
 
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import hex.collection.ILocatorListener;
+import haxe.macro.Type.ClassType;
 import hex.collection.Locator;
-import hex.compiletime.basic.IContextFactory;
 import hex.compiletime.basic.vo.FactoryVOTypeDef;
 import hex.compiletime.factory.FactoryUtil;
 import hex.compiletime.factory.PropertyFactory;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
-import hex.core.IBuilder;
 import hex.core.ICoreFactory;
-import hex.di.IInjectorContainer;
 import hex.event.IDispatcher;
-import hex.module.IContextModule;
 import hex.util.MacroUtil;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
@@ -26,15 +23,18 @@ import hex.vo.PropertyVO;
  * @author Francis Bourre
  */
 class CompileTimeContextFactory 
-	implements IBuilder<BuildRequest>
-	implements IContextFactory 
-	implements ILocatorListener<String, Dynamic>
+	implements hex.core.IBuilder<BuildRequest>
+	implements hex.compiletime.basic.IContextFactory 
+	implements hex.collection.ILocatorListener<String, Dynamic>
 {
-	static var _injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( IInjectorContainer ) );
-	static var _moduleInterface 			= MacroUtil.getClassType( Type.getClassName( IContextModule ) );
+	var _injectorContainerInterface : ClassType;
+	var _moduleInterface 			: ClassType;
+	var _dependencyInterface 		: ClassType;
 	
 	var _isInitialized				: Bool;
 	var _expressions 				: Array<Expr>;
+	var _mappedTypes 				: Array<Expr>;
+	var _injectedInto 				: Array<Expr>;
 	
 	var _contextDispatcher			: IDispatcher<{}>;
 	var _moduleLocator				: Locator<String, String>;
@@ -47,8 +47,11 @@ class CompileTimeContextFactory
 	
 	public function new( expressions : Array<Expr> )
 	{
-		this._expressions = expressions;
-		this._isInitialized = false;
+		this._expressions 					= expressions;
+		this._isInitialized 				= false;
+		this._injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( hex.di.IInjectorContainer ) );
+		this._moduleInterface 				= MacroUtil.getClassType( Type.getClassName( hex.module.IContextModule ) );
+		this._dependencyInterface 			= MacroUtil.getClassType( Type.getClassName( hex.di.mapping.IDependencyOwner ) );
 	}
 	
 	public function init( applicationContext : IApplicationContext ) : Void
@@ -66,22 +69,25 @@ class CompileTimeContextFactory
 			this._propertyVOLocator 				= new Locator();
 			this._methodCallVOLocator 				= new Locator();
 			this._moduleLocator 					= new Locator();
-			
-			this._factoryMap.set( ContextTypeList.ARRAY, 			hex.compiletime.factory.ArrayFactory.build );
-			this._factoryMap.set( ContextTypeList.BOOLEAN, 			hex.compiletime.factory.BoolFactory.build );
-			this._factoryMap.set( ContextTypeList.INT, 				hex.compiletime.factory.IntFactory.build );
-			this._factoryMap.set( ContextTypeList.NULL, 			hex.compiletime.factory.NullFactory.build );
-			this._factoryMap.set( ContextTypeList.FLOAT, 			hex.compiletime.factory.FloatFactory.build );
-			this._factoryMap.set( ContextTypeList.OBJECT, 			hex.compiletime.factory.DynamicObjectFactory.build );
-			this._factoryMap.set( ContextTypeList.STRING, 			hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.UINT, 			hex.compiletime.factory.UIntFactory.build );
-			this._factoryMap.set( ContextTypeList.DEFAULT, 			hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.HASHMAP, 			hex.compiletime.factory.HashMapFactory.build );
-			this._factoryMap.set( ContextTypeList.CLASS, 			hex.compiletime.factory.ClassFactory.build );
-			this._factoryMap.set( ContextTypeList.XML, 				hex.compiletime.factory.XmlFactory.build );
-			this._factoryMap.set( ContextTypeList.FUNCTION, 		hex.compiletime.factory.FunctionFactory.build );
-			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 	hex.compiletime.factory.StaticVariableFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 	hex.compiletime.factory.MappingConfigurationFactory.build );
+			this._mappedTypes 						= [];
+			this._injectedInto 						= [];
+		
+			this._factoryMap.set( ContextTypeList.ARRAY, 				hex.compiletime.factory.ArrayFactory.build );
+			this._factoryMap.set( ContextTypeList.BOOLEAN, 				hex.compiletime.factory.BoolFactory.build );
+			this._factoryMap.set( ContextTypeList.INT, 					hex.compiletime.factory.IntFactory.build );
+			this._factoryMap.set( ContextTypeList.NULL, 				hex.compiletime.factory.NullFactory.build );
+			this._factoryMap.set( ContextTypeList.FLOAT, 				hex.compiletime.factory.FloatFactory.build );
+			this._factoryMap.set( ContextTypeList.OBJECT, 				hex.compiletime.factory.DynamicObjectFactory.build );
+			this._factoryMap.set( ContextTypeList.STRING, 				hex.compiletime.factory.StringFactory.build );
+			this._factoryMap.set( ContextTypeList.UINT, 				hex.compiletime.factory.UIntFactory.build );
+			this._factoryMap.set( ContextTypeList.DEFAULT, 				hex.compiletime.factory.StringFactory.build );
+			this._factoryMap.set( ContextTypeList.HASHMAP, 				hex.compiletime.factory.HashMapFactory.build );
+			this._factoryMap.set( ContextTypeList.CLASS, 				hex.compiletime.factory.ClassFactory.build );
+			this._factoryMap.set( ContextTypeList.XML, 					hex.compiletime.factory.XmlFactory.build );
+			this._factoryMap.set( ContextTypeList.FUNCTION, 			hex.compiletime.factory.FunctionFactory.build );
+			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 		hex.compiletime.factory.StaticVariableFactory.build );
+			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 		hex.compiletime.factory.MappingConfigurationFactory.build );
+			this._factoryMap.set( ContextTypeList.MAPPING_DEFINITION, 	hex.compiletime.factory.MappingDefinitionFactory.build );
 			
 			this._coreFactory.addListener( this );
 		}
@@ -115,6 +121,8 @@ class CompileTimeContextFactory
 		this._methodCallVOLocator.release();
 		this._moduleLocator.release();
 		this._factoryMap = new Map();
+		this._mappedTypes = [];
+		this._injectedInto = [];
 	}
 	
 	public function getCoreFactory() : ICoreFactory
@@ -160,9 +168,8 @@ class CompileTimeContextFactory
 	{
 		if ( this._propertyVOLocator.isRegisteredWithKey( key ) )
 		{
-			var properties = this._propertyVOLocator.locate( key );
-			for ( property in properties )
-				this._expressions.push( macro @:mergeBlock ${ PropertyFactory.build( this, property ) } );
+			this._propertyVOLocator.locate( key )
+				.map( function( property ) this._expressions.push( macro @:mergeBlock ${ PropertyFactory.build( this, property ) } ) );
 		}
 	}
 
@@ -185,11 +192,11 @@ class CompileTimeContextFactory
 	
 	public function buildAllObjects() : Void
 	{
-		var keys : Array<String> = this._constructorVOLocator.keys();
-		for ( key in keys )
-		{
-			this.buildObject( key );
-		}
+		this._constructorVOLocator.keys().map( this.buildObject );
+		
+		//Append to final expressions stack
+		this._mappedTypes.map( this._expressions.push );
+		this._injectedInto.map( this._expressions.push );
 		
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.OBJECTS_BUILT" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
@@ -211,13 +218,9 @@ class CompileTimeContextFactory
 
 		var idArgs = method.ownerID + "_" + method.name + "Args";
 		var varIDArgs = macro $i { idArgs };
-		var args = [];
 
 		var l : Int = arguments.length;
-		for ( i in 0...l )
-		{
-			args.push( this.buildVO( arguments[ i ] ) );
-		}
+		var args = [ for ( i in 0...l ) this.buildVO( arguments[ i ] ) ];
 		
 		var varOwner = macro $i{ method.ownerID };
 		this._expressions.push( macro @:mergeBlock { $varOwner.$methodName( $a{ args } ); } );
@@ -225,28 +228,16 @@ class CompileTimeContextFactory
 
 	public function callAllMethods() : Void
 	{
-		var keyList : Array<String> = this._methodCallVOLocator.keys();
-		for ( key in keyList )
-		{
-			this.callMethod(  key );
-		}
-		
+		for ( key in this._methodCallVOLocator.keys() ) this.callMethod(  key );
 		this._methodCallVOLocator.clear();
-
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.METHODS_CALLED" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function callModuleInitialisation() : Void
 	{
-		var domains = this._moduleLocator.values();
-		for ( moduleName in domains )
-		{
-			this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(); } );
-		}
-		
+		for ( moduleName in this._moduleLocator.values() ) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(); } );
 		this._moduleLocator.clear();
-		
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.MODULES_INITIALIZED" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
@@ -273,6 +264,7 @@ class CompileTimeContextFactory
 		}
 		else
 		{
+			this._checkDependencies( constructorVO );
 			buildMethod = hex.compiletime.factory.ClassInstanceFactory.build;
 		}
 		
@@ -280,17 +272,37 @@ class CompileTimeContextFactory
 
 		if ( id != null )
 		{
-			this._tryToRegisterModule( constructorVO );
-			
-			var finalResult = result;
-			finalResult = this._parseInjectInto( constructorVO, finalResult );
-			finalResult = this._parseMapTypes( constructorVO, finalResult );
-
-			this._expressions.push( macro @:mergeBlock { $finalResult;  coreFactory.register( $v { id }, $i { id } ); } );
-			this._coreFactory.register( id, result );
+			_buildVO( constructorVO, id, result );
 		}
 
 		return result;
+	}
+	
+	function _buildVO( constructorVO : ConstructorVO, id : String, result : Any ) : Void
+	{
+		this._tryToRegisterModule( constructorVO );
+		this._parseInjectInto( constructorVO );
+		this._parseMapTypes( constructorVO );
+
+		this._expressions.push( macro @:mergeBlock { $result;  coreFactory.register( $v { id }, $i { id } ); } );
+		this._coreFactory.register( id, result );
+	}
+	
+	function _checkDependencies( constructorVO : ConstructorVO ) : Void
+	{
+		if ( MacroUtil.implementsInterface( this._getClassType( constructorVO.className ), _dependencyInterface ) )
+		{
+			var mappings = constructorVO.arguments.filter(
+				function ( arg ) return arg.ref != null && 
+					this._coreFactory.isRegisteredWithKey( "mappingDefinition#" + arg.ref  ) 
+			).map( function ( arg ) return this._coreFactory.locate( "mappingDefinition#" + arg.ref ) );
+			
+			if ( !hex.di.mapping.MappingChecker.matchForClassName( constructorVO.className, mappings ) )
+			{
+				var missingMappings = hex.di.mapping.MappingChecker.getMissingMapping( constructorVO.className, mappings );
+				Context.fatalError( "Missing mappings:" + missingMappings, constructorVO.filePosition );
+			}
+		}
 	}
 	
 	function _tryToRegisterModule( constructorVO : ConstructorVO ) : Void
@@ -301,23 +313,22 @@ class CompileTimeContextFactory
 		}
 	}
 	
-	function _parseInjectInto( constructorVO : ConstructorVO, result : Expr ) : Expr
+	function _parseInjectInto( constructorVO : ConstructorVO ) : Void
 	{
 		if ( constructorVO.injectInto && MacroUtil.implementsInterface( this._getClassType( constructorVO.className ), _injectorContainerInterface ) )
 		{
 			//TODO throws an error if interface is not implemented
-			result = macro 	@:pos( constructorVO.filePosition )
-							@:mergeBlock
-							{ 
-								$result; 
-								__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
-							};
+			this._injectedInto.push( 
+				macro 	@:pos( constructorVO.filePosition )
+						@:mergeBlock
+						{ 
+							__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+						}
+			);
 		}
-		
-		return result;
 	}
 	
-	function _parseMapTypes( constructorVO : ConstructorVO, result : Expr ) : Expr
+	function _parseMapTypes( constructorVO : ConstructorVO ) : Void
 	{
 		if ( constructorVO.mapTypes != null )
 		{
@@ -331,27 +342,26 @@ class CompileTimeContextFactory
 				mapType = mapType.split( ' ' ).join( '' );
 				
 				//Map it
-				result = macro 	@:pos( constructorVO.filePosition ) 
-				@:mergeBlock 
-				{
-					$result; 
-					__applicationContextInjector.mapClassNameToValue
-					( $v{ mapType }, $i{ constructorVO.ID }, $v{ constructorVO.ID } 
-					);
-				};
+				this._mappedTypes.push( 
+					macro 	@:pos( constructorVO.filePosition ) 
+							@:mergeBlock 
+							{
+								__applicationContextInjector.mapClassNameToValue
+								( $v{ mapType }, $i{ constructorVO.ID }, $v{ constructorVO.ID } 
+								);
+							}
+				);
 			}
 		}
-		
-		return result;
 	}
 	
-	function _getFactoryVO( constructorVO : ConstructorVO = null ) : FactoryVOTypeDef
+	inline function _getFactoryVO( constructorVO : ConstructorVO = null ) : FactoryVOTypeDef
 	{
 		return { constructorVO : constructorVO, contextFactory : this };
 	}
 	
 	//helper
-	function _getClassType( className : String ) : haxe.macro.Type.ClassType
+	inline function _getClassType( className : String ) : haxe.macro.Type.ClassType
 	{
 		try
 		{

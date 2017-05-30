@@ -49,6 +49,7 @@ class RunTimeContextFactory
 	var _constructorVOLocator 		: Locator<String, ConstructorVO>;
 	var _propertyVOLocator 			: Locator<String, Array<PropertyVO>>;
 	var _methodCallVOLocator 		: Locator<String, MethodCallVO>;
+	var _injectedInto				: Array<Any>;
 
 	public function new()
 	{
@@ -75,6 +76,7 @@ class RunTimeContextFactory
 			this._constructorVOLocator 		= new Locator();
 			this._propertyVOLocator 		= new Locator();
 			this._methodCallVOLocator 		= new Locator();
+			this._injectedInto				= [];
 
 			this._factoryMap.set( ContextTypeList.ARRAY, ArrayFactory.build );
 			this._factoryMap.set( ContextTypeList.BOOLEAN, BoolFactory.build );
@@ -124,6 +126,7 @@ class RunTimeContextFactory
 		this._propertyVOLocator.release();
 		this._methodCallVOLocator.release();
 		this._factoryMap = new Map();
+		this._injectedInto = [];
 	}
 	
 	public function getCoreFactory() : IRunTimeCoreFactory
@@ -197,6 +200,15 @@ class RunTimeContextFactory
 			this.buildObject( key );
 		}
 		
+		if ( this._injectedInto.length > 0 )
+		{
+			var injector = this._applicationContext.getInjector();
+			for ( element in this._injectedInto )
+			{
+				injector.injectInto( element );
+			}
+		}
+		
 		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.OBJECTS_BUILT );
 	}
 	
@@ -246,9 +258,29 @@ class RunTimeContextFactory
 		//TODO better type checking
 		var type 			= constructorVO.className.split( "<" )[ 0 ];
 		buildMethod 		= ( this._factoryMap.exists( type ) ) ? this._factoryMap.get( type ) : ClassInstanceFactory.build;
-
+		
 		//build instance with the expected factory method
 		var result 	= buildMethod( this._getFactoryVO( constructorVO ) );
+		
+		//Mapped types
+		if ( constructorVO.mapTypes != null )
+		{
+			var mapTypes = constructorVO.mapTypes;
+			for ( mapType in mapTypes )
+			{
+				//Remove whitespaces
+				mapType = mapType.split( ' ' ).join( '' );
+				
+				this.getApplicationContext().getInjector()
+					.mapClassNameToValue( mapType, result, constructorVO.ID );
+			}
+		}
+
+		//Inject into
+		if ( constructorVO.injectInto )
+		{
+			this._injectedInto.push( result );
+		}
 
 		if ( id != null )
 		{

@@ -9,7 +9,6 @@ import hex.compiletime.CompileTimeParser;
 import hex.compiletime.ICompileTimeApplicationAssembler;
 import hex.compiletime.basic.CompileTimeApplicationContext;
 import hex.compiletime.basic.StaticCompileTimeContextFactory;
-import hex.compiletime.flow.AbstractExprParser;
 import hex.compiletime.xml.DSLReader;
 import hex.compiletime.xml.ExceptionReporter;
 import hex.compiletime.util.ClassImportHelper;
@@ -20,7 +19,7 @@ import hex.log.MacroLoggerContext;
 import hex.parser.AbstractParserCollection;
 import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.RuntimeParam;
-import hex.preprocess.flow.MacroConditionalVariablesProcessor;
+import hex.preprocess.MacroConditionalVariablesProcessor;
 import hex.util.MacroUtil;
 #end
 

@@ -11,5 +11,4 @@ typedef CoreFactoryVODef =
 	var factory         	: String;
 	var staticRef			: String;
 	var injectInto      	: Bool;
-	var injectorCreation 	: Bool;
 }

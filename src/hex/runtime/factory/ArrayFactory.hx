@@ -26,19 +26,6 @@ class ArrayFactory
 		{
 			result = args.copy();
 		}
-
-		if ( constructorVO.mapTypes != null )
-		{
-			var mapTypes = constructorVO.mapTypes;
-			for ( mapType in mapTypes )
-			{
-				//Remove whitespaces
-				mapType = mapType.split( ' ' ).join( '' );
-					
-				factoryVO.contextFactory.getApplicationContext().getInjector()
-					.mapClassNameToValue( mapType, result, constructorVO.ID );
-			}
-		}
 		
 		return result;
 	}

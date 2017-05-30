@@ -1,4 +1,5 @@
 @context( name = 'applicationContext' )
 {
 	@inject_into instance = new hex.mock.MockClassWithInjectedProperty();
+	@map_type( 'String' ) injected = "hola mundo";
 }

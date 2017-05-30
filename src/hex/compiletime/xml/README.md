@@ -382,16 +382,6 @@ var myString = factory.locate( 'myString' );
 </details>
 
 <details>
-<summary>Create an instance using context's injector</summary>
-
-```xml
-<root name="applicationContext">
-    <instance id="instance" type="hex.mock.MockClassWithInjectedProperty" injector-creation="true"/>
-</root>
-```
-</details>
-
-<details>
 <summary>Class instance with its abstract type mapped to context's injector</summary>
 
 ```xml
@@ -698,7 +688,8 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Instantiate mapping configuration</summary>
-```haxe
+
+```xml
 <root name="applicationContext">
 
     <config id="config" type="hex.di.mapping.MappingConfiguration">

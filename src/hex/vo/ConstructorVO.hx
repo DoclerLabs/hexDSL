@@ -16,7 +16,6 @@ class ConstructorVO extends AssemblerVO
 	public var              ref             	: String;
 	public var 				mapTypes			: Array<String>;
 	public var 				staticRef			: String;
-	public var              injectorCreation 	: Bool;
 	
 	public var 				shouldAssign		= true;
 		
@@ -28,8 +27,7 @@ class ConstructorVO extends AssemblerVO
 							?injectInto 		: Bool = false,
 							?ref 				: String,
 							?mapTypes 			: Array<String>,
-							?staticRef 			: String,
-							?injectorCreation 	: Bool )
+							?staticRef 			: String )
 	{
 		super();
 		
@@ -43,7 +41,6 @@ class ConstructorVO extends AssemblerVO
 		this.ref 				= ref;
 		this.mapTypes 			= mapTypes;
 		this.staticRef 			= staticRef;
-		this.injectorCreation 	= injectorCreation;
 	}
 
 	public function toString() : String
@@ -59,7 +56,6 @@ class ConstructorVO extends AssemblerVO
 				+ "ref:"  				+ ref 				+ ", "
 				+ "mapTypes:"  			+ mapTypes 			+ ", "
 				+ "staticRef:"          + staticRef 		+ ", "
-				+ "injectorCreation:"   + injectorCreation 	+ ", "
 				+ "shouldAssign:"   	+ shouldAssign 		+ ")";
 	}
 }

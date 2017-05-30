@@ -16,7 +16,6 @@ class ContextAttributeList
 	static public inline var FACTORY_METHOD 		: String = "factory-method";
 	public static inline var STATIC_REF 			: String = "static-ref";
 	static public inline var STATIC_CALL 			: String = "static-call";
-	static public inline var INJECTOR_CREATION 		: String = "injector-creation";
 	static public inline var INJECT_INTO 			: String = "inject-into";
 	static public inline var METHOD 				: String = "method";
 	static public inline var PARSER_CLASS 			: String = "parser-class";

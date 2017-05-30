@@ -3,7 +3,6 @@ package hex.compiletime.xml.parser;
 #if macro
 import haxe.macro.Context;
 import hex.compiletime.error.IExceptionReporter;
-import hex.compiletime.xml.AbstractXmlParser;
 import hex.compiletime.xml.ContextAttributeList;
 import hex.compiletime.xml.ContextNodeNameList;
 import hex.compiletime.xml.XmlUtil;
@@ -21,12 +20,10 @@ using StringTools;
  * ...
  * @author Francis Bourre
  */
-class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
+class ObjectParser 
+	extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 {
-	public function new() 
-	{
-		super();
-	}
+	public function new() super();
 	
 	override public function parse() : Void
 	{
@@ -34,9 +31,7 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 		var iterator 			= this._contextData.firstElement().elements();
 		
 		while ( iterator.hasNext() )
-		{
 			this._parseNode( iterator.next(), applicationContext );
-		}
 	}
 	
 	public function _parseNode( xml : Xml, applicationContext :  IApplicationContext ) : Void
@@ -71,7 +66,6 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 		var factory 			: String;
 		var staticCall 			: String;
 		var injectInto			: Bool;
-		var injectorCreation	: Bool;
 		var ifList				: Array<String>;
 		var ifNotList			: Array<String>;
 
@@ -97,7 +91,6 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 				injectInto			= xml.get( ContextAttributeList.INJECT_INTO ) == "true";
 				mapType 			= this._getMapType( xml );
 				staticRef 			= xml.get( ContextAttributeList.STATIC_REF );
-				injectorCreation 	= xml.get( ContextAttributeList.INJECTOR_CREATION ) == "true";
 				ifList 				= XmlUtil.getIfList( xml );
 				ifNotList 			= XmlUtil.getIfNotList( xml );
 			
@@ -129,6 +122,10 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 							}
 						}
 					}
+				}
+				else if ( strippedType == ContextTypeList.MAPPING_DEFINITION )
+				{
+					args = this._getMappingDefinitionArgs( identifier, xml, this._exceptionReporter );
 				}
 				else
 				{
@@ -225,7 +222,7 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 					}
 				}
 
-				var constructorVO 			= new ConstructorVO( identifier, type, args, factory, staticCall, injectInto, null, mapType, staticRef, injectorCreation );
+				var constructorVO 			= new ConstructorVO( identifier, type, args, factory, staticCall, injectInto, null, mapType, staticRef );
 				constructorVO.ifList 		= ifList;
 				constructorVO.ifNotList 	= ifNotList;
 				constructorVO.filePosition 	= constructorVO.ref == null ? this._positionTracker.getPosition( xml ) : this._positionTracker.getPosition( xml, ContextAttributeList.REF );
@@ -238,38 +235,11 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 		var propertyIterator = xml.elementsNamed( ContextNodeNameList.PROPERTY );
 		while ( propertyIterator.hasNext() )
 		{
-			var property = propertyIterator.next();
-			var staticRef = property.get( ContextAttributeList.STATIC_REF );
-			
-			if ( staticRef != null )
-			{
-				var type = this._importHelper.getClassFullyQualifiedNameFromStaticVariable( staticRef );
-
-				try
-				{
-					this._importHelper.forceCompilation( type.split( '<' )[ 0 ] );
-				}
-				catch ( e : String )
-				{
-					this._throwMissingTypeException( type, property, ContextAttributeList.STATIC_REF );
-				}
-			}
-			
-			var propertyVO = new PropertyVO ( 	identifier, 
-												property.get( ContextAttributeList.NAME ),
-												property.get( ContextAttributeList.VALUE ),
-												property.get( ContextAttributeList.TYPE ),
-												property.get( ContextAttributeList.REF ),
-												property.get( ContextAttributeList.METHOD ),
-												property.get( ContextAttributeList.STATIC_REF ) 
-											);
-			
-			propertyVO.filePosition = propertyVO.ref == null ? this._positionTracker.getPosition( property ) : this._positionTracker.getPosition( property, ContextAttributeList.REF );
-			propertyVO.ifList 		= XmlUtil.getIfList( xml );
-			propertyVO.ifNotList 	= XmlUtil.getIfNotList( xml );
-
-			this._builder.build( PROPERTY( propertyVO ) );
+			var p = propertyIterator.next();
+			xml.removeChild( p );
+			this._builder.build( PROPERTY( this._getProperty( identifier, p ) ) );
 		}
+		
 
 		// Build method call.
 		var methodCallIterator = xml.elementsNamed( ContextNodeNameList.METHOD_CALL );
@@ -323,6 +293,53 @@ class ObjectParser extends AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 			
 			this._builder.build( METHOD_CALL( methodCallVO ) );
 		}
+	}
+	
+	function _getMappingDefinitionArgs( ownerID : String, xml : Xml, exceptionReporter : IExceptionReporter<Xml> ) : Array<PropertyVO>
+	{
+		var args : Array<PropertyVO> = [];
+		var propertyIterator = xml.elementsNamed( ContextNodeNameList.PROPERTY );
+		while ( propertyIterator.hasNext() )
+		{
+			var p = propertyIterator.next();
+			xml.removeChild( p );
+			args.push( this._getProperty( ownerID, p ) );
+		}
+		return args;
+	}
+	
+	function _getProperty( identifier : String, property : Xml ) : PropertyVO
+	{
+		var staticRef = property.get( ContextAttributeList.STATIC_REF );
+		
+		if ( staticRef != null )
+		{
+			var type = this._importHelper.getClassFullyQualifiedNameFromStaticVariable( staticRef );
+
+			try
+			{
+				this._importHelper.forceCompilation( type.split( '<' )[ 0 ] );
+			}
+			catch ( e : String )
+			{
+				this._throwMissingTypeException( type, property, ContextAttributeList.STATIC_REF );
+			}
+		}
+		
+		var propertyVO = new PropertyVO ( 	identifier, 
+											property.get( ContextAttributeList.NAME ),
+											property.get( ContextAttributeList.VALUE ),
+											property.get( ContextAttributeList.TYPE ),
+											property.get( ContextAttributeList.REF ),
+											property.get( ContextAttributeList.METHOD ),
+											property.get( ContextAttributeList.STATIC_REF ) 
+										);
+		
+		propertyVO.filePosition = propertyVO.ref == null ? this._positionTracker.getPosition( property ) : this._positionTracker.getPosition( property, ContextAttributeList.REF );
+		propertyVO.ifList 		= XmlUtil.getIfList( property );
+		propertyVO.ifNotList 	= XmlUtil.getIfNotList( property );
+		
+		return propertyVO;
 	}
 
 	function _getMapArguments( ownerID : String, xml : Xml, exceptionReporter : IExceptionReporter<Xml> ) : Array<MapVO>

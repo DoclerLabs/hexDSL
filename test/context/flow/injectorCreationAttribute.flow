@@ -1,4 +1,0 @@
-@context( name = 'applicationContext' )
-{
-	@injector_creation instance = new hex.mock.MockClassWithInjectedProperty();
-}
