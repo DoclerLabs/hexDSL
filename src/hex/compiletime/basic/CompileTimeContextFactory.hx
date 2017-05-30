@@ -1,4 +1,5 @@
 package hex.compiletime.basic;
+import haxe.macro.ExprTools;
 
 #if macro
 import haxe.macro.Context;
@@ -28,6 +29,7 @@ class CompileTimeContextFactory
 {
 	var _injectorContainerInterface : ClassType;
 	var _moduleInterface 			: ClassType;
+	var _dependencyInterface 		: ClassType;
 	
 	var _isInitialized				: Bool;
 	var _expressions 				: Array<Expr>;
@@ -49,6 +51,7 @@ class CompileTimeContextFactory
 		this._isInitialized 				= false;
 		this._injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( hex.di.IInjectorContainer ) );
 		this._moduleInterface 				= MacroUtil.getClassType( Type.getClassName( hex.module.IContextModule ) );
+		this._dependencyInterface 			= MacroUtil.getClassType( Type.getClassName( hex.di.mapping.IDependencyOwner ) );
 	}
 	
 	public function init( applicationContext : IApplicationContext ) : Void
@@ -69,21 +72,22 @@ class CompileTimeContextFactory
 			this._mappedTypes 						= [];
 			this._injectedInto 						= [];
 		
-			this._factoryMap.set( ContextTypeList.ARRAY, 			hex.compiletime.factory.ArrayFactory.build );
-			this._factoryMap.set( ContextTypeList.BOOLEAN, 			hex.compiletime.factory.BoolFactory.build );
-			this._factoryMap.set( ContextTypeList.INT, 				hex.compiletime.factory.IntFactory.build );
-			this._factoryMap.set( ContextTypeList.NULL, 			hex.compiletime.factory.NullFactory.build );
-			this._factoryMap.set( ContextTypeList.FLOAT, 			hex.compiletime.factory.FloatFactory.build );
-			this._factoryMap.set( ContextTypeList.OBJECT, 			hex.compiletime.factory.DynamicObjectFactory.build );
-			this._factoryMap.set( ContextTypeList.STRING, 			hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.UINT, 			hex.compiletime.factory.UIntFactory.build );
-			this._factoryMap.set( ContextTypeList.DEFAULT, 			hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.HASHMAP, 			hex.compiletime.factory.HashMapFactory.build );
-			this._factoryMap.set( ContextTypeList.CLASS, 			hex.compiletime.factory.ClassFactory.build );
-			this._factoryMap.set( ContextTypeList.XML, 				hex.compiletime.factory.XmlFactory.build );
-			this._factoryMap.set( ContextTypeList.FUNCTION, 		hex.compiletime.factory.FunctionFactory.build );
-			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 	hex.compiletime.factory.StaticVariableFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 	hex.compiletime.factory.MappingConfigurationFactory.build );
+			this._factoryMap.set( ContextTypeList.ARRAY, 				hex.compiletime.factory.ArrayFactory.build );
+			this._factoryMap.set( ContextTypeList.BOOLEAN, 				hex.compiletime.factory.BoolFactory.build );
+			this._factoryMap.set( ContextTypeList.INT, 					hex.compiletime.factory.IntFactory.build );
+			this._factoryMap.set( ContextTypeList.NULL, 				hex.compiletime.factory.NullFactory.build );
+			this._factoryMap.set( ContextTypeList.FLOAT, 				hex.compiletime.factory.FloatFactory.build );
+			this._factoryMap.set( ContextTypeList.OBJECT, 				hex.compiletime.factory.DynamicObjectFactory.build );
+			this._factoryMap.set( ContextTypeList.STRING, 				hex.compiletime.factory.StringFactory.build );
+			this._factoryMap.set( ContextTypeList.UINT, 				hex.compiletime.factory.UIntFactory.build );
+			this._factoryMap.set( ContextTypeList.DEFAULT, 				hex.compiletime.factory.StringFactory.build );
+			this._factoryMap.set( ContextTypeList.HASHMAP, 				hex.compiletime.factory.HashMapFactory.build );
+			this._factoryMap.set( ContextTypeList.CLASS, 				hex.compiletime.factory.ClassFactory.build );
+			this._factoryMap.set( ContextTypeList.XML, 					hex.compiletime.factory.XmlFactory.build );
+			this._factoryMap.set( ContextTypeList.FUNCTION, 			hex.compiletime.factory.FunctionFactory.build );
+			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 		hex.compiletime.factory.StaticVariableFactory.build );
+			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 		hex.compiletime.factory.MappingConfigurationFactory.build );
+			this._factoryMap.set( ContextTypeList.MAPPING_DEFINITION, 	hex.compiletime.factory.MappingDefinitionFactory.build );
 			
 			this._coreFactory.addListener( this );
 		}
@@ -260,6 +264,7 @@ class CompileTimeContextFactory
 		}
 		else
 		{
+			this._checkDependencies( constructorVO );
 			buildMethod = hex.compiletime.factory.ClassInstanceFactory.build;
 		}
 		
@@ -281,6 +286,23 @@ class CompileTimeContextFactory
 
 		this._expressions.push( macro @:mergeBlock { $result;  coreFactory.register( $v { id }, $i { id } ); } );
 		this._coreFactory.register( id, result );
+	}
+	
+	function _checkDependencies( constructorVO : ConstructorVO ) : Void
+	{
+		if ( MacroUtil.implementsInterface( this._getClassType( constructorVO.className ), _dependencyInterface ) )
+		{
+			var mappings = constructorVO.arguments.filter(
+				function ( arg ) return arg.ref != null && 
+					this._coreFactory.isRegisteredWithKey( "mappingDefinition#" + arg.ref  ) 
+			).map( function ( arg ) return this._coreFactory.locate( "mappingDefinition#" + arg.ref ) );
+			
+			if ( !hex.di.mapping.MappingChecker.matchForClassName( constructorVO.className, mappings ) )
+			{
+				var missingMappings = hex.di.mapping.MappingChecker.getMissingMapping( constructorVO.className, mappings );
+				Context.fatalError( "Missing mappings:" + missingMappings, constructorVO.filePosition );
+			}
+		}
 	}
 	
 	function _tryToRegisterModule( constructorVO : ConstructorVO ) : Void

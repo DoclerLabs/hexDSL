@@ -878,4 +878,11 @@ class BasicStaticXmlCompilerTest
 		code.execute( {contextName:"BasicStaticXmlCompiler_testRuntimeContext"} );
 		code.execute( {contextName:"BasicStaticXmlCompiler_testRuntimeContext2" } );
 	}*/
+	
+	@Test( "test dependencies checking" )
+	public function testDependenciesChecking() : Void
+	{
+		var code1 = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/dependencies.xml", "BasicStaticXmlCompiler_testDependenciesChecking" );
+		code1.execute();
+	}
 }
