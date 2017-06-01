@@ -902,7 +902,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test mixed dependencies checking" )
 	public function testMixedDependenciesChecking() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/mixedDependencies.xml", "BasicStaticFlowCompiler_testMixedDependenciesChecking" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/mixedDependencies.xml", "BasicStaticXmlCompiler_testMixedDependenciesChecking" );
 		code.execute();
 	}
 }
