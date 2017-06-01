@@ -5,7 +5,6 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.ExprTools;
 import hex.core.ContextTypeList;
-import hex.error.PrivateConstructorException;
 import hex.log.LogManager;
 import hex.vo.ConstructorVO;
 import hex.vo.MapVO;
@@ -18,11 +17,7 @@ import hex.vo.PropertyVO;
 @:final
 class ExpressionUtil 
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
 	static var logger = LogManager.getLoggerByClass(ExpressionUtil);
 	
@@ -42,53 +37,145 @@ class ExpressionUtil
 		}
 	}
 	
-	static public function getArgument( id : String, e : Expr ) : ConstructorVO
+	static public function getArgument( ident : String, value : Expr ) : ConstructorVO
 	{
-		var vo : ConstructorVO;
+		var constructorVO : ConstructorVO;
 
-		switch( e.expr )
+		switch( value.expr )
 		{
 			case EConst(CString(v)):
 				//String
-				vo = new ConstructorVO( id, ContextTypeList.STRING, [ v ] );
+				constructorVO = new ConstructorVO( ident, ContextTypeList.STRING, [ v ] );
 
 			case EConst(CInt(v)):
 				//Int
-				vo = new ConstructorVO( id, ContextTypeList.INT, [ v ] );
+				constructorVO = new ConstructorVO( ident, ContextTypeList.INT, [ v ] );
 
 			case EConst(CFloat(v)):
 				//Float
-				vo = new ConstructorVO( id, ContextTypeList.FLOAT, [ v ] );
+				constructorVO = new ConstructorVO( ident, ContextTypeList.FLOAT, [ v ] );
 
 			case EConst(CIdent(v)):
 				
-				var args : Array<Dynamic>;
-
 				switch( v )
 				{
 					case "null":
 						//null
-						vo =  new ConstructorVO( id, ContextTypeList.NULL, [ 'null' ] );
+						constructorVO =  new ConstructorVO( ident, ContextTypeList.NULL, [ 'null' ] );
 
 					case "true" | "false":
 						//Boolean
-						vo =  new ConstructorVO( id, ContextTypeList.BOOLEAN, [ v ] );
+						constructorVO =  new ConstructorVO( ident, ContextTypeList.BOOLEAN, [ v ] );
 
 					case _:
 						//Object reference
-						vo =  new ConstructorVO( id, ContextTypeList.INSTANCE, [ v ], null, null, null, v );
+						constructorVO =  new ConstructorVO( ident, ContextTypeList.INSTANCE, [ v ], null, null, null, v );
 				}
 
-			case EField( e, field ):
+			case EField( value, field ):
 				//Property or method reference
-				vo =  new ConstructorVO( id, ContextTypeList.INSTANCE, [], null, null, null, compressField(e.expr) + '.' + field );
+				constructorVO =  new ConstructorVO( ident, ContextTypeList.INSTANCE, [], null, null, null, compressField(value.expr) + '.' + field );
+			
+			case ENew( t, params ):
+				constructorVO = ExpressionUtil.getVOFromNewExpr( ident, t, params );
+				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
+				
+			case EArrayDecl( values ):
+				constructorVO = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );
+				var it = values.iterator();
+				while ( it.hasNext() ) constructorVO.arguments.push( ExpressionUtil.getArgument( ident, it.next() ) );
+			
+			case ECall( _.expr => EConst(CIdent('mapping')), params ):
 
+				for ( param in params )
+				{
+					switch( param.expr )
+					{
+						case EObjectDecl( fields ):
+
+							var args = [];
+							var it = fields.iterator();
+							while ( it.hasNext() )
+							{
+								var argument = it.next();
+								args.push( ExpressionUtil.getProperty( ident, argument.field, argument.expr ) );
+							}
+
+							constructorVO = new ConstructorVO( ident, ContextTypeList.MAPPING_DEFINITION, args );
+							constructorVO.filePosition = param.pos;
+							
+						case _:
+							trace( 'WTF' );
+					}
+				}
+				
+				
+				
 			case _:
-				logger.debug( e.expr );
+				trace( value.expr );
+				logger.debug( value.expr );
 		}
 
-		vo.filePosition = e.pos;
-		return vo;
+		constructorVO.filePosition = value.pos;
+		return constructorVO;
+	}
+	
+	static public function getVOFromNewExpr( ident : String, t : TypePath, params : Array<Expr> ) : ConstructorVO
+	{
+		var constructorVO : ConstructorVO;
+		
+		var pack = t.pack.join( '.' );
+		var type = pack == "" ? t.name : pack + '.' + t.name;
+
+		switch ( type )
+		{
+			case ContextTypeList.HASHMAP | 
+					ContextTypeList.MAPPING_CONFIG:
+				
+				if ( params.length > 0 )
+				{
+					switch( params[ 0 ].expr )
+					{
+						case EArrayDecl( values ):
+							constructorVO = new ConstructorVO( ident, ExpressionUtil.getFullClassDeclaration( t ), ExpressionUtil.getMapArguments( ident, values ) );
+							
+						case _:
+							//logger.error( params[ 0 ].expr );
+					}
+					//
+				}
+			case ContextTypeList.MAPPING_DEFINITION:
+				
+				switch( params[0].expr )
+				{
+					case EObjectDecl( fields ):
+						
+						var args = [];
+						var it = fields.iterator();
+						while ( it.hasNext() )
+						{
+							var argument = it.next();
+							args.push( ExpressionUtil.getProperty( ident, argument.field, argument.expr ) );
+						}
+						
+						constructorVO = new ConstructorVO( ident, ContextTypeList.MAPPING_DEFINITION, args );
+					case _:
+						trace( 'WTF' );
+				}
+				
+				
+			case _ :
+				constructorVO = new ConstructorVO( ident, type, [] );
+				
+				if ( params.length > 0 )
+				{
+					var it = params.iterator();
+					while ( it.hasNext() )
+						constructorVO.arguments.push( ExpressionUtil.getArgument( ident, it.next() ) );
+				}
+		}
+		
+		return constructorVO;
 	}
 	
 	static public function getProperty( ident : String, field : String, assigned : Expr ) : PropertyVO
@@ -184,7 +271,6 @@ class ExpressionUtil
 					
 					logger.debug( param.expr );
 			}
-			
 		}
 		
 		return args;

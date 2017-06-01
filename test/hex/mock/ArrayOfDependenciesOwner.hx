@@ -11,13 +11,13 @@ import hex.di.mapping.MappingDefinition;
  */
 @Dependency( var _:String )
 @Dependency( var id:Interface)
-class DependencyOwner implements IDependencyOwner
+class ArrayOfDependenciesOwner implements IDependencyOwner
 {
 	var _injector = new Injector();
 	
-	public function new( mapping1 : MappingDefinition, mapping2 : MappingDefinition ) 
+	public function new( mappings : Array<MappingDefinition> ) 
 	{
-		trace( mapping1.toValue );
+		
 	}
 	
 	public function getInjector() : IDependencyInjector return this._injector;

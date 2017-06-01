@@ -1,6 +1,5 @@
 package hex.compiletime.flow.parser;
 
-
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -41,6 +40,28 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 	{
 		switch ( e )
 		{
+			case macro $i { ident } = mapping( $param ):
+
+				switch( param.expr )
+				{
+					case EObjectDecl( fields ):
+						
+						var args = [];
+						var it = fields.iterator();
+						while ( it.hasNext() )
+						{
+							var argument = it.next();
+							args.push( ExpressionUtil.getProperty( ident, argument.field, argument.expr ) );
+						}
+
+						var constructorVO = new ConstructorVO( ident, ContextTypeList.MAPPING_DEFINITION, args );
+						constructorVO.filePosition = param.pos;
+						this._builder.build( OBJECT( constructorVO ) );
+						
+					case _:
+						trace( 'WTF' );
+				}
+				
 			case macro $i { ident } = $value:
 				var constructorVO = this._getConstructorVO( ident, value );
 				this._builder.build( OBJECT( constructorVO ) );
@@ -73,6 +94,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					case _: "";
 				} );
 				this._builder.build( OBJECT( constructorVO ) );
+				
+			
 				
 			case _:
 				//TODO remove
@@ -110,7 +133,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				
 			case ENew( t, params ):
-				constructorVO = this._getVOFromNewExpr( ident, t, params );
+				constructorVO = ExpressionUtil.getVOFromNewExpr( ident, t, params );
 				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				
 			case EObjectDecl( fields ):
@@ -126,10 +149,36 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 			case EArrayDecl( values ):
 				constructorVO = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );
-				
+				var i = 0;
 				var it = values.iterator();
 				while ( it.hasNext() )
-					constructorVO.arguments.push( ExpressionUtil.getArgument( ident, it.next() ) );
+				{
+					var value = it.next();
+					switch( value )
+					{
+						/*case macro mapping( $param ):
+							switch( param.expr )
+							{
+								case EObjectDecl( fields ):
+									trace( fields );	
+									var args = [];
+									var it = fields.iterator();
+									while ( it.hasNext() )
+									{
+										var argument = it.next();
+										//constructorVO.arguments.push( ExpressionUtil.getProperty( ident, argument.field, argument.expr ) );
+										constructorVO.arguments.push( ExpressionUtil.getArgument( ident, value ) );
+									}
+									
+								case _:
+									trace( 'WTF' );
+							}	*/
+							
+						case _:
+							constructorVO.arguments.push( ExpressionUtil.getArgument( ident /*+ i*/, value ) );
+							//i++;
+					}
+				}
 					
 			case EField( e, field ):
 				
@@ -218,45 +267,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 		}
 		
 		constructorVO.filePosition = value.pos;
-		return constructorVO;
-	}
-	
-	function _getVOFromNewExpr( ident : String, t : TypePath, params : Array<Expr> ) : ConstructorVO
-	{
-		var constructorVO : ConstructorVO;
-		
-		var pack = t.pack.join( '.' );
-		var type = pack == "" ? t.name : pack + '.' + t.name;
-
-		switch ( type )
-		{
-			case ContextTypeList.HASHMAP | 
-					ContextTypeList.MAPPING_CONFIG:
-				
-				if ( params.length > 0 )
-				{
-					switch( params[ 0 ].expr )
-					{
-						case EArrayDecl( values ):
-							constructorVO = new ConstructorVO( ident, ExpressionUtil.getFullClassDeclaration( t ), ExpressionUtil.getMapArguments( ident, values ) );
-							
-						case _:
-							logger.error( params[ 0 ].expr );
-					}
-					//
-				}
-				
-			case _ :
-				constructorVO = new ConstructorVO( ident, type, [] );
-				
-				if ( params.length > 0 )
-				{
-					var it = params.iterator();
-					while ( it.hasNext() )
-						constructorVO.arguments.push( ExpressionUtil.getArgument( ident, it.next() ) );
-				}
-		}
-		
 		return constructorVO;
 	}
 }

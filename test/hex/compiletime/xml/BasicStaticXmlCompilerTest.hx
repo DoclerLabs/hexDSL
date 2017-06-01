@@ -2,12 +2,14 @@ package hex.compiletime.xml;
 
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
+import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
+import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
 import hex.mock.MockCaller;
@@ -882,7 +884,25 @@ class BasicStaticXmlCompilerTest
 	@Test( "test dependencies checking" )
 	public function testDependenciesChecking() : Void
 	{
-		var code1 = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/dependencies.xml", "BasicStaticXmlCompiler_testDependenciesChecking" );
-		code1.execute();
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/dependencies.xml", "BasicStaticXmlCompiler_testDependenciesChecking" );
+		code.execute();
+	}
+	
+	@Test( "test array of dependencies checking" )
+	public function testArrayOfDependenciesChecking() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/arrayOfDependencies.xml", "BasicStaticXmlCompiler_testArrayOfDependenciesChecking" );
+		code.execute();
+
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, code.locator.mappings1 ) );
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, code.locator.mappings2 ) );
+		Assert.deepEquals( code.locator.mappings1, code.locator.mappings2 );
+	}
+	
+	@Test( "test mixed dependencies checking" )
+	public function testMixedDependenciesChecking() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/mixedDependencies.xml", "BasicStaticFlowCompiler_testMixedDependenciesChecking" );
+		code.execute();
 	}
 }

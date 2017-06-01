@@ -2,11 +2,13 @@ package hex.compiletime.flow;
 
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
+import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
+import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
 import hex.mock.MockCaller;
@@ -828,5 +830,57 @@ class BasicStaticFlowCompilerTest
 		Assert.isInstanceOf( code.locator.anotherSize, Size );
 		Assert.equals( 30, code.locator.anotherSize.width );
 		Assert.equals( 40, code.locator.anotherSize.height );
+	}
+	
+	@Test( "test array recursivity" )
+	public function testArrayRecursivity() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/arrayRecursivity.flow", "BasicStaticFlowCompiler_testArrayRecursivity" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.test[ 0 ] , MockClass );
+		Assert.isInstanceOf( code.locator.test[ 1 ] , AnotherMockClass );
+		Assert.isInstanceOf( code.locator.test[ 2 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 3, code.locator.test[2].property );
+		
+		var a = code.locator.test[ 3 ];
+		Assert.isInstanceOf( a[ 0 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 4, a[ 0 ].property );
+		Assert.equals( 5, a[ 1 ] );
+	}
+	
+	@Test( "test new recursivity" )
+	public function testNewRecursivity() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/newRecursivity.flow", "BasicStaticFlowCompiler_testNewRecursivity" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.test, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( code.locator.test.context, hex.mock.MockApplicationContext );
+	}
+	
+	@Test( "test dependencies checking" )
+	public function testDependenciesChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/dependencies.flow", "BasicStaticFlowCompiler_testDependenciesChecking" );
+		code.execute();
+	}
+	
+	@Test( "test array of dependencies checking" )
+	public function testArrayOfDependenciesChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/arrayOfDependencies.flow", "BasicStaticFlowCompiler_testArrayOfDependenciesChecking" );
+		code.execute();
+
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, code.locator.mappings1 ) );
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, code.locator.mappings2 ) );
+		Assert.deepEquals( code.locator.mappings1, code.locator.mappings2 );
+	}
+	
+	@Test( "test mixed dependencies checking" )
+	public function testMixedDependenciesChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/mixedDependencies.flow", "BasicStaticFlowCompiler_testMixedDependenciesChecking" );
+		code.execute();
 	}
 }

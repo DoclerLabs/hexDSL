@@ -1,5 +1,4 @@
 package hex.compiletime.basic;
-import haxe.macro.ExprTools;
 
 #if macro
 import haxe.macro.Context;
@@ -17,6 +16,8 @@ import hex.util.MacroUtil;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
 import hex.vo.PropertyVO;
+
+using Lambda;
 
 /**
  * ...
@@ -288,18 +289,88 @@ class CompileTimeContextFactory
 		this._coreFactory.register( id, result );
 	}
 	
+	function _getMappingDefinition( e )
+	{
+		switch( e.expr )
+		{
+			case EObjectDecl( fields ):
+
+				return fields.fold ( 
+					function (f, o) 
+					{
+						switch( f.field )
+						{
+							case 'fromType': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
+							case 'withName': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
+							case _:
+						}
+						return o;
+					}, {} );
+
+			case _:
+		}
+		
+		return null;
+	}
+	
+	function _getMappingDefinitions( e : Expr )
+	{
+		var a = [];
+		switch( e.expr )
+		{
+			case EVars( vars ) :
+				if ( vars[ 0 ].type != null )
+				{
+					if ( haxe.macro.ComplexTypeTools.toString( vars[ 0 ].type ) == 'Array<hex.di.mapping.MappingDefinition>' )
+					{
+						switch( vars[ 0 ].expr.expr )
+						{
+							case EArrayDecl( values ):
+								for ( value in values ) 
+								{
+									switch( value.expr )
+									{
+										case EObjectDecl( fields ):
+											var mapping = _getMappingDefinition( value );
+											if ( mapping != null ) a.push( mapping );
+											
+										case EConst(CIdent(ident)):
+											a = a.concat( _getMappingDefinitions( this._coreFactory.locate( ident ) ) );
+											
+										case wtf:
+											trace( 'wtf', wtf );
+									}
+								}
+
+							case _:
+						}
+						
+					}
+					else if ( haxe.macro.ComplexTypeTools.toString( vars[ 0 ].type ) == 'hex.di.mapping.MappingDefinition' )
+					{
+						var mapping = _getMappingDefinition( vars[ 0 ].expr );
+						if ( mapping != null ) a.push( mapping );
+					}
+				}
+				
+			case _:
+		}
+		
+		return a;
+	}
+	
 	function _checkDependencies( constructorVO : ConstructorVO ) : Void
 	{
 		if ( MacroUtil.implementsInterface( this._getClassType( constructorVO.className ), _dependencyInterface ) )
 		{
 			var mappings = constructorVO.arguments.filter(
-				function ( arg ) return arg.ref != null && 
-					this._coreFactory.isRegisteredWithKey( "mappingDefinition#" + arg.ref  ) 
-			).map( function ( arg ) return this._coreFactory.locate( "mappingDefinition#" + arg.ref ) );
+				function ( arg ) return arg.ref != null )
+			.map( function ( arg ) return this._coreFactory.locate( arg.ref ) )
+			.flatMap( _getMappingDefinitions );
 			
-			if ( !hex.di.mapping.MappingChecker.matchForClassName( constructorVO.className, mappings ) )
+			if ( !hex.di.mapping.MappingChecker.matchForClassName( constructorVO.className, cast mappings ) )
 			{
-				var missingMappings = hex.di.mapping.MappingChecker.getMissingMapping( constructorVO.className, mappings );
+				var missingMappings = hex.di.mapping.MappingChecker.getMissingMapping( constructorVO.className, cast mappings );
 				Context.fatalError( "Missing mappings:" + missingMappings, constructorVO.filePosition );
 			}
 		}

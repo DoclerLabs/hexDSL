@@ -4,11 +4,13 @@ import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.Injector;
+import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.error.NoSuchElementException;
 import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
+import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
@@ -749,4 +751,56 @@ class BasicFlowCompilerTest
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
+	
+	@Test( "test array recursivity" )
+	public function testArrayRecursivity() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/arrayRecursivity.flow" );
+		
+		var test = this._getCoreFactory().locate( "test" );
+		Assert.isInstanceOf( test[ 0 ] , MockClass );
+		Assert.isInstanceOf( test[ 1 ] , AnotherMockClass );
+		Assert.isInstanceOf( test[ 2 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 3, test[2].property );
+		
+		var a = cast test[ 3 ];
+		Assert.isInstanceOf( a[ 0 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 4, a[ 0 ].property );
+		Assert.equals( 5, a[ 1 ] );
+	}
+	
+	@Test( "test new recursivity" )
+	public function testNewRecursivity() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/newRecursivity.flow" );
+		
+		var test = this._getCoreFactory().locate( "test" );
+		Assert.isInstanceOf( test, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( test.context, hex.mock.MockApplicationContext );
+	}
+	
+	@Test( "test dependencies checking" )
+	public function testDependenciesChecking() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/dependencies.flow" );
+	}
+	
+	@Test( "test array of dependencies checking" )
+	public function testArrayOfDependenciesChecking() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/arrayOfDependencies.flow" );
+
+		var mappings1 = this._getCoreFactory().locate( "mappings1" );
+		var mappings2 = this._getCoreFactory().locate( "mappings2" );
+		
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, mappings1 ) );
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, mappings2 ) );
+		Assert.deepEquals( mappings1, mappings2 );
+	}
+	
+	@Test( "test mixed dependencies checking" )
+	public function testMixedDependenciesChecking() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/mixedDependencies.flow" );
+	}
 }

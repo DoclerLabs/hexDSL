@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	test = new hex.mock.MockContextHolder( new hex.mock.MockApplicationContext( 'newRecursivity' ) );
+}

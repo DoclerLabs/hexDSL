@@ -1,0 +1,43 @@
+<root name="applicationContext">
+
+    <test id="mapping1a" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="String"/>
+        <property name="toValue" value="test"/>
+    </test>
+	
+	<test id="mapping1b" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="hex.mock.Interface"/>
+        <property name="toClass" type="Class" value="hex.mock.Clazz"/>
+        <property name="withName" value="id"/>
+    </test>
+	
+	<test id="mapping2a" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="String"/>
+        <property name="toValue" value="test"/>
+    </test>
+	
+	<test id="mapping2b" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="hex.mock.Interface"/>
+        <property name="toClass" type="Class" value="hex.mock.Clazz"/>
+        <property name="withName" value="id"/>
+    </test>
+	
+	<collection id="mappings1" type="Array<hex.di.mapping.MappingDefinition>">
+        <argument ref="mapping1a" />
+        <argument ref="mapping1b" />
+    </collection>
+	
+	<collection id="mappings2" type="Array<hex.di.mapping.MappingDefinition>">
+        <argument ref="mapping2a" />
+        <argument ref="mapping2b" />
+    </collection>
+	
+	<test id="ownera" type="hex.mock.ArrayOfDependenciesOwner">
+		<argument ref="mappings1"/>
+	</test>
+	
+	<test id="ownerb" type="hex.mock.ArrayOfDependenciesOwner">
+		<argument ref="mappings2"/>
+	</test>
+	
+</root>
