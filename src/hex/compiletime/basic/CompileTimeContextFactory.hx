@@ -265,11 +265,11 @@ class CompileTimeContextFactory
 		}
 		else
 		{
-			this._checkDependencies( constructorVO );
 			buildMethod = hex.compiletime.factory.ClassInstanceFactory.build;
 		}
 		
 		var result = buildMethod( this._getFactoryVO( constructorVO ) );
+		this._checkDependencies( constructorVO );
 
 		if ( id != null )
 		{
