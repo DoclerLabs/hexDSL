@@ -13,23 +13,26 @@ class PropertyVO extends AssemblerVO
 	public var ref 			: String;
 	public var method 		: String;
 	public var staticRef 	: String;
+	public var valueToBuild : ConstructorVO;
 
-	public function new(    ownerID 	: String,
-							?name    	: String,
-							?value   	: String,
-							?type    	: String,
-							?ref     	: String,
-							?method  	: String,
-							?staticRef  : String )
+	public function new(    ownerID 		: String,
+							?name    		: String,
+							?value   		: String,
+							?type    		: String,
+							?ref     		: String,
+							?method  		: String,
+							?staticRef  	: String,
+							?valueToBuild  	: ConstructorVO )
 		{
 			super();
 			
-			this.ownerID 	= ownerID;
-			this.name 		= name;
-			this.value 		= value;
-			this.type 		= type;
-			this.ref 		= ref;
-			this.method 	= method;
-			this.staticRef 	= staticRef;
+			this.ownerID 		= ownerID;
+			this.name 			= name;
+			this.value 			= value;
+			this.type 			= type;
+			this.ref 			= ref;
+			this.method 		= method;
+			this.staticRef 		= staticRef;
+			this.valueToBuild 	= valueToBuild;
 		}
 }

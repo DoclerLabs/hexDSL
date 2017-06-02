@@ -69,6 +69,12 @@ class MappingDefinitionFactory
 					constructorVO.filePosition 	= property.filePosition;
 					value 						= factory.buildVO( constructorVO );
 					fields.push( { field: propertyName, expr: value } );
+					
+				} else if ( property.valueToBuild != null )
+				{
+					property.valueToBuild.filePosition = property.filePosition;
+					value 						= factory.buildVO( property.valueToBuild );
+					fields.push( { field: propertyName, expr: value } );
 
 				} else
 				{

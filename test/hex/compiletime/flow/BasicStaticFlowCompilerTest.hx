@@ -882,5 +882,22 @@ class BasicStaticFlowCompilerTest
 	{
 		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/mixedDependencies.flow", "BasicStaticFlowCompiler_testMixedDependenciesChecking" );
 		code.execute();
+		
+		Assert.isInstanceOf( code.locator.mapping.toValue, hex.mock.Clazz );
+	}
+	
+	@Test( "test property recursivity" )
+	public function testPropertyRecursivity() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/propertyRecursivity.flow", "BasicStaticFlowCompiler_testPropertyRecursivity" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.o1.p, hex.mock.Clazz );
+		
+		Assert.isInstanceOf( code.locator.o2.p, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( code.locator.o2.p.context, hex.mock.MockApplicationContext );
+		
+		Assert.equals( 10, code.locator.r.width );
+		Assert.equals( 20, code.locator.r.height );
 	}
 }

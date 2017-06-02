@@ -152,7 +152,7 @@ class ContextBuilder
 		return haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( 'hex.context.' + interfaceExpr.name ) );
 	}
 	
-	//Build final class for each diffrent context name
+	//Build final class for each different context name
 	static function _onAfterTyping( types : Array<haxe.macro.Type.ModuleType> ) : Void
 	{
 		var iti = ContextBuilder._Iteration.keys();

@@ -1,0 +1,9 @@
+@context( name = 'applicationContext' )
+{
+	r = new hex.mock.MockRectangle();
+	r.size = new hex.structures.Point( 10, 20 );
+	
+	o1 = {p: new hex.mock.Clazz()};
+	
+	o2 = { p: new hex.mock.MockContextHolder( new hex.mock.MockApplicationContext( 'propertyRecursivity' ) ) };
+}

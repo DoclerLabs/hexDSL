@@ -204,7 +204,13 @@ class ExpressionUtil
 						v = null;
 						propertyVO = new PropertyVO( ident, field, v, type, ref );
 				}
-			
+				
+			case ENew( t, params ):
+				
+				var constructorVO = ExpressionUtil.getVOFromNewExpr( ident, t, params );
+				//constructorVO.type = ExprTools.toString( assigned.expr ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
+				propertyVO = new PropertyVO( ident, field, null, type, ref, null, null, constructorVO );
+				
 			case EConst(CInt(v)):
 				//Int
 				propertyVO = new PropertyVO( ident, field, v, ContextTypeList.INT );

@@ -2,12 +2,13 @@
 {
 	s = "test";
 	a = new Array<String>( s, 'yes' );
-	
-	mapping = mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "anotherID"} );
+
+	mapping = mapping( {fromType: "hex.mock.Interface", toValue: new hex.mock.Clazz(), withName: "anotherID"} );
 	
 	mappings = new Array<hex.di.mapping.MappingDefinition>
 	(
 		mapping( {fromType: "String", toValue: s} ),
+		//mappin2,
 		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"} )
 	);
 

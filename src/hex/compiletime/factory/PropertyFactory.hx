@@ -46,6 +46,12 @@ class PropertyFactory
 			var constructorVO 			= new ConstructorVO( null, ContextTypeList.STATIC_VARIABLE, null, null, null, false, null, null,  property.staticRef );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
+			e 							= macro $i { id } .$propertyName = $value;
+			
+		} else if ( property.valueToBuild != null )
+		{
+			property.valueToBuild.filePosition = property.filePosition;
+			value 						= factory.buildVO( property.valueToBuild );
 			e 							= macro $i{ id }.$propertyName = $value;
 
 		} else
