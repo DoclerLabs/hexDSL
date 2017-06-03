@@ -66,9 +66,10 @@ serviceLocator = new hex.collection.HashMap<Class<IService>, Class<IService>>
 ## Use the basic Flow compiler
 
 <details>
-```haxe
+
 <summary>Defining context</summary>
 
+```haxe
 @context( name = 'myContextName' )
 {
     myString = 'hello world';
@@ -641,6 +642,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Instantiate mapping configuration</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
