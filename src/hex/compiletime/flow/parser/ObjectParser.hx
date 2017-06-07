@@ -149,36 +149,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 			case EArrayDecl( values ):
 				constructorVO = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );
-				var i = 0;
-				var it = values.iterator();
-				while ( it.hasNext() )
-				{
-					var value = it.next();
-					switch( value )
-					{
-						/*case macro mapping( $param ):
-							switch( param.expr )
-							{
-								case EObjectDecl( fields ):
-									trace( fields );	
-									var args = [];
-									var it = fields.iterator();
-									while ( it.hasNext() )
-									{
-										var argument = it.next();
-										//constructorVO.arguments.push( ExpressionUtil.getProperty( ident, argument.field, argument.expr ) );
-										constructorVO.arguments.push( ExpressionUtil.getArgument( ident, value ) );
-									}
-									
-								case _:
-									trace( 'WTF' );
-							}	*/
-							
-						case _:
-							constructorVO.arguments.push( ExpressionUtil.getArgument( ident /*+ i*/, value ) );
-							//i++;
-					}
-				}
+				values.map( function( e ) constructorVO.arguments.push( ExpressionUtil.getArgument( ident, e ) ) );
 					
 			case EField( e, field ):
 				
