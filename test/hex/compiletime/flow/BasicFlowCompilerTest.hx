@@ -830,4 +830,22 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( instance, hex.mock.Clazz );
 		Assert.equals( instance, injector.getInstanceWithClassName( "hex.mock.Interface", "id" ) );
 	}
+	
+	@Test( "test property recursivity" )
+	public function testPropertyRecursivity() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyRecursivity.flow" );
+
+		var o1 = this._getCoreFactory().locate( "o1" );
+		var o2 = this._getCoreFactory().locate( "o2" );
+		var r = this._getCoreFactory().locate( "r" );
+		
+		Assert.isInstanceOf( o1.p, hex.mock.Clazz );
+		
+		Assert.isInstanceOf( o2.p, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( o2.p.context, hex.mock.MockApplicationContext );
+		
+		Assert.equals( 10, r.width );
+		Assert.equals( 20, r.height );
+	}
 }
