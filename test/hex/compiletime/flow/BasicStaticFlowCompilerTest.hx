@@ -897,6 +897,15 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "hex.mock.Interface", mapping.fromType );
 		Assert.equals( hex.mock.Clazz, mapping.toClass );
 		Assert.equals( "id", mapping.withName );
+		
+		var injector = code.locator.owner.getInjector();
+		Assert.equals( "test", injector.getInstanceWithClassName( "String" ) );
+		Assert.isInstanceOf( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), hex.mock.Clazz );
+		Assert.equals( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ) );
+		
+		var instance = injector.getInstanceWithClassName( "hex.mock.Interface", "id" );
+		Assert.isInstanceOf( instance, hex.mock.Clazz );
+		Assert.equals( instance, injector.getInstanceWithClassName( "hex.mock.Interface", "id" ) );
 	}
 	
 	@Test( "test property recursivity" )

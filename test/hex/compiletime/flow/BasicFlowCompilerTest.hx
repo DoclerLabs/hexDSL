@@ -3,6 +3,7 @@ package hex.compiletime.flow;
 import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
+import hex.di.IDependencyInjector;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
@@ -819,5 +820,14 @@ class BasicFlowCompilerTest
 		Assert.equals( "hex.mock.Interface", mapping.fromType );
 		Assert.equals( hex.mock.Clazz, mapping.toClass );
 		Assert.equals( "id", mapping.withName );
+		
+		var injector : IDependencyInjector = cast this._getCoreFactory().locate( "owner" ).getInjector();
+		Assert.equals( "test", injector.getInstanceWithClassName( "String" ) );
+		Assert.isInstanceOf( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), hex.mock.Clazz );
+		Assert.equals( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ) );
+		
+		var instance = injector.getInstanceWithClassName( "hex.mock.Interface", "id" );
+		Assert.isInstanceOf( instance, hex.mock.Clazz );
+		Assert.equals( instance, injector.getInstanceWithClassName( "hex.mock.Interface", "id" ) );
 	}
 }

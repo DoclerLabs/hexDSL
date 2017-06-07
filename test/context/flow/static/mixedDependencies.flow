@@ -9,7 +9,7 @@
 	mappings = new Array<hex.di.mapping.MappingDefinition>
 	(
 		mapping2,
-		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"} )
+		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id", asSingleton:true} )
 	);
 
 	owner = new hex.mock.MixedDependenciesOwner( a, mapping1, mappings, s );
