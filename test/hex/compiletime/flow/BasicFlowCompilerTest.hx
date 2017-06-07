@@ -8,28 +8,25 @@ import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.error.NoSuchElementException;
-import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
+import hex.mock.MockCaller;
 import hex.mock.MockChat;
 import hex.mock.MockClass;
+import hex.mock.MockClassWithGeneric;
+import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockContextHolder;
+import hex.mock.MockFruitVO;
 import hex.mock.MockMethodCaller;
-import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
-import hex.mock.MockCaller;
-import hex.mock.MockClassWithGeneric;
-import hex.mock.MockClassWithInjectedProperty;
-import hex.mock.MockFruitVO;
-import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -802,5 +799,25 @@ class BasicFlowCompilerTest
 	public function testMixedDependenciesChecking() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/mixedDependencies.flow" );
+		
+		var s = this._getCoreFactory().locate( "s" );
+		var mapping1 = this._getCoreFactory().locate( "mapping1" );
+		var mapping2 = this._getCoreFactory().locate( "mapping2" );
+		var mappings = this._getCoreFactory().locate( "mappings" );
+		
+		Assert.equals( "String", mapping1.fromType );
+		Assert.equals( "test", mapping1.toValue );
+		Assert.equals( s, mapping1.toValue );
+		
+		Assert.equals( "hex.mock.Interface", mapping2.fromType );
+		Assert.isInstanceOf( mapping2.toValue, hex.mock.Clazz );
+		Assert.equals( "anotherID", mapping2.withName );
+		
+		Assert.equals( mapping2, mappings[0] );
+		
+		var mapping = mappings[ 1 ];
+		Assert.equals( "hex.mock.Interface", mapping.fromType );
+		Assert.equals( hex.mock.Clazz, mapping.toClass );
+		Assert.equals( "id", mapping.withName );
 	}
 }

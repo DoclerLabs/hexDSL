@@ -883,7 +883,20 @@ class BasicStaticFlowCompilerTest
 		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/mixedDependencies.flow", "BasicStaticFlowCompiler_testMixedDependenciesChecking" );
 		code.execute();
 		
-		Assert.isInstanceOf( code.locator.mapping.toValue, hex.mock.Clazz );
+		Assert.equals( "String", code.locator.mapping1.fromType );
+		Assert.equals( "test", code.locator.mapping1.toValue );
+		Assert.equals( code.locator.s, code.locator.mapping1.toValue );
+		
+		Assert.equals( "hex.mock.Interface", code.locator.mapping2.fromType );
+		Assert.isInstanceOf( code.locator.mapping2.toValue, hex.mock.Clazz );
+		Assert.equals( "anotherID", code.locator.mapping2.withName );
+		
+		Assert.equals( code.locator.mapping2, code.locator.mappings[0] );
+		
+		var mapping = code.locator.mappings[ 1 ];
+		Assert.equals( "hex.mock.Interface", mapping.fromType );
+		Assert.equals( hex.mock.Clazz, mapping.toClass );
+		Assert.equals( "id", mapping.withName );
 	}
 	
 	@Test( "test property recursivity" )
