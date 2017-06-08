@@ -18,10 +18,12 @@ import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModelWithTrigger;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
+import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -760,12 +762,12 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
-
-		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
-		Assert.isInstanceOf( model, MockModelWithTrigger );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerMethodConnection" );
+		code.execute();
 		
-		model.callbacks.trigger( 'hello world' );
+		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
+		
+		code.locator.model.callbacks.trigger( 'hello world' );
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}
@@ -776,12 +778,12 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
-
-		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
-		Assert.isInstanceOf( model, MockModelWithTrigger );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerInterfaceConnection" );
+		code.execute();
 		
-		model.trigger.onTrigger( 'hello world' );
+		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
+		
+		code.locator.model.trigger.onTrigger( 'hello world' );
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
