@@ -21,7 +21,7 @@ class ExpressionUtil
 				previousValue = previousValue == "" ? field : field + "." + previousValue;
 				return compressField( ee, previousValue );
 				
-			case EConst( CIdent( id ) ):
+			case EConst(CIdent(id)):
 				return previousValue == "" ? id : id + "." + previousValue;
 
 			default:

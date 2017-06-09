@@ -1,16 +1,16 @@
 package hex.compiletime.flow.parser.custom;
 
+/**
+ * ...
+ * @author Francis Bourre
+ */
 #if macro
 import haxe.macro.*;
 import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 
-/**
- * ...
- * @author Francis Bourre
- */
-class MappingParser 
+class MappingConfigParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
@@ -18,17 +18,18 @@ class MappingParser
 	{
 		var constructorVO : ConstructorVO;
 		
-		switch( params[ 0 ].expr )
+		if ( params.length > 0 )
 		{
-			case EObjectDecl( fields ):
-				
-				var args = fields.map( function( e ) return parser.parseProperty( parser, id, e.field, e.expr ) );
-				constructorVO = new ConstructorVO( id, ContextTypeList.MAPPING_DEFINITION, args );
-				constructorVO.filePosition = params[0].pos;
-			
-			case wtf:
-				trace( wtf );
-				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
+			switch( params[ 0 ].expr )
+			{
+				case EArrayDecl( values ):
+					var args = values.map( function (e) return parser.parseMapArgument( parser, id, e ) );
+					constructorVO = new ConstructorVO( id, ContextTypeList.MAPPING_CONFIG, args );
+					
+				case wtf:
+					trace( wtf );
+					Context.error( '', Context.currentPos() );
+			}
 		}
 		
 		constructorVO.filePosition = expr.pos;

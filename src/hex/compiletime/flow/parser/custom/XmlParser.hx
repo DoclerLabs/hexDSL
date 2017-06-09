@@ -2,6 +2,7 @@ package hex.compiletime.flow.parser.custom;
 
 #if macro
 import haxe.macro.Expr;
+import hex.compiletime.flow.parser.ExpressionParser;
 import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
@@ -14,7 +15,7 @@ class XmlParser
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	public static function parse( id : String, params : Array<Expr>, originalExpression : Expr ) : ConstructorVO
+	public static function parse( parser : ExpressionParser, id : ID, params : Array<Expr>, originalExpression : Expr ) : ConstructorVO
 	{
 		var constructorVO : ConstructorVO;
 		
