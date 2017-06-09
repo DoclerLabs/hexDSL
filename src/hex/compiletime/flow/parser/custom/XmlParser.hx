@@ -1,5 +1,6 @@
 package hex.compiletime.flow.parser.custom;
 
+#if macro
 import haxe.macro.Expr;
 import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.core.ContextTypeList;
@@ -49,3 +50,4 @@ class XmlParser
 		return constructorVO;
 	}
 }
+#end

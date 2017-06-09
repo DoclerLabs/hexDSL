@@ -1,5 +1,6 @@
 package hex.compiletime.flow.parser.custom;
 
+#if macro
 import haxe.macro.Expr;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
@@ -40,3 +41,4 @@ class MappingParser
 		return constructorVO;
 	}
 }
+#end
