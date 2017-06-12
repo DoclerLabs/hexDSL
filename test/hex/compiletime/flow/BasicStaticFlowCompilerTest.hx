@@ -2,11 +2,13 @@ package hex.compiletime.flow;
 
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
+import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
+import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
 import hex.mock.MockCaller;
@@ -16,10 +18,12 @@ import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModelWithTrigger;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
+import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -758,12 +762,12 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
-
-		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
-		Assert.isInstanceOf( model, MockModelWithTrigger );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerMethodConnection" );
+		code.execute();
 		
-		model.callbacks.trigger( 'hello world' );
+		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
+		
+		code.locator.model.callbacks.trigger( 'hello world' );
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}
@@ -774,12 +778,12 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/trigger.flow" );
-
-		var model : MockModelWithTrigger = this._getCoreFactory().locate( "model" );
-		Assert.isInstanceOf( model, MockModelWithTrigger );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerInterfaceConnection" );
+		code.execute();
 		
-		model.trigger.onTrigger( 'hello world' );
+		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
+		
+		code.locator.model.trigger.onTrigger( 'hello world' );
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
@@ -828,5 +832,96 @@ class BasicStaticFlowCompilerTest
 		Assert.isInstanceOf( code.locator.anotherSize, Size );
 		Assert.equals( 30, code.locator.anotherSize.width );
 		Assert.equals( 40, code.locator.anotherSize.height );
+	}
+	
+	@Test( "test array recursivity" )
+	public function testArrayRecursivity() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/arrayRecursivity.flow", "BasicStaticFlowCompiler_testArrayRecursivity" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.test[ 0 ] , MockClass );
+		Assert.isInstanceOf( code.locator.test[ 1 ] , AnotherMockClass );
+		Assert.isInstanceOf( code.locator.test[ 2 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 3, code.locator.test[2].property );
+		
+		var a = code.locator.test[ 3 ];
+		Assert.isInstanceOf( a[ 0 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 4, a[ 0 ].property );
+		Assert.equals( 5, a[ 1 ] );
+	}
+	
+	@Test( "test new recursivity" )
+	public function testNewRecursivity() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/newRecursivity.flow", "BasicStaticFlowCompiler_testNewRecursivity" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.test, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( code.locator.test.context, hex.mock.MockApplicationContext );
+	}
+	
+	@Test( "test dependencies checking" )
+	public function testDependenciesChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/dependencies.flow", "BasicStaticFlowCompiler_testDependenciesChecking" );
+		code.execute();
+	}
+	
+	@Test( "test array of dependencies checking" )
+	public function testArrayOfDependenciesChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/arrayOfDependencies.flow", "BasicStaticFlowCompiler_testArrayOfDependenciesChecking" );
+		code.execute();
+
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, code.locator.mappings1 ) );
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, code.locator.mappings2 ) );
+		Assert.deepEquals( code.locator.mappings1, code.locator.mappings2 );
+	}
+	
+	@Test( "test mixed dependencies checking" )
+	public function testMixedDependenciesChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/mixedDependencies.flow", "BasicStaticFlowCompiler_testMixedDependenciesChecking" );
+		code.execute();
+		
+		Assert.equals( "String", code.locator.mapping1.fromType );
+		Assert.equals( "test", code.locator.mapping1.toValue );
+		Assert.equals( code.locator.s, code.locator.mapping1.toValue );
+		
+		Assert.equals( "hex.mock.Interface", code.locator.mapping2.fromType );
+		Assert.isInstanceOf( code.locator.mapping2.toValue, hex.mock.Clazz );
+		Assert.equals( "anotherID", code.locator.mapping2.withName );
+		
+		Assert.equals( code.locator.mapping2, code.locator.mappings[0] );
+		
+		var mapping = code.locator.mappings[ 1 ];
+		Assert.equals( "hex.mock.Interface", mapping.fromType );
+		Assert.equals( hex.mock.Clazz, mapping.toClass );
+		Assert.equals( "id", mapping.withName );
+		
+		var injector = code.locator.owner.getInjector();
+		Assert.equals( "test", injector.getInstanceWithClassName( "String" ) );
+		Assert.isInstanceOf( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), hex.mock.Clazz );
+		Assert.equals( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ) );
+		
+		var instance = injector.getInstanceWithClassName( "hex.mock.Interface", "id" );
+		Assert.isInstanceOf( instance, hex.mock.Clazz );
+		Assert.equals( instance, injector.getInstanceWithClassName( "hex.mock.Interface", "id" ) );
+	}
+	
+	@Test( "test property recursivity" )
+	public function testPropertyRecursivity() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/propertyRecursivity.flow", "BasicStaticFlowCompiler_testPropertyRecursivity" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.o1.p, hex.mock.Clazz );
+		
+		Assert.isInstanceOf( code.locator.o2.p, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( code.locator.o2.p.context, hex.mock.MockApplicationContext );
+		
+		Assert.equals( 10, code.locator.r.width );
+		Assert.equals( 20, code.locator.r.height );
 	}
 }

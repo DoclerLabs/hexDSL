@@ -100,7 +100,7 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 						name = switch( a.first().expr )
 						{
 							case EBinop( OpAssign, e1, e2 ) :
-								e2.expr.compressField();
+								e2.compressField();
 								
 							case _:
 								null;

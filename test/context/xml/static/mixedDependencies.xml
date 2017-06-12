@@ -1,0 +1,39 @@
+<root name="applicationContext">
+	
+	<string id="s" value="test"/>
+	
+	<collection id="a" type="Array<String>">
+        <argument ref="s" />
+        <argument value="yes" />
+    </collection>
+	
+	<test id="mapping" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="hex.mock.Interface"/>
+        <property name="toClass" type="Class" value="hex.mock.Clazz"/>
+        <property name="withName" value="anotherID"/>
+    </test>
+	
+	<collection id="mappings" type="Array<hex.di.mapping.MappingDefinition>">
+        <argument ref="mapping1" />
+        <argument ref="mapping2" />
+    </collection>
+	
+	<test id="mapping1" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="String"/>
+        <property name="toValue" value="test"/>
+    </test>
+	
+	<test id="mapping2" type="hex.di.mapping.MappingDefinition">
+        <property name="fromType" value="hex.mock.Interface"/>
+        <property name="toClass" type="Class" value="hex.mock.Clazz"/>
+        <property name="withName" value="id"/>
+    </test>
+
+	<test id="owner" type="hex.mock.MixedDependenciesOwner">
+		<argument ref="a"/>
+		<argument ref="mapping"/>
+		<argument ref="mappings"/>
+		<argument ref="s"/>
+	</test>
+	
+</root>

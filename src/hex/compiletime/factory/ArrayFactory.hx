@@ -29,6 +29,12 @@ class ArrayFactory
 		{
 			var exp 	= Context.parseInlineString( "new " + constructorVO.type + "()", constructorVO.filePosition );
 			var varType = TypeTools.toComplexType( Context.typeof( exp ) );
+			
+			if ( varType == null )
+			{
+				varType = macro :Array<Dynamic>;
+			}
+			
 			var result 	= macro @:pos( constructorVO.filePosition ) var $idVar : $varType = $a{ args };
 
 			return result;

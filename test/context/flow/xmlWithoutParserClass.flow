@@ -1,6 +1,6 @@
 @context( name = 'applicationContext' )
 {
-	fruits = Xml.parse
+	fruits = xml
 	(
 		'<root>
 			<node>orange</node>

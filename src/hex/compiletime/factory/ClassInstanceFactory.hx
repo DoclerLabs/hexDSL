@@ -38,43 +38,50 @@ class ClassInstanceFactory
 		var staticRef 		= vo.staticRef;
 		var classType 		= MacroUtil.getClassType( vo.className, pos );
 		
-		var result = //Assign result
-		if ( factoryMethod != null )//factory method
+		if ( !vo.shouldAssign )
 		{
-			//TODO implement the same behavior @runtime issue#1
-			if ( staticRef != null )//static variable - with factory method
+			return macro @:pos( pos ) new $typePath( $a { args } );
+		}
+		else
+		{
+			var result = //Assign result
+			if ( factoryMethod != null )//factory method
 			{
-				var e = _staticRefFactory( pack, staticRef, factoryMethod, args );
+				//TODO implement the same behavior @runtime issue#1
+				if ( staticRef != null )//static variable - with factory method
+				{
+					var e = _staticRefFactory( pack, staticRef, factoryMethod, args );
+					vo.type = try _fqcn( e )//Assign right type description 
+						catch ( e : Dynamic ) _fqcn( _staticRefFactory( pack, staticRef, factoryMethod, _nullArray( argsLength ) ) );
+					_result( e, id, vo.type, pos );
+				}
+				else if ( staticCall != null )//static method call - with factory method
+				{
+					var e = _staticCallFactory( pack, staticCall, factoryMethod, args );
+					vo.type = try _fqcn( e )//Assign right type description 
+						catch ( e : Dynamic ) _fqcn( _staticCallFactory( pack, staticCall, factoryMethod, _nullArray( argsLength ) ) );
+					_result( e, id, vo.type, pos );
+				}
+				else//factory method error
+				{
+					Context.error( 	"'" + factoryMethod + "' method cannot be called on '" +  vo.className + 
+									"' class. Add static method or variable to make it working.", pos );
+				}
+			}
+			else if ( staticCall != null )//simple static method call
+			{
+				var e = _staticCall( pack, staticCall, args );
 				vo.type = try _fqcn( e )//Assign right type description 
-					catch ( e : Dynamic ) _fqcn( _staticRefFactory( pack, staticRef, factoryMethod, _nullArray( argsLength ) ) );
+					catch ( e : Dynamic ) _fqcn( _staticCall( pack, staticCall, _nullArray( argsLength ) ) );
 				_result( e, id, vo.type, pos );
 			}
-			else if ( staticCall != null )//static method call - with factory method
+			else//Standard instantiation
 			{
-				var e = _staticCallFactory( pack, staticCall, factoryMethod, args );
-				vo.type = try _fqcn( e )//Assign right type description 
-					catch ( e : Dynamic ) _fqcn( _staticCallFactory( pack, staticCall, factoryMethod, _nullArray( argsLength ) ) );
-				_result( e, id, vo.type, pos );
+				_result( macro new $typePath( $a{ args } ), id, vo.type, pos );
 			}
-			else//factory method error
-			{
-				Context.error( 	"'" + factoryMethod + "' method cannot be called on '" +  vo.className + 
-								"' class. Add static method or variable to make it working.", pos );
-			}
+
+			return macro @:pos(pos) $result;
 		}
-		else if ( staticCall != null )//simple static method call
-		{
-			var e = _staticCall( pack, staticCall, args );
-			vo.type = try _fqcn( e )//Assign right type description 
-				catch ( e : Dynamic ) _fqcn( _staticCall( pack, staticCall, _nullArray( argsLength ) ) );
-			_result( e, id, vo.type, pos );
-		}
-		else//Standard instantiation
-		{
-			_result( macro new $typePath( $a{ args } ), id, vo.type, pos );
-		}
-		
-		return macro @:pos(pos) $result;
 	}
 }
 #end

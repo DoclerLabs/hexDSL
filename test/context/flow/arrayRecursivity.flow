@@ -1,0 +1,10 @@
+@context( name = 'applicationContext' )
+{
+	test = 
+	[
+		new hex.mock.MockClass(),
+		new hex.mock.AnotherMockClass(),
+		new hex.mock.MockClassWithIntGeneric( 3 ),
+		[ new hex.mock.MockClassWithIntGeneric( 4 ), 5 ]
+	];
+}

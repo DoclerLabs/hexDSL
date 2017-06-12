@@ -3,31 +3,31 @@ package hex.compiletime.flow;
 import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
+import hex.di.IDependencyInjector;
 import hex.di.Injector;
+import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.error.NoSuchElementException;
-import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
+import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
+import hex.mock.MockCaller;
 import hex.mock.MockChat;
 import hex.mock.MockClass;
+import hex.mock.MockClassWithGeneric;
+import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockContextHolder;
+import hex.mock.MockFruitVO;
 import hex.mock.MockMethodCaller;
-import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
-import hex.mock.MockCaller;
-import hex.mock.MockClassWithGeneric;
-import hex.mock.MockClassWithInjectedProperty;
-import hex.mock.MockFruitVO;
-import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -749,4 +749,103 @@ class BasicFlowCompilerTest
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
+	
+	@Test( "test array recursivity" )
+	public function testArrayRecursivity() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/arrayRecursivity.flow" );
+		
+		var test = this._getCoreFactory().locate( "test" );
+		Assert.isInstanceOf( test[ 0 ] , MockClass );
+		Assert.isInstanceOf( test[ 1 ] , AnotherMockClass );
+		Assert.isInstanceOf( test[ 2 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 3, test[2].property );
+		
+		var a = cast test[ 3 ];
+		Assert.isInstanceOf( a[ 0 ] , hex.mock.MockClassWithIntGeneric );
+		Assert.equals( 4, a[ 0 ].property );
+		Assert.equals( 5, a[ 1 ] );
+	}
+	
+	@Test( "test new recursivity" )
+	public function testNewRecursivity() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/newRecursivity.flow" );
+		
+		var test = this._getCoreFactory().locate( "test" );
+		Assert.isInstanceOf( test, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( test.context, hex.mock.MockApplicationContext );
+	}
+	
+	@Test( "test dependencies checking" )
+	public function testDependenciesChecking() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/dependencies.flow" );
+	}
+	
+	@Test( "test array of dependencies checking" )
+	public function testArrayOfDependenciesChecking() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/arrayOfDependencies.flow" );
+
+		var mappings1 = this._getCoreFactory().locate( "mappings1" );
+		var mappings2 = this._getCoreFactory().locate( "mappings2" );
+		
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, mappings1 ) );
+		Assert.isTrue( MappingChecker.match( ArrayOfDependenciesOwner, mappings2 ) );
+		Assert.deepEquals( mappings1, mappings2 );
+	}
+	
+	@Test( "test mixed dependencies checking" )
+	public function testMixedDependenciesChecking() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/mixedDependencies.flow" );
+		
+		var s = this._getCoreFactory().locate( "s" );
+		var mapping1 = this._getCoreFactory().locate( "mapping1" );
+		var mapping2 = this._getCoreFactory().locate( "mapping2" );
+		var mappings = this._getCoreFactory().locate( "mappings" );
+		
+		Assert.equals( "String", mapping1.fromType );
+		Assert.equals( "test", mapping1.toValue );
+		Assert.equals( s, mapping1.toValue );
+		
+		Assert.equals( "hex.mock.Interface", mapping2.fromType );
+		Assert.isInstanceOf( mapping2.toValue, hex.mock.Clazz );
+		Assert.equals( "anotherID", mapping2.withName );
+		
+		Assert.equals( mapping2, mappings[0] );
+		
+		var mapping = mappings[ 1 ];
+		Assert.equals( "hex.mock.Interface", mapping.fromType );
+		Assert.equals( hex.mock.Clazz, mapping.toClass );
+		Assert.equals( "id", mapping.withName );
+		
+		var injector : IDependencyInjector = cast this._getCoreFactory().locate( "owner" ).getInjector();
+		Assert.equals( "test", injector.getInstanceWithClassName( "String" ) );
+		Assert.isInstanceOf( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), hex.mock.Clazz );
+		Assert.equals( injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ), injector.getInstanceWithClassName( "hex.mock.Interface", "anotherID" ) );
+		
+		var instance = injector.getInstanceWithClassName( "hex.mock.Interface", "id" );
+		Assert.isInstanceOf( instance, hex.mock.Clazz );
+		Assert.equals( instance, injector.getInstanceWithClassName( "hex.mock.Interface", "id" ) );
+	}
+	
+	@Test( "test property recursivity" )
+	public function testPropertyRecursivity() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyRecursivity.flow" );
+
+		var o1 = this._getCoreFactory().locate( "o1" );
+		var o2 = this._getCoreFactory().locate( "o2" );
+		var r = this._getCoreFactory().locate( "r" );
+		
+		Assert.isInstanceOf( o1.p, hex.mock.Clazz );
+		
+		Assert.isInstanceOf( o2.p, hex.mock.MockContextHolder );
+		Assert.isInstanceOf( o2.p.context, hex.mock.MockApplicationContext );
+		
+		Assert.equals( 10, r.width );
+		Assert.equals( 20, r.height );
+	}
 }

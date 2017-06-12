@@ -1,0 +1,18 @@
+@context( name = 'applicationContext' )
+{
+	s = "test";
+	
+	mapping1a = new hex.di.mapping.MappingDefinition(
+		{fromType: "String", toValue: s}
+	);
+	
+	mapping2a = new hex.di.mapping.MappingDefinition(
+		{fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"}
+	);
+	
+	mapping1b = mapping( {fromType: "String", toValue: s} );
+	mapping2b = mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"} );
+	
+	ownera = new hex.mock.DependencyOwner( mapping1a, mapping2a );
+	ownerb = new hex.mock.DependencyOwner( mapping1b, mapping2b );
+}
