@@ -1,37 +1,40 @@
 package hex.compiletime.flow.parser.custom;
 
-/**
- * ...
- * @author Francis Bourre
- */
 #if macro
 import haxe.macro.*;
 import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 
-class HashMapParser 
+/**
+ * ...
+ * @author Francis Bourre
+ */
+class MapTypeParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
-		if ( params.length > 0 )
+		if ( params.length < 2 )
 		{
-			switch( params[ 0 ].expr )
-			{
-				case EArrayDecl( values ):
-					constructorVO.type = ContextTypeList.HASHMAP;
-					constructorVO.arguments = values.map( function(e) return parser.parseMapArgument( parser, constructorVO.ID, e ) );
-					
-				case wtf:
-					trace( wtf );
-					haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
-			}
+			Context.error( 'Invalid number of arguments', Context.currentPos() );
+		}
+		
+		switch( params[1].expr )
+		{
+			case EArrayDecl( values ):
+				constructorVO.mapTypes = values.map( function( e ) return switch( e.expr ) 
+				{ 
+					case EConst(CString( mapType )) : mapType; 
+					case _: "";
+				} );
+				
+			case wtf:
 		}
 		
 		constructorVO.filePosition = expr.pos;
-		return constructorVO;
+		return parser.parseType( parser, constructorVO, params[0] );
 	}
 }
 #end

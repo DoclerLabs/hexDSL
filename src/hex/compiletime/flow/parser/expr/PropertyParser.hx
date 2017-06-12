@@ -1,4 +1,5 @@
 package hex.compiletime.flow.parser.expr;
+import hex.vo.ConstructorVO;
 
 /**
  * ...
@@ -40,7 +41,7 @@ class PropertyParser
 				
 			case ENew( t, params ):
 				
-				var constructorVO = parser.parseType( parser, ident, assigned );
+				var constructorVO = parser.parseType( parser, new ConstructorVO( ident ), assigned );
 				//constructorVO.type = ExprTools.toString( assigned.expr ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
 				

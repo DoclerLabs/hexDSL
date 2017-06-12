@@ -10,26 +10,15 @@ import hex.vo.ConstructorVO;
  * ...
  * @author Francis Bourre
  */
-class MappingParser 
+class InjectIntoParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
-		switch( params[ 0 ].expr )
-		{
-			case EObjectDecl( fields ):
-				constructorVO.type = ContextTypeList.MAPPING_DEFINITION;
-				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
-				constructorVO.filePosition = params[0].pos;
-			
-			case wtf:
-				trace( wtf );
-				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
-		}
-		
+		constructorVO.injectInto = true;
 		constructorVO.filePosition = expr.pos;
-		return constructorVO;
+		return parser.parseType( parser, constructorVO, params[0] );
 	}
 }
 #end

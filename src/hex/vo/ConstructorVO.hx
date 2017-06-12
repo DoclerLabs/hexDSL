@@ -7,7 +7,7 @@ package hex.vo;
 class ConstructorVO extends AssemblerVO
 {
 	public var              ID              	: String;
-	public var              type            	: String;
+	public var              type (default, set) : String;
 	public var              className           : String;
 	public var              arguments       	: Array<Dynamic>;
 	public var              factory         	: String;
@@ -33,7 +33,6 @@ class ConstructorVO extends AssemblerVO
 		
 		this.ID         		= id;
 		this.type       		= type;
-		this.className       	= type != null ? type.split( '<' )[ 0 ] : null;
 		this.arguments  		= args;
 		this.factory    		= factory;
 		this.staticCall  		= staticCall;
@@ -41,6 +40,13 @@ class ConstructorVO extends AssemblerVO
 		this.ref 				= ref;
 		this.mapTypes 			= mapTypes;
 		this.staticRef 			= staticRef;
+	}
+	
+	function set_type( t : String ) : String
+	{
+		this.type 		= t;
+		this.className	= t != null ? t.split( '<' )[ 0 ] : null;
+		return t;
 	}
 
 	public function toString() : String

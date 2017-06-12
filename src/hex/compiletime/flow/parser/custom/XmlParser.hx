@@ -1,7 +1,7 @@
 package hex.compiletime.flow.parser.custom;
 
 #if macro
-import haxe.macro.Expr;
+import haxe.macro.*;
 import hex.compiletime.flow.parser.ExpressionParser;
 import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.core.ContextTypeList;
@@ -15,36 +15,35 @@ class XmlParser
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	public static function parse( parser : ExpressionParser, id : ID, params : Array<Expr>, originalExpression : Expr ) : ConstructorVO
+	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, originalExpression : Expr ) : ConstructorVO
 	{
-		var constructorVO : ConstructorVO;
+		constructorVO.type = ContextTypeList.XML;
 		
 		switch( params[ 0 ].expr )
 		{
 			case EConst(CString(xml)):
-				
-				if ( params.length == 1 )
-				{
-					constructorVO = new ConstructorVO( id, ContextTypeList.XML, [xml]  );
-				}
-				else if ( params.length == 2 )
+				constructorVO.arguments = [xml];
+
+				if ( params.length == 2 )
 				{
 					switch( params[ 1 ].expr )
 					{
 						case EField( ee, ff ):
-							var factory = ExpressionUtil.compressField( params[ 1 ] );
-							constructorVO = new ConstructorVO( id, ContextTypeList.XML, [xml], factory  );
+							constructorVO.factory = ExpressionUtil.compressField( params[ 1 ] );
 
 						case wtf:
 							trace( wtf );
-							haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
+							haxe.macro.Context.error( 'Invalid factory parameter', haxe.macro.Context.currentPos() );
 					}
 				}
-				
+				else if ( params.length > 2)
+				{
+					haxe.macro.Context.error( 'Invalid number of arguments', haxe.macro.Context.currentPos() );
+				}
 				
 			case wtf:
 				trace( wtf );
-				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
+				Context.error( '', Context.currentPos() );
 		}
 		
 		constructorVO.filePosition = originalExpression.pos;

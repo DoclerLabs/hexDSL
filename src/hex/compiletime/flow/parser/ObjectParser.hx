@@ -18,8 +18,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 {
 	var logger : hex.log.ILogger;
 	var parser : ExpressionParser;
-	//
-	
+
 	public function new() 
 	{
 		super();
@@ -41,6 +40,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 			methodParser:		
 			[
 				'mapping' 							=> hex.compiletime.flow.parser.custom.MappingParser.parse,
+				'injectInto' 						=> hex.compiletime.flow.parser.custom.InjectIntoParser.parse,
+				'mapType' 							=> hex.compiletime.flow.parser.custom.MapTypeParser.parse,
 				'xml' 								=> hex.compiletime.flow.parser.custom.XmlParser.parse
 			]
 		};
@@ -79,9 +80,9 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 
 			case _:
 				//TODO remove
-				//logger.error("Unknown expression");
-				//logger.debug(e);
-				//logger.debug(e.expr);
+				logger.error('Unknown expression');
+				logger.debug(e.pos);
+				logger.debug(e.expr);
 		}
 		//logger.debug(e);
 	}
@@ -113,7 +114,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				
 			case ENew( t, params ):
-				constructorVO = this.parser.parseType( this.parser, ident, value );
+				constructorVO = this.parser.parseType( this.parser, new ConstructorVO( ident ), value );
 				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				
 			case EObjectDecl( fields ):
@@ -151,7 +152,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				
 			case ECall( _.expr => EConst(CIdent(keyword)), params ):
-				return this.parser.methodParser.get( keyword )( this.parser, ident, params, value );
+				return this.parser.methodParser.get( keyword )( this.parser, new ConstructorVO( ident ), params, value );
 				
 			case ECall( _.expr => EField( e, field ), params ):
 				switch( e.expr )
@@ -181,7 +182,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 			case _:
 				logger.error( value.expr );
 				constructorVO = new ConstructorVO( ident );
-				//break;
 		}
 		
 		constructorVO.filePosition = value.pos;
