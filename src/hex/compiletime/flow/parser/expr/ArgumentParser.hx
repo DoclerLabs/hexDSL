@@ -51,7 +51,7 @@ class ArgumentParser
 				constructorVO =  new ConstructorVO( ident, ContextTypeList.INSTANCE, [], null, null, null, ExpressionUtil.compressField( value ) + '.' + field );
 			
 			case ENew( t, params ):
-				constructorVO = parser.parseType( parser, ident, value );
+				constructorVO = parser.parseType( parser, new ConstructorVO( ident ), value );
 				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				
 			case EArrayDecl( values ):
@@ -60,7 +60,7 @@ class ArgumentParser
 				while ( it.hasNext() ) constructorVO.arguments.push( parser.parseArgument( parser, ident, it.next() ) );
 			
 			case ECall( _.expr => EConst(CIdent('mapping')), params ):
-				constructorVO = return hex.compiletime.flow.parser.custom.MappingParser.parse( parser, ident, params, value );
+				constructorVO = hex.compiletime.flow.parser.custom.MappingParser.parse( parser, new ConstructorVO( ident ), params, value );
 
 			case _:
 				trace( value.expr );
