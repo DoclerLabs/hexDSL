@@ -1,0 +1,12 @@
+@context( name = 'applicationContext' )
+{
+	s = add( "hello", space, "world", space, "!" );
+	space =  " ";
+	
+	i = add( 6, five );
+	five = 5;
+	
+	p = add( p1, new hex.structures.Point( 3, 4 ), p2 );
+	p1 = new hex.structures.Point( 5, 5 );
+	p2 = new hex.structures.Point( 3, 4 );
+}

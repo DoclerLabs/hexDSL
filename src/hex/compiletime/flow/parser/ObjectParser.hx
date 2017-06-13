@@ -1,9 +1,8 @@
 package hex.compiletime.flow.parser;
 
 #if macro
-import haxe.macro.Context;
+import haxe.macro.*;
 import haxe.macro.Expr;
-import haxe.macro.ExprTools;
 import hex.compiletime.flow.AbstractExprParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
@@ -19,32 +18,11 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 	var logger : hex.log.ILogger;
 	var parser : ExpressionParser;
 
-	public function new() 
+	public function new( parser : ExpressionParser ) 
 	{
 		super();
 		this.logger = hex.log.LogManager.getLoggerByInstance( this );
-		this.parser = 
-		{
-			parseProperty: 		hex.compiletime.flow.parser.expr.PropertyParser.parse, 
-			parseType: 			hex.compiletime.flow.parser.expr.TypeParser.parse, 
-			parseArgument: 		hex.compiletime.flow.parser.expr.ArgumentParser.parse, 
-			parseMapArgument:	hex.compiletime.flow.parser.expr.MapArgumentParser.parse,
-			
-			typeParser:		
-			[
-				ContextTypeList.HASHMAP 			=> hex.compiletime.flow.parser.custom.HashMapParser.parse,
-				ContextTypeList.MAPPING_CONFIG		=> hex.compiletime.flow.parser.custom.MappingConfigParser.parse,
-				ContextTypeList.MAPPING_DEFINITION	=> hex.compiletime.flow.parser.custom.MappingParser.parse
-			],
-			
-			methodParser:		
-			[
-				'mapping' 							=> hex.compiletime.flow.parser.custom.MappingParser.parse,
-				'injectInto' 						=> hex.compiletime.flow.parser.custom.InjectIntoParser.parse,
-				'mapType' 							=> hex.compiletime.flow.parser.custom.MapTypeParser.parse,
-				'xml' 								=> hex.compiletime.flow.parser.custom.XmlParser.parse
-			]
-		};
+		this.parser = parser;
 	}
 	
 	override public function parse() : Void this._getExpressions().map( this._parseExpression );

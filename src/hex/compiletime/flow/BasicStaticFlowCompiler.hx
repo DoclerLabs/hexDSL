@@ -101,6 +101,35 @@ class BasicStaticFlowCompiler
 }
 
 #if macro
+class FlowExpressionParser
+{
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	
+	public static var parser = 
+	{
+		parseProperty: 		hex.compiletime.flow.parser.expr.PropertyParser.parse, 
+		parseType: 			hex.compiletime.flow.parser.expr.TypeParser.parse, 
+		parseArgument: 		hex.compiletime.flow.parser.expr.ArgumentParser.parse, 
+		parseMapArgument:	hex.compiletime.flow.parser.expr.MapArgumentParser.parse,
+		
+		typeParser:		
+		[
+			hex.core.ContextTypeList.HASHMAP 			=> hex.compiletime.flow.parser.custom.HashMapParser.parse,
+			hex.core.ContextTypeList.MAPPING_CONFIG		=> hex.compiletime.flow.parser.custom.MappingConfigParser.parse,
+			hex.core.ContextTypeList.MAPPING_DEFINITION	=> hex.compiletime.flow.parser.custom.MappingParser.parse
+		],
+		
+		methodParser:		
+		[
+			'mapping' 							=> hex.compiletime.flow.parser.custom.MappingParser.parse,
+			'injectInto' 						=> hex.compiletime.flow.parser.custom.InjectIntoParser.parse,
+			'mapType' 							=> hex.compiletime.flow.parser.custom.MapTypeParser.parse,
+			'xml' 								=> hex.compiletime.flow.parser.custom.XmlParser.parse,
+			'add' 								=> hex.compiletime.flow.parser.custom.AddParser.parse
+		]
+	};	
+}
+
 class ParserCollection extends AbstractParserCollection<AbstractExprParser<hex.compiletime.basic.BuildRequest>>
 {
 	var _assemblerExpression 	: VariableExpression;
@@ -121,7 +150,7 @@ class ParserCollection extends AbstractParserCollection<AbstractExprParser<hex.c
 	override function _buildParserList() : Void
 	{
 		this._parserCollection.push( new ApplicationContextParser( this._assemblerExpression, this._isExtending ) );
-		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser() );
+		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser( FlowExpressionParser.parser ) );
 		this._parserCollection.push( new Launcher( this._assemblerExpression, this._fileName, this._isExtending, this._runtimeParam ) );
 	}
 }

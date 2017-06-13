@@ -17,7 +17,7 @@ class DependencyOwner implements IDependencyOwner
 	
 	public function new( mapping1 : MappingDefinition, mapping2 : MappingDefinition ) 
 	{
-		trace( mapping1.toValue );
+		
 	}
 	
 	public function getInjector() : IDependencyInjector return this._injector;

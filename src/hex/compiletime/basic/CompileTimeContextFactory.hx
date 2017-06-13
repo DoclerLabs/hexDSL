@@ -89,6 +89,7 @@ class CompileTimeContextFactory
 			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 		hex.compiletime.factory.StaticVariableFactory.build );
 			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 		hex.compiletime.factory.MappingConfigurationFactory.build );
 			this._factoryMap.set( ContextTypeList.MAPPING_DEFINITION, 	hex.compiletime.factory.MappingDefinitionFactory.build );
+			this._factoryMap.set( ContextTypeList.EXPRESSION, 			hex.compiletime.factory.CodeFactory.build );
 			
 			this._coreFactory.addListener( this );
 		}

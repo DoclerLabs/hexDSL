@@ -1,5 +1,6 @@
 package hex.compiletime.flow;
 
+import hex.compiletime.flow.BasicStaticFlowCompiler;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
@@ -924,4 +925,18 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 10, code.locator.r.width );
 		Assert.equals( 20, code.locator.r.height );
 	}
+	
+	@Test( "test add custom parser" )
+	public function testAddCustomParser() : Void
+	{
+		CustomStaticFlowParser.prepareCompiler();
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/addParser.flow", "BasicStaticFlowCompiler_testAddCustomParser" );
+		code.execute();
+		
+		Assert.equals( 'hello world !', code.locator.s );
+		Assert.equals( 11, code.locator.i );
+		Assert.equals( 11, code.locator.p.x );
+		Assert.equals( 13, code.locator.p.y );
+	}
 }
+
