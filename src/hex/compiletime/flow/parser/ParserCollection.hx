@@ -2,6 +2,7 @@ package hex.compiletime.flow.parser;
 
 #if macro
 import hex.core.VariableExpression;
+import hex.compiletime.flow.BasicStaticFlowCompiler;
 
 /**
  * ...
@@ -19,9 +20,9 @@ class ParserCollection extends hex.parser.AbstractParserCollection<AbstractExprP
 	
 	override function _buildParserList() : Void
 	{
-		this._parserCollection.push( new ApplicationContextParser( this._assemblerExpression ) );
-		this._parserCollection.push( new ObjectParser() );
-		this._parserCollection.push( new Launcher( this._assemblerExpression ) );
+		this._parserCollection.push( new hex.compiletime.flow.parser.ApplicationContextParser( this._assemblerExpression ) );
+		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser( hex.compiletime.flow.parser.FlowExpressionParser.parser ) );
+		this._parserCollection.push( new hex.compiletime.flow.parser.Launcher( this._assemblerExpression ) );
 	}
 }
 #end
