@@ -65,31 +65,13 @@ class CompileTimeContextFactory
 			this._coreFactory 						= applicationContext.getCoreFactory();
 			this._coreFactory.register( this._applicationContext.getName(), this._applicationContext );
 
-			this._factoryMap 						= new Map();
 			this._constructorVOLocator 				= new Locator();
 			this._propertyVOLocator 				= new Locator();
 			this._methodCallVOLocator 				= new Locator();
 			this._moduleLocator 					= new Locator();
 			this._mappedTypes 						= [];
 			this._injectedInto 						= [];
-		
-			this._factoryMap.set( ContextTypeList.ARRAY, 				hex.compiletime.factory.ArrayFactory.build );
-			this._factoryMap.set( ContextTypeList.BOOLEAN, 				hex.compiletime.factory.BoolFactory.build );
-			this._factoryMap.set( ContextTypeList.INT, 					hex.compiletime.factory.IntFactory.build );
-			this._factoryMap.set( ContextTypeList.NULL, 				hex.compiletime.factory.NullFactory.build );
-			this._factoryMap.set( ContextTypeList.FLOAT, 				hex.compiletime.factory.FloatFactory.build );
-			this._factoryMap.set( ContextTypeList.OBJECT, 				hex.compiletime.factory.DynamicObjectFactory.build );
-			this._factoryMap.set( ContextTypeList.STRING, 				hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.UINT, 				hex.compiletime.factory.UIntFactory.build );
-			this._factoryMap.set( ContextTypeList.DEFAULT, 				hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.HASHMAP, 				hex.compiletime.factory.HashMapFactory.build );
-			this._factoryMap.set( ContextTypeList.CLASS, 				hex.compiletime.factory.ClassFactory.build );
-			this._factoryMap.set( ContextTypeList.XML, 					hex.compiletime.factory.XmlFactory.build );
-			this._factoryMap.set( ContextTypeList.FUNCTION, 			hex.compiletime.factory.FunctionFactory.build );
-			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 		hex.compiletime.factory.StaticVariableFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 		hex.compiletime.factory.MappingConfigurationFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_DEFINITION, 	hex.compiletime.factory.MappingDefinitionFactory.build );
-			this._factoryMap.set( ContextTypeList.EXPRESSION, 			hex.compiletime.factory.CodeFactory.build );
+			this._factoryMap 						= hex.compiletime.basic.BasicCompileTimeSettings.factoryMap;
 			
 			this._coreFactory.addListener( this );
 		}

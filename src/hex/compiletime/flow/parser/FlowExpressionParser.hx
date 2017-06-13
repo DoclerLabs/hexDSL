@@ -28,8 +28,7 @@ class FlowExpressionParser
 			'mapping' 							=> hex.compiletime.flow.parser.custom.MappingParser.parse,
 			'injectInto' 						=> hex.compiletime.flow.parser.custom.InjectIntoParser.parse,
 			'mapType' 							=> hex.compiletime.flow.parser.custom.MapTypeParser.parse,
-			'xml' 								=> hex.compiletime.flow.parser.custom.XmlParser.parse,
-			'add' 								=> hex.compiletime.flow.parser.custom.AddParser.parse
+			'xml' 								=> hex.compiletime.flow.parser.custom.XmlParser.parse
 		]
 	};	
 }

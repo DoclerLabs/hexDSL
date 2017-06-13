@@ -35,7 +35,7 @@ class AddParser
 			e = { expr: EBinop(OpAdd, e, param), pos:param.pos };
 		}
 
-		constructorVO.type = ContextTypeList.EXPRESSION;
+		constructorVO.type = 'haxe.macro.Expr';
 		constructorVO.arguments.unshift( e );
 		constructorVO.filePosition = expr.pos;
 		return constructorVO;

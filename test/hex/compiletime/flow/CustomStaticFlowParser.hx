@@ -1,6 +1,7 @@
 package hex.compiletime.flow;
 
-import hex.compiletime.flow.BasicStaticFlowCompiler;
+import hex.compiletime.basic.BasicCompileTimeSettings;
+import hex.compiletime.flow.parser.FlowExpressionParser;
 
 /**
  * ...
@@ -11,7 +12,8 @@ class CustomStaticFlowParser
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	macro public static function prepareCompiler() : haxe.macro.Expr.ExprOf<Bool>
 	{
-		hex.compiletime.flow.parser.FlowExpressionParser.parser.methodParser.set( 'add', hex.compiletime.flow.parser.custom.AddParser.parse );
+		FlowExpressionParser.parser.methodParser.set( 'add', hex.compiletime.flow.parser.custom.AddParser.parse );
+		BasicCompileTimeSettings.factoryMap.set( 'haxe.macro.Expr', hex.compiletime.factory.CodeFactory.build );
 		return macro true;
 	}
 }
