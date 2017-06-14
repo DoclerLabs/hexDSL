@@ -7,7 +7,7 @@ import hex.compiletime.flow.parser.FlowExpressionParser;
  * ...
  * @author Francis Bourre
  */
-class CustomStaticFlowParser 
+class MockCustomStaticFlowParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	macro public static function prepareCompiler() : haxe.macro.Expr.ExprOf<Bool>

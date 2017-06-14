@@ -4,7 +4,7 @@ package hex.compiletime.basic;
 import hex.core.ContextTypeList;
 
 /**
- * ...
+ * These are the factory settings for the CompileTimeContextFactory
  * @author Francis Bourre
  */
 class BasicCompileTimeSettings 

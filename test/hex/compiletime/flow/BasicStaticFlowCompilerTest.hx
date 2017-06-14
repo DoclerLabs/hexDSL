@@ -929,7 +929,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test add custom parser" )
 	public function testAddCustomParser() : Void
 	{
-		CustomStaticFlowParser.prepareCompiler();
+		MockCustomStaticFlowParser.prepareCompiler();
 		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/addParser.flow", "BasicStaticFlowCompiler_testAddCustomParser" );
 		code.execute();
 		
