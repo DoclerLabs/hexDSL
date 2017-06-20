@@ -1,5 +1,7 @@
 package hex.compiletime.flow.parser;
 
+#if macro
+
 /**
  * ...
  * @author Francis Bourre
@@ -26,3 +28,4 @@ class RuntimeParameterParser extends AbstractExprParser<hex.compiletime.basic.Bu
 		);
 	}
 }
+#end
