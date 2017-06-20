@@ -9,6 +9,7 @@ class ContextTypeList
 	public inline static var ARRAY 				: String = "Array";
 	public inline static var BOOLEAN 			: String = "Bool";
 	public inline static var INSTANCE 			: String = "Instance";
+	public inline static var ALIAS 				: String = "Alias";
 	public inline static var STATIC_VARIABLE 	: String = "StaticVariable";
 	public inline static var MAPPING_CONFIG 	: String = "hex.di.mapping.MappingConfiguration";
 	public inline static var MAPPING_DEFINITION : String = "hex.di.mapping.MappingDefinition";
@@ -23,4 +24,5 @@ class ContextTypeList
 	public inline static var CLASS 				: String = "Class";
 	public inline static var XML 				: String = "Xml";
 	public inline static var FUNCTION 			: String = "Function";
+	public inline static var IMPORT 			: String = "import";
 }

@@ -30,8 +30,8 @@ class MixedDslTest
 		this._applicationAssembler.release();
 	}
 
-	@Test( "test building String" )
-	public function testFlowXmlMixed() : Void
+	/*@Test( "test Flow and Xml mixed" )
+	public function testFlowAndXmlMixed() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multipleInstancesWithReferences.xml", "MixedDslTest_testFlowXmlMixed" );
 		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleInstanceWithoutArguments.flow" );
@@ -88,4 +88,13 @@ class MixedDslTest
 		Assert.equals( locator, locator3 );
 		Assert.equals( locator2, locator3 );
 	}
+	
+	@Test( "test Flow and Xml mixed with imports" )
+	public function testFlowXmlAndMixedWithImports() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/doImport.flow", "MixedDslTest_testFlowXmlAndMixedWithImports" );
+		code.execute();
+		//Assert.equals( 10, code.locator.size.width );
+		//Assert.equals( 20, code.locator.size.height );
+	}*/
 }

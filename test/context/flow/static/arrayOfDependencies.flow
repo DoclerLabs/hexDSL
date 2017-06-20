@@ -16,20 +16,4 @@
 	
 	owner1 = new hex.mock.ArrayOfDependenciesOwner( mappings1 );
 	owner2 = new hex.mock.ArrayOfDependenciesOwner( mappings2 );
-	
-	/*mappings1 = 
-	[
-		mapping( {fromType: "String", toValue: s} ),
-		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"} )
-	];
-	
-	
-	/*mappings3 =
-	[
-		new hex.di.mapping.MappingDefinition( {fromType: "String", toValue: s} ),
-		new hex.di.mapping.MappingDefinition( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"} )
-	];
-	
-	owner1 = new hex.mock.ArrayOfDependenciesOwner( mappings1 );
-	owner3 = new hex.mock.ArrayOfDependenciesOwner( mappings3 );*/
 }

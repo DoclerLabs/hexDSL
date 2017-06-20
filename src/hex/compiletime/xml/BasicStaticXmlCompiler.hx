@@ -110,7 +110,7 @@ class ParserCollection extends hex.parser.AbstractParserCollection<hex.compileti
 	public function new( assemblerExpression : VariableExpression, fileName : String, isExtending : Bool = false ) 
 	{
 		//Null pattern
-		this._runtimeParam			= { type: null, block: [] };
+		this._runtimeParam			= { type: null };
 		this._assemblerExpression 	= assemblerExpression;
 		this._fileName 				= fileName;
 		this._isExtending 			= isExtending;
@@ -120,21 +120,20 @@ class ParserCollection extends hex.parser.AbstractParserCollection<hex.compileti
 	
 	override function _buildParserList() : Void
 	{
-		this._parserCollection.push( new RuntimeParamsParser( this._runtimeParam ) );
+		this._parserCollection.push( new RuntimeParameterParser( this._runtimeParam ) );
 		this._parserCollection.push( new ApplicationContextParser( this._assemblerExpression, this._isExtending ) );
 		this._parserCollection.push( new hex.compiletime.xml.parser.ObjectParser() );
 		this._parserCollection.push( new Launcher( this._assemblerExpression, this._fileName, this._isExtending, this._runtimeParam ) );
 	}
 }
 
-class RuntimeParamsParser extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.basic.BuildRequest>
+class RuntimeParameterParser extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.basic.BuildRequest>
 {
 	var _runtimeParam : hex.preprocess.RuntimeParam;
 	
 	public function new( runtimeParam : hex.preprocess.RuntimeParam )
 	{
 		this._runtimeParam = runtimeParam;
-		
 		super();
 	}
 	
@@ -152,7 +151,6 @@ class RuntimeParamsParser extends hex.compiletime.xml.AbstractXmlParser<hex.comp
 	
 	function _parseNode( xml : Xml ) : Void
 	{
-		var block : Array<Expr> = [];
 		var o = "var o:{";
 		
 		var elements = xml.elements();
@@ -169,8 +167,9 @@ class RuntimeParamsParser extends hex.compiletime.xml.AbstractXmlParser<hex.comp
 			}
 			
 			var type = element.get( ContextAttributeList.TYPE );
-			
-			block.push( haxe.macro.Context.parse( "var " + identifier + " = param." + identifier, haxe.macro.Context.currentPos() ) );
+			var vo = new hex.vo.PreProcessVO( identifier, [type] );
+			vo.filePosition = haxe.macro.Context.currentPos();
+			this._builder.build( PREPROCESS( vo ) );
 			o += identifier + ":" + type + ",";
 		}
 		
@@ -184,7 +183,6 @@ class RuntimeParamsParser extends hex.compiletime.xml.AbstractXmlParser<hex.comp
 		}
 		
 		this._runtimeParam.type = param;
-		this._runtimeParam.block = block;
 	}
 }
 

@@ -1,0 +1,5 @@
+@context( name = 'applicationContext', params = {p: hex.structures.Point} )
+{
+	anotherPosition = position;
+	position = p;
+}

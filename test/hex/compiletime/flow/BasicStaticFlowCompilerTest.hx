@@ -938,5 +938,57 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 11, code.locator.p.x );
 		Assert.equals( 13, code.locator.p.y );
 	}
+	
+	@Test( "test alias primitive" )
+	public function testAliasPrimitive() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/aliasPrimitive.flow", "BasicStaticFlowCompiler_aliasPrimitive" );
+		code.execute();
+		
+		Assert.equals( 5, code.locator.value );
+		Assert.equals( code.locator.value, code.locator.x );
+		
+		var i : Int;
+		i = code.locator.x;
+		Assert.equals( 5, i );
+	}
+	
+	@Test( "test alias instance" )
+	public function testAliasInstance() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/aliasInstance.flow", "BasicStaticFlowCompiler_aliasInstance" );
+		code.execute();
+
+		var position = code.locator.reference;
+		Assert.equals( 1, position.x );
+		Assert.equals( 2, position.y );
+	}
+	
+	@Test( "test runtime alias primitive" )
+	public function testRuntimeAliasPrimitive() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/runtimeAliasPrimitive.flow", "BasicStaticFlowCompiler_runtimeAliasPrimitive" );
+		code.execute( {value: 5} );
+		
+		Assert.equals( 5, code.locator.x );
+		
+		var i : Int;
+		i = code.locator.x;
+		Assert.equals( 5, i );
+	}
+	
+	@Test( "test runtime alias instance" )
+	public function testRuntimeAliasInstance() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/runtimeAliasInstance.flow", "BasicStaticFlowCompiler_runtimeAliasInstance" );
+		var p = new hex.structures.Point(1, 2);
+		code.execute( {p: p} );
+		
+		Assert.equals( 1, code.locator.position.x );
+		Assert.equals( 2, code.locator.position.y );
+
+		Assert.equals( p, code.locator.position );
+		Assert.equals( code.locator.position, code.locator.anotherPosition );
+	}
 }
 

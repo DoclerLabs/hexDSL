@@ -15,14 +15,17 @@ import hex.vo.PropertyVO;
  */
 class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 {
-	var logger : hex.log.ILogger;
-	var parser : ExpressionParser;
+	var logger 				: hex.log.ILogger;
+	var parser 				: ExpressionParser;
+	var _runtimeParam 		: hex.preprocess.RuntimeParam;
 
-	public function new( parser : ExpressionParser ) 
+	public function new( parser : ExpressionParser, ?runtimeParam : hex.preprocess.RuntimeParam ) 
 	{
 		super();
-		this.logger = hex.log.LogManager.getLoggerByInstance( this );
-		this.parser = parser;
+		
+		this.logger 		= hex.log.LogManager.getLoggerByInstance( this );
+		this.parser 		= parser;
+		this._runtimeParam 	= runtimeParam;
 	}
 	
 	override public function parse() : Void this._getExpressions().map( this._parseExpression );
@@ -88,7 +91,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						constructorVO = new ConstructorVO( ident, ContextTypeList.BOOLEAN, [ v ] );
 						
 					case _:
-						logger.error( v );
+						var type = hex.preprocess.RuntimeParametersPreprocessor.getType( v, this._runtimeParam );
+						var arg = new ConstructorVO( ident, (type==null? ContextTypeList.INSTANCE : type), null, null, null, v );
+						arg.filePosition = value.pos;
+						constructorVO = new ConstructorVO( ident, ContextTypeList.ALIAS, [ arg ], null, null, null, v );
 				}
 				
 			case ENew( t, params ):
