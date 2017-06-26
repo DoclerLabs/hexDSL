@@ -1,0 +1,8 @@
+@context( 	name = 'applicationContext'
+			params 	= {x: Float, y:Float} )
+{
+	size = new hex.structures.Size( xContext.x, yContext.y );
+	
+	xContext = new Context( 'context/flow/static/beImportedX.flow', {xParameter: x} );
+	yContext = new Context( 'context/flow/static/beImportedY.flow', {yParameter: y} );
+}

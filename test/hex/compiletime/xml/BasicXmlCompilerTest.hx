@@ -674,6 +674,18 @@ class BasicXmlCompilerTest
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}
 	
+	@Test( "test recursive property reference" )
+	public function testRecursivePropertyReference() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/propertyReference.xml" );
+
+		var oClass : hex.mock.MockClassWithProperty = this._locate( "oClass" );
+		var oDynamic : Dynamic = this._locate( "oDynamic" );
+		
+		Assert.equals( 'property', oClass.property );
+		Assert.equals( 'property', oDynamic.p );
+	}
+	
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
 	{

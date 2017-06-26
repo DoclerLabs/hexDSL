@@ -30,7 +30,8 @@ class BasicCompileTimeSettings
 		ContextTypeList.MAPPING_CONFIG 			=> hex.compiletime.factory.MappingConfigurationFactory.build,
 		ContextTypeList.MAPPING_DEFINITION 		=> hex.compiletime.factory.MappingDefinitionFactory.build,
 		ContextTypeList.ALIAS 					=> hex.compiletime.factory.AliasFactory.build,
-		ContextTypeList.IMPORT 					=> hex.compiletime.factory.ImportFactory.build
+		ContextTypeList.CONTEXT 				=> hex.compiletime.factory.ContextFactory.build,
+		ContextTypeList.CONTEXT_ARGUMENT 		=> hex.compiletime.factory.ContextArgumentFactory.build
 	];
 }
 #end

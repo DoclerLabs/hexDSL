@@ -1,0 +1,13 @@
+<root name="applicationContext">
+	
+	<params>
+		<param id="xParameter" type="Float"/>
+		<param id="yParameter" type="Float"/>
+	</params>
+	
+    <bean id="size" type="hex.structures.Size">
+        <argument ref="xParameter"/>
+        <argument ref="yParameter"/>
+    </bean>
+
+</root>

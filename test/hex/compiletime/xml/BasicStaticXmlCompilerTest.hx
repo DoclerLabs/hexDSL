@@ -19,6 +19,7 @@ import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
@@ -686,16 +687,25 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( MockClass, code.locator.map.get( IMockInterface ) );
 	}
 	
-	//TODO implement
-	/*@Ignore( "test target sub property" )
+	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/xml/targetSubProperty.xml" );
-
-		var mockObject : MockObjectWithRegtangleProperty = this._getCoreFactory().locate( "mockObject" );
-		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
-		Assert.equals( 1.5, mockObject.rectangle.x );
-	}*/
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/targetSubProperty.xml" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.mockObject, MockObjectWithRegtangleProperty );
+		Assert.equals( 1.5, code.locator.mockObject.rectangle.x );
+	}
+	
+	@Test( "test recursive property reference" )
+	public function testRecursivePropertyReference() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/propertyReference.xml", "BasicStaticXmlCompiler_testRecursivePropertyReference" );
+		code.execute();
+		
+		Assert.equals( 'property', code.locator.oClass.property );
+		Assert.equals( 'property', code.locator.oDynamic.p );
+	}
 	
 	@Test( "test if attribute" )
 	public function testIfAttribute() : Void

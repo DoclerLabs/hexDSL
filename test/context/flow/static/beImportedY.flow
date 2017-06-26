@@ -1,0 +1,5 @@
+@context( 	name 	= 'applicationContext'
+			params 	= {yParameter: Float} )
+{
+	y = yParameter;
+}

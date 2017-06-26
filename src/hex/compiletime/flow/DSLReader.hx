@@ -18,7 +18,7 @@ class DSLReader
 	
 	public function new() {}
 
-	public function read( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariablesChecker : ConditionalVariablesChecker ) : Expr
+	public function read( fileName : String, ?preprocessingVariables : Expr, ?conditionalVariablesChecker : ConditionalVariablesChecker )
 	{
 		var e = this._processFile( null, { fileName: fileName, pos: Context.currentPos() }, preprocessingVariables, conditionalVariablesChecker );
 		return e;  
@@ -29,7 +29,7 @@ class DSLReader
 		return this._runtimeParamsProcessor.param();
 	}
 
-	function _processFile( e : Expr, file : File, ?preprocessingVariables : Expr, ?conditionalVariablesChecker : ConditionalVariablesChecker )
+	function _processFile( e : Expr, file : Include, ?preprocessingVariables : Expr, ?conditionalVariablesChecker : ConditionalVariablesChecker )
 	{
 		//read file
 		var dsl = this._readFile( file.fileName, file.pos );
@@ -97,7 +97,7 @@ class DSLReader
 		}
 	}
 	
-	function _searchForInclude( e : Expr, includeList : Array<File> = null ) : Array<File>
+	function _searchForInclude( e : Expr, includeList : Array<Include> = null ) : Array<Include>
 	{
 		if ( includeList == null )
 		{
@@ -157,7 +157,7 @@ class DSLReader
 	}
 }
 
-typedef File =
+typedef Include =
 {
 	fileName 	: String,
 	pos 		: Position

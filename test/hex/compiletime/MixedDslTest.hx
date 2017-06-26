@@ -1,6 +1,7 @@
 package hex.compiletime;
 
 import hex.compiletime.flow.BasicStaticFlowCompiler;
+import hex.compiletime.flow.MockCustomStaticFlowParser;
 import hex.compiletime.xml.BasicStaticXmlCompiler;
 import hex.core.IApplicationAssembler;
 import hex.domain.ApplicationDomainDispatcher;
@@ -30,7 +31,7 @@ class MixedDslTest
 		this._applicationAssembler.release();
 	}
 
-	/*@Test( "test Flow and Xml mixed" )
+	@Test( "test Flow and Xml mixed" )
 	public function testFlowAndXmlMixed() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multipleInstancesWithReferences.xml", "MixedDslTest_testFlowXmlMixed" );
@@ -90,11 +91,19 @@ class MixedDslTest
 	}
 	
 	@Test( "test Flow and Xml mixed with imports" )
-	public function testFlowXmlAndMixedWithImports() : Void
+	public function testFlowAndXmlMixedWithImports() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/doImport.flow", "MixedDslTest_testFlowXmlAndMixedWithImports" );
-		code.execute();
-		//Assert.equals( 10, code.locator.size.width );
-		//Assert.equals( 20, code.locator.size.height );
-	}*/
+		MockCustomStaticFlowParser.prepareCompiler();
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/sizeWithXmlImport.flow", "MixedDslTest_testFlowAndXmlMixedWithImports" );
+		code.execute( {x:10, y:20} );
+
+		Assert.equals( 10, code.locator.sizeContext.size.width );
+		Assert.equals( 20, code.locator.sizeContext.size.height );
+		
+		Assert.equals( 10, code.locator.width );
+		Assert.equals( 20, code.locator.height );
+		
+		Assert.equals( 30, code.locator.sum );
+		Assert.equals( 'width is 10 and height is 20. Sum is 30', code.locator.concatenation );
+	}
 }

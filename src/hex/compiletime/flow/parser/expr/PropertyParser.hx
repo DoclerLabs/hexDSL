@@ -56,24 +56,31 @@ class PropertyParser
 				
 			case EField( e, ff ):
 				
-				var className = ExpressionUtil.compressField( e, ff );
-				var exp = Context.parse( '(null: ${className})', Context.currentPos() );
-
-				switch( exp.expr )
+				try
 				{
-					case EParenthesis( _.expr => ECheckType( ee, TPath(p) ) ):
-						
-						if ( p.sub != null )
-						{
-							propertyVO = new PropertyVO( ident, fieldName, null, null, null, null, className );
-						}
-						else
-						{
-							propertyVO = new PropertyVO( ident, fieldName, className, ContextTypeList.CLASS );
-						}
-						
-					case _:
-						logger.debug( exp );
+					var className = ExpressionUtil.compressField( e, ff );
+					var exp = Context.parse( '(null: ${className})', Context.currentPos() );
+
+					switch( exp.expr )
+					{
+						case EParenthesis( _.expr => ECheckType( ee, TPath(p) ) ):
+							
+							if ( p.sub != null )
+							{
+								propertyVO = new PropertyVO( ident, fieldName, null, null, null, null, className );
+							}
+							else
+							{
+								propertyVO = new PropertyVO( ident, fieldName, className, ContextTypeList.CLASS );
+							}
+							
+						case _:
+							logger.debug( exp );
+					}
+				}
+				catch ( err : Dynamic )
+				{
+					propertyVO = new PropertyVO( ident, fieldName, null, null, ExpressionUtil.compressField( e, ff ) );
 				}
 				
 			case _:

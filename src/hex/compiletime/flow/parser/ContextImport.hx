@@ -7,5 +7,6 @@ typedef ContextImport =
 {
 	id 			: String,
 	fileName 	: String,
+	arg			: String,
 	pos 		: haxe.macro.Expr.Position
 }

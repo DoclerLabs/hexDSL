@@ -150,13 +150,24 @@ class ContextBuilder
 		{
 			var contextName = iti.next();
 			var contextIteration = ContextBuilder._Iteration.get( contextName );
-			
+	
 			if ( !contextIteration.defined )
 			{
 				contextIteration.defined = true;
 				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
 				haxe.macro.Context.defineType( td );
 			}
+		}
+	}
+	
+	public static function forceGeneration( contextName : String ) : Void
+	{
+		var contextIteration = ContextBuilder._Iteration.get( contextName );
+		if ( !contextIteration.defined )
+		{
+			contextIteration.defined = true;
+			var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
+			haxe.macro.Context.defineType( td );
 		}
 	}
 }

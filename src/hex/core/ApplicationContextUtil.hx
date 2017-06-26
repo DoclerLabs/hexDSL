@@ -14,9 +14,9 @@ class ApplicationContextUtil
 	{
 		if( variableNameEreg.match( name ) )
 		{
-			return variableNameEreg.matched(0) == name;
+			return variableNameEreg.matched( 0 ) == name;
 		}
+		
 		return false;
-		//Context.error( 'Invalid application context name.\n Name should be alphanumeric (underscore is allowed).\n First chararcter should not be a number.', Context.currentPos() );
 	}
 }

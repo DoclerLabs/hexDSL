@@ -58,12 +58,25 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					case _: "";
 				} );
 				this._builder.build( OBJECT( constructorVO ) );
-
+				
 			case _:
-				//TODO remove
-				logger.error('Unknown expression');
-				logger.debug(e.pos);
-				logger.debug(e.expr);
+				
+				switch( e.expr )
+				{
+					//TODO refactor - Should be part of the property parser
+					case EBinop( OpAssign, _.expr => EField( ref, field ), value ):
+						var fields = ExpressionUtil.compressField( ref, field ).split('.');
+						var ident = fields.shift();
+						var fieldName = fields.join('.');
+						this._builder.build( PROPERTY( this.parser.parseProperty( this.parser, ident, fieldName, value ) ) );
+						
+						case _:
+							//TODO remove
+							logger.error('Unknown expression');
+							logger.debug(e.pos);
+							logger.debug(e.expr);
+				}
+				
 		}
 		//logger.debug(e);
 	}
@@ -114,29 +127,50 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 			case EField( e, field ):
 				
 				var className = ExpressionUtil.compressField( e, field );
-				var exp = Context.parse( '(null: ${className})', e.pos );
 
-				switch( exp.expr )
+				try
 				{
-					case EParenthesis( _.expr => ECheckType( ee, TPath(p) ) ):
-						
-						constructorVO =
-						if ( p.sub != null )
-						{
-							new ConstructorVO( ident, ContextTypeList.STATIC_VARIABLE, [], null, null, false, null, null, className );
+					//
+					var exp = Context.parse( '(null: ${className})', e.pos );
 
-						}
-						else
-						{
-							new ConstructorVO( ident, ContextTypeList.CLASS, [ className ] );
-						}
-						
-					case _:
-						logger.error( exp );
+					switch( exp.expr )
+					{
+						case EParenthesis( _.expr => ECheckType( ee, TPath(p) ) ):
+							
+							constructorVO =
+							if ( p.sub != null )
+							{
+								new ConstructorVO( ident, ContextTypeList.STATIC_VARIABLE, [], null, null, false, null, null, className );
+
+							}
+							else
+							{
+								new ConstructorVO( ident, ContextTypeList.CLASS, [ className ] );
+							}
+							
+						case _:
+							logger.error( exp );
+					}
+				}
+				catch ( e : Dynamic )
+				{
+					//TODO refactor
+					var type = hex.preprocess.RuntimeParametersPreprocessor.getType( className, this._runtimeParam );
+					var arg = new ConstructorVO( ident, (type==null? ContextTypeList.INSTANCE : type), null, null, null, className );
+					arg.filePosition = e.pos;
+					constructorVO = new ConstructorVO( ident, ContextTypeList.ALIAS, [ arg ], null, null, null, className );
 				}
 				
 			case ECall( _.expr => EConst(CIdent(keyword)), params ):
-				return this.parser.methodParser.get( keyword )( this.parser, new ConstructorVO( ident ), params, value );
+				if ( this.parser.methodParser.exists( keyword ) )
+				{
+					return this.parser.methodParser.get( keyword )( this.parser, new ConstructorVO( ident ), params, value );
+				}
+				else
+				{
+					Context.error( "'" + keyword + "' keyword is not defined for your current compiler", value.pos );
+				}
+				
 				
 			case ECall( _.expr => EField( e, field ), params ):
 				switch( e.expr )

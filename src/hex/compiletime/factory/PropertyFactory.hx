@@ -34,7 +34,7 @@ class PropertyFactory
 			var constructorVO 			= new ConstructorVO( null, ContextTypeList.INSTANCE, null, null, null, false, property.ref, null, null );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
-			e 							= macro $i{ id }.$propertyName = $i{ property.ref };
+			e 							= macro $i{ id }.$propertyName = $p { property.ref.split( '.' ) };
 
 		} else if ( property.staticRef != null )
 		{

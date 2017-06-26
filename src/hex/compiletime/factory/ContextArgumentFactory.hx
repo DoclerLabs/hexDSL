@@ -1,44 +1,38 @@
 package hex.compiletime.factory;
 
 #if macro
+import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
-using hex.util.MacroUtil;
-using Lambda;
 
+using Lambda;
 /**
  * ...
  * @author Francis Bourre
  */
-class MappingDefinitionFactory
+class ContextArgumentFactory
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
-
+	
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;
-
+		
 		var result = constructorVO.arguments.fold
 		( 
 			function ( arg, e ) return addProperty( factoryVO.contextFactory, arg, e ), 
 				macro @:pos( constructorVO.filePosition ) 
-					$v{{ fromType: "", toValue: null, toClass: null, withName: "", asSingleton: false, injectInto: false }} 
+					$v{{}} 
 		);
 
-		var ct = macro :hex.di.mapping.MappingDefinition;
+		//Building result
 		return constructorVO.shouldAssign ?
-			return macro var $idVar : $ct = $result:
-			return macro $result;
+			macro @:pos( constructorVO.filePosition ) var $idVar = $result:
+			macro @:pos( constructorVO.filePosition ) $result;
 	}
 	
-	static function setPropertyValue( p : hex.vo.PropertyVO, o : Dynamic ) : Dynamic
-	{
-		Reflect.setField( o, p.name, p.value );
-		return o;
-	}
-
 	static public function addProperty( factory : hex.compiletime.basic.IContextFactory, property : hex.vo.PropertyVO, expr : Expr ) : Expr
 	{
 		var value 			: Dynamic 	= null;
@@ -49,7 +43,7 @@ class MappingDefinitionFactory
 		{
 			case EObjectDecl( fields ):
 	
-				fields.remove( fields.find( function(arg) return arg.field == propertyName ) );
+				//fields.remove( fields.find( function(arg) return arg.field == propertyName ) );
 				if ( property.method != null )
 				{
 					var constructorVO 			= new ConstructorVO( null, ContextTypeList.FUNCTION, [ property.method ], null, null, false, null, null, null );

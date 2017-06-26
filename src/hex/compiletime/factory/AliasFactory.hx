@@ -23,11 +23,11 @@ class AliasFactory
 		if ( !factoryVO.contextFactory.getTypeLocator().isRegisteredWithKey( constructorVO.ref ) )
 		{
 			value = factoryVO.contextFactory.buildVO( constructorVO.arguments[ 0 ] );
-			type = factoryVO.contextFactory.getTypeLocator().locate( constructorVO.ref );
+			type = _getType( factoryVO, constructorVO.ref );
 		}
 		else
 		{
-			type = factoryVO.contextFactory.getTypeLocator().locate( constructorVO.ref );
+			type = _getType( factoryVO, constructorVO.ref );
 			value = macro $i{ constructorVO.ref };
 		}
 		
@@ -37,6 +37,20 @@ class AliasFactory
 		return constructorVO.shouldAssign ?
 			macro @:pos( constructorVO.filePosition ) var $idVar = $value:
 			macro @:pos( constructorVO.filePosition ) $value;	
+	}
+	
+	static function _getType( factoryVO, ref : String )
+	{
+		return 
+		if ( factoryVO.contextFactory.getTypeLocator().isRegisteredWithKey( ref ) )
+		{
+			factoryVO.contextFactory.getTypeLocator().locate( ref );
+		}
+		else
+		{
+			//TODO Find a better way to resolve final type
+			'Dynamic';
+		}
 	}
 }
 #end

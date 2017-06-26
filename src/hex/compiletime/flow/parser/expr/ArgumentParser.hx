@@ -62,6 +62,10 @@ class ArgumentParser
 			case ECall( _.expr => EConst(CIdent('mapping')), params ):
 				constructorVO = hex.compiletime.flow.parser.custom.MappingParser.parse( parser, new ConstructorVO( ident ), params, value );
 
+			case EObjectDecl( fields ):
+				constructorVO = new ConstructorVO( ident, ContextTypeList.CONTEXT_ARGUMENT, [] );
+				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
+
 			case _:
 				trace( value.expr );
 				Context.error( '', Context.currentPos() );

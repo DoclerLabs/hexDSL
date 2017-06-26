@@ -657,15 +657,23 @@ class BasicFlowCompilerTest
 		Assert.equals( MockClass, amazonServiceClass );
 	}
 	
-	//TODO implement
-	@Ignore( "test target sub property" )
+	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/targetSubProperty.flow" );
 
-		var mockObject : MockObjectWithRegtangleProperty = this._getCoreFactory().locate( "mockObject" );
+		var mockObject = this._getCoreFactory().locate( "mockObject" );
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
+	}
+	
+	@Test( "test recursive property reference" )
+	public function testRecursivePropertyReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyReference.flow" );
+
+		Assert.equals( 'property', this._getCoreFactory().locate( "oClass" ).property );
+		Assert.equals( 'property', this._getCoreFactory().locate( "oDynamic" ).p );
 	}
 	
 	@Test( "test file preprocessor with flow file" )

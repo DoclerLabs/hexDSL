@@ -30,6 +30,7 @@ import hex.util.MacroUtil;
 class BasicStaticXmlCompiler 
 {
 	#if macro
+	@:allow( hex.compiletime.flow.parser )
 	static function _readFile(	fileName 						: String, 
 								?applicationContextName 		: String,
 								?preprocessingVariables 		: Expr, 
@@ -63,6 +64,11 @@ class BasicStaticXmlCompiler
 											?preprocessingVariables : Expr, 
 											?conditionalVariables 	: Expr ) : Expr
 	{
+		if ( applicationContextName != null && !hex.core.ApplicationContextUtil.isValidName( applicationContextName ) ) 
+		{
+			haxe.macro.Context.error( 'Invalid application context name.\n Name should be alphanumeric (underscore is allowed).\n First chararcter should not be a number.', haxe.macro.Context.currentPos() );
+		}
+		
 		return BasicStaticXmlCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr, false );
 	}
 	

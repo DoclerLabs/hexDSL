@@ -57,6 +57,11 @@ class BasicXmlCompiler
 											?preprocessingVariables : Expr, 
 											?conditionalVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
+		if ( applicationContextName != null && !hex.core.ApplicationContextUtil.isValidName( applicationContextName ) ) 
+		{
+			haxe.macro.Context.error( 'Invalid application context name.\n Name should be alphanumeric (underscore is allowed).\n First chararcter should not be a number.', haxe.macro.Context.currentPos() );
+		}
+		
 		return BasicXmlCompiler._readXmlFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
 	}
 	
