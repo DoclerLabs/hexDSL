@@ -20,6 +20,7 @@ import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockModelWithTrigger;
+import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
@@ -689,16 +690,25 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( MockClass, code.locator.map.get( IMockInterface ) );
 	}
 	
-	//TODO implement
-	/*@Ignore( "test target sub property" )
+	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/targetSubProperty.flow" );
-
-		var mockObject : MockObjectWithRegtangleProperty = this._getCoreFactory().locate( "mockObject" );
-		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
-		Assert.equals( 1.5, mockObject.rectangle.x );
-	}*/
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/targetSubProperty.flow", "BasicStaticFlowCompiler_testTargetSubProperty" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.mockObject, MockObjectWithRegtangleProperty );
+		Assert.equals( 1.5, code.locator.mockObject.rectangle.x );
+	}
+	
+	@Test( "test recursive property reference" )
+	public function testRecursivePropertyReference() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/propertyReference.flow", "BasicStaticFlowCompiler_testRecursivePropertyReference" );
+		code.execute();
+		
+		Assert.equals( 'property', code.locator.oClass.property );
+		Assert.equals( 'property', code.locator.oDynamic.p );
+	}
 	
 	@Test( "test file preprocessor with flow file" )
 	public function testFilePreprocessorWithFlowFile() : Void
@@ -990,5 +1000,50 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( p, code.locator.position );
 		Assert.equals( code.locator.position, code.locator.anotherPosition );
 	}
+	
+	//Import
+	@Test( "test two Int import" )
+	public function testTwoIntImport() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/twoIntImport.flow", "BasicStaticFlowCompiler_testTwoIntImport" );
+		code.execute( {x:10, y:20} );
+		
+		Assert.equals( 10, code.locator.size.width );
+		Assert.equals( 20, code.locator.size.height );
+		Assert.equals( 10, code.locator.xContext.x );
+		Assert.equals( 20, code.locator.yContext.y );
+	}
+	
+	@Test( "test Size import" )
+	public function testSizeImport() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/sizeImport.flow", "BasicStaticFlowCompiler_testSizeImport" );
+		code.execute( {x:10, y:20} );
+
+		Assert.equals( 10, code.locator.sizeContext.size.width );
+		Assert.equals( 20, code.locator.sizeContext.size.height );
+		
+		Assert.equals( 10, code.locator.width );
+		Assert.equals( 20, code.locator.height );
+	}
+	
+	@Test( "test recursive Size import" )
+	public function testRecursiveSizeImport() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/recursiveSizeImport.flow", "BasicStaticFlowCompiler_testRecursiveSizeImport" );
+		code.execute( {x:10, y:20} );
+
+		Assert.equals( 10, code.locator.sizeContext1.sizeContext.size.width );
+		Assert.equals( 20, code.locator.sizeContext1.sizeContext.size.height );
+		Assert.equals( 10, code.locator.sizeContext2.sizeContext.size.width );
+		Assert.equals( 20, code.locator.sizeContext2.sizeContext.size.height );
+	}
+	
+	/*@Test( "test import with parent context dependency" )
+	public function testImportWithParentContextDependency() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/importWithParentDependency.flow", "BasicStaticFlowCompiler_testImportWithParentContextDependency" );
+		code.execute();
+	}*/
 }
 
