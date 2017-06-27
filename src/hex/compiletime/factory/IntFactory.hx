@@ -34,7 +34,7 @@ class IntFactory
 		}
 		else
 		{
-			Context.error( "Invalid arguments.", constructorVO.filePosition );
+			Context.error( "Invalid arguments: " + constructorVO, constructorVO.filePosition );
 		}
 		
 		//Building result

@@ -4,6 +4,7 @@ package hex.compiletime.basic;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type.ClassType;
+import hex.collection.ILocator;
 import hex.collection.Locator;
 import hex.compiletime.basic.vo.FactoryVOTypeDef;
 import hex.compiletime.factory.FactoryUtil;
@@ -45,6 +46,7 @@ class CompileTimeContextFactory
 	var _constructorVOLocator 		: Locator<String, ConstructorVO>;
 	var _propertyVOLocator 			: Locator<String, Array<PropertyVO>>;
 	var _methodCallVOLocator 		: Locator<String, MethodCallVO>;
+	var _typeLocator 				: Locator<String, String>;
 	
 	public function new( expressions : Array<Expr> )
 	{
@@ -65,30 +67,14 @@ class CompileTimeContextFactory
 			this._coreFactory 						= applicationContext.getCoreFactory();
 			this._coreFactory.register( this._applicationContext.getName(), this._applicationContext );
 
-			this._factoryMap 						= new Map();
 			this._constructorVOLocator 				= new Locator();
 			this._propertyVOLocator 				= new Locator();
 			this._methodCallVOLocator 				= new Locator();
+			this._typeLocator 						= new Locator();
 			this._moduleLocator 					= new Locator();
 			this._mappedTypes 						= [];
 			this._injectedInto 						= [];
-		
-			this._factoryMap.set( ContextTypeList.ARRAY, 				hex.compiletime.factory.ArrayFactory.build );
-			this._factoryMap.set( ContextTypeList.BOOLEAN, 				hex.compiletime.factory.BoolFactory.build );
-			this._factoryMap.set( ContextTypeList.INT, 					hex.compiletime.factory.IntFactory.build );
-			this._factoryMap.set( ContextTypeList.NULL, 				hex.compiletime.factory.NullFactory.build );
-			this._factoryMap.set( ContextTypeList.FLOAT, 				hex.compiletime.factory.FloatFactory.build );
-			this._factoryMap.set( ContextTypeList.OBJECT, 				hex.compiletime.factory.DynamicObjectFactory.build );
-			this._factoryMap.set( ContextTypeList.STRING, 				hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.UINT, 				hex.compiletime.factory.UIntFactory.build );
-			this._factoryMap.set( ContextTypeList.DEFAULT, 				hex.compiletime.factory.StringFactory.build );
-			this._factoryMap.set( ContextTypeList.HASHMAP, 				hex.compiletime.factory.HashMapFactory.build );
-			this._factoryMap.set( ContextTypeList.CLASS, 				hex.compiletime.factory.ClassFactory.build );
-			this._factoryMap.set( ContextTypeList.XML, 					hex.compiletime.factory.XmlFactory.build );
-			this._factoryMap.set( ContextTypeList.FUNCTION, 			hex.compiletime.factory.FunctionFactory.build );
-			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, 		hex.compiletime.factory.StaticVariableFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, 		hex.compiletime.factory.MappingConfigurationFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_DEFINITION, 	hex.compiletime.factory.MappingDefinitionFactory.build );
+			this._factoryMap 						= hex.compiletime.basic.BasicCompileTimeSettings.factoryMap;
 			
 			this._coreFactory.addListener( this );
 		}
@@ -98,6 +84,7 @@ class CompileTimeContextFactory
 	{
 		switch( request )
 		{
+			case PREPROCESS( vo ): this.preprocess( vo );
 			case OBJECT( vo ): this.registerConstructorVO( vo );
 			case PROPERTY( vo ): this.registerPropertyVO( vo );
 			case METHOD_CALL( vo ): this.registerMethodCallVO( vo );
@@ -120,6 +107,7 @@ class CompileTimeContextFactory
 		this._constructorVOLocator.release();
 		this._propertyVOLocator.release();
 		this._methodCallVOLocator.release();
+		this._typeLocator.release();
 		this._moduleLocator.release();
 		this._factoryMap = new Map();
 		this._mappedTypes = [];
@@ -129,6 +117,11 @@ class CompileTimeContextFactory
 	public function getCoreFactory() : ICoreFactory
 	{
 		return this._coreFactory;
+	}
+	
+	public function getTypeLocator() : ILocator<String, String>
+	{
+		return this._typeLocator;
 	}
 	
 	public function dispatchAssemblingStart() : Void
@@ -150,6 +143,13 @@ class CompileTimeContextFactory
 	}
 	
 	//
+	public function preprocess( vo : hex.vo.PreProcessVO ) : Void
+	{
+		//We have only 1 preprocessor for now
+		var e = hex.compiletime.factory.RuntimeParameterProcessor.process( this, vo );
+		if ( e != null ) this._expressions.push( e );
+	}
+	
 	public function registerPropertyVO( propertyVO : PropertyVO ) : Void
 	{
 		var id = propertyVO.ownerID;
@@ -269,10 +269,12 @@ class CompileTimeContextFactory
 		}
 		
 		var result = buildMethod( this._getFactoryVO( constructorVO ) );
+
 		this._checkDependencies( constructorVO );
 
 		if ( id != null )
 		{
+			this._typeLocator.register( id, constructorVO.type );
 			_buildVO( constructorVO, id, result );
 		}
 

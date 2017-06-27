@@ -1,0 +1,5 @@
+@context( 	name 	= 'applicationContext'
+			params 	= {to:String, message: String} )
+{
+	text = add( message, " ", to );
+}

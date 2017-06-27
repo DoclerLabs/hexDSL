@@ -1,0 +1,6 @@
+@context( name = 'applicationContext' )
+{
+	childContext = new Context( 'context/flow/static/beImportedMessage.flow', {message: message, to: name} );
+	message = "hello";
+	name = "world";
+}

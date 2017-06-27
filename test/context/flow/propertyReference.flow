@@ -1,0 +1,8 @@
+@context( name = 'applicationContext' )
+{
+	oDynamic = {p: refO.property};
+	oClass.property = refO.property;
+	
+	oClass = new hex.mock.MockClassWithProperty();
+	refO = new hex.mock.MockClassWithProperty();
+}

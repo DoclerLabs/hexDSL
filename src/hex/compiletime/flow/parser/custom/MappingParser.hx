@@ -14,16 +14,13 @@ class MappingParser
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	public static function parse( parser : ExpressionParser, id : ID, params : Array<Expr>, expr : Expr ) : ConstructorVO
+	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
-		var constructorVO : ConstructorVO;
-		
 		switch( params[ 0 ].expr )
 		{
 			case EObjectDecl( fields ):
-				
-				var args = fields.map( function( e ) return parser.parseProperty( parser, id, e.field, e.expr ) );
-				constructorVO = new ConstructorVO( id, ContextTypeList.MAPPING_DEFINITION, args );
+				constructorVO.type = ContextTypeList.MAPPING_DEFINITION;
+				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
 				constructorVO.filePosition = params[0].pos;
 			
 			case wtf:

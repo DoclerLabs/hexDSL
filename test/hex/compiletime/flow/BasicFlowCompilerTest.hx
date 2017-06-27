@@ -657,15 +657,23 @@ class BasicFlowCompilerTest
 		Assert.equals( MockClass, amazonServiceClass );
 	}
 	
-	//TODO implement
-	@Ignore( "test target sub property" )
+	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/targetSubProperty.flow" );
 
-		var mockObject : MockObjectWithRegtangleProperty = this._getCoreFactory().locate( "mockObject" );
+		var mockObject = this._getCoreFactory().locate( "mockObject" );
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
+	}
+	
+	@Test( "test recursive property reference" )
+	public function testRecursivePropertyReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyReference.flow" );
+
+		Assert.equals( 'property', this._getCoreFactory().locate( "oClass" ).property );
+		Assert.equals( 'property', this._getCoreFactory().locate( "oDynamic" ).p );
 	}
 	
 	@Test( "test file preprocessor with flow file" )
@@ -847,5 +855,39 @@ class BasicFlowCompilerTest
 		
 		Assert.equals( 10, r.width );
 		Assert.equals( 20, r.height );
+	}
+	
+	@Test( "test add custom parser" )
+	public function testAddCustomParser() : Void
+	{
+		MockCustomStaticFlowParser.prepareCompiler();
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/addParser.flow" );
+		
+		Assert.equals( 'hello world !', this._getCoreFactory().locate( "s" ) );
+		Assert.equals( 11, this._getCoreFactory().locate( "i" ) );
+		Assert.equals( 11, this._getCoreFactory().locate( "p" ).x );
+		Assert.equals( 13, this._getCoreFactory().locate( "p" ).y );
+	}
+	
+	@Test( "test alias primitive" )
+	public function testAliasPrimitive() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/aliasPrimitive.flow" );
+		
+		Assert.equals( 5, this._getCoreFactory().locate( "value" ) );
+		Assert.equals( this._getCoreFactory().locate( "value" ), this._getCoreFactory().locate( "x" ) );
+		
+		var i : Int = this._getCoreFactory().locate( "x" );
+		Assert.equals( 5, i );
+	}
+	
+	@Test( "test alias instance" )
+	public function testAliasInstance() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/aliasInstance.flow" );
+
+		var position = this._getCoreFactory().locate( "reference" );
+		Assert.equals( 1, this._getCoreFactory().locate( "position" ).x );
+		Assert.equals( 2, this._getCoreFactory().locate( "position" ).y );
 	}
 }

@@ -14,10 +14,8 @@ class TypeParser
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function parse( parser : ExpressionParser, ident : String, e : Expr ) : ConstructorVO
+	static public function parse( parser : ExpressionParser, constructorVO : ConstructorVO, e : Expr ) : ConstructorVO
 	{
-		var constructorVO : ConstructorVO = null;
-		
 		switch( e.expr )
 		{
 			case ENew( t, params ):
@@ -27,15 +25,17 @@ class TypeParser
 				
 				if ( parser.typeParser.exists( type ) )
 				{
-					return parser.typeParser.get( type )( parser, ident, params, e );
+					return parser.typeParser.get( type )( parser, constructorVO, params, e );
 				}
 				else
 				{
-					constructorVO = new ConstructorVO( ident, type, [] );
-					constructorVO.arguments = params.map( function (param) return parser.parseArgument (parser, ident, param) );
+					constructorVO.type = type;
+					constructorVO.arguments = params.map( function (param) return parser.parseArgument (parser, constructorVO.ID, param) );
 				}
 				
 			case wtf:
+				trace( wtf );
+				Context.error( '', Context.currentPos() );
 		}
 
 		return constructorVO;

@@ -1,0 +1,11 @@
+@context( 	name = 'applicationContext'
+			params 	= {x: Float, y:Float} )
+{
+	sum = add( width, height );
+	concatenation = add( 'width is ', width, ' and height is ', height + '. Sum is ', sum );
+	
+	width = sizeContext.size.width;
+	height = sizeContext.size.height;
+	
+	sizeContext = new Context( 'context/xml/static/beImportedSize.xml', {xParameter: x, yParameter: y} );
+}

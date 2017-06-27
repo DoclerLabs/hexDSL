@@ -15,11 +15,6 @@ using hex.compiletime.flow.parser.ExpressionUtil;
  */
 class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 {
-	function new() 
-	{
-		super();
-	}
-	
 	@final
 	public function getApplicationContext() : IApplicationContext
 	{
@@ -136,6 +131,26 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 				exprs;
 			case _:
 				null;
+		}
+	}
+	
+	function transformContextData( f : Array<Expr>->Array<Expr> )
+	{
+		this._contextData = { expr: this._doOnMainBlock( this._contextData.expr, f ), pos: this._contextData.pos };
+	}
+	
+	function _doOnMainBlock( parsed : ExprDef, f : Array<Expr>->Array<Expr> ) : ExprDef
+	{
+		return switch( parsed )
+		{
+			case EMeta( entry, e ):
+				EMeta( entry,  {expr: _doOnMainBlock( e.expr, f ), pos: e.pos} );
+				
+			case EBlock( exprs ):
+				EBlock( f( exprs ) );
+				
+			case _:
+				parsed;
 		}
 	}
 }

@@ -103,6 +103,7 @@ class RunTimeContextFactory
 	{
 		switch( request )
 		{
+			case PREPROCESS( vo ): this.preprocess( vo );
 			case OBJECT( vo ): this.registerConstructorVO( vo );
 			case PROPERTY( vo ): this.registerPropertyVO( vo );
 			case METHOD_CALL( vo ): this.registerMethodCallVO( vo );
@@ -150,6 +151,11 @@ class RunTimeContextFactory
 	}
 	
 	//
+	public function preprocess( vo : hex.vo.PreProcessVO ) : Void
+	{
+		//We don't have any preprocessor for now
+	}
+	
 	public function registerPropertyVO( propertyVO : PropertyVO  ) : Void
 	{
 		var id = propertyVO.ownerID;

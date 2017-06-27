@@ -3,7 +3,6 @@ package hex.compiletime.factory;
 #if macro
 import haxe.macro.Expr;
 import hex.core.ContextTypeList;
-import hex.error.PrivateConstructorException;
 import hex.compiletime.basic.IContextFactory;
 import hex.vo.ConstructorVO;
 import hex.vo.PropertyVO;
@@ -14,11 +13,7 @@ import hex.vo.PropertyVO;
  */
 class PropertyFactory 
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
 	static public function build( factory : IContextFactory, property : PropertyVO ) : Expr
 	{
@@ -39,7 +34,7 @@ class PropertyFactory
 			var constructorVO 			= new ConstructorVO( null, ContextTypeList.INSTANCE, null, null, null, false, property.ref, null, null );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
-			e 							= macro $i{ id }.$propertyName = $i{ property.ref };
+			e 							= macro $i{ id }.$propertyName = $p { property.ref.split( '.' ) };
 
 		} else if ( property.staticRef != null )
 		{

@@ -1,0 +1,13 @@
+<root name="applicationContext">
+	
+	<object id="oDynamic" type="Object">
+		<property name="p" ref="refO.property"/>
+	</object>
+	
+	<object id="oClass" type="hex.mock.MockClassWithProperty">
+		<property name="property" ref="refO.property"/>
+	</object>
+	
+	<object id="refO" type="hex.mock.MockClassWithProperty"/>
+	
+</root>

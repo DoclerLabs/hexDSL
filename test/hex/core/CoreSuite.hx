@@ -1,5 +1,6 @@
 package hex.core;
 
+import hex.core.ApplicationContextUtilTest;
 /**
  * ...
  * @author Francis Bourre
@@ -7,5 +8,5 @@ package hex.core;
 class CoreSuite
 {
 	@Suite( "Core" )
-    public var list : Array<Class<Dynamic>> = [];
+    public var list : Array<Class<Dynamic>> = [ ApplicationContextUtilTest ];
 }

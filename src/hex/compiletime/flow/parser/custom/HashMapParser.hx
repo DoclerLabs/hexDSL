@@ -14,17 +14,15 @@ class HashMapParser
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	public static function parse( parser : ExpressionParser, id : ID, params : Array<Expr>, expr : Expr ) : ConstructorVO
+	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
-		var constructorVO : ConstructorVO;
-		
 		if ( params.length > 0 )
 		{
 			switch( params[ 0 ].expr )
 			{
 				case EArrayDecl( values ):
-					var args = values.map( function(e) return parser.parseMapArgument( parser, id, e ) );
-					constructorVO = new ConstructorVO( id, ContextTypeList.HASHMAP, args );
+					constructorVO.type = ContextTypeList.HASHMAP;
+					constructorVO.arguments = values.map( function(e) return parser.parseMapArgument( parser, constructorVO.ID, e ) );
 					
 				case wtf:
 					trace( wtf );

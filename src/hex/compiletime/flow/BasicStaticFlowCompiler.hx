@@ -1,7 +1,7 @@
 package hex.compiletime.flow;
 
 import hex.core.IApplicationAssembler;
-
+import hex.preprocess.RuntimeParametersPreprocessor;
 
 #if macro
 import haxe.macro.Expr;
@@ -22,6 +22,9 @@ import hex.parser.AbstractParserCollection;
 import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.flow.MacroConditionalVariablesProcessor;
 import hex.util.MacroUtil;
+
+using Lambda;
+using hex.util.LambdaUtil;
 #end
 
 /**
@@ -31,6 +34,7 @@ import hex.util.MacroUtil;
 class BasicStaticFlowCompiler 
 {
 	#if macro
+	@:allow( hex.compiletime.flow.parser )
 	static function _readFile(	fileName 						: String, 
 								?applicationContextName 		: String,
 								?preprocessingVariables 		: Expr, 
@@ -64,6 +68,11 @@ class BasicStaticFlowCompiler
 											?preprocessingVariables : Expr, 
 											?conditionalVariables 	: Expr ) : Expr
 	{
+		if ( applicationContextName != null && !hex.core.ApplicationContextUtil.isValidName( applicationContextName ) ) 
+		{
+			haxe.macro.Context.error( 'Invalid application context name.\n Name should be alphanumeric (underscore is allowed).\n First chararcter should not be a number.', haxe.macro.Context.currentPos() );
+		}
+		
 		return BasicStaticFlowCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr, false );
 	}
 	
@@ -121,7 +130,9 @@ class ParserCollection extends AbstractParserCollection<AbstractExprParser<hex.c
 	override function _buildParserList() : Void
 	{
 		this._parserCollection.push( new ApplicationContextParser( this._assemblerExpression, this._isExtending ) );
-		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser() );
+		this._parserCollection.push( new hex.compiletime.flow.parser.RuntimeParameterParser( this._runtimeParam ) );
+		this._parserCollection.push( new hex.compiletime.flow.parser.ImportContextParser( hex.compiletime.flow.parser.FlowExpressionParser.parser, this._assemblerExpression ) );
+		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser( hex.compiletime.flow.parser.FlowExpressionParser.parser, this._runtimeParam ) );
 		this._parserCollection.push( new Launcher( this._assemblerExpression, this._fileName, this._isExtending, this._runtimeParam ) );
 	}
 }
@@ -130,6 +141,7 @@ class ApplicationContextParser extends AbstractExprParser<hex.compiletime.basic.
 {
 	var _assemblerVariable 	: VariableExpression;
 	var _isExtending 		: Bool;
+	
 	
 	public function new( assemblerVariable : VariableExpression, isExtending : Bool = false ) 
 	{
@@ -187,6 +199,7 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 	
 	override public function parse() : Void
 	{
+
 		var assembler : ICompileTimeApplicationAssembler = cast this._applicationAssembler;
 		
 		//Dispatch CONTEXT_PARSED message

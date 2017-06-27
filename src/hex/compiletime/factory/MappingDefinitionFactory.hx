@@ -20,7 +20,8 @@ class MappingDefinitionFactory
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;
 
-		var result = constructorVO.arguments.fold( 
+		var result = constructorVO.arguments.fold
+		( 
 			function ( arg, e ) return addProperty( factoryVO.contextFactory, arg, e ), 
 				macro @:pos( constructorVO.filePosition ) 
 					$v{{ fromType: "", toValue: null, toClass: null, withName: "", asSingleton: false, injectInto: false }} 
@@ -85,8 +86,8 @@ class MappingDefinitionFactory
 					fields.push( { field: propertyName, expr: value } );
 				}
 				
-			case _:
-				trace( 'wtf' );
+			case wtf:
+				trace( wtf );
 		}
 
 		return expr;

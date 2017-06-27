@@ -53,7 +53,7 @@ class DSLReader
 		}
 		
 		//collect include nodes
-		var includeList : Array<Xml> = this._getIncludeList( rootXml, conditionalVariablesChecker );
+		var includeList = this._getIncludeList( rootXml, conditionalVariablesChecker );
 		
 		//parse/remove comditionals
 		var iterator = rootXml.elements();
@@ -65,7 +65,7 @@ class DSLReader
 				finalRootXML.addChild( node );
 			}
 		}
-		
+
 		//parse include collection
 		for ( include in includeList )
 		{

@@ -1,19 +1,17 @@
 package hex.compiletime.basic;
 
-import hex.core.IApplicationContext;
-import hex.core.ICoreFactory;
-import hex.vo.ConstructorVO;
-
 /**
  * @author Francis Bourre
  */
 interface IContextFactory
 {
-	function buildVO( constructorVO : ConstructorVO, ?id : String ) : Dynamic;
+	function buildVO( constructorVO : hex.vo.ConstructorVO, ?id : String ) : Dynamic;
 	
 	function buildObject( id : String ) : Void;
 	
-	function getApplicationContext() : IApplicationContext;
+	function getApplicationContext() : hex.core.IApplicationContext;
 	
-	function getCoreFactory() : ICoreFactory;
+	function getCoreFactory() : hex.core.ICoreFactory;
+	
+	function getTypeLocator() : hex.collection.ILocator<String, String>;
 }
