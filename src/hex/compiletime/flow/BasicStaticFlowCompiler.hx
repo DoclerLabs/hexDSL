@@ -129,7 +129,7 @@ class ParserCollection extends AbstractParserCollection<AbstractExprParser<hex.c
 	
 	override function _buildParserList() : Void
 	{
-		this._parserCollection.push( new ApplicationContextParser( this._assemblerExpression, this._isExtending ) );
+		this._parserCollection.push( new StaticContextParser( this._assemblerExpression, this._isExtending ) );
 		this._parserCollection.push( new hex.compiletime.flow.parser.RuntimeParameterParser( this._runtimeParam ) );
 		this._parserCollection.push( new hex.compiletime.flow.parser.ImportContextParser( hex.compiletime.flow.parser.FlowExpressionParser.parser, this._assemblerExpression ) );
 		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser( hex.compiletime.flow.parser.FlowExpressionParser.parser, this._runtimeParam ) );
@@ -137,7 +137,7 @@ class ParserCollection extends AbstractParserCollection<AbstractExprParser<hex.c
 	}
 }
 
-class ApplicationContextParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
+class StaticContextParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 {
 	var _assemblerVariable 	: VariableExpression;
 	var _isExtending 		: Bool;
