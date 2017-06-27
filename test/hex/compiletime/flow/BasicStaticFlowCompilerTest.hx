@@ -1039,11 +1039,11 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 20, code.locator.sizeContext2.sizeContext.size.height );
 	}
 	
-	/*@Test( "test import with parent context dependency" )
+	@Test( "test import with parent context dependency" )
 	public function testImportWithParentContextDependency() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/importWithParentDependency.flow", "BasicStaticFlowCompiler_testImportWithParentContextDependency" );
 		code.execute();
-	}*/
+	}
 }
 

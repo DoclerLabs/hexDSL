@@ -109,7 +109,7 @@ class CompileTimeContextFactory
 		this._methodCallVOLocator.release();
 		this._typeLocator.release();
 		this._moduleLocator.release();
-		this._factoryMap = new Map();
+		this._factoryMap = hex.compiletime.basic.BasicCompileTimeSettings.factoryMap;
 		this._mappedTypes = [];
 		this._injectedInto = [];
 	}
