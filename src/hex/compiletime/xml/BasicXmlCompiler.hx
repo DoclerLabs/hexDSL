@@ -26,11 +26,11 @@ using StringTools;
 class BasicXmlCompiler
 {
 	#if macro
-	static function _readXmlFile( 	fileName 						: String, 
-									?applicationContextName 		: String,
-									?preprocessingVariables 		: Expr, 
-									?conditionalVariables 			: Expr, 
-									?applicationAssemblerExpression : Expr ) : ExprOf<IApplicationAssembler>
+	public static function _readFile( 	fileName 						: String,
+										?applicationContextName 		: String,
+										?preprocessingVariables 		: Expr,
+										?conditionalVariables 			: Expr,
+										?applicationAssemblerExpression : Expr ) : ExprOf<IApplicationAssembler>
 	{
 		LogManager.context = new MacroLoggerContext();
 		
@@ -62,7 +62,7 @@ class BasicXmlCompiler
 			haxe.macro.Context.error( 'Invalid application context name.\n Name should be alphanumeric (underscore is allowed).\n First chararcter should not be a number.', haxe.macro.Context.currentPos() );
 		}
 		
-		return BasicXmlCompiler._readXmlFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
+		return BasicXmlCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables );
 	}
 	
 	macro public static function compileWithAssembler( 	assemblerExpr : Expr, 
@@ -71,6 +71,6 @@ class BasicXmlCompiler
 														?preprocessingVariables : Expr, 
 														?conditionalVariables : Expr ) : ExprOf<IApplicationAssembler>
 	{
-		return BasicXmlCompiler._readXmlFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr );
+		return BasicXmlCompiler._readFile( fileName, applicationContextName, preprocessingVariables, conditionalVariables, assemblerExpr );
 	}
 }
