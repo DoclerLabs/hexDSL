@@ -35,12 +35,12 @@ class BasicStaticFlowCompiler
 {
 	#if macro
 	@:allow( hex.compiletime.flow.parser )
-	static function _readFile(	fileName 						: String, 
-								?applicationContextName 		: String,
-								?preprocessingVariables 		: Expr, 
-								?conditionalVariables 			: Expr, 
-								?applicationAssemblerExpression : Expr,
-								isExtending 					: Bool = false ) : Expr
+	public static function _readFile(	fileName 						: String,
+										?applicationContextName 		: String,
+										?preprocessingVariables 		: Expr,
+										?conditionalVariables 			: Expr,
+										?applicationAssemblerExpression : Expr,
+										isExtending 					: Bool = false ) : Expr
 	{
 		LogManager.context 				= new MacroLoggerContext();
 		

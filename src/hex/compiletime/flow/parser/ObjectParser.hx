@@ -162,9 +162,9 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				
 			case ECall( _.expr => EConst(CIdent(keyword)), params ):
-				if ( this.parser.methodParser.exists( keyword ) )
+				if ( this.parser.buildMethodParser.exists( keyword ) )
 				{
-					return this.parser.methodParser.get( keyword )( this.parser, new ConstructorVO( ident ), params, value );
+					return this.parser.buildMethodParser.get( keyword )( this.parser, new ConstructorVO( ident ), params, value );
 				}
 				else
 				{
