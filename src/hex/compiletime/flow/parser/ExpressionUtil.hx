@@ -34,5 +34,14 @@ class ExpressionUtil
 		var className = ExprTools.toString( macro new $tp() );
 		return className.split( "new " ).join( '' ).split( '()' ).join( '' );
 	}
+	
+	static public function getIdent( e : Expr ) : String
+	{
+		return switch( e.expr )
+		{
+			case EConst(CIdent(value)): value;
+			case _: "";
+		}
+	}
 }
 #end

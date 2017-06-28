@@ -23,7 +23,7 @@ class FlowExpressionParser
 			hex.core.ContextTypeList.MAPPING_DEFINITION	=> hex.compiletime.flow.parser.custom.MappingParser.parse
 		],
 		
-		methodParser:		
+		buildMethodParser:		
 		[
 			'mapping' 							=> hex.compiletime.flow.parser.custom.MappingParser.parse,
 			'injectInto' 						=> hex.compiletime.flow.parser.custom.InjectIntoParser.parse,

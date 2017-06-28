@@ -16,7 +16,7 @@ typedef ExpressionParser =
 	var parseProperty 		: PropertyParser;
 	var parseMapArgument 	: MapArgumentParser;
 	var typeParser			: Map<String, ExpressionParser->ConstructorVO->Array<Expr>->Expr->ConstructorVO>;
-	var methodParser		: Map<String, ExpressionParser->ConstructorVO->Array<Expr>->Expr->ConstructorVO>;
+	var buildMethodParser	: Map<String, ExpressionParser->ConstructorVO->Array<Expr>->Expr->ConstructorVO>;
 }
 
 typedef ID 					= String;
