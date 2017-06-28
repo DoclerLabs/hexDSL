@@ -43,5 +43,14 @@ class ExpressionUtil
 			case _: "";
 		}
 	}
+	
+	static public function getBool( e : Expr ) : Bool
+	{
+		return switch( e.expr )
+		{
+			case EConst(CIdent('true')): true;
+			case _: false;
+		}
+	}
 }
 #end
