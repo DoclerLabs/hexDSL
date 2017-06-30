@@ -1,5 +1,6 @@
 <root name="applicationContext">
 
     <module id="instance" type="hex.mock.MockClass" map-type="hex.mock.IMockInterface"/>
+    <module id="instance2" type="hex.mock.MockClass" map-type="hex.mock.MockModuleWithInternalType.GetInfosInternalTypedef"/>
 
 </root>
