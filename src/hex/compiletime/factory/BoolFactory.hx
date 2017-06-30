@@ -3,8 +3,6 @@ package hex.compiletime.factory;
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -12,13 +10,9 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class BoolFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var result : Bool 		= false;
 		

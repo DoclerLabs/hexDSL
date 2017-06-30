@@ -1,9 +1,7 @@
 package hex.compiletime.factory;
-import hex.compiletime.flow.BasicStaticFlowCompiler;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
+import haxe.macro.*;
 
 /**
  * ...

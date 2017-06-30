@@ -1,11 +1,8 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Expr;
 import hex.core.ContextTypeList;
-import hex.compiletime.basic.IContextFactory;
 import hex.vo.ConstructorVO;
-import hex.vo.PropertyVO;
 
 /**
  * ...
@@ -15,9 +12,9 @@ class PropertyFactory
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
-	static public function build( factory : IContextFactory, property : PropertyVO ) : Expr
+	static public function build( factory : hex.compiletime.basic.IContextFactory, property : hex.vo.PropertyVO ) : haxe.macro.Expr
 	{
-		var e 				: Expr 		= null;
+		var e 							= null;
 		var value 			: Dynamic 	= null;
 		var id							= property.ownerID;
 		var propertyName				= property.name;

@@ -1,33 +1,24 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.util.MacroUtil;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
-
 /**
  * ...
  * @author Francis Bourre
  */
 class StaticVariableFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : haxe.macro.Expr
 	{
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;
 		
 		//Building result
-		var result	= MacroUtil.getStaticVariable( constructorVO.staticRef, constructorVO.filePosition );
+		var result	= hex.util.MacroUtil.getStaticVariable( constructorVO.staticRef, constructorVO.filePosition );
 		
 		//Assign right type description
-		constructorVO.type = MacroUtil.getFQCNFromExpression( result );
+		constructorVO.type = hex.util.MacroUtil.getFQCNFromExpression( result );
 		
 		return constructorVO.shouldAssign ?
 			macro @:pos( constructorVO.filePosition ) var $idVar = $result:

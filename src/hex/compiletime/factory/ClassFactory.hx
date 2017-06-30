@@ -2,9 +2,6 @@ package hex.compiletime.factory;
 
 #if macro
 import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.util.MacroUtil;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -12,13 +9,9 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class ClassFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var qualifiedClassName 	= "";
 		
@@ -33,7 +26,7 @@ class ClassFactory
 		}
 
 		//TODO correct file position. seems there's a bug with file inclusion
-		var tp = MacroUtil.getPack( qualifiedClassName, constructorVO.filePosition );
+		var tp = hex.util.MacroUtil.getPack( qualifiedClassName, constructorVO.filePosition );
 		
 		//Assign right type description
 		constructorVO.type = "Class<" + qualifiedClassName + ">";

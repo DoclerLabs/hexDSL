@@ -1,10 +1,7 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import hex.compiletime.basic.IContextFactory;
-import hex.vo.PreProcessVO;
+import haxe.macro.*;
 
 /**
  * ...
@@ -14,7 +11,7 @@ class RuntimeParameterProcessor
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function process( factory : IContextFactory, vo : PreProcessVO ) : Expr
+	static public function process( factory : hex.compiletime.basic.IContextFactory, vo : hex.vo.PreProcessVO ) : Expr
 	{
 		factory.getTypeLocator().register( vo.ID, vo.arguments[ 0 ] );
 		

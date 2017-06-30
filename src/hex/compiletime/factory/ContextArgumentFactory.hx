@@ -1,8 +1,7 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
+import haxe.macro.*;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 

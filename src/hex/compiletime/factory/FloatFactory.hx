@@ -1,10 +1,7 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
+import haxe.macro.*;
 
 /**
  * ...
@@ -12,13 +9,9 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class FloatFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var result : Float 		= Math.NaN;
 		

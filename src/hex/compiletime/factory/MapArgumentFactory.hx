@@ -1,9 +1,7 @@
 package hex.compiletime.factory;
 
 #if macro
-import hex.error.PrivateConstructorException;
 import hex.vo.MapVO;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
 /**
  * ...
@@ -11,13 +9,9 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class MapArgumentFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Array<MapVO>
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Array<MapVO>
 	{
 		var result 				= [];
 		var factory 			= factoryVO.contextFactory;
