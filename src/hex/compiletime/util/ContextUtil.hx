@@ -146,7 +146,7 @@ class ContextUtil
 	 * @param	typeName	Type of the context ID that will become property's type
 	 * @return 	class property as Field
 	 */
-	public static function buildInstanceField( instanceID : String, typeName : String ) : Field
+	public static function buildInstanceFieldWithClassName( instanceID : String, typeName : String ) : Field
 	{
 		var newField : Field = 
 		{
@@ -168,6 +168,17 @@ class ContextUtil
 		} );
 		
 		return newField;
+	}
+	
+	public static function buildInstanceField( instanceID : String, ct : ComplexType ) : Field
+	{
+		return
+		{
+			name: instanceID,
+			pos: Context.currentPos(),
+			kind: FVar( ct ),
+			access: [ APublic ]
+		}
 	}
 	
 	/**

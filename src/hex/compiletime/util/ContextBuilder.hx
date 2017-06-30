@@ -1,4 +1,5 @@
 package hex.compiletime.util;
+import haxe.macro.TypeTools;
 
 #if macro
 import haxe.macro.Expr.TypeDefinition;
@@ -40,7 +41,7 @@ class ContextBuilder
 			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ) );
 			
 			//Add a field for applicationContext with the name of the context.
-			definition.fields.push( ContextUtil.buildInstanceField( applicationContextName, applicationContextClassName ) );
+			definition.fields.push( ContextUtil.buildInstanceFieldWithClassName( applicationContextName, applicationContextClassName ) );
 			
 			contextIteration = { iteration: 0, definition: definition, iDefinition: iDefinition, contextName: applicationContextName, contextClassName: applicationContextClassName, defined: false };
 			ContextBuilder._Iteration.set( applicationContextName, contextIteration );
@@ -90,9 +91,15 @@ class ContextBuilder
 	
 	//Each instance of the DSL is reprezented by a class property
 	// The name of the property is the context ID.
-	public function addField( fieldName : String, className : String ) : Void
+	public function addFieldWithClassName( fieldName : String, className : String ) : Void
 	{
-		var field = ContextUtil.buildInstanceField( fieldName, className );
+		var field = ContextUtil.buildInstanceFieldWithClassName( fieldName, className );
+		this._iteration.definition.fields.push( field );
+	}
+	
+	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType ) : Void
+	{
+		var field = ContextUtil.buildInstanceField( fieldName, ct );
 		this._iteration.definition.fields.push( field );
 	}
 	

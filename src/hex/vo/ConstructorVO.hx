@@ -6,6 +6,10 @@ package hex.vo;
  */
 class ConstructorVO extends AssemblerVO
 {
+	#if macro
+	public var cType : haxe.macro.Expr.ComplexType;
+	#end
+	
 	public var              ID              	: String;
 	public var              type (default, set) : String;
 	public var              className           : String;
