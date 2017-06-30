@@ -1,5 +1,4 @@
 package hex.compiletime.util;
-import haxe.macro.TypeTools;
 
 #if macro
 import haxe.macro.Expr.TypeDefinition;
