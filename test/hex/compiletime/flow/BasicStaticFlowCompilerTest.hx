@@ -1005,6 +1005,29 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( code.locator.position, code.locator.anotherPosition );
 	}
 	
+	@Test( "test Array concat with runtime parameters" )
+	public function testArrayConcatWithRuntimeParameter() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/arrayConcatRuntimeParam.flow", "MixedDslTest_testArrayConcatWithRuntimeParameter" );
+		code.execute( { collection:[1, 2, 3] } );
+		Assert.deepEquals( [1,2,3,4,5,6], code.locator.result );
+	}
+	
+	#if js
+	@Test( "test div selection" )
+	public function testDivSelection() : Void
+	{
+		if ( js.Browser.supported )
+		{
+			var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/static/divSelection.flow", "MixedDslTest_testDivSelection" );
+			code.execute( { divName: '#console' } );
+			Assert.equals( code.locator.div1, code.locator.div2 );
+			Assert.isInstanceOf( code.locator.div1, js.html.DivElement );
+			Assert.isInstanceOf( code.locator.div2, js.html.DivElement );
+		}
+	}
+	#end
+	
 	//Import
 	@Test( "test two Int import" )
 	public function testTwoIntImport() : Void
