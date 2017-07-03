@@ -57,7 +57,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingString.flow", "BasicStaticFlowCompiler_testBuildingString" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/primitives/string.flow", "BasicStaticFlowCompiler_testBuildingString" );
 		
 		var locator = code.locator;
 		Assert.isNull( locator.s );
@@ -87,7 +87,7 @@ class BasicStaticFlowCompilerTest
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicStaticFlowCompilerTest.applicationAssembler = new ApplicationAssembler();
-		var code = BasicStaticFlowCompiler.compile( BasicStaticFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow", "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty" );
+		var code = BasicStaticFlowCompiler.compile( BasicStaticFlowCompilerTest.applicationAssembler, "context/flow/primitives/string.flow", "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty" );
 		code.execute();
 		
 		var s : String = BasicStaticFlowCompilerTest.applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty", ApplicationContext ).getCoreFactory().locate( "s" );
@@ -114,7 +114,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Int" )
 	public function testBuildingInt() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingInt.flow", "BasicStaticFlowCompiler_testBuildingInt" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/primitives/int.flow", "BasicStaticFlowCompiler_testBuildingInt" );
 		code.execute();
 		Assert.equals( -3, code.locator.i );
 	}
@@ -122,7 +122,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Hex" )
 	public function testBuildingHex() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingHex.flow", "BasicStaticFlowCompiler_testBuildingHex" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/primitives/hex.flow", "BasicStaticFlowCompiler_testBuildingHex" );
 		code.execute();
 		Assert.equals( 0xFFFFFF, code.locator.i );
 	}
@@ -130,7 +130,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Bool" )
 	public function testBuildingBool() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingBool.flow", "BasicStaticFlowCompiler_testBuildingBool" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/primitives/bool.flow", "BasicStaticFlowCompiler_testBuildingBool" );
 		code.execute();
 		Assert.isTrue( code.locator.b );
 	}
@@ -138,7 +138,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building UInt" )
 	public function testBuildingUInt() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingUInt.flow", "BasicStaticFlowCompiler_testBuildingUInt" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/primitives/uint.flow", "BasicStaticFlowCompiler_testBuildingUInt" );
 		code.execute();
 		Assert.equals( 3, code.locator.i );
 	}
@@ -146,7 +146,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building null" )
 	public function testBuildingNull() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testBuildingNull.flow", "BasicStaticFlowCompiler_testBuildingNull" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/primitives/null.flow", "BasicStaticFlowCompiler_testBuildingNull" );
 		code.execute();
 		Assert.isNull( code.locator.value );
 	}
@@ -570,7 +570,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test map-type attribute with Array" )
 	public function testMapTypeWithArray() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testMapTypeWithArray.flow", "BasicStaticFlowCompiler_testMapTypeWithArray" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/mapTypeWithArray.flow", "BasicStaticFlowCompiler_testMapTypeWithArray" );
 		code.execute();
 		
 		var intCollection = code.applicationContext.getInjector().getInstanceWithClassName( "Array<Int>", "intCollection" );
@@ -588,7 +588,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test map-type attribute with instance" )
 	public function testMapTypeWithInstance() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/testMapTypeWithInstance.flow", "BasicStaticFlowCompiler_testMapTypeWithInstance" );
+		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/mapTypeWithInstance.flow", "BasicStaticFlowCompiler_testMapTypeWithInstance" );
 		code.execute();
 		
 		var intInstance = code.applicationContext.getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<Int>", "intInstance" );

@@ -65,7 +65,7 @@ class BasicFlowCompilerTest
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingString.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/string.flow" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -93,7 +93,7 @@ class BasicFlowCompilerTest
 		var assembler = new ApplicationAssembler();
 		assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().register( "s2", "bonjour" );
 		
-		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( assembler, "context/flow/testBuildingString.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( assembler, "context/flow/primitives/string.flow" );
 
 		Assert.equals( "hello", this._getCoreFactory().locate( "s" ) );
 		Assert.equals( "bonjour", this._getCoreFactory().locate( "s2" ) );
@@ -104,7 +104,7 @@ class BasicFlowCompilerTest
 	public function testBuildingStringWithAssemblerProperty() : Void
 	{
 		this._applicationAssembler = new ApplicationAssembler();
-		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/testBuildingString.flow" );
+		BasicFlowCompiler.compileWithAssembler( this._applicationAssembler, "context/flow/primitives/string.flow" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -113,7 +113,7 @@ class BasicFlowCompilerTest
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicFlowCompilerTest.applicationAssembler = new ApplicationAssembler();
-		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/testBuildingString.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compileWithAssembler( BasicFlowCompilerTest.applicationAssembler, "context/flow/primitives/string.flow" );
 		var s : String = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -161,7 +161,7 @@ class BasicFlowCompilerTest
 	@Test( "test building Int" )
 	public function testBuildingInt() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingInt.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/int.flow" );
 		var i : Int = this._getCoreFactory().locate( "i" );
 		Assert.equals( -3, i );
 	}
@@ -169,14 +169,14 @@ class BasicFlowCompilerTest
 	@Test( "test building Hex" )
 	public function testBuildingHex() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingHex.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/hex.flow" );
 		Assert.equals( 0xFFFFFF, this._getCoreFactory().locate( "i" ) );
 	}
 	
 	@Test( "test building Bool" )
 	public function testBuildingBool() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingBool.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/bool.flow" );
 		var b : Bool = this._getCoreFactory().locate( "b" );
 		Assert.isTrue( b );
 	}
@@ -184,7 +184,7 @@ class BasicFlowCompilerTest
 	@Test( "test building UInt" )
 	public function testBuildingUInt() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingUInt.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/uint.flow" );
 		var i : UInt = this._getCoreFactory().locate( "i" );
 		Assert.equals( 3, i );
 	}
@@ -192,7 +192,7 @@ class BasicFlowCompilerTest
 	@Test( "test building null" )
 	public function testBuildingNull() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testBuildingNull.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/null.flow" );
 		var result = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
@@ -519,7 +519,7 @@ class BasicFlowCompilerTest
 	@Test( "test map-type attribute with Array" )
 	public function testMapTypeWithArray() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testMapTypeWithArray.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/mapTypeWithArray.flow" );
 		
 		var intCollection = this._getCoreFactory().getInjector().getInstanceWithClassName( "Array<Int>", "intCollection" );
 		var uintCollection = this._getCoreFactory().getInjector().getInstanceWithClassName( "Array<UInt>", "intCollection" );
@@ -536,7 +536,7 @@ class BasicFlowCompilerTest
 	@Test( "test map-type attribute with instance" )
 	public function testMapTypeWithInstance() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/testMapTypeWithInstance.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/mapTypeWithInstance.flow" );
 		
 		var intInstance = this._getCoreFactory().getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<Int>", "intInstance" );
 		var uintInstance = this._getCoreFactory().getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<UInt>", "intInstance" );
