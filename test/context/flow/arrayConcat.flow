@@ -1,0 +1,6 @@
+@context( 	name = 'applicationContext' )
+{
+	collection1 = [1,2,3];
+	collection2 = [4,5,6];
+	result = hex.mock.MockUtil.concat( collection1, collection2 );
+}

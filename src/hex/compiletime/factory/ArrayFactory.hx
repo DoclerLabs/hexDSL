@@ -25,7 +25,8 @@ class ArrayFactory
 			
 			if ( varType == null )
 			{
-				varType = macro :Array<Dynamic>;
+				var t = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
+				varType = macro :Array<$t>;
 			}
 			
 			var result 	= macro @:pos( constructorVO.filePosition ) var $idVar : $varType = $a{ args };
