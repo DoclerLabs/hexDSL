@@ -18,13 +18,11 @@ using hex.util.LambdaUtil;
 class ImportContextParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 {
 	var _parser 			: ExpressionParser;
-	var _assemblerVariable 	: VariableExpression;
 	
-	public function new( parser : ExpressionParser, assemblerVariable : VariableExpression ) 
+	public function new( parser : ExpressionParser ) 
 	{
 		super();
-		this._parser 			= parser;
-		this._assemblerVariable = assemblerVariable;
+		this._parser = parser;
 	}
 	
 	override public function parse() : Void 
@@ -63,7 +61,7 @@ class ImportContextParser extends AbstractExprParser<hex.compiletime.basic.Build
 	function _parseImport( i : ContextImport )
 	{
 		var className = this._applicationContextName + '_' + i.id;
-		var e = this._getCompiler( i.fileName)( i.fileName, className, null, null, this._assemblerVariable.expression  );
+		var e = this._getCompiler( i.fileName)( i.fileName, className, null, null, macro this._applicationAssembler );
 		ContextBuilder.forceGeneration( className );
 		
 		var args = [ { className: 'hex.context.' + className/*this._getClassName( e )*/, expr: e, arg: i.arg } ];
