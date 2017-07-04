@@ -22,10 +22,19 @@ class ClassInstanceFactory
 	static inline function _nullArray( length : UInt ) return  [ for ( i in 0...length ) macro null ];
 	static inline function _implementsInterface( classRef, interfaceRef ) return  MacroUtil.implementsInterface( classRef, MacroUtil.getClassType( Type.getClassName( interfaceRef ) ) );
 	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );
-	static inline function _result( e, id, vo ) { var t = vo.cType != null ? vo.cType : _varType( vo.type, vo.filePosition ); return macro @:pos( vo.filePosition ) var $id : $t = $e; }
 	static inline function _blankType( vo ) { vo.cType = tink.macro.Positions.makeBlankType( vo.filePosition ); return MacroUtil.getFQCNFromComplexType( vo.cType ); }
 	
+	public static inline function getResult( e, id, vo ) { var t = vo.cType != null ? vo.cType : _varType( vo.type, vo.filePosition ); return macro @:pos( vo.filePosition ) var $id : $t = $e; }
+	
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
+	{
+		return _build( factoryVO, 
+			function( typePath, args, id, vo ) 
+				return getResult( macro new $typePath( $a { args } ), id, vo ) 
+		);
+	}
+	
+	static public function _build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T, elseDo ) : Expr
 	{
 		var vo 				= factoryVO.constructorVO;
 		var pos 			= vo.filePosition;
@@ -56,7 +65,7 @@ class ClassInstanceFactory
 						catch ( e : Dynamic ) 
 							try _fqcn( _staticRefFactory( pack, staticRef, factoryMethod, _nullArray( argsLength ) ) ) 
 								catch ( e : Dynamic ) _blankType( vo );
-					_result( e, id, vo );
+					getResult( e, id, vo );
 				}
 				else if ( staticCall != null )//static method call - with factory method
 				{
@@ -65,7 +74,7 @@ class ClassInstanceFactory
 						catch ( e : Dynamic ) 
 							try _fqcn( _staticCallFactory( pack, staticCall, factoryMethod, _nullArray( argsLength ) ) ) 
 								catch ( e : Dynamic ) _blankType( vo );
-					_result( e, id, vo );
+					getResult( e, id, vo );
 				}
 				else//factory method error
 				{
@@ -80,11 +89,11 @@ class ClassInstanceFactory
 					catch ( e : Dynamic ) 
 						try _fqcn( _staticCall( pack, staticCall, _nullArray( argsLength ) ) )
 							catch ( e : Dynamic ) _blankType( vo );
-				_result( e, id, vo );
+				getResult( e, id, vo );
 			}
 			else//Standard instantiation
 			{
-				_result( macro new $typePath( $a{ args } ), id, vo );
+				elseDo( typePath, args, id, vo );
 			}
 
 			return macro @:pos(pos) $result;
