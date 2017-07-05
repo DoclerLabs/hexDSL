@@ -21,6 +21,8 @@ class ConstructorVO extends AssemblerVO
 	public var 				mapTypes			: Array<String>;
 	public var 				staticRef			: String;
 	
+	public var 				abstractType 		: String;
+	
 	public var 				shouldAssign		= true;
 		
 	public function new(  	id 					: String,

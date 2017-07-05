@@ -16,7 +16,11 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		this._parseInjectInto( constructorVO );
 		this._parseMapTypes( constructorVO );
 		
-		if ( constructorVO.cType != null )
+		if ( constructorVO.abstractType != null )
+		{
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.abstractType );
+		}
+		else if ( constructorVO.cType != null )
 		{
 			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, constructorVO.cType );
 		}
