@@ -205,8 +205,7 @@ class CompileTimeContextFactory
 	
 	public function registerMethodCallVO( methodCallVO : MethodCallVO ) : Void
 	{
-		var index : Int = this._methodCallVOLocator.keys().length +1;
-		this._methodCallVOLocator.register( "" + index, methodCallVO );
+		this._methodCallVOLocator.register( "_" + hex.core.HashCodeFactory.getKey( methodCallVO ), methodCallVO );
 	}
 	
 	public function callMethod( id : String ) : Void
@@ -223,7 +222,7 @@ class CompileTimeContextFactory
 		var l : Int = arguments.length;
 		var args = [ for ( i in 0...l ) this.buildVO( arguments[ i ] ) ];
 		
-		var varOwner = macro $i{ method.ownerID };
+		var varOwner = macro $p{ method.ownerID.split('.') };
 		this._expressions.push( macro @:mergeBlock { $varOwner.$methodName( $a{ args } ); } );
 	}
 
@@ -243,10 +242,7 @@ class CompileTimeContextFactory
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 
-	public function getApplicationContext() : IApplicationContext
-	{
-		return this._applicationContext;
-	}
+	public function getApplicationContext() return this._applicationContext;
 
 	public function buildVO( constructorVO : ConstructorVO, ?id : String ) : Dynamic
 	{

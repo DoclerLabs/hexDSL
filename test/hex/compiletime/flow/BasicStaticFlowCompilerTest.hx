@@ -19,13 +19,11 @@ import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockMethodCaller;
-import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
-import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -44,6 +42,7 @@ class BasicStaticFlowCompilerTest
 	@Before
 	public function setUp() : Void
 	{
+		MockCustomStaticFlowParser.prepareCompiler();
 		this._myApplicationAssembler = new ApplicationAssembler();
 	}
 	
@@ -1130,6 +1129,25 @@ class BasicStaticFlowCompilerTest
 		var applicationAssembler = new ApplicationAssembler();
 		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/static/importWithParentDependency.flow", "BasicStaticFlowCompiler_testImportWithParentContextDependency" );
 		code.execute();
+		Assert.equals( 'hello world', code.locator.childContext.text );
+	}
+	
+	@Test( "test import with child depending on another child" )
+	public function testImportWithChildDependingOnAnotherChild() : Void
+	{
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/static/importWithChildDependsOnChild.flow", "BasicStaticFlowCompiler_testImportWithChildDependingOnAnotherChild" );
+		code.execute();
+		Assert.equals( 'hello world', code.locator.childContext2.text );
+	}
+	
+	@Test( "test child method call with another child argument" )
+	public function testChildMethodCallWithAnotherChildArgument() : Void
+	{
+		var applicationAssembler = new ApplicationAssembler();
+		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/static/childMethodCallWithAnotherChildArg.flow", "BasicStaticFlowCompiler_testChildMethodCallWithAnotherChildArgument" );
+		code.execute();
+		Assert.deepEquals( [ 3, 4 ], code.locator.childContext3.o.owner.collection );
 	}
 }
 

@@ -1,0 +1,10 @@
+@context( name = 'applicationContext' )
+{
+	childContext3.o.owner.setCollection( a );
+	childContext3 = new Context( 'context/flow/static/importedCollectionOwner.flow' );
+	
+	a = hex.mock.MockUtil.concat( childContext1.o.p, childContext2.o.p );
+	
+	childContext1 = new Context( 'context/flow/static/beImportedArrayProperty.flow', { value: 3 } );
+	childContext2 = new Context( 'context/flow/static/beImportedArrayProperty.flow', { value: 4 } );
+}
