@@ -193,8 +193,8 @@ class BasicFlowCompilerTest
 	public function testBuildingFloat() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/primitives/float.flow" );
-		var f : Float = this._getCoreFactory().locate( "f" );
-		Assert.equals( -12.5, f );
+		Assert.equals( -12.5, this._getCoreFactory().locate( "f" ) );
+		Assert.equals( 13.0, this._getCoreFactory().locate( "f2" ) );
 	}
 	
 	@Test( "test building null" )

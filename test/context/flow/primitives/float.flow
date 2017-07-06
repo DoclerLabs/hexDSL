@@ -1,4 +1,5 @@
 @context( name = 'applicationContext' )
 {
 	f = -12.5;
+	f2 = 13.0;
 }

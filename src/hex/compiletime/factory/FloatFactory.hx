@@ -24,7 +24,7 @@ class FloatFactory
 			result = Std.parseFloat( args[ 0 ] );
 		}
 
-		if ( Math.isNaN( result ) || "" + result != args[ 0 ] )
+		if ( Math.isNaN( result ) )
 		{
 			Context.error( "Value is not a Float", constructorVO.filePosition );
 		}

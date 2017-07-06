@@ -148,6 +148,7 @@ class BasicStaticFlowCompilerTest
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/primitives/float.flow", "BasicStaticFlowCompiler_testBuildingFloat" );
 		code.execute();
 		Assert.equals( -12.5, code.locator.f );
+		Assert.equals( 13.0, code.locator.f2 );
 	}
 	
 	@Test( "test building null" )
