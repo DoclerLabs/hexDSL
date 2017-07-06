@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	f = -12.5;
+}

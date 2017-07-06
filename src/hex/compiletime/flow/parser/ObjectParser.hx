@@ -110,6 +110,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				constructorVO.type = ContextTypeList.INT;
 				constructorVO.arguments = [ v ];
 				
+			case EConst(CFloat(v)):
+				constructorVO.type = ContextTypeList.FLOAT;
+				constructorVO.arguments = [ v ];
+				
 			case EConst(CIdent(v)):
 				
 				switch( v )
