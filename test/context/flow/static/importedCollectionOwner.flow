@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	o = { owner: new hex.mock.MockCollectionOwner() };
+}

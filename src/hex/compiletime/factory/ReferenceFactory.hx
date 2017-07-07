@@ -1,25 +1,17 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
-
 /**
  * ...
  * @author Francis Bourre
  */
 class ReferenceFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : haxe.macro.Expr
 	{
-		var result : Expr 	= null;
+		var result 			= null;
 		var constructorVO 	= factoryVO.constructorVO;
 		var idVar 			= constructorVO.ID;
 		var key 			= constructorVO.ref;

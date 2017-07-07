@@ -3,10 +3,6 @@ package hex.compiletime.factory;
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
-import hex.di.mapping.MappingConfiguration;
-import hex.error.PrivateConstructorException;
-import hex.util.MacroUtil;
 import hex.vo.MapVO;
 
 /**
@@ -15,19 +11,15 @@ import hex.vo.MapVO;
  */
 class MappingConfigurationFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;
 		var args 				= MappingConfigurationFactory._buildArgs( factoryVO );
 		
-		var typePath 			= MacroUtil.getTypePath( Type.getClassName( MappingConfiguration ) );
+		var typePath 			= hex.util.MacroUtil.getTypePath( Type.getClassName( hex.di.mapping.MappingConfiguration ) );
 		var e 					= macro @:pos( constructorVO.filePosition ) { new $typePath(); };
 
 		if ( constructorVO.shouldAssign )
@@ -73,7 +65,7 @@ class MappingConfigurationFactory
 		}
 	}
 	
-	static function _buildArgs<T:FactoryVOTypeDef>( factoryVO : T ) : Array<MapVO>
+	static function _buildArgs<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Array<MapVO>
 	{
 		var result 				= [];
 		var factory 			= factoryVO.contextFactory;

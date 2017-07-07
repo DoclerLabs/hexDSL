@@ -25,6 +25,7 @@ import hex.mock.MockContextHolder;
 import hex.mock.MockFruitVO;
 import hex.mock.MockInjectee;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModuleWithInternalType.GetInfosInternalTypedef;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
@@ -92,7 +93,7 @@ class BasicXmlCompilerTest
 		var assembler = new ApplicationAssembler();
 		assembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().register( "s2", "bonjour" );
 		
-		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/testBuildingString.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( assembler, "context/xml/primitives/string.xml" );
 
 		Assert.equals( "hello", this._getCoreFactory().locate( "s" ) );
 		Assert.equals( "bonjour", this._getCoreFactory().locate( "s2" ) );
@@ -102,7 +103,7 @@ class BasicXmlCompilerTest
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingString.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/primitives/string.xml" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -111,7 +112,7 @@ class BasicXmlCompilerTest
 	public function testBuildingStringWithAssemblerProperty() : Void
 	{
 		this._applicationAssembler = new ApplicationAssembler();
-		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/testBuildingString.xml" );
+		BasicXmlCompiler.compileWithAssembler( this._applicationAssembler, "context/xml/primitives/string.xml" );
 		var s : String = this._getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -120,7 +121,7 @@ class BasicXmlCompilerTest
 	public function testBuildingStringWithAssemblerStaticProperty() : Void
 	{
 		BasicXmlCompilerTest.applicationAssembler = new ApplicationAssembler();
-		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/testBuildingString.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compileWithAssembler( BasicXmlCompilerTest.applicationAssembler, "context/xml/primitives/string.xml" );
 		var s : String = applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getCoreFactory().locate( "s" );
 		Assert.equals( "hello", s );
 	}
@@ -168,7 +169,7 @@ class BasicXmlCompilerTest
 	@Test( "test building Int" )
 	public function testBuildingInt() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingInt.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/primitives/int.xml" );
 		var i : Int = this._getCoreFactory().locate( "i" );
 		Assert.equals( -3, i );
 	}
@@ -176,14 +177,14 @@ class BasicXmlCompilerTest
 	@Test( "test building Hex" )
 	public function testBuildingHex() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingHex.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/primitives/hex.xml" );
 		Assert.equals( 0xFFFFFF, this._getCoreFactory().locate( "i" ) );
 	}
 	
 	@Test( "test building Bool" )
 	public function testBuildingBool() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingBool.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/primitives/bool.xml" );
 		var b : Bool = this._getCoreFactory().locate( "b" );
 		Assert.isTrue( b );
 	}
@@ -191,7 +192,7 @@ class BasicXmlCompilerTest
 	@Test( "test building UInt" )
 	public function testBuildingUInt() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingUInt.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/primitives/uint.xml" );
 		var i : UInt = this._getCoreFactory().locate( "i" );
 		Assert.equals( 3, i );
 	}
@@ -199,7 +200,7 @@ class BasicXmlCompilerTest
 	@Test( "test building null" )
 	public function testBuildingNull() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testBuildingNull.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/primitives/null.xml" );
 		var result = this._getCoreFactory().locate( "value" );
 		Assert.isNull( result );
 	}
@@ -527,7 +528,7 @@ class BasicXmlCompilerTest
 	@Test( "test map-type attribute with Array" )
 	public function testMapTypeWithArray() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testMapTypeWithArray.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mapTypeWithArray.xml" );
 		
 		var intCollection = this._getCoreFactory().getInjector().getInstanceWithClassName( "Array<Int>", "intCollection" );
 		var uintCollection = this._getCoreFactory().getInjector().getInstanceWithClassName( "Array<UInt>", "intCollection" );
@@ -544,7 +545,7 @@ class BasicXmlCompilerTest
 	@Test( "test map-type attribute with instance" )
 	public function testMapTypeWithInstance() : Void
 	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/testMapTypeWithInstance.xml" );
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mapTypeWithInstance.xml" );
 		
 		var intInstance = this._getCoreFactory().getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<Int>", "intInstance" );
 		var uintInstance = this._getCoreFactory().getInjector().getInstanceWithClassName( "hex.mock.IMockInterfaceWithGeneric<UInt>", "intInstance" );
@@ -634,6 +635,11 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( instance, MockClass );
 		Assert.isInstanceOf( instance, IMockInterface );
 		Assert.equals( instance, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstance( IMockInterface, "instance" ) );
+	
+		var instance2 : MockClass = this._getCoreFactory().locate( "instance2" );
+		Assert.isNotNull( instance2 );
+		Assert.isInstanceOf( instance2, MockClass );
+		Assert.equals( instance2, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstanceWithClassName( 'hex.mock.MockModuleWithInternalType.GetInfosInternalTypedef', "instance2" ) );
 	}
 	
 	@Test( "test multi map-type attributes" )

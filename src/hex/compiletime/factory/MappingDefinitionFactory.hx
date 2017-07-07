@@ -4,7 +4,6 @@ package hex.compiletime.factory;
 import haxe.macro.Expr;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
-using hex.util.MacroUtil;
 using Lambda;
 
 /**

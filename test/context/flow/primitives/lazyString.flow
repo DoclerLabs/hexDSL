@@ -1,0 +1,8 @@
+@context( name = 'applicationContext' )
+{
+	@lazy
+	s = hex.mock.LazyProvider.provide( 'test' );
+	
+	@lazy
+	o = new hex.mock.LazyClass( 'test' );
+}

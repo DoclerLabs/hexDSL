@@ -1,0 +1,5 @@
+@context( name = 'applicationContext' )
+{
+	childContext2 = new Context( 'context/flow/static/beImportedMessage.flow', {message: childContext1.message, to: childContext1.name} );
+	childContext1 = new Context( 'context/flow/static/importedChildDependencyOwner.flow' );
+}

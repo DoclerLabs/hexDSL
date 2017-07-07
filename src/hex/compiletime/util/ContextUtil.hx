@@ -139,35 +139,45 @@ class ContextUtil
 		classExpr.pack = [ "hex", "context" ];
 		return classExpr;
 	}
-	
-	/**
-	 * Build a public class property
-	 * @param	instanceID 	Context ID that will become property's name
-	 * @param	typeName	Type of the context ID that will become property's type
-	 * @return 	class property as Field
-	 */
-	public static function buildInstanceField( instanceID : String, typeName : String ) : Field
+
+	public static function buildField( instanceID : String, ct : ComplexType, pos : haxe.macro.Expr.Position, lazy : Bool ) : Field
 	{
-		var newField : Field = 
+		return !lazy ?
 		{
 			name: instanceID,
-			pos: Context.currentPos(),
+			pos: pos,
+			kind: FVar( ct ),
+			access: [ APublic ]
+		}
+		:
+		{
+			name: instanceID,
+			pos: pos,
+			kind: FProp( 'get', 'null', ct ),
+			access: [ APublic ]
+		}
+	}
+	
+	public static function buildLazyField( instanceID : String, ct : ComplexType, body : Expr, pos : haxe.macro.Expr.Position ) : Field
+	{
+		var lazyField : Field = 
+		{
+			name: 'get_' + instanceID,
+			meta: [ { name: ":noCompletion", params: [], pos: pos } ],
+			pos: pos,
 			kind: null,
 			access: [ APublic ]
 		}
 		
-		newField.kind = FVar( switch ( typeName.split('<')[0] )
-		{
-			case "Array": 	
-				typeName.indexOf( '<' ) != -1 ?
-					TypeTools.toComplexType( Context.typeof( Context.parseInlineString( "new " + typeName + "()", Context.currentPos() ) ) ):
-					macro:Array<Dynamic>;
-					
-			case "null" | "Object": macro:Dynamic;
-			case _: 				MacroUtil.getComplexTypeFromString( typeName );
-		} );
+		lazyField.kind = FFun( 
+			{
+				args: [],
+				ret: ct,
+				expr: body
+			}
+		);
 		
-		return newField;
+		return lazyField;
 	}
 	
 	/**

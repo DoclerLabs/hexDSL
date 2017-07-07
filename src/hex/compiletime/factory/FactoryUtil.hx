@@ -1,10 +1,7 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Context;
-import hex.error.PrivateConstructorException;
-import hex.util.ArrayUtil;
-import hex.util.MacroUtil;
+import haxe.macro.*;
 
 /**
  * ...
@@ -12,11 +9,7 @@ import hex.util.MacroUtil;
  */
 class FactoryUtil 
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException( "This class can't be instantiated." );
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
 	static public function checkTypeParamsExist( typeParams : String, filePosition : haxe.macro.Expr.Position ) : Void
 	{

@@ -2,10 +2,6 @@ package hex.compiletime.factory;
 
 #if macro
 import haxe.macro.*;
-import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
-import hex.util.MacroUtil;
 
 /**
  * ...
@@ -13,13 +9,9 @@ import hex.util.MacroUtil;
  */
 class CodeFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var constructorVO = factoryVO.constructorVO;
 		var e = constructorVO.arguments.shift();
@@ -30,7 +22,7 @@ class CodeFactory
 		
 		constructorVO.type = try
 		{
-			MacroUtil.getFQCNFromComplexType( TypeTools.toComplexType( Context.typeof( e ) ) );
+			hex.util.MacroUtil.getFQCNFromComplexType( TypeTools.toComplexType( Context.typeof( e ) ) );
 		}
 		catch ( e: Dynamic )
 		{

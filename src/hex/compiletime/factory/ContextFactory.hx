@@ -1,9 +1,7 @@
 package hex.compiletime.factory;
-import hex.compiletime.flow.BasicStaticFlowCompiler;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
+import haxe.macro.*;
 
 /**
  * ...
@@ -24,11 +22,18 @@ class ContextFactory
 		var expr 		= desc.expr;
 		var arg 		= desc.arg;
 		
-		constructorVO.arguments = [ arg ];
-		var eArg = ArgumentFactory.build( factoryVO )[ 0 ];
-		constructorVO.type = className;
+		var e = if ( arg != null )
+		{
+			constructorVO.arguments = [ arg ];
+			var eArg = ArgumentFactory.build( factoryVO )[ 0 ];
+			macro var fx = function() { var code = $expr; code.execute($eArg); return code.locator; };
+		}
+		else
+		{
+			macro var fx = function() { var code = $expr; code.execute(); return code.locator; };
+		}
 		
-		var e = macro var fx = function() { var code = $expr; code.execute($eArg); return code.locator; };
+		constructorVO.type = className;
 		return macro @:mergeBlock @:pos( constructorVO.filePosition ) {  $e; var $idVar = cast fx(); };
 	}
 }

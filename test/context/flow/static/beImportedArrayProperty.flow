@@ -1,0 +1,6 @@
+@context( 	name = 'applicationContext'
+			params 	= {value: Int} )
+{
+	o = { p: a };
+	a = [value];
+}

@@ -6,6 +6,10 @@ package hex.vo;
  */
 class ConstructorVO extends AssemblerVO
 {
+	#if macro
+	public var cType : haxe.macro.Expr.ComplexType;
+	#end
+	
 	public var              ID              	: String;
 	public var              type (default, set) : String;
 	public var              className           : String;
@@ -16,6 +20,9 @@ class ConstructorVO extends AssemblerVO
 	public var              ref             	: String;
 	public var 				mapTypes			: Array<String>;
 	public var 				staticRef			: String;
+	
+	public var 				abstractType 		: String;
+	public var 				lazy 				: Bool;
 	
 	public var 				shouldAssign		= true;
 		

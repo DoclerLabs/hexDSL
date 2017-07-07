@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	childContext = new Context( 'context/flow/static/emptyChildImport.flow' );
+}

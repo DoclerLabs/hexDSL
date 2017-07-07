@@ -1,27 +1,17 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
-
 /**
  * ...
  * @author Francis Bourre
  */
 class StringFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : haxe.macro.Expr
 	{
 		var result : String 	= null;
-		
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;
 		var args 				= constructorVO.arguments;
@@ -32,14 +22,14 @@ class StringFactory
 		}
 		else
 		{
-			Context.error( "String instance cannot returns an empty String.", constructorVO.filePosition );
+			haxe.macro.Context.error( "String instance cannot returns an empty String.", constructorVO.filePosition );
 		}
 
 		if ( result == null )
 		{
 			result = "";
 			#if debug
-			Context.warning( "String instance cannot returns an empty String.", constructorVO.filePosition );
+			haxe.macro.Context.warning( "String instance cannot returns an empty String.", constructorVO.filePosition );
 			#end
 		}
 

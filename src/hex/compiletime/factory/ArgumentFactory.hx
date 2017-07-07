@@ -2,7 +2,6 @@ package hex.compiletime.factory;
 
 #if macro
 import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
 import hex.vo.ConstructorVO;
 import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
@@ -12,11 +11,7 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class ArgumentFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException( );
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Array<Expr>
 	{

@@ -10,6 +10,7 @@
   "url": "https://github.com/DoclerLabs/hexDSL",
   "dependencies":
   {
-    "hexinject": "git:https://github.com/DoclerLabs/hexInject.git"
+    "hexinject": "git:https://github.com/DoclerLabs/hexInject.git",
+    "tink_macro": "0.14.0"
   }
 }

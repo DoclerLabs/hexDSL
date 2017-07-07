@@ -131,7 +131,7 @@ class ParserCollection extends AbstractParserCollection<AbstractExprParser<hex.c
 	{
 		this._parserCollection.push( new StaticContextParser( this._assemblerExpression, this._isExtending ) );
 		this._parserCollection.push( new hex.compiletime.flow.parser.RuntimeParameterParser( this._runtimeParam ) );
-		this._parserCollection.push( new hex.compiletime.flow.parser.ImportContextParser( hex.compiletime.flow.parser.FlowExpressionParser.parser, this._assemblerExpression ) );
+		this._parserCollection.push( new hex.compiletime.flow.parser.ImportContextParser( hex.compiletime.flow.parser.FlowExpressionParser.parser ) );
 		this._parserCollection.push( new hex.compiletime.flow.parser.ObjectParser( hex.compiletime.flow.parser.FlowExpressionParser.parser, this._runtimeParam ) );
 		this._parserCollection.push( new Launcher( this._assemblerExpression, this._fileName, this._isExtending, this._runtimeParam ) );
 	}

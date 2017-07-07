@@ -2,9 +2,9 @@
 {
 	test = 
 	[
-		new hex.mock.MockClass(),
-		new hex.mock.AnotherMockClass(),
-		new hex.mock.MockClassWithIntGeneric( 3 ),
-		[ new hex.mock.MockClassWithIntGeneric( 4 ), 5 ]
+		[ new hex.mock.MockClassWithIntGeneric( 1 ) ],
+		[ new hex.mock.MockClassWithIntGeneric( 2 ) ],
+		[ new hex.mock.MockClassWithIntGeneric( 3 ) ],
+		[ new hex.mock.MockClassWithIntGeneric( 4 ), new hex.mock.MockClassWithIntGeneric( 5 ) ]
 	];
 }

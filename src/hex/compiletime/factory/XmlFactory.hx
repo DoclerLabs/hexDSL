@@ -1,11 +1,7 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import hex.error.PrivateConstructorException;
-import hex.util.MacroUtil;
-import hex.compiletime.basic.vo.FactoryVOTypeDef;
+import haxe.macro.*;
 
 /**
  * ...
@@ -13,13 +9,9 @@ import hex.compiletime.basic.vo.FactoryVOTypeDef;
  */
 class XmlFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Expr
+	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		var result : Expr 	= null;
 		var constructorVO 	= factoryVO.constructorVO;
@@ -40,11 +32,11 @@ class XmlFactory
 				}
 				else
 				{
-					var typePath 	= MacroUtil.getTypePath( factory, constructorVO.filePosition );
+					var typePath 	= hex.util.MacroUtil.getTypePath( factory, constructorVO.filePosition );
 					
 					//Assign right type description
 					var xmlContent = macro Xml.parse( $v { source } );
-					constructorVO.type = MacroUtil.getFQCNFromExpression( macro ( new $typePath() ).parse( $xmlContent ) );
+					constructorVO.type = hex.util.MacroUtil.getFQCNFromExpression( macro ( new $typePath() ).parse( $xmlContent ) );
 
 					result = macro 	@:pos( constructorVO.filePosition ) 
 									( new $typePath() ).parse( $xmlContent );

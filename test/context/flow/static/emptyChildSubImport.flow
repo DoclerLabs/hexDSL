@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	test = 'hello world';
+}
