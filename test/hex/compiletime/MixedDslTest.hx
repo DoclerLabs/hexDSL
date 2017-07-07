@@ -5,6 +5,7 @@ import hex.compiletime.flow.MockCustomStaticFlowParser;
 import hex.compiletime.xml.BasicStaticXmlCompiler;
 import hex.core.IApplicationAssembler;
 import hex.domain.ApplicationDomainDispatcher;
+import hex.mock.LazyProvider;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockRectangle;
 import hex.runtime.ApplicationAssembler;
@@ -31,7 +32,7 @@ class MixedDslTest
 		this._applicationAssembler.release();
 	}
 
-	@Test( "test Flow and Xml mixed" )
+	/*@Test( "test Flow and Xml mixed" )
 	public function testFlowAndXmlMixed() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multipleInstancesWithReferences.xml", "MixedDslTest_testFlowXmlMixed" );
@@ -105,5 +106,7 @@ class MixedDslTest
 		
 		Assert.equals( 30, code.locator.sum );
 		Assert.equals( 'width is 10 and height is 20. Sum is 30', code.locator.concatenation );
-	}
+	}*/
+	
+	
 }

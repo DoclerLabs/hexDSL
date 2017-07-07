@@ -1,7 +1,7 @@
 @context( name = 'applicationContext' )
 {
 	@lazy
-	i = hex.mock.LazyProvider.provide( -3 );
+	s = hex.mock.LazyProvider.provide( 'test' );
 	
 	@lazy
 	o = new hex.mock.LazyClass( 'test' );
