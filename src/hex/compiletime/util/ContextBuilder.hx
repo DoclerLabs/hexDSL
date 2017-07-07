@@ -40,7 +40,7 @@ class ContextBuilder
 			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ) );
 			
 			//Add a field for applicationContext with the name of the context.
-			definition.fields.push( ContextUtil.buildInstanceFieldWithClassName( applicationContextName, applicationContextClassName ) );
+			definition.fields.push( ContextUtil.buildInstanceFieldWithClassName( applicationContextName, applicationContextClassName, haxe.macro.Context.currentPos() ) );
 			
 			contextIteration = { iteration: 0, definition: definition, iDefinition: iDefinition, contextName: applicationContextName, contextClassName: applicationContextClassName, defined: false };
 			ContextBuilder._Iteration.set( applicationContextName, contextIteration );
@@ -90,16 +90,44 @@ class ContextBuilder
 	
 	//Each instance of the DSL is reprezented by a class property
 	// The name of the property is the context ID.
-	public function addFieldWithClassName( fieldName : String, className : String ) : Void
+	public function addFieldWithClassName( fieldName : String, className : String, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null ) : Void
 	{
-		var field = ContextUtil.buildInstanceFieldWithClassName( fieldName, className );
+		var field = ContextUtil.buildInstanceFieldWithClassName( fieldName, className, pos, lazyExpr!=null );
 		this._iteration.definition.fields.push( field );
+
+		if ( lazyExpr != null )
+		{
+			lazyExpr = macro @:pos( pos )
+			{
+				if ( this.$fieldName == null )
+				{
+					this.$fieldName = $lazyExpr;
+				}
+				return this.$fieldName;
+			}
+			var lazyField = ContextUtil.buildLazyFieldWithClassName( fieldName, className, lazyExpr, pos );
+			this._iteration.definition.fields.push( lazyField );
+		}
 	}
 	
-	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType ) : Void
+	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null ) : Void
 	{
-		var field = ContextUtil.buildInstanceField( fieldName, ct );
+		var field = ContextUtil.buildInstanceField( fieldName, ct, pos, lazyExpr!=null );
 		this._iteration.definition.fields.push( field );
+	
+		if ( lazyExpr != null )
+		{
+			lazyExpr = macro @:pos( pos )
+			{
+				if ( this.$fieldName == null )
+				{
+					this.$fieldName = $lazyExpr;
+				}
+				return this.$fieldName;
+			}
+			var lazyField = ContextUtil.buildLazyField( fieldName, ct, lazyExpr, pos );
+			this._iteration.definition.fields.push( lazyField );
+		}
 	}
 	
 	public function instantiate()
@@ -132,8 +160,12 @@ class ContextBuilder
 						interfaceExpr.fields.push( { name: field.name, kind: FVar( t, e ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
 						
 					case FFun( f ):
-						interfaceExpr.fields.push( { name: field.name, meta: [ { name: ":noCompletion", params: [], pos: haxe.macro.Context.currentPos() } ], kind: FFun( {args: f.args, ret:macro:Void, expr:null, params:f.params} ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
+						if ( field.name.indexOf('get_') != 0 )
+							interfaceExpr.fields.push( { name: field.name, meta: [ { name: ":noCompletion", params: [], pos: haxe.macro.Context.currentPos() } ], kind: FFun( {args: f.args, ret:f.ret, expr:null, params:f.params} ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
 
+					case FProp( get, set, t, e ):
+						interfaceExpr.fields.push( { name: field.name, kind: FProp( get, set, t ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
+						
 					case _:
 						haxe.macro.Context.error( 'field not handled here', haxe.macro.Context.currentPos() );
 				}
