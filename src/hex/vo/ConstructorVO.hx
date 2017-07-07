@@ -22,6 +22,7 @@ class ConstructorVO extends AssemblerVO
 	public var 				staticRef			: String;
 	
 	public var 				abstractType 		: String;
+	public var 				lazy 				: Bool;
 	
 	public var 				shouldAssign		= true;
 		

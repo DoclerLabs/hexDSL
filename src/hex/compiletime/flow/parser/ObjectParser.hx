@@ -35,19 +35,19 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 	{
 		switch ( e )
 		{
-			case macro $i { ident } = $value:
+			case macro $i{ ident } = $value:
 				constructorVO.ID = ident;
 				this._builder.build( OBJECT( this._getConstructorVO( constructorVO, value ) ) );
 			
-			case macro $i{ident}.$field = $assigned:	
+			case macro $i{ ident }.$field = $assigned:	
 				var propertyVO = this.parser.parseProperty( this.parser, ident, field, assigned );
 				this._builder.build( PROPERTY( propertyVO ) );
 			
-			case macro $i{ident}.$field( $a{params} ):
-				var args = params.map( function(param) return this.parser.parseArgument(this.parser, ident, param) );
+			case macro $i{ ident }.$field( $a{ params } ):
+				var args = params.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) );
 				this._builder.build( METHOD_CALL( new MethodCallVO( ident, field, args ) ) );
 			
-			case macro @inject_into($a { args } ) $e:
+			case macro @inject_into( $a{ args } ) $e:
 				constructorVO.injectInto = true;
 				this._parseExpression ( e, constructorVO );
 				
@@ -65,6 +65,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					case EConst(CString( abstractType )) : abstractType; 
 					case _: "";
 				}
+				this._parseExpression ( e, constructorVO );
+				
+			case macro @lazy( $a{ args } ) $e:
+				constructorVO.lazy = true;
 				this._parseExpression ( e, constructorVO );
 				
 			case _:
@@ -91,6 +95,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						//TODO remove
 						logger.error( 'Unknown expression' );
 						logger.debug( e.pos );
+						logger.debug( e );
 						logger.debug( e.expr );
 				}
 				

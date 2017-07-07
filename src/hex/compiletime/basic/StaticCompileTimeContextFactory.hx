@@ -15,21 +15,25 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		this._tryToRegisterModule( constructorVO );
 		this._parseInjectInto( constructorVO );
 		this._parseMapTypes( constructorVO );
-		
+
 		if ( constructorVO.abstractType != null )
 		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.abstractType );
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.abstractType, constructorVO.filePosition, (constructorVO.lazy?result:null) );
 		}
 		else if ( constructorVO.cType != null )
 		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, constructorVO.cType );
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, constructorVO.cType, constructorVO.filePosition, (constructorVO.lazy?result:null) );
 		}
 		else
 		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.type );
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.type, constructorVO.filePosition, (constructorVO.lazy?result:null) );
 		}
 
-		this._expressions.push( macro @:mergeBlock { $result;  coreFactory.register( $v { id }, $i { id } ); this.$id = $i { id }; } );
+		if ( !constructorVO.lazy )
+		{
+			this._expressions.push( macro @:mergeBlock { $result;  coreFactory.register( $v { id }, $i { id } ); this.$id = $i { id }; } );
+		}
+		
 		this._coreFactory.register( id, result );
 	}
 }

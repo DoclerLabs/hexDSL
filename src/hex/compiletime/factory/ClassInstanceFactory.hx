@@ -24,7 +24,15 @@ class ClassInstanceFactory
 	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );
 	static inline function _blankType( vo ) { vo.cType = tink.macro.Positions.makeBlankType( vo.filePosition ); return MacroUtil.getFQCNFromComplexType( vo.cType ); }
 	
-	public static inline function getResult( e, id, vo ) { var t = vo.cType != null ? vo.cType : _varType( vo.type, vo.filePosition ); return macro @:pos( vo.filePosition ) var $id : $t = $e; }
+	public static inline function getResult( e, id, vo ) 
+	{
+		return if ( vo.shouldAssign && !vo.lazy )
+		{
+			var t = vo.cType != null ? vo.cType : _varType( vo.type, vo.filePosition ); 
+			macro @:pos( vo.filePosition ) var $id : $t = $e;
+			
+		} else e;
+	}
 	
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
@@ -48,7 +56,7 @@ class ClassInstanceFactory
 		var staticRef 		= vo.staticRef;
 		var classType 		= MacroUtil.getClassType( vo.className, pos );
 		
-		if ( !vo.shouldAssign )
+		if ( !vo.shouldAssign && !vo.lazy )//TODO remove
 		{
 			return macro @:pos( pos ) new $typePath( $a { args } );
 		}
@@ -74,6 +82,7 @@ class ClassInstanceFactory
 						catch ( e : Dynamic ) 
 							try _fqcn( _staticCallFactory( pack, staticCall, factoryMethod, _nullArray( argsLength ) ) ) 
 								catch ( e : Dynamic ) _blankType( vo );
+					
 					getResult( e, id, vo );
 				}
 				else//factory method error
@@ -89,6 +98,7 @@ class ClassInstanceFactory
 					catch ( e : Dynamic ) 
 						try _fqcn( _staticCall( pack, staticCall, _nullArray( argsLength ) ) )
 							catch ( e : Dynamic ) _blankType( vo );
+
 				getResult( e, id, vo );
 			}
 			else//Standard instantiation
