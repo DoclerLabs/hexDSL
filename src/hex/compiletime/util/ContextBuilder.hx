@@ -40,7 +40,7 @@ class ContextBuilder
 			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ) );
 			
 			//Add a field for applicationContext with the name of the context.
-			definition.fields.push( ContextUtil.buildInstanceFieldWithClassName( applicationContextName, applicationContextClassName, haxe.macro.Context.currentPos() ) );
+			definition.fields.push( ContextUtil.buildField( applicationContextName, hex.util.MacroUtil.getComplexTypeFromString( applicationContextClassName ), haxe.macro.Context.currentPos(), false ) );
 			
 			contextIteration = { iteration: 0, definition: definition, iDefinition: iDefinition, contextName: applicationContextName, contextClassName: applicationContextClassName, defined: false };
 			ContextBuilder._Iteration.set( applicationContextName, contextIteration );
@@ -88,31 +88,9 @@ class ContextBuilder
 		ContextBuilder._Map.set( owner, new ContextBuilder( owner, applicationContextClassName ) );
 	}
 	
-	//Each instance of the DSL is reprezented by a class property
-	// The name of the property is the context ID.
-	public function addFieldWithClassName( fieldName : String, className : String, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null ) : Void
-	{
-		var field = ContextUtil.buildInstanceFieldWithClassName( fieldName, className, pos, lazyExpr!=null );
-		this._iteration.definition.fields.push( field );
-
-		if ( lazyExpr != null )
-		{
-			lazyExpr = macro @:pos( pos )
-			{
-				if ( this.$fieldName == null )
-				{
-					this.$fieldName = $lazyExpr;
-				}
-				return this.$fieldName;
-			}
-			var lazyField = ContextUtil.buildLazyFieldWithClassName( fieldName, className, lazyExpr, pos );
-			this._iteration.definition.fields.push( lazyField );
-		}
-	}
-	
 	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null ) : Void
 	{
-		var field = ContextUtil.buildInstanceField( fieldName, ct, pos, lazyExpr!=null );
+		var field = ContextUtil.buildField( fieldName, ct, pos, lazyExpr!=null );
 		this._iteration.definition.fields.push( field );
 	
 		if ( lazyExpr != null )

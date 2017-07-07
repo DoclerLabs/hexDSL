@@ -139,33 +139,8 @@ class ContextUtil
 		classExpr.pack = [ "hex", "context" ];
 		return classExpr;
 	}
-	
-	/**
-	 * Build a public class property
-	 * @param	instanceID 	Context ID that will become property's name
-	 * @param	typeName	Type of the context ID that will become property's type
-	 * @return 	class property as Field
-	 */
-	public static function buildInstanceFieldWithClassName( instanceID : String, typeName : String, pos : haxe.macro.Expr.Position, lazy : Bool = false ) : Field
-	{
-		return buildInstanceField( instanceID, ContextUtil.getComplexType( typeName, pos ), pos, lazy );
-	}
-	
-	static public function getComplexType( typeName : String, pos : haxe.macro.Expr.Position )
-	{
-		return switch ( typeName.split('<')[0] )
-		{
-			case "Array": 	
-				typeName.indexOf( '<' ) != -1 ?
-					TypeTools.toComplexType( Context.typeof( Context.parseInlineString( "new " + typeName + "()", pos ) ) ):
-					macro:Array<Dynamic>;
-					
-			case "null" | "Object": macro:Dynamic;
-			case _: 				MacroUtil.getComplexTypeFromString( typeName );
-		}
-	}
-	
-	public static function buildInstanceField( instanceID : String, ct : ComplexType, pos : haxe.macro.Expr.Position, lazy : Bool ) : Field
+
+	public static function buildField( instanceID : String, ct : ComplexType, pos : haxe.macro.Expr.Position, lazy : Bool ) : Field
 	{
 		return !lazy ?
 		{
@@ -181,28 +156,6 @@ class ContextUtil
 			kind: FProp( 'get', 'null', ct ),
 			access: [ APublic ]
 		}
-	}
-	
-	public static function buildLazyFieldWithClassName( instanceID : String, typeName : String, body : Expr, pos : haxe.macro.Expr.Position ) : Field
-	{
-		var kind = FFun( 
-			{
-				args: [],
-				ret: ContextUtil.getComplexType( typeName, pos ),
-				expr: body
-			}
-		);
-		
-		var lazyField = 
-		{
-			name: 'get_' + instanceID,
-			meta: [ { name: ":noCompletion", params: [], pos: pos } ],
-			pos: pos,
-			kind: kind,
-			access: [ APublic ]
-		}
-
-		return lazyField;
 	}
 	
 	public static function buildLazyField( instanceID : String, ct : ComplexType, body : Expr, pos : haxe.macro.Expr.Position ) : Field

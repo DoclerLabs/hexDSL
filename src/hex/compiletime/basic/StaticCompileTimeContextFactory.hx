@@ -18,7 +18,7 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 
 		if ( constructorVO.abstractType != null )
 		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.abstractType, constructorVO.filePosition, (constructorVO.lazy?result:null) );
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, ContextFactoryUtil.getComplexType( constructorVO.abstractType, constructorVO.filePosition ), constructorVO.filePosition, (constructorVO.lazy?result:null) );
 		}
 		else if ( constructorVO.cType != null )
 		{
@@ -26,7 +26,7 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		}
 		else
 		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addFieldWithClassName( id, constructorVO.type, constructorVO.filePosition, (constructorVO.lazy?result:null) );
+			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, ContextFactoryUtil.getComplexType( constructorVO.type, constructorVO.filePosition ), constructorVO.filePosition, (constructorVO.lazy?result:null) );
 		}
 
 		if ( !constructorVO.lazy )
