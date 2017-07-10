@@ -19,4 +19,9 @@ class MockClass implements IMockInterface implements IAnotherMockInterface
 	{
 		return 'infos';
 	}
+	
+	static public function getInfos2(arg:String) : String
+	{
+		return 'infos';
+	}
 }

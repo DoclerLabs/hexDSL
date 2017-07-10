@@ -683,7 +683,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test multi map-type attributes" )
 	public function testMultiMapTypeAttributes() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/multiMapTypeAttributes.flow", "BasicStaticFlowCompiler_testMultiMapTypeAttributes" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/multiMapTypeAttributes.flow", "BasicStaticFlowCompiler_testMultiMapTypeAttributes" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClass );
@@ -692,6 +692,19 @@ class BasicStaticFlowCompilerTest
 		
 		Assert.equals( code.locator.instance, code.applicationContext.getInjector().getInstance( IMockInterface, "instance" ) );
 		Assert.equals( code.locator.instance, code.applicationContext.getInjector().getInstance( IAnotherMockInterface, "instance" ) );
+		
+		Assert.equals( code.locator.f, code.applicationContext.getInjector().getInstanceWithClassName( "String->String", "f" ) );
+		Assert.equals( code.locator.f, code.applicationContext.getInjector().getInstanceWithClassName( "hex.mock.MockModuleWithInternalType.FunctionSignature", "f" ) );
+	
+		Assert.equals( code.locator.f2, code.applicationContext.getInjector().getInstanceWithClassName( "String->String", "f2" ) );
+		Assert.equals( code.locator.f2, code.applicationContext.getInjector().getInstanceWithClassName( "hex.mock.MockModuleWithInternalType.FunctionSignature", "f2" ) );
+		
+		Assert.equals( code.locator.f, code.locator.instanceWithSubType.toInject1 );
+		Assert.equals( code.locator.f2, code.locator.instanceWithSubType.toInject2 );
+		Assert.equals( code.locator.f, code.locator.instanceWithSubType.toInject1b );
+		Assert.equals( code.locator.f2, code.locator.instanceWithSubType.toInject2b );
+		Assert.equals( code.locator.f, code.locator.instanceWithSubType.toInject1c );
+		Assert.equals( code.locator.f2, code.locator.instanceWithSubType.toInject2c );
 	}
 	
 	@Test( "test building Map with class reference" )
@@ -1200,6 +1213,20 @@ class BasicStaticFlowCompilerTest
 		Assert.isNull( LazyClass.value  );
 		Assert.isNotNull( code.locator.o );
 		Assert.equals( 'test', LazyClass.value  );
+	}
+	
+	@Test( "test composite runtine parameters" )
+	public function testCompositeRuntimeParameters() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/compositeRuntimeParams.flow", "BasicStaticFlowCompiler_testCompositeRuntimeParameters" );
+		var mock = new MockClass();
+		code.execute( { p:{x: 30, y: 40}, test:{p:mock} } );
+		
+		Assert.isInstanceOf( code.locator.size, Size );
+		Assert.equals( 30, code.locator.size.width );
+		Assert.equals( 40, code.locator.size.height );
+		
+		Assert.equals( mock, code.locator.alias );
 	}
 }
 

@@ -1,5 +1,7 @@
 package hex.mock;
 
+typedef FunctionSignature = String->String;
+
 /**
  * ...
  * @author Francis Bourre
@@ -7,11 +9,16 @@ package hex.mock;
 class MockModuleWithInternalType 
 {
 
-	public function new() 
+/*	public function new() 
 	{
 		
-	}
+	}*/
 	
+	
+	static public function getInfos2(arg:String) : String
+	{
+		return 'infos';
+	}
 }
 
 typedef GetInfosInternalTypedef =
