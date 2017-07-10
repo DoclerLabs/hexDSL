@@ -1,0 +1,9 @@
+@context( 	name = 'applicationContext',
+			params = {p:{x:Float, 
+			y:Float}
+			, test:{p: hex.mock.IMockInterface}
+			} )
+{
+	size = new hex.structures.Size( p.x, p.y );
+	alias = test.p;
+}

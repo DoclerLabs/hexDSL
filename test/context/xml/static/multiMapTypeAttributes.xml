@@ -1,0 +1,6 @@
+<root name="applicationContext">
+    <module id="instanceWithSubType" type="hex.mock.MockClassWithInjectedMethod" inject-into="true" />
+    <module id="instance" type="hex.mock.MockClass" map-type="hex.mock.IMockInterface; hex.mock.IAnotherMockInterface"/>
+    <method id="f" static-ref="hex.mock.MockClass.getInfos2" map-type="String->String; hex.mock.MockModuleWithInternalType.FunctionSignature"/>
+    <method id="f2" static-ref="hex.mock.MockModuleWithInternalType.getInfos2" map-type="String->String; hex.mock.MockModuleWithInternalType.FunctionSignature"/>
+</root>

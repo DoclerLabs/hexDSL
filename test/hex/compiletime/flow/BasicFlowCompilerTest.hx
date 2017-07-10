@@ -25,9 +25,9 @@ import hex.mock.MockFruitVO;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
+import hex.mock.MockServiceProvider;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
-import hex.mock.MockServiceProvider;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -645,16 +645,31 @@ class BasicFlowCompilerTest
 	@Test( "test multi map-type attributes" )
 	public function testMultiMapTypeAttributes() : Void
 	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/multiMapTypeAttributes.flow" );
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/multiMapTypeAttributes.flow" );
 
-		var instance : MockClass = this._getCoreFactory().locate( "instance" );
-		Assert.isNotNull( instance );
+		var instance = this._getCoreFactory().locate( "instance" );
+		var f = this._getCoreFactory().locate( "f" );
+		var f2 = this._getCoreFactory().locate( "f2" );
+		
 		Assert.isInstanceOf( instance, MockClass );
 		Assert.isInstanceOf( instance, IMockInterface );
 		Assert.isInstanceOf( instance, IAnotherMockInterface );
-		
+
 		Assert.equals( instance, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstance( IMockInterface, "instance" ) );
 		Assert.equals( instance, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstance( IAnotherMockInterface, "instance" ) );
+		
+		Assert.equals( f, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstanceWithClassName( "String->String", "f" ) );
+		Assert.equals( f, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstanceWithClassName( "hex.mock.MockModuleWithInternalType.FunctionSignature", "f" ) );
+	
+		Assert.equals( f2, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstanceWithClassName( "String->String", "f2" ) );
+		Assert.equals( f2, this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext ).getInjector().getInstanceWithClassName( "hex.mock.MockModuleWithInternalType.FunctionSignature", "f2" ) );
+		
+		Assert.equals( f, this._getCoreFactory().locate( "instanceWithSubType.toInject1" ) );
+		Assert.equals( f2, this._getCoreFactory().locate( "instanceWithSubType.toInject2" ) );
+		Assert.equals( f, this._getCoreFactory().locate( "instanceWithSubType.toInject1b" ) );
+		Assert.equals( f2, this._getCoreFactory().locate( "instanceWithSubType.toInject2b" ) );
+		Assert.equals( f, this._getCoreFactory().locate( "instanceWithSubType.toInject1c" ) );
+		Assert.equals( f2, this._getCoreFactory().locate( "instanceWithSubType.toInject2c" ) );
 	}
 	
 	@Test( "test building Map with class reference" )

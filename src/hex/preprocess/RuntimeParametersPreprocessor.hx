@@ -20,7 +20,7 @@ class RuntimeParametersPreprocessor
 		this._param 	= null;
 		this._initBlock = [];
 		
-		var result = ~/(?:,\s*)?params\s*=\s*\{([^}]+|\n)}/.map
+		var result = ~/(?:,\s*)?params\s*=\s*{((?:{[^}]*}|[^{}]+)*)}/.map
 		( 
 			dsl.data, 
 			this._parse
@@ -35,10 +35,10 @@ class RuntimeParametersPreprocessor
 	}
 	
 	function _parse( ereg : EReg ) : String
-	{
+	{//trace( ereg );
 		var matched = ereg.matched( 1 );
 		var startPos =  ereg.matchedPos().pos + ereg.matched( 0 ).indexOf( '{' ) -6;
-		
+	//trace( matched );	
 		//short way but not the best way for displaying errors with right positions
 		var e = Context.parse( "var o:{" + matched + "}", Context.makePosition( { min: startPos, max: startPos+matched.length, file: this._dsl.path } ) );
 
@@ -53,6 +53,7 @@ class RuntimeParametersPreprocessor
 		//Return empty spaces to not modify file positions
 		var result = "";
 		for ( i in 0...matched.length ) result += " ";
+		//trace( this._param );
 		return result;
 	}
 	
@@ -72,11 +73,13 @@ class RuntimeParametersPreprocessor
 								case FVar( t ):
 									return MacroUtil.getFQCNFromComplexType( t );
 									
-								case _:
+								case wtf:
+									trace( field, wtf );
 							}
 						}
 					}
-				case _:
+				case wtf:
+					//trace( field, wtf );
 			}
 		}
 		else
@@ -103,11 +106,13 @@ class RuntimeParametersPreprocessor
 						case FVar( t ):
 							a.push( { name: e .name, type: MacroUtil.getFQCNFromComplexType( t ), pos: e.pos } );
 							
-						case _:
+						case wtf:
+							trace( runtimeParam.type, wtf );
 					}
 
 				}
-			case _:
+			case wtf:
+				//trace( runtimeParam.type, wtf );
 		}
 		
 		return a;

@@ -15,19 +15,14 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		this._tryToRegisterModule( constructorVO );
 		this._parseInjectInto( constructorVO );
 		this._parseMapTypes( constructorVO );
+		
+		var type = 
+		if ( constructorVO.abstractType != null ) 	ContextFactoryUtil.getComplexType( constructorVO.abstractType, constructorVO.filePosition );
+			else if ( constructorVO.cType != null ) constructorVO.cType;
+				else 								ContextFactoryUtil.getComplexType( constructorVO.type, constructorVO.filePosition );
 
-		if ( constructorVO.abstractType != null )
-		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, ContextFactoryUtil.getComplexType( constructorVO.abstractType, constructorVO.filePosition ), constructorVO.filePosition, (constructorVO.lazy?result:null) );
-		}
-		else if ( constructorVO.cType != null )
-		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, constructorVO.cType, constructorVO.filePosition, (constructorVO.lazy?result:null) );
-		}
-		else
-		{
-			hex.compiletime.util.ContextBuilder.getInstance( this ).addField( id, ContextFactoryUtil.getComplexType( constructorVO.type, constructorVO.filePosition ), constructorVO.filePosition, (constructorVO.lazy?result:null) );
-		}
+		hex.compiletime.util.ContextBuilder.getInstance( this )
+			.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?result:null) );
 
 		if ( !constructorVO.lazy )
 		{

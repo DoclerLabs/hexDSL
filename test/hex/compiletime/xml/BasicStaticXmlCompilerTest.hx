@@ -670,7 +670,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test multi map-type attributes" )
 	public function testMultiMapTypeAttributes() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/multiMapTypeAttributes.xml", "BasicStaticXmlCompiler_testMultiMapTypeAttributes" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/multiMapTypeAttributes.xml", "BasicStaticXmlCompiler_testMultiMapTypeAttributes" );
 		code.execute();
 
 		Assert.isInstanceOf( code.locator.instance, MockClass );
@@ -679,6 +679,19 @@ class BasicStaticXmlCompilerTest
 		
 		Assert.equals( code.locator.instance, code.applicationContext.getInjector().getInstance( IMockInterface, "instance" ) );
 		Assert.equals( code.locator.instance, code.applicationContext.getInjector().getInstance( IAnotherMockInterface, "instance" ) );
+		
+		Assert.equals( code.locator.f, code.applicationContext.getInjector().getInstanceWithClassName( "String->String", "f" ) );
+		Assert.equals( code.locator.f, code.applicationContext.getInjector().getInstanceWithClassName( "hex.mock.MockModuleWithInternalType.FunctionSignature", "f" ) );
+	
+		Assert.equals( code.locator.f2, code.applicationContext.getInjector().getInstanceWithClassName( "String->String", "f2" ) );
+		Assert.equals( code.locator.f2, code.applicationContext.getInjector().getInstanceWithClassName( "hex.mock.MockModuleWithInternalType.FunctionSignature", "f2" ) );
+		
+		Assert.equals( code.locator.f, code.locator.instanceWithSubType.toInject1 );
+		Assert.equals( code.locator.f2, code.locator.instanceWithSubType.toInject2 );
+		Assert.equals( code.locator.f, code.locator.instanceWithSubType.toInject1b );
+		Assert.equals( code.locator.f2, code.locator.instanceWithSubType.toInject2b );
+		Assert.equals( code.locator.f, code.locator.instanceWithSubType.toInject1c );
+		Assert.equals( code.locator.f2, code.locator.instanceWithSubType.toInject2c );
 	}
 	
 	@Test( "test building Map with class reference" )
