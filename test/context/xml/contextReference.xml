@@ -2,4 +2,16 @@
     <bean id="contextHolder" type="hex.mock.MockContextHolder">
         <argument ref="this"/>
     </bean>
+	
+	<bean id="injector" type="hex.mock.MockContextUtil" static-call="getInjector">
+		<argument ref="this"/>
+	</bean>
+	
+	<bean ref="injector">
+		<method-call name="mapClassNameToValue">
+            <argument value="hex.mock.MockContextHolder"/>
+            <argument ref="contextHolder"/>
+            <argument value="contextHolder"/>
+        </method-call>
+	</bean>
 </root>
