@@ -147,11 +147,9 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 
 			case EBlock([]): // empty object
 				constructorVO.type = ContextTypeList.OBJECT;
-				constructorVO.arguments = [];
 
 			case EObjectDecl( fields ):
 				constructorVO.type = ContextTypeList.OBJECT;
-				constructorVO.arguments = [];
 				fields.map( function(field) this._builder.build( 
 					PROPERTY( this.parser.parseProperty( this.parser, constructorVO.ID, field.field, field.expr ) )
 				) );

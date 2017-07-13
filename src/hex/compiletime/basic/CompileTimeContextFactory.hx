@@ -95,6 +95,7 @@ class CompileTimeContextFactory
 	{
 		this.dispatchAssemblingStart();
 		this.buildAllObjects();
+		this.buildAllProperties();
 		this.callAllMethods();
 		this.callModuleInitialisation();
 		this.dispatchAssemblingEnd();
@@ -153,7 +154,7 @@ class CompileTimeContextFactory
 	public function registerPropertyVO( propertyVO : PropertyVO ) : Void
 	{
 		var id = propertyVO.ownerID;
-		
+
 		if ( this._propertyVOLocator.isRegisteredWithKey( id ) )
 		{
 			this._propertyVOLocator.locate( id ).push( propertyVO );
@@ -201,6 +202,20 @@ class CompileTimeContextFactory
 		
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.OBJECTS_BUILT" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+	}
+	
+	public function buildProperty( key : String ) : Void
+	{
+		if ( this._propertyVOLocator.isRegisteredWithKey( key ) )
+		{
+			this._propertyVOLocator.locate( key )
+				.map( function( property ) this._expressions.push( macro @:mergeBlock ${ PropertyFactory.build( this, property ) } ) );
+		}
+	}
+	
+	public function buildAllProperties() : Void
+	{
+		this._propertyVOLocator.keys().map( this.buildProperty );
 	}
 	
 	public function registerMethodCallVO( methodCallVO : MethodCallVO ) : Void

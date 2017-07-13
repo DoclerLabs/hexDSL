@@ -176,6 +176,8 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 1.75, obj.height );
 		Assert.isTrue( obj.isWorking );
 		Assert.isFalse( obj.isSleeping );
+		
+		Assert.isNotNull( code.locator.emptyObj );
 	}
 	
 	@Test( "test building simple instance without arguments" )
@@ -876,7 +878,6 @@ class BasicStaticFlowCompilerTest
 
 		Assert.isInstanceOf( code.locator.instance, MockClassWithProperty );
 		Assert.equals( "default value", code.locator.instance.property );
-
 
 		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleReferenceWithProperty.flow" );
 		code2.execute();

@@ -1,7 +1,10 @@
 package hex.compiletime.basic;
 
 #if macro
+import hex.collection.Locator;
 import hex.compiletime.basic.vo.FactoryVOTypeDef;
+import hex.core.IApplicationContext;
+import hex.core.ICoreFactory;
 import hex.vo.ConstructorVO;
 
 /**
@@ -10,6 +13,37 @@ import hex.vo.ConstructorVO;
  */
 class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 {
+	static var _coreFactories : Map<String, ICoreFactory> = new Map();
+	
+	override public function init( applicationContext : IApplicationContext ) : Void
+	{
+		if ( !this._isInitialized )
+		{
+			this._isInitialized = true;
+			
+			this._applicationContext 				= applicationContext;
+			this._coreFactory 						= applicationContext.getCoreFactory();
+
+			if ( !StaticCompileTimeContextFactory._coreFactories.exists( applicationContext.getName() ) )
+			{
+				StaticCompileTimeContextFactory._coreFactories.set( this._applicationContext.getName(), cast ( applicationContext.getCoreFactory(), CompileTimeCoreFactory ) );
+			}
+			
+			this._coreFactory = StaticCompileTimeContextFactory._coreFactories.get( this._applicationContext.getName() );
+
+			this._constructorVOLocator 				= new Locator();
+			this._propertyVOLocator 				= new Locator();
+			this._methodCallVOLocator 				= new Locator();
+			this._typeLocator 						= new Locator();
+			this._moduleLocator 					= new Locator();
+			this._mappedTypes 						= [];
+			this._injectedInto 						= [];
+			this._factoryMap 						= hex.compiletime.basic.BasicCompileTimeSettings.factoryMap;
+			
+			this._coreFactory.addListener( this );
+		}
+	}
+	
 	override function _buildVO( constructorVO : ConstructorVO, id : String, result : Any ) : Void
 	{
 		this._tryToRegisterModule( constructorVO );
