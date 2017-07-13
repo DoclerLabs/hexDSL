@@ -176,8 +176,10 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 1.75, obj.height );
 		Assert.isTrue( obj.isWorking );
 		Assert.isFalse( obj.isSleeping );
+		Assert.deepEquals( [1, 2], code.locator.obj.data );
 		
 		Assert.isNotNull( code.locator.emptyObj );
+		
 	}
 	
 	@Test( "test building simple instance without arguments" )

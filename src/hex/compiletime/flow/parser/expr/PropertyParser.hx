@@ -22,7 +22,7 @@ class PropertyParser
 		var propertyVO 	: PropertyVO;
 		var type 		: String;
 		var ref 		: String;
-		
+
 		switch( assigned.expr )
 		{
 			case EConst(CIdent(v)):
@@ -53,6 +53,12 @@ class PropertyParser
 				
 			case EConst(CString(v)):
 				propertyVO = new PropertyVO( ident, fieldName, v, ContextTypeList.STRING );
+				
+			case EArrayDecl( values ):
+				var valueToBuild = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );
+				var it = values.iterator();
+				while ( it.hasNext() ) valueToBuild.arguments.push( parser.parseArgument( parser, ident, it.next() ) );
+				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.ARRAY, valueToBuild );
 				
 			case EField( e, ff ):
 				

@@ -1,5 +1,5 @@
 @context( name = 'applicationContext' )
 {
 	emptyObj = {};
-	obj = { name: "Francis", age: 44, height: 1.75, isWorking: true, isSleeping: false };
+	obj = { name: "Francis", age: 44, height: 1.75, isWorking: true, isSleeping: false, data:[1, 2] };
 }
