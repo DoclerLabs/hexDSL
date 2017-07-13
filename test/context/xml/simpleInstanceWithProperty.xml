@@ -1,0 +1,5 @@
+<root name="applicationContext">
+	<bean id="instance" type="hex.mock.MockClassWithProperty">
+		<property name="property" value="default value"/>
+	</bean>
+</root>

@@ -1,0 +1,5 @@
+@context( name = 'applicationContext' )
+{
+	instance = new hex.mock.MockClassWithProperty();
+	instance.property = "default value";
+}

@@ -209,7 +209,7 @@ class BasicFlowCompilerTest
 	public function testBuildingAnonymousObject() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/anonymousObject.flow" );
-		var obj : Dynamic = this._getCoreFactory().locate( "obj" );
+		var obj = this._getCoreFactory().locate( "obj" );
 
 		Assert.equals( "Francis", obj.name );
 		Assert.equals( 44, obj.age );
@@ -217,6 +217,9 @@ class BasicFlowCompilerTest
 		Assert.isTrue( obj.isWorking );
 		Assert.isFalse( obj.isSleeping );
 		Assert.equals( 1.75, this._getCoreFactory().locate( "obj.height" ) );
+		
+		var emptyObject = this._getCoreFactory().locate( "emptyObj" );
+		Assert.isNotNull( emptyObject );
 	}
 
 	@Test( "test building simple instance without arguments" )
@@ -694,11 +697,20 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}
-	
+
 	@Test( "test recursive property reference" )
 	public function testRecursivePropertyReference() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyReference.flow" );
+
+		Assert.equals( 'property', this._getCoreFactory().locate( "oClass" ).property );
+		Assert.equals( 'property', this._getCoreFactory().locate( "oDynamic" ).p );
+	}
+
+	@Test( "test recursive property reference to reference" )
+	public function testRecursivePropertyReferenceToReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyReferenceToReference.flow" );
 
 		Assert.equals( 'property', this._getCoreFactory().locate( "oClass" ).property );
 		Assert.equals( 'property', this._getCoreFactory().locate( "oDynamic" ).p );

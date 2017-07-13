@@ -1,0 +1,4 @@
+@context( name = 'applicationContext' )
+{
+	instance.property = "new value";
+}

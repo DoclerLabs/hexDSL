@@ -20,6 +20,7 @@ import hex.mock.MockClass;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockClassWithProperty;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
@@ -175,6 +176,10 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 1.75, obj.height );
 		Assert.isTrue( obj.isWorking );
 		Assert.isFalse( obj.isSleeping );
+		Assert.deepEquals( [1, 2], code.locator.obj.data );
+		
+		Assert.isNotNull( code.locator.emptyObj );
+		
 	}
 	
 	@Test( "test building simple instance without arguments" )
@@ -726,13 +731,23 @@ class BasicStaticFlowCompilerTest
 		Assert.isInstanceOf( code.locator.mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, code.locator.mockObject.rectangle.x );
 	}
-	
+
 	@Test( "test recursive property reference" )
 	public function testRecursivePropertyReference() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/propertyReference.flow", "BasicStaticFlowCompiler_testRecursivePropertyReference" );
 		code.execute();
-		
+
+		Assert.equals( 'property', code.locator.oClass.property );
+		Assert.equals( 'property', code.locator.oDynamic.p );
+	}
+
+	@Test( "test recursive property reference to reference" )
+	public function testRecursivePropertyReferenceToReference() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/propertyReferenceToReference.flow", "BasicStaticFlowCompiler_testRecursivePropertyReferenceToReference" );
+		code.execute();
+
 		Assert.equals( 'property', code.locator.oClass.property );
 		Assert.equals( 'property', code.locator.oDynamic.p );
 	}
@@ -834,27 +849,43 @@ class BasicStaticFlowCompilerTest
 		
 		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
 	}
-	
+
 	@Test( "test recursive static calls" )
 	public function testRecursiveStaticCalls() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithStaticMethodAndArguments.flow", "BasicStaticFlowCompiler_testRecursiveStaticCalls" );
 		code.execute();
-		
+
 		Assert.isInstanceOf( code.locator.rect, MockRectangle );
 		Assert.equals( 10, code.locator.rect.x );
 		Assert.equals( 20, code.locator.rect.y );
 		Assert.equals( 30, code.locator.rect.width );
 		Assert.equals( 40, code.locator.rect.height );
-		
+
 		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/testRecursiveStaticCalls.flow" );
 		code2.execute();
-		
+
 		Assert.isInstanceOf( code2.locator.rect2, MockRectangle );
 		Assert.equals( 10, code2.locator.rect2.x );
 		Assert.equals( 20, code2.locator.rect2.y );
 		Assert.equals( 30, code2.locator.rect2.width );
 		Assert.equals( 40, code2.locator.rect2.height );
+	}
+
+	@Test( "test property on reference node" )
+	public function testPropertyOnReferenceNode() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/simpleInstanceWithProperty.flow", "BasicStaticFlowCompiler_testPropertyOnReferenceNode" );
+		code.execute();
+
+		Assert.isInstanceOf( code.locator.instance, MockClassWithProperty );
+		Assert.equals( "default value", code.locator.instance.property );
+
+		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleReferenceWithProperty.flow" );
+		code2.execute();
+
+		Assert.isInstanceOf( code2.locator.instance, MockClassWithProperty );
+		Assert.equals( "new value", code2.locator.instance.property );
 	}
 	
 	@Test( "test runtime arguments" )
