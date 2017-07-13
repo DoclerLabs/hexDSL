@@ -694,7 +694,7 @@ class BasicXmlCompilerTest
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}
-	
+
 	@Test( "test recursive property reference" )
 	public function testRecursivePropertyReference() : Void
 	{
@@ -702,7 +702,19 @@ class BasicXmlCompilerTest
 
 		var oClass : hex.mock.MockClassWithProperty = this._locate( "oClass" );
 		var oDynamic : Dynamic = this._locate( "oDynamic" );
-		
+
+		Assert.equals( 'property', oClass.property );
+		Assert.equals( 'property', oDynamic.p );
+	}
+
+	@Test( "test recursive property reference to reference" )
+	public function testRecursivePropertyReferenceToReference() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/propertyReferenceToReference.xml" );
+
+		var oClass : hex.mock.MockClassWithProperty = this._locate( "oClass" );
+		var oDynamic : Dynamic = this._locate( "oDynamic" );
+
 		Assert.equals( 'property', oClass.property );
 		Assert.equals( 'property', oDynamic.p );
 	}

@@ -18,6 +18,7 @@ import hex.mock.MockClass;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockClassWithProperty;
 import hex.mock.MockMethodCaller;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
@@ -280,7 +281,7 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( width, rect.size.x );
 		Assert.equals( height, rect.size.y );
 	}
-	
+
 	@Test( "test building multiple instances with references" )
 	public function testBuildingMultipleInstancesWithReferences() : Void
 	{
@@ -713,13 +714,23 @@ class BasicStaticXmlCompilerTest
 		Assert.isInstanceOf( code.locator.mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, code.locator.mockObject.rectangle.x );
 	}
-	
+
 	@Test( "test recursive property reference" )
 	public function testRecursivePropertyReference() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/propertyReference.xml", "BasicStaticXmlCompiler_testRecursivePropertyReference" );
 		code.execute();
-		
+
+		Assert.equals( 'property', code.locator.oClass.property );
+		Assert.equals( 'property', code.locator.oDynamic.p );
+	}
+
+	@Test( "test recursive property reference to reference" )
+	public function testRecursivePropertyReferenceToReference() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/propertyReferenceToReference.xml", "BasicStaticXmlCompiler_testRecursivePropertyReferenceToReference" );
+		code.execute();
+
 		Assert.equals( 'property', code.locator.oClass.property );
 		Assert.equals( 'property', code.locator.oDynamic.p );
 	}
@@ -862,27 +873,43 @@ class BasicStaticXmlCompilerTest
 		
 		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
 	}
-	
+
 	@Test( "test recursive static calls" )
 	public function testRecursiveStaticCalls() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/instanceWithStaticMethodAndArguments.xml", "BasicStaticXmlCompiler_testRecursiveStaticCalls" );
 		code.execute();
-		
+
 		Assert.isInstanceOf( code.locator.rect, MockRectangle );
 		Assert.equals( 10, code.locator.rect.x );
 		Assert.equals( 20, code.locator.rect.y );
 		Assert.equals( 30, code.locator.rect.width );
 		Assert.equals( 40, code.locator.rect.height );
-		
+
 		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/recursiveStaticCalls.xml" );
 		code2.execute();
-		
+
 		Assert.isInstanceOf( code2.locator.rect2, MockRectangle );
 		Assert.equals( 10, code2.locator.rect2.x );
 		Assert.equals( 20, code2.locator.rect2.y );
 		Assert.equals( 30, code2.locator.rect2.width );
 		Assert.equals( 40, code2.locator.rect2.height );
+	}
+
+	@Test( "test property on reference node" )
+	public function testPropertyOnReferenceNode() : Void
+	{
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithProperty.xml", "BasicStaticXmlCompiler_testPropertyOnReferenceNode" );
+		code.execute();
+
+		Assert.isInstanceOf( code.locator.instance, MockClassWithProperty );
+		Assert.equals( "default value", code.locator.instance.property );
+
+		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/simpleReferenceWithProperty.xml" );
+		code2.execute();
+
+		Assert.isInstanceOf( code2.locator.instance, MockClassWithProperty );
+		Assert.equals( "new value", code2.locator.instance.property );
 	}
 	
 	@Test( "test runtime arguments" )

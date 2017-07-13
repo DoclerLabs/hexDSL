@@ -1,0 +1,5 @@
+<root name="applicationContext">
+	<bean ref="instance">
+		<property name="property" value="new value"/>
+	</bean>
+</root>

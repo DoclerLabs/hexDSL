@@ -694,11 +694,20 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( mockObject, MockObjectWithRegtangleProperty );
 		Assert.equals( 1.5, mockObject.rectangle.x );
 	}
-	
+
 	@Test( "test recursive property reference" )
 	public function testRecursivePropertyReference() : Void
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyReference.flow" );
+
+		Assert.equals( 'property', this._getCoreFactory().locate( "oClass" ).property );
+		Assert.equals( 'property', this._getCoreFactory().locate( "oDynamic" ).p );
+	}
+
+	@Test( "test recursive property reference to reference" )
+	public function testRecursivePropertyReferenceToReference() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/propertyReferenceToReference.flow" );
 
 		Assert.equals( 'property', this._getCoreFactory().locate( "oClass" ).property );
 		Assert.equals( 'property', this._getCoreFactory().locate( "oDynamic" ).p );
