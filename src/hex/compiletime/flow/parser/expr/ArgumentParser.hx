@@ -13,6 +13,7 @@ import hex.vo.ConstructorVO;
 class ArgumentParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( ArgumentParser );
 	
 	static public function parse( parser : ExpressionParser, ident : ID, value : Expr ) : ConstructorVO
 	{
@@ -67,9 +68,8 @@ class ArgumentParser
 				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
 
 			case _:
-				trace( value.expr );
+				logger.error( value.expr );
 				Context.error( '', Context.currentPos() );
-				//logger.debug( value.expr );
 		}
 
 		constructorVO.filePosition = value.pos;

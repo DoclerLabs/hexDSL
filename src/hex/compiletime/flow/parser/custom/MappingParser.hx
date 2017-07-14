@@ -13,6 +13,7 @@ import hex.vo.ConstructorVO;
 class MappingParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( MappingParser );
 	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
@@ -24,7 +25,7 @@ class MappingParser
 				constructorVO.filePosition = params[0].pos;
 			
 			case wtf:
-				trace( wtf );
+				logger.error( wtf );
 				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
 		}
 		

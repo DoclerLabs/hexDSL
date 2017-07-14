@@ -14,6 +14,7 @@ import hex.vo.ConstructorVO;
 class AddParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( AddParser );
 	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
