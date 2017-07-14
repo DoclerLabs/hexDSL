@@ -16,7 +16,7 @@ class SymbolTable
 
 	public function new()
 	{
-		this._map = new Map<String, Bool>();
+		this._map = new Map();
 	}
 
 	public function isRegistered( id : String ) : Bool
@@ -26,17 +26,17 @@ class SymbolTable
 
 	public function clear() : Void
 	{
-		this._map = new Map<String, Bool>();
+		this._map = new Map();
 	}
 
-	public function register( id : String ) : Bool
+	public function register( id : String, ?pos : haxe.macro.Expr.Position ) : Void
 	{
 		if ( this._map.exists( id ) )
 		{
 			var errorMessage = "Registration failed. '" + id + "' is already registered in this symbol table";
 			
 			#if macro
-			Context.error( errorMessage, Context.currentPos() );
+			Context.error( errorMessage, pos!=null?pos:Context.currentPos() );
 			#else
 			throw new IllegalArgumentException( errorMessage );
 			#end
@@ -44,30 +44,24 @@ class SymbolTable
 		} else
 		{
 			this._map.set( id, true );
-			return true;
 		}
-
-		return false;
 	}
 
-	public function unregister( id : String ) : Bool
+	public function unregister( id : String, ?pos : haxe.macro.Expr.Position ) : Void
 	{
 		if ( this.isRegistered( id ) )
 		{
 			this._map.remove( id );
-			return true;
 		}
 		else
 		{
 			var errorMessage = "Unregistration failed with id '" + id + "'";
 			
 			#if macro
-			Context.error( errorMessage, Context.currentPos() );
+			Context.error( errorMessage, pos!=null?pos:Context.currentPos() );
 			#else
 			throw new IllegalArgumentException( errorMessage );
 			#end
 		}
-
-		return false;
 	}
 }
