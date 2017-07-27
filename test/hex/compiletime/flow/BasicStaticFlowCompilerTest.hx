@@ -22,11 +22,13 @@ import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockClassWithProperty;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
+import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -97,6 +99,18 @@ class BasicStaticFlowCompilerTest
 	}
 	
 	//Reading twice the same context cannot be tested
+	@Test( "test read twice the same context" )
+	public function testReadTwiceTheSameContext() : Void
+	{
+		var code1 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/runtimeContext.flow", "BasicStaticFlowCompiler_testReadTwiceTheSameContext" );
+		code1.execute();
+		//var code1 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow" );
+		
+		Assert.isInstanceOf( code1.locator.instance, MockClassWithoutArgument );
+		//Assert.isInstanceOf( code2.locator.instance, MockClassWithoutArgument );
+		
+		//Assert.notEquals( code1.locator.instance, code2.locator.instance );
+	}
 	
 	@Test( "test overriding context name" )
 	public function testOverridingContextName() : Void
@@ -809,13 +823,13 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( code.locator.instance, injector.getInstance( IAnotherMockInterface ) );
 	}
 	
-	/*@Test( "test trigger method connection" )
+	@Test( "test trigger method connection" )
 	public function testTriggerMethodConnection() : Void
 	{
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerMethodConnection" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerMethodConnection" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
@@ -831,7 +845,7 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerInterfaceConnection" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerInterfaceConnection" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
@@ -839,7 +853,7 @@ class BasicStaticFlowCompilerTest
 		code.locator.model.trigger.onTrigger( 'hello world' );
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
-	}*/
+	}
 	
 	@Test( "test build domain" )
 	public function testBuildDomain() : Void
