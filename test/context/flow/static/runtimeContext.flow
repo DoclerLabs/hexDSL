@@ -1,4 +1,0 @@
-@context( name = 'applicationContext' )
-{
-	instance = new hex.mock.MockClassWithoutArgument();
-}
