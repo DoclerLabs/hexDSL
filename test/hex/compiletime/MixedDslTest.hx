@@ -1,7 +1,6 @@
 package hex.compiletime;
 
 import hex.compiletime.flow.BasicStaticFlowCompiler;
-import hex.compiletime.flow.MockCustomStaticFlowParser;
 import hex.compiletime.xml.BasicStaticXmlCompiler;
 import hex.core.IApplicationAssembler;
 import hex.domain.ApplicationDomainDispatcher;
