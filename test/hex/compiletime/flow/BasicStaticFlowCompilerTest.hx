@@ -1,6 +1,7 @@
 package hex.compiletime.flow;
 
 import hex.compiletime.flow.BasicStaticFlowCompiler;
+import hex.compiletime.flow.parser.custom.AddParser;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
@@ -47,7 +48,6 @@ class BasicStaticFlowCompilerTest
 	@Before
 	public function setUp() : Void
 	{
-		MockCustomStaticFlowParser.prepareCompiler();
 		this._myApplicationAssembler = new ApplicationAssembler();
 	}
 	
@@ -1062,7 +1062,7 @@ class BasicStaticFlowCompilerTest
 	@Test( "test add custom parser" )
 	public function testAddCustomParser() : Void
 	{
-		MockCustomStaticFlowParser.prepareCompiler();
+		AddParser.activate();
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/addParser.flow", "BasicStaticFlowCompiler_testAddCustomParser" );
 		code.execute();
 		

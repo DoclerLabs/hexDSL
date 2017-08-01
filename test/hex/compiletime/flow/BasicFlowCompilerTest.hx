@@ -1,6 +1,7 @@
 package hex.compiletime.flow;
 
 import hex.collection.HashMap;
+import hex.compiletime.flow.parser.custom.AddParser;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
@@ -950,7 +951,7 @@ class BasicFlowCompilerTest
 	@Test( "test add custom parser" )
 	public function testAddCustomParser() : Void
 	{
-		MockCustomStaticFlowParser.prepareCompiler();
+		AddParser.activate();
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/static/addParser.flow" );
 		
 		Assert.equals( 'hello world !', this._getCoreFactory().locate( "s" ) );

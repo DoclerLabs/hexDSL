@@ -6,6 +6,7 @@ import haxe.macro.Expr;
 import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
+#end
 
 /**
  * ...
@@ -16,6 +17,25 @@ class AddParser
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( AddParser );
 	
+	macro public static function activate() : haxe.macro.Expr.ExprOf<Bool>
+	{
+		//Sets the parser
+		FlowExpressionParser.parser.buildMethodParser.set( 'add', hex.compiletime.flow.parser.custom.AddParser.parse );
+		
+		//Sets the builder
+		if ( !hex.compiletime.basic.BasicCompileTimeSettings.factoryMap.exists( 'haxe.macro.Expr' ) )
+			hex.compiletime.basic.BasicCompileTimeSettings.factoryMap.set( 'haxe.macro.Expr', hex.compiletime.factory.CodeFactory.build );
+		
+		return macro true;
+	}
+	
+	macro public static function desactivate() : haxe.macro.Expr.ExprOf<Bool>
+	{
+		FlowExpressionParser.parser.buildMethodParser.remove( 'add' );
+		return macro true;
+	}
+	
+	#if macro
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
 		if ( constructorVO.arguments == null ) constructorVO.arguments = [];
@@ -41,5 +61,5 @@ class AddParser
 		constructorVO.filePosition = expr.pos;
 		return constructorVO;
 	}
+	#end
 }
-#end
