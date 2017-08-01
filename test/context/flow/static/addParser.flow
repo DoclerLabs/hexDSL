@@ -1,4 +1,5 @@
 @context( name = 'applicationContext' )
+@parser( hex.compiletime.flow.parser.custom.AddParser )
 {
 	s = add( "hello", space, "world", space, "!" );
 	space =  " ";

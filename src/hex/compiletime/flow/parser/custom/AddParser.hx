@@ -29,13 +29,25 @@ class AddParser
 		return macro true;
 	}
 	
-	macro public static function desactivate() : haxe.macro.Expr.ExprOf<Bool>
+	macro public static function deactivate() : haxe.macro.Expr.ExprOf<Bool>
 	{
 		FlowExpressionParser.parser.buildMethodParser.remove( 'add' );
 		return macro true;
 	}
 	
 	#if macro
+	public static function _activate() : Bool
+	{
+		//Sets the parser
+		FlowExpressionParser.parser.buildMethodParser.set( 'add', hex.compiletime.flow.parser.custom.AddParser.parse );
+		
+		//Sets the builder
+		if ( !hex.compiletime.basic.BasicCompileTimeSettings.factoryMap.exists( 'haxe.macro.Expr' ) )
+			hex.compiletime.basic.BasicCompileTimeSettings.factoryMap.set( 'haxe.macro.Expr', hex.compiletime.factory.CodeFactory.build );
+		
+		return true;
+	}
+	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO
 	{
 		if ( constructorVO.arguments == null ) constructorVO.arguments = [];

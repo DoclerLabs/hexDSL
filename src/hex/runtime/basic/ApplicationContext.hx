@@ -27,7 +27,7 @@ class ApplicationContext extends AbstractApplicationContext
 	}
 
 	
-	@:allow( hex.runtime )
+	@:allow( hex.runtime, hex.metadata )
 	function new( applicationContextName : String )
 	{
 		//build contextDispatcher
