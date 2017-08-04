@@ -641,6 +641,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Instantiate mapping configuration</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -657,6 +658,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Import another context to a parent one</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -667,6 +669,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Import another context to a parent one with passed references</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -679,6 +682,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Import another context to a parent one with passed parameters</summary>
+
 ```haxe
 @context( 	name = 'applicationContext'
 			params 	= {x: Float, y:Float} )
@@ -692,6 +696,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Import two contexts with passed references from one to another</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -703,6 +708,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Import xml context in flow context</summary>
+
 ```haxe
 @context( 	name = 'applicationContext'
 			params 	= {x: Float, y:Float} )
@@ -714,6 +720,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Call a method in a child context with other children context references as arguments</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 {
@@ -730,6 +737,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Use children context references as a parent's instance arguments</summary>
+
 ```haxe
 @context( 	name = 'applicationContext'
 			params 	= {x: Float, y:Float} )
@@ -744,6 +752,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Composite runtime parameters structure</summary>
+
 ```haxe
 @context( 	name = 'applicationContext',
 			params = 	{
@@ -758,6 +767,7 @@ var myString = factory.locate( 'myString' );
 
 <details>
 <summary>Use parser metadata on the fly to define new `sum` keyword</summary>
+
 ```haxe
 @context( name = 'applicationContext' )
 @parser( package.MyCustomSumParser )
