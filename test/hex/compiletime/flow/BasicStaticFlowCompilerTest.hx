@@ -53,7 +53,7 @@ class BasicStaticFlowCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.getInstance().clear();
+		ApplicationDomainDispatcher.release();
 		this._myApplicationAssembler.release();
 	}
 	

@@ -32,7 +32,7 @@ class ApplicationContext extends AbstractApplicationContext
 	{
 		//build contextDispatcher
 		var domain = Domain.getDomain( applicationContextName );
-		this._dispatcher = ApplicationDomainDispatcher.getInstance().getDomainDispatcher( domain );
+		this._dispatcher = ApplicationDomainDispatcher.getInstance( this ).getDomainDispatcher( domain );
 		
 		//build injector
 		var injector : IDependencyInjector = new Injector();

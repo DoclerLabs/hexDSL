@@ -57,7 +57,7 @@ class AbstractApplicationContext implements IApplicationContext
 	}
 	
 	@:final 
-	public function initialize() : Void
+	public function initialize( context : IApplicationContext ) : Void
 	{
 		if ( !this.isInitialized )
 		{
