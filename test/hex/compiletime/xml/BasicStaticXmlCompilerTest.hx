@@ -48,7 +48,7 @@ class BasicStaticXmlCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.getInstance().clear();
+		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 
@@ -287,8 +287,8 @@ class BasicStaticXmlCompilerTest
 	{
 		var applicationAssembler = new ApplicationAssembler();
 		var code = BasicStaticXmlCompiler.compile( applicationAssembler, "context/xml/multipleInstancesWithReferences.xml", "BasicStaticXmlCompiler_testBuildingMultipleInstancesWithReferences" );
-		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/simpleInstanceWithoutArguments.xml" );
-		var code3 = BasicStaticXmlCompiler.extend( code, "context/xml/multipleInstancesWithReferencesReferenced.xml" );
+		var code2 = BasicStaticXmlCompiler.extend( applicationAssembler, code, "context/xml/simpleInstanceWithoutArguments.xml" );
+		var code3 = BasicStaticXmlCompiler.extend( applicationAssembler, code, "context/xml/multipleInstancesWithReferencesReferenced.xml" );
 		
 		var locator = code.locator;
 		var locator2 = code2.locator;
@@ -376,7 +376,7 @@ class BasicStaticXmlCompilerTest
 		Assert.notEquals( code1.locator.testApplicationContextBuilding1, code2.locator.testApplicationContextBuilding2 );
 		
 		//Extended code generation uses the same application context
-		var code3 = BasicStaticXmlCompiler.extend( code2, "context/xml/simpleInstanceWithoutArguments.xml", "testApplicationContextBuilding2" );
+		var code3 = BasicStaticXmlCompiler.extend( applicationAssembler, code2, "context/xml/simpleInstanceWithoutArguments.xml", "testApplicationContextBuilding2" );
 		Assert.notEquals( code2, code3 );
 		Assert.equals( code2.applicationContext, code3.applicationContext );
 		Assert.equals( code2.locator.testApplicationContextBuilding2, code3.locator.testApplicationContextBuilding2 );
@@ -844,11 +844,26 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
 	
+	@Test( "test read twice the same context" )
+	public function testReadTwiceTheSameContext() : Void
+	{
+		var code1 = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", "BasicStaticXmlCompiler_testReadTwiceTheSameContext" );
+		code1.execute();
+		
+		var code2 = code1.clone( new ApplicationAssembler() );
+		code2.execute();
+
+		Assert.isInstanceOf( code1.locator.instance, MockClassWithoutArgument );
+		Assert.isInstanceOf( code2.locator.instance, MockClassWithoutArgument );
+		
+		Assert.notEquals( code1.locator.instance, code2.locator.instance );
+	}
+	
 	@Test( "test parsing twice" )
 	public function testParsingTwice() : Void
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/parsingOnce.xml", "BasicStaticXmlCompiler_testParsingTwice" );
-		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/parsingTwice.xml" );
+		var code2 = BasicStaticXmlCompiler.extend( this._applicationAssembler, code, "context/xml/parsingTwice.xml" );
 
 		code.execute();
 		Assert.isInstanceOf( code.locator.rect0, MockRectangle );
@@ -886,7 +901,7 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 30, code.locator.rect.width );
 		Assert.equals( 40, code.locator.rect.height );
 
-		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/recursiveStaticCalls.xml" );
+		var code2 = BasicStaticXmlCompiler.extend( this._applicationAssembler, code, "context/xml/recursiveStaticCalls.xml" );
 		code2.execute();
 
 		Assert.isInstanceOf( code2.locator.rect2, MockRectangle );
@@ -905,7 +920,7 @@ class BasicStaticXmlCompilerTest
 		Assert.isInstanceOf( code.locator.instance, MockClassWithProperty );
 		Assert.equals( "default value", code.locator.instance.property );
 
-		var code2 = BasicStaticXmlCompiler.extend( code, "context/xml/simpleReferenceWithProperty.xml" );
+		var code2 = BasicStaticXmlCompiler.extend( this._applicationAssembler, code, "context/xml/simpleReferenceWithProperty.xml" );
 		code2.execute();
 
 		Assert.isInstanceOf( code2.locator.instance, MockClassWithProperty );

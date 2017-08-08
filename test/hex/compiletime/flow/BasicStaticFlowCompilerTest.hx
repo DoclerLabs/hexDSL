@@ -22,11 +22,13 @@ import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
 import hex.mock.MockClassWithProperty;
 import hex.mock.MockMethodCaller;
+import hex.mock.MockModelWithTrigger;
 import hex.mock.MockObjectWithRegtangleProperty;
 import hex.mock.MockProxy;
 import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
+import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
@@ -45,14 +47,13 @@ class BasicStaticFlowCompilerTest
 	@Before
 	public function setUp() : Void
 	{
-		MockCustomStaticFlowParser.prepareCompiler();
 		this._myApplicationAssembler = new ApplicationAssembler();
 	}
 	
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.getInstance().clear();
+		ApplicationDomainDispatcher.release();
 		this._myApplicationAssembler.release();
 	}
 	
@@ -96,7 +97,20 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "hello", s );
 	}
 	
-	//Reading twice the same context cannot be tested
+	@Test( "test read twice the same context" )
+	public function testReadTwiceTheSameContext() : Void
+	{
+		var code1 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testReadTwiceTheSameContext" );
+		code1.execute();
+		
+		var code2 = code1.clone( new ApplicationAssembler() );
+		code2.execute();
+
+		Assert.isInstanceOf( code1.locator.instance, MockClassWithoutArgument );
+		Assert.isInstanceOf( code2.locator.instance, MockClassWithoutArgument );
+		
+		Assert.notEquals( code1.locator.instance, code2.locator.instance );
+	}
 	
 	@Test( "test overriding context name" )
 	public function testOverridingContextName() : Void
@@ -304,8 +318,8 @@ class BasicStaticFlowCompilerTest
 	{
 		var applicationAssembler = new ApplicationAssembler();
 		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/multipleInstancesWithReferences.flow", "BasicStaticFlowCompiler_testBuildingMultipleInstancesWithReferences" );
-		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleInstanceWithoutArguments.flow" );
-		var code3 = BasicStaticFlowCompiler.extend( code, "context/flow/multipleInstancesWithReferencesReferenced.flow" );
+		var code2 = BasicStaticFlowCompiler.extend( applicationAssembler, code, "context/flow/simpleInstanceWithoutArguments.flow" );
+		var code3 = BasicStaticFlowCompiler.extend( applicationAssembler, code, "context/flow/multipleInstancesWithReferencesReferenced.flow" );
 		
 		var locator = code.locator;
 		var locator2 = code2.locator;
@@ -393,7 +407,7 @@ class BasicStaticFlowCompilerTest
 		Assert.notEquals( code1.locator.BasicStaticFlowCompiler_testApplicationContextBuilding1, code2.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2 );
 		
 		//Extended code generation uses the same application context
-		var code3 = BasicStaticFlowCompiler.extend( code2, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testApplicationContextBuilding2" );
+		var code3 = BasicStaticFlowCompiler.extend( applicationAssembler, code2, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testApplicationContextBuilding2" );
 		Assert.notEquals( code2, code3 );
 		Assert.equals( code2.applicationContext, code3.applicationContext );
 		Assert.equals( code2.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2, code3.locator.BasicStaticFlowCompiler_testApplicationContextBuilding2 );
@@ -809,13 +823,13 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( code.locator.instance, injector.getInstance( IAnotherMockInterface ) );
 	}
 	
-	/*@Test( "test trigger method connection" )
+	@Test( "test trigger method connection" )
 	public function testTriggerMethodConnection() : Void
 	{
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerMethodConnection" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerMethodConnection" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
@@ -831,7 +845,7 @@ class BasicStaticFlowCompilerTest
 		MockTriggerListener.callbackCount = 0;
 		MockTriggerListener.message = '';
 		
-		var code = BasicStaticFlowCompiler.compile( this._applicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerInterfaceConnection" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/trigger.flow", "BasicStaticFlowCompiler_testTriggerInterfaceConnection" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.model, MockModelWithTrigger );
@@ -839,7 +853,7 @@ class BasicStaticFlowCompilerTest
 		code.locator.model.trigger.onTrigger( 'hello world' );
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
-	}*/
+	}
 	
 	@Test( "test build domain" )
 	public function testBuildDomain() : Void
@@ -862,7 +876,7 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 30, code.locator.rect.width );
 		Assert.equals( 40, code.locator.rect.height );
 
-		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/testRecursiveStaticCalls.flow" );
+		var code2 = BasicStaticFlowCompiler.extend( this._myApplicationAssembler, code, "context/flow/testRecursiveStaticCalls.flow" );
 		code2.execute();
 
 		Assert.isInstanceOf( code2.locator.rect2, MockRectangle );
@@ -881,7 +895,7 @@ class BasicStaticFlowCompilerTest
 		Assert.isInstanceOf( code.locator.instance, MockClassWithProperty );
 		Assert.equals( "default value", code.locator.instance.property );
 
-		var code2 = BasicStaticFlowCompiler.extend( code, "context/flow/simpleReferenceWithProperty.flow" );
+		var code2 = BasicStaticFlowCompiler.extend( this._myApplicationAssembler, code, "context/flow/simpleReferenceWithProperty.flow" );
 		code2.execute();
 
 		Assert.isInstanceOf( code2.locator.instance, MockClassWithProperty );
@@ -1047,7 +1061,6 @@ class BasicStaticFlowCompilerTest
 	@Test( "test add custom parser" )
 	public function testAddCustomParser() : Void
 	{
-		MockCustomStaticFlowParser.prepareCompiler();
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/addParser.flow", "BasicStaticFlowCompiler_testAddCustomParser" );
 		code.execute();
 		

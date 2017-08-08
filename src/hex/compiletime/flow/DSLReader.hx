@@ -7,6 +7,7 @@ import haxe.macro.Expr;
 import hex.preprocess.ConditionalVariablesChecker;
 import hex.preprocess.MacroPreprocessor;
 import hex.preprocess.RuntimeParametersPreprocessor;
+import hex.compiletime.flow.parser.ExpressionUtil;
 
 /**
  * ...
@@ -70,6 +71,9 @@ class DSLReader
 			}
 		}
 		
+		//parsers
+		this._searchForParser( expr );
+		
 		//include
 		var includeList = this._searchForInclude( expr );
 		
@@ -95,6 +99,40 @@ class DSLReader
 				Context.error( 'Invalid content', e.pos );
 				return null;
 		}
+	}
+	
+	function _searchForParser( e : Expr ) : Bool
+	{
+		var meta = null;
+		
+		switch( e.expr )
+		{
+			case EMeta( s, expr ): 
+				e = expr;
+				meta = s;
+
+			case _: return false;
+		}
+		
+		
+		if ( meta.name == 'parser' )
+		{
+			for ( entry in meta.params )
+			{
+				switch( entry.expr )
+				{
+					case EField( e, field ): 
+						var parserClassName = ExpressionUtil.compressField( e, field );
+						var parserClass = macro $p { parserClassName.split('.') };
+						Context.typeExpr( macro @:pos(parserClass.pos) $parserClass.activate() );
+
+					case EConst( CString( id ) ): trace( id );
+					case _:
+				}
+			}
+		}
+		
+		return _searchForParser( e );
 	}
 	
 	function _searchForInclude( e : Expr, includeList : Array<Include> = null ) : Array<Include>

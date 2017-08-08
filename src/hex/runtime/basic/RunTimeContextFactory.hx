@@ -64,7 +64,7 @@ class RunTimeContextFactory
 			
 			//settings
 			this._applicationContext = applicationContext;
-			this._contextDispatcher = ApplicationDomainDispatcher.getInstance().getDomainDispatcher( applicationContext.getDomain() );
+			this._contextDispatcher = ApplicationDomainDispatcher.getInstance( this._applicationContext ).getDomainDispatcher( applicationContext.getDomain() );
 			var injector = this._applicationContext.getInjector();
 			this._coreFactory = cast ( applicationContext.getCoreFactory(), IRunTimeCoreFactory );
 

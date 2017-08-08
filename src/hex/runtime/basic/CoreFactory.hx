@@ -117,7 +117,7 @@ class CoreFactory implements IRunTimeCoreFactory
 		}
 		else
 		{
-			throw new IllegalArgumentException( "register fails, key is already registered." );
+			throw new IllegalArgumentException( "'" + key + "' register fails, key is already registered." );
 		}
 	}
 	

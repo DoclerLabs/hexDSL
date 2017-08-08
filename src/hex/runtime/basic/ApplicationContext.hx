@@ -27,12 +27,12 @@ class ApplicationContext extends AbstractApplicationContext
 	}
 
 	
-	@:allow( hex.runtime )
+	@:allow( hex.runtime, hex.metadata )
 	function new( applicationContextName : String )
 	{
 		//build contextDispatcher
 		var domain = Domain.getDomain( applicationContextName );
-		this._dispatcher = ApplicationDomainDispatcher.getInstance().getDomainDispatcher( domain );
+		this._dispatcher = ApplicationDomainDispatcher.getInstance( this ).getDomainDispatcher( domain );
 		
 		//build injector
 		var injector : IDependencyInjector = new Injector();

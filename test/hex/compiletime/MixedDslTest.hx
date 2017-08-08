@@ -1,15 +1,8 @@
 package hex.compiletime;
 
-import hex.compiletime.flow.BasicStaticFlowCompiler;
-import hex.compiletime.flow.MockCustomStaticFlowParser;
-import hex.compiletime.xml.BasicStaticXmlCompiler;
 import hex.core.IApplicationAssembler;
 import hex.domain.ApplicationDomainDispatcher;
-import hex.mock.LazyProvider;
-import hex.mock.MockClassWithoutArgument;
-import hex.mock.MockRectangle;
 import hex.runtime.ApplicationAssembler;
-import hex.unittest.assertion.Assert;
 
 /**
  * ...
@@ -28,7 +21,7 @@ class MixedDslTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.getInstance().clear();
+		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 

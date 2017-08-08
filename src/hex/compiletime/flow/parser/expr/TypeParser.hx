@@ -13,6 +13,7 @@ import hex.vo.ConstructorVO;
 class TypeParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( TypeParser );
 	
 	static public function parse( parser : ExpressionParser, constructorVO : ConstructorVO, e : Expr ) : ConstructorVO
 	{
@@ -34,7 +35,7 @@ class TypeParser
 				}
 				
 			case wtf:
-				trace( wtf );
+				logger.error( wtf );
 				Context.error( '', Context.currentPos() );
 		}
 

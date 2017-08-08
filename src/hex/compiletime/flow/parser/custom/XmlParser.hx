@@ -14,6 +14,7 @@ import hex.vo.ConstructorVO;
 class XmlParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( XmlParser );
 	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, originalExpression : Expr ) : ConstructorVO
 	{
@@ -32,7 +33,7 @@ class XmlParser
 							constructorVO.factory = ExpressionUtil.compressField( params[ 1 ] );
 
 						case wtf:
-							trace( wtf );
+							logger.error( wtf );
 							haxe.macro.Context.error( 'Invalid factory parameter', haxe.macro.Context.currentPos() );
 					}
 				}
@@ -42,7 +43,7 @@ class XmlParser
 				}
 				
 			case wtf:
-				trace( wtf );
+				logger.error( wtf );
 				Context.error( '', Context.currentPos() );
 		}
 		

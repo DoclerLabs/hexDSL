@@ -233,9 +233,7 @@ class CompileTimeContextFactory
 
 		var idArgs = method.ownerID + "_" + method.name + "Args";
 		var varIDArgs = macro $i { idArgs };
-
-		var l : Int = arguments.length;
-		var args = [ for ( i in 0...l ) this.buildVO( arguments[ i ] ) ];
+		var args = arguments.map( function(e) return this.buildVO( e ) );
 		
 		var varOwner = macro $p{ method.ownerID.split('.') };
 		this._expressions.push( macro @:mergeBlock { $varOwner.$methodName( $a{ args } ); } );
@@ -251,7 +249,7 @@ class CompileTimeContextFactory
 	
 	public function callModuleInitialisation() : Void
 	{
-		for ( moduleName in this._moduleLocator.values() ) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(); } );
+		this._moduleLocator.values().map( function(moduleName) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(); } ) );
 		this._moduleLocator.clear();
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.MODULES_INITIALIZED" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );

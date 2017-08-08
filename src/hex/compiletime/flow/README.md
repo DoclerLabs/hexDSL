@@ -656,3 +656,132 @@ var myString = factory.locate( 'myString' );
 }
 ```
 </details>
+
+<details>
+<summary>Import another context to a parent one</summary>
+
+```haxe
+@context( name = 'applicationContext' )
+{
+	childContext = new Context( 'context/flow/static/childcontext.flow' );
+}
+```
+</details>
+
+<details>
+<summary>Import another context to a parent one with passed references</summary>
+
+```haxe
+@context( name = 'applicationContext' )
+{
+	childContext = new Context( 'context/flow/static/message.flow', {message: message, to: name} );
+	message = "hello";
+	name = "world";
+}
+```
+</details>
+
+<details>
+<summary>Import another context to a parent one with passed parameters</summary>
+
+```haxe
+@context( 	name = 'applicationContext'
+			params 	= {x: Float, y:Float} )
+{
+	width = sizeContext.size.width;
+	height = sizeContext.size.height;
+	sizeContext = new Context( 'context/flow/static/childcontext.flow', {xParameter: x, yParameter: y} );
+}
+```
+</details>
+
+<details>
+<summary>Import two contexts with passed references from one to another</summary>
+
+```haxe
+@context( name = 'applicationContext' )
+{
+	childContext2 = new Context( 'context/flow/static/childContext.flow', {message: childContext1.message, to: childContext1.name} );
+	childContext1 = new Context( 'context/flow/static/anotherChildcontext.flow' );
+}
+```
+</details>
+
+<details>
+<summary>Import xml context in flow context</summary>
+
+```haxe
+@context( 	name = 'applicationContext'
+			params 	= {x: Float, y:Float} )
+{
+	childContext = new Context( 'context/xml/static/childContext.xml', {xParameter: x, yParameter: y} );
+}
+```
+</details>
+
+<details>
+<summary>Call a method in a child context with other children context references as arguments</summary>
+
+```haxe
+@context( name = 'applicationContext' )
+{
+	childContext3.o.owner.setCollection( a );
+	childContext3 = new Context( 'context/flow/static/importedCollectionOwner.flow' );
+	
+	a = hex.mock.MockUtil.concat( childContext1.o.p, childContext2.o.p );
+	
+	childContext1 = new Context( 'context/flow/static/beImportedArrayProperty.flow', { value: 3 } );
+	childContext2 = new Context( 'context/flow/static/beImportedArrayProperty.flow', { value: 4 } );
+}
+```
+</details>
+
+<details>
+<summary>Use children context references as a parent's instance arguments</summary>
+
+```haxe
+@context( 	name = 'applicationContext'
+			params 	= {x: Float, y:Float} )
+{
+	size = new hex.structures.Size( xContext.x, yContext.y );
+	
+	xContext = new Context( 'context/flow/static/childContext1.flow', {xParameter: x} );
+	yContext = new Context( 'context/flow/static/childContext2.flow', {yParameter: y} );
+}
+```
+</details>
+
+<details>
+<summary>Composite runtime parameters structure</summary>
+
+```haxe
+@context( 	name = 'applicationContext',
+			params = 	{
+							p:{x:Float, y:Float}, test:{p: hex.mock.IMockInterface}
+						} )
+{
+	size = new hex.structures.Size( p.x, p.y );
+	alias = test.p;
+}
+```
+</details>
+
+<details>
+<summary>Use parser metadata on the fly to define new `sum` keyword</summary>
+
+```haxe
+@context( name = 'applicationContext' )
+@parser( package.MyCustomSumParser )
+{
+	s = sum( "hello", space, "world", space, "!" );
+	space =  " ";
+	
+	i = sum( 6, five );
+	five = 5;
+	
+	p = sum( p1, new hex.structures.Point( 3, 4 ), p2 );
+	p1 = new hex.structures.Point( 5, 5 );
+	p2 = new hex.structures.Point( 3, 4 );
+}
+```
+</details>

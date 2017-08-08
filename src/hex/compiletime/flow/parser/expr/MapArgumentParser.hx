@@ -13,6 +13,7 @@ import hex.vo.MapVO;
 class MapArgumentParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( MapArgumentParser );
 	
 	static public function parse( parser : ExpressionParser, ident : ID, param : Expr ) : MapVO
 	{
@@ -27,7 +28,7 @@ class MapArgumentParser
 				return mapVO;
 				
 			case wtf:
-				trace( wtf );
+				logger.error( wtf );
 				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
 				null;
 		}

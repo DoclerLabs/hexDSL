@@ -9,15 +9,29 @@ import hex.error.NullPointerException;
  */
 class CodeLocator 
 {
-	static var _M : Map<String, Dynamic> = new Map();
-	
+	static var __M : Map<IApplicationAssembler, Map<String, Dynamic>> = new Map();
+
 	function new() {}
 	
-	static public function get( contextName : String, ?assembler : IApplicationAssembler )
+	static public function get( contextName : String, assembler : IApplicationAssembler )
 	{
+		if ( !__M.exists( assembler ) )
+		{
+			if ( assembler == null )
+			{
+				throw new NullPointerException( 'assembler should not be null' );
+			}
+			else
+			{
+				__M.set( assembler, new Map() );
+			}
+			
+		}
+		
+		var contextMap = __M.get( assembler );
 		contextName = 'hex.context.' + contextName;
 		
-		if ( !_M.exists( contextName ) )
+		if ( !contextMap.exists( contextName ) )
 		{
 			if ( assembler == null )
 			{
@@ -27,10 +41,10 @@ class CodeLocator
 			{
 				var cls = Type.resolveClass( contextName );
 				var locator = Type.createInstance( cls, [ assembler ] );
-				_M.set( contextName, locator );
+				contextMap.set( contextName, locator );
 			}
 		}
 		
-		return _M.get( contextName );
+		return contextMap.get( contextName );
 	}
 }

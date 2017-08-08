@@ -1,20 +1,19 @@
 package hex.compiletime.flow.parser.expr;
+
+#if macro
+import haxe.macro.*;
+import hex.compiletime.flow.parser.ExpressionParser;
+import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
+import hex.vo.PropertyVO;
 
 /**
  * ...
  * @author Francis Bourre
  */
-#if macro
-import haxe.macro.*;
-import hex.compiletime.flow.parser.ExpressionParser;
-import hex.core.ContextTypeList;
-import hex.vo.PropertyVO;
-
 class PropertyParser 
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
-	
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( PropertyParser );
 	
 	static public function parse( parser : ExpressionParser, ident : ID, fieldName : FieldName, assigned : Expr ) : PropertyVO
@@ -42,7 +41,6 @@ class PropertyParser
 			case ENew( t, params ):
 				
 				var constructorVO = parser.parseType( parser, new ConstructorVO( ident ), assigned );
-				//constructorVO.type = ExprTools.toString( assigned.expr ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
 				
 			case EConst(CInt(v)):
@@ -55,10 +53,9 @@ class PropertyParser
 				propertyVO = new PropertyVO( ident, fieldName, v, ContextTypeList.STRING );
 				
 			case EArrayDecl( values ):
-				var valueToBuild = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );
-				var it = values.iterator();
-				while ( it.hasNext() ) valueToBuild.arguments.push( parser.parseArgument( parser, ident, it.next() ) );
-				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.ARRAY, valueToBuild );
+				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.ARRAY,
+					new ConstructorVO( ident, ContextTypeList.ARRAY,
+						values.map( function(e) return parser.parseArgument( parser, ident, e ) ) ) );
 				
 			case EField( e, ff ):
 				
