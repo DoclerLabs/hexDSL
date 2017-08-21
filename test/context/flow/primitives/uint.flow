@@ -1,4 +1,5 @@
 @context( name = 'applicationContext' )
 {
+	@type( 'UInt' )
 	i = 3;
 }
