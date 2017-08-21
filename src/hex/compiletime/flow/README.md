@@ -347,18 +347,7 @@ var myString = factory.locate( 'myString' );
 ```haxe
 @context( name = 'applicationContext' )
 {
-	@inject_into(a, b, c) instance = new hex.mock.MockClassWithInjectedProperty();
-}
-```
-</details>
-
-<details>
-<summary>Create an instance using context's injector</summary>
-
-```haxe
-@context( name = 'applicationContext' )
-{
-	@injector_creation instance = new hex.mock.MockClassWithInjectedProperty();
+	@inject_into instance = new hex.mock.MockClassWithInjectedProperty();
 }
 ```
 </details>
