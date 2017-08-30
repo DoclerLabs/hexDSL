@@ -20,6 +20,7 @@ class MainDslTest
 		#else
 		emu.addListener( new hex.unittest.notifier.ConsoleNotifier( ) );
 		#end
+		emu.addListener( new hex.unittest.notifier.ExitingNotifier( ) );
 		
         emu.addTest( HexDslSuite );
         emu.run();
