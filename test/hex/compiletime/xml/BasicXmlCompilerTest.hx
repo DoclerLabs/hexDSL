@@ -21,6 +21,7 @@ import hex.mock.MockClass;
 import hex.mock.MockClassWithGeneric;
 import hex.mock.MockClassWithInjectedProperty;
 import hex.mock.MockClassWithoutArgument;
+import hex.mock.MockColorable;
 import hex.mock.MockContextHolder;
 import hex.mock.MockFruitVO;
 import hex.mock.MockInjectee;
@@ -911,4 +912,12 @@ class BasicXmlCompilerTest
 		Assert.equals( 1, MockTriggerListener.callbackCount );
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
+	
+	@Test( "test enum argument" )
+	public function testEnumArgument() : Void
+	{
+		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/enumArgument.xml" );
+		var colored : MockColorable = cast this._locate( "colored" );
+		Assert.equals( hex.mock.MockColor.Red, colored.color );
+	}
 }

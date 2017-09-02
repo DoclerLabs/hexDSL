@@ -1,0 +1,5 @@
+<root name="applicationContext">
+	<model id="colored" type="hex.mock.MockColorable">
+		<argument static-ref="hex.mock.MockColor.Red" />
+	</model>
+</root>

@@ -1272,5 +1272,16 @@ class BasicStaticFlowCompilerTest
 		
 		Assert.equals( mock, code.locator.alias );
 	}
+	
+	@Test( "test enum argument" )
+	public function testEnumArgument() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/enumArgument.flow", "BasicStaticFlowCompiler_testEnumArgument" );
+		code.execute();
+		
+		Assert.equals( hex.mock.MockColor.Red, code.locator.color );
+		Assert.equals( hex.mock.MockColor.Red, code.locator.colored.color );
+		Assert.equals( hex.mock.MockColor.Red, code.locator.colored2.color );
+	}
 }
 

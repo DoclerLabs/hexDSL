@@ -1,0 +1,6 @@
+@context( name = 'applicationContext' )
+{
+	color = hex.mock.MockColor.Red;
+	colored = new hex.mock.MockColorable( color );
+	colored2 = new hex.mock.MockColorable( hex.mock.MockColor.Red );
+}

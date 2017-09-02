@@ -1001,4 +1001,13 @@ class BasicFlowCompilerTest
 		Assert.isInstanceOf( map, MockClass );
 		Assert.equals( this._getCoreFactory().locate( "test" ), map );
 	}
+	
+	@Test( "test enum argument" )
+	public function testEnumArgument() : Void
+	{
+		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/enumArgument.flow" );
+		Assert.equals( hex.mock.MockColor.Red, this._getCoreFactory().locate( "color" ) );
+		Assert.equals( hex.mock.MockColor.Red, this._getCoreFactory().locate( "colored" ).color );
+		Assert.equals( hex.mock.MockColor.Red, this._getCoreFactory().locate( "colored2" ).color );
+	}
 }
