@@ -137,12 +137,6 @@ class CompileTimeContextFactory
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
-	public function dispatchIdleMode() : Void
-	{
-		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.IDLE_MODE" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
-	}
-	
 	//
 	public function preprocess( vo : hex.vo.PreProcessVO ) : Void
 	{
