@@ -7,7 +7,6 @@ import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
-import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -30,7 +29,6 @@ import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.mock.MockTriggerListener;
 import hex.runtime.ApplicationAssembler;
-import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
@@ -93,8 +91,8 @@ class BasicStaticFlowCompilerTest
 		var code = BasicStaticFlowCompiler.compile( BasicStaticFlowCompilerTest.applicationAssembler, "context/flow/primitives/string.flow", "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty" );
 		code.execute();
 		
-		var s : String = BasicStaticFlowCompilerTest.applicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testBuildingStringWithAssemblerStaticProperty", ApplicationContext ).getCoreFactory().locate( "s" );
-		Assert.equals( "hello", s );
+		Assert.equals( BasicStaticFlowCompilerTest.applicationAssembler, code.applicationAssembler );
+		Assert.equals( "hello", code.locator.s );
 	}
 	
 	@Test( "test read twice the same context" )
@@ -802,11 +800,10 @@ class BasicStaticFlowCompilerTest
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/includeWithIfAttribute.flow", "BasicStaticFlowCompiler_testIncludeFailsWithIfAttribute", null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
 		code.execute();
-		
-		var coreFactory = this._myApplicationAssembler.getApplicationContext( "BasicStaticFlowCompiler_testIncludeFailsWithIfAttribute", ApplicationContext ).getCoreFactory();
-		Assert.methodCallThrows( NoSuchElementException, coreFactory, coreFactory.locate, [ "message" ], "'NoSuchElementException' should be thrown" );
+
+		Assert.isFalse( Reflect.hasField(code.locator, "message"), "locator shouldn't have message field" );
 	}
-	
+
 	@Test( "test building mapping configuration" )
 	public function testBuildingMappingConfiguration() : Void
 	{
