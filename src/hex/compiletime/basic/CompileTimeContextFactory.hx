@@ -240,7 +240,7 @@ class CompileTimeContextFactory
 	
 	public function callModuleInitialisation() : Void
 	{
-		this._moduleLocator.values().map( function(moduleName) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(); } ) );
+		this._moduleLocator.values().map( function(moduleName) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(applicationContext); } ) );
 		this._moduleLocator.clear();
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.MODULES_INITIALIZED" );
 		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
