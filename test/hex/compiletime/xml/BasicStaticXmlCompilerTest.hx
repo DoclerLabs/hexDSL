@@ -7,7 +7,6 @@ import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.error.Exception;
-import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -26,7 +25,6 @@ import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.runtime.ApplicationAssembler;
-import hex.runtime.basic.ApplicationContext;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
