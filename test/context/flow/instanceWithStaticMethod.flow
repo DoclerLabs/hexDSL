@@ -3,4 +3,6 @@
 	gateway = "http://localhost/amfphp/gateway.php";
 	service = hex.mock.MockServiceProvider.getInstance();
 	service.setGateway( gateway );
+
+	random = Math.random();
 }

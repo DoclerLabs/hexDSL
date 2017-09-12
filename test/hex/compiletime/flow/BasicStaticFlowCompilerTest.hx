@@ -471,6 +471,15 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.service.getGateway() );
 		Assert.equals( "http://localhost/amfphp/gateway.php", MockServiceProvider.getInstance().getGateway() );
 	}
+
+	@Test( "test static method on class without classpath" )
+	public function testStaticMethodOnClassWitoutClasspath() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithStaticMethod.flow", "BasicStaticFlowCompiler_testStaticMethodOnClassWitoutClasspath" );
+		code.execute();
+
+		Assert.isInstanceOf( code.locator.random, Float );
+	}
 	
 	@Test( "test building instance with static method and arguments" )
 	public function testBuildingInstanceWithStaticMethodAndArguments() : Void
