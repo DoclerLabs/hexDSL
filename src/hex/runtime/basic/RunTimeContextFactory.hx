@@ -116,7 +116,6 @@ class RunTimeContextFactory
 		this.buildAllObjects();
 		this.callAllMethods();
 		this.dispatchAssemblingEnd();
-		this.dispatchIdleMode();
 	}
 	
 	public function dispose() : Void
@@ -143,11 +142,6 @@ class RunTimeContextFactory
 	public function dispatchAssemblingEnd() : Void
 	{
 		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.ASSEMBLING_END );
-	}
-	
-	public function dispatchIdleMode() : Void
-	{
-		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.IDLE_MODE );
 	}
 	
 	//

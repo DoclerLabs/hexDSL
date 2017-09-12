@@ -7,7 +7,6 @@ import hex.di.mapping.MappingConfiguration;
 import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.error.Exception;
-import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -26,7 +25,6 @@ import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.runtime.ApplicationAssembler;
-import hex.runtime.basic.ApplicationContext;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
@@ -87,9 +85,9 @@ class BasicStaticXmlCompilerTest
 		BasicStaticXmlCompilerTest.applicationAssembler = new ApplicationAssembler();
 		var code = BasicStaticXmlCompiler.compile( BasicStaticXmlCompilerTest.applicationAssembler, "context/xml/primitives/string.xml", "BasicStaticXmlCompiler_testBuildingStringWithAssemblerStaticProperty" );
 		code.execute();
-		
-		var s : String = BasicStaticXmlCompilerTest.applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testBuildingStringWithAssemblerStaticProperty", ApplicationContext ).getCoreFactory().locate( "s" );
-		Assert.equals( "hello", s );
+
+		Assert.equals( BasicStaticXmlCompilerTest.applicationAssembler, code.applicationAssembler );
+		Assert.equals( "hello", code.locator.s );
 	}
 	
 	//Reading twice the same context cannot be tested
@@ -758,9 +756,8 @@ class BasicStaticXmlCompilerTest
 	{
 		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/static/includeWithIfAttribute.xml", "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", null, [ "prodz2" => false, "testing2" => true, "releasing2" => true ] );
 		code.execute();
-		
-		var coreFactory = this._applicationAssembler.getApplicationContext( "BasicStaticXmlCompiler_testIncludeFailsWithIfAttribute", ApplicationContext ).getCoreFactory();
-		Assert.methodCallThrows( NoSuchElementException, coreFactory, coreFactory.locate, [ "message" ], "'NoSuchElementException' should be thrown" );
+
+		Assert.isFalse( Reflect.hasField(code.locator, "message"), "locator shouldn't have message field" );
 	}
 	
 	@Test( "test file preprocessor with Xml file" )

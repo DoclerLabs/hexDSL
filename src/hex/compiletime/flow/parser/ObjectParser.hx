@@ -232,7 +232,12 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						constructorVO.arguments = [];
 						constructorVO.factory = factory;
 						constructorVO.staticCall = staticCall;
-						
+
+					case EConst( ee ):
+						constructorVO.type = ExpressionUtil.compressField( e );
+						constructorVO.arguments = [];
+						constructorVO.staticCall = field;
+
 					case _:
 						logger.error( e.expr );
 				}
