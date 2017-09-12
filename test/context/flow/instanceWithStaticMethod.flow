@@ -4,6 +4,5 @@
 	service = hex.mock.MockServiceProvider.getInstance();
 	service.setGateway( gateway );
 
-	// DoclerLabs/hexMachina#236
 	random = Math.random();
 }
