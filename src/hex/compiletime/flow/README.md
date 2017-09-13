@@ -592,7 +592,8 @@ var myString = factory.locate( 'myString' );
 			<node>orange</node>
 			<node>apple</node>
 			<node>banana</node>
-		</root>'
+		</root>',
+		hex.mock.MockXmlParser
 	);
 }
 ```
