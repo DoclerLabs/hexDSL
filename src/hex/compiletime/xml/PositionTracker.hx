@@ -32,8 +32,23 @@ class PositionTracker implements IXmlPositionTracker
 	
 	public function makePositionFromAttribute( xml : Xml, attributeName : String ) : Position
 	{
+		#if ( haxe_ver < 4 )
 		var dslPosition = this.attributeMap.get( xml ).get( attributeName );
 		return Context.makePosition( { min: dslPosition.from, max: dslPosition.to, file: dslPosition.file } );
+		
+		//TODO Ugly try/catch to be removed when Map 2macro time will be fixed.
+		#else
+		try
+		{
+			var dslPosition = this.attributeMap.get( xml ).get( attributeName );
+			return Context.makePosition( { min: dslPosition.from, max: dslPosition.to, file: dslPosition.file } );
+		}
+		catch ( e : Dynamic )
+		{
+			var dslPosition = this.nodeMap.get( xml );
+			return Context.makePosition( { min: dslPosition.from, max: dslPosition.to, file: dslPosition.file } );
+		}
+		#end
 	}
 	
 	public function getPosition( xml : Xml, ?attributeName : String ) : Position
