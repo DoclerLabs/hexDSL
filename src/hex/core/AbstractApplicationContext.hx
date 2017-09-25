@@ -104,8 +104,8 @@ class AbstractApplicationContext implements IApplicationContext
 	 * Accessor for context initialisation state
 	 * @return <code>true</code> if the module is initialized
 	 */
-	@:final 
 	@:isVar public var isInitialized( get, null ) : Bool;
+	@:final 
 	function get_isInitialized() : Bool
 	{
 		return this.isInitialized;
@@ -115,8 +115,8 @@ class AbstractApplicationContext implements IApplicationContext
 	 * Accessor for context release state
 	 * @return <code>true</code> if the module is released
 	 */
-	@:final 
 	@:isVar public var isReleased( get, null ) : Bool;
+	@:final 
 	function get_isReleased() : Bool
 	{
 		return this.isReleased;
