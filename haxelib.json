@@ -11,6 +11,6 @@
   "dependencies":
   {
     "hexinject": "git:https://github.com/DoclerLabs/hexInject.git",
-    "tink_macro": "0.14.1"
+    "tink_macro": "0.15.0"
   }
 }
