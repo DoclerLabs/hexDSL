@@ -96,7 +96,7 @@ class ImportContextParser extends AbstractExprParser<hex.compiletime.basic.Build
 			case 'flow':
 				return BasicStaticFlowCompiler._readFile;
 				
-			case ext:
+			case var ext:
 				trace( ext );
 				
 		}

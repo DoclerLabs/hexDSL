@@ -25,7 +25,7 @@ class MappingConfigParser
 					constructorVO.type = ContextTypeList.MAPPING_CONFIG;
 					constructorVO.arguments = values.map( function (e) return parser.parseMapArgument( parser, constructorVO.ID, e ) );
 					
-				case wtf:
+				case var wtf:
 					logger.error( wtf );
 					Context.error( '', Context.currentPos() );
 			}

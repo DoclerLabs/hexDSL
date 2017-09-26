@@ -32,7 +32,7 @@ class XmlParser
 						case EField( ee, ff ):
 							constructorVO.factory = ExpressionUtil.compressField( params[ 1 ] );
 
-						case wtf:
+						case var wtf:
 							logger.error( wtf );
 							haxe.macro.Context.error( 'Invalid factory parameter', haxe.macro.Context.currentPos() );
 					}
@@ -42,7 +42,7 @@ class XmlParser
 					haxe.macro.Context.error( 'Invalid number of arguments', haxe.macro.Context.currentPos() );
 				}
 				
-			case wtf:
+			case var wtf:
 				logger.error( wtf );
 				Context.error( '', Context.currentPos() );
 		}

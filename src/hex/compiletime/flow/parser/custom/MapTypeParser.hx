@@ -31,7 +31,7 @@ class MapTypeParser
 					case _: "";
 				} );
 				
-			case wtf:
+			case var wtf:
 				logger.error( wtf );
 		}
 		

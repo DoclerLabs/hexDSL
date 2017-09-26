@@ -79,7 +79,7 @@ class ContextArgumentFactory
 					fields.push( { field: propertyName, expr: value } );
 				}
 				
-			case wtf:
+			case var wtf:
 				trace( wtf );
 		}
 

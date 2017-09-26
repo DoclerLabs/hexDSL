@@ -24,7 +24,7 @@ class MappingParser
 				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
 				constructorVO.filePosition = params[0].pos;
 			
-			case wtf:
+			case var wtf:
 				logger.error( wtf );
 				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
 		}
