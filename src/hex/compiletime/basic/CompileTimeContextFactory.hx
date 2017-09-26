@@ -339,7 +339,7 @@ class CompileTimeContextFactory
 										case EConst(CIdent(ident)):
 											a = a.concat( _getMappingDefinitions( this._coreFactory.locate( ident ) ) );
 											
-										case var wtf:
+										case wtf:
 											trace( 'wtf', wtf );
 									}
 								}

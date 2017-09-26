@@ -25,7 +25,7 @@ class HashMapParser
 					constructorVO.type = ContextTypeList.HASHMAP;
 					constructorVO.arguments = values.map( function(e) return parser.parseMapArgument( parser, constructorVO.ID, e ) );
 					
-				case var wtf:
+				case wtf:
 					logger.error( wtf );
 					haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
 			}

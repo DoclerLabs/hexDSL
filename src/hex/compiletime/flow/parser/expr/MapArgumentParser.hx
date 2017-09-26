@@ -27,7 +27,7 @@ class MapArgumentParser
 				mapVO.filePosition 	= param.pos;
 				return mapVO;
 				
-			case var wtf:
+			case wtf:
 				logger.error( wtf );
 				haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
 				null;

@@ -73,12 +73,12 @@ class RuntimeParametersPreprocessor
 								case FVar( t ):
 									return MacroUtil.getFQCNFromComplexType( t );
 									
-								case var wtf:
+								case wtf:
 									trace( field, wtf );
 							}
 						}
 					}
-				case var wtf:
+				case wtf:
 					//trace( field, wtf );
 			}
 		}
@@ -106,12 +106,12 @@ class RuntimeParametersPreprocessor
 						case FVar( t ):
 							a.push( { name: e .name, type: MacroUtil.getFQCNFromComplexType( t ), pos: e.pos } );
 							
-						case var wtf:
+						case wtf:
 							trace( runtimeParam.type, wtf );
 					}
 
 				}
-			case var wtf:
+			case wtf:
 				//trace( runtimeParam.type, wtf );
 		}
 		

@@ -34,7 +34,7 @@ class TypeParser
 					constructorVO.arguments = params.map( function (param) return parser.parseArgument (parser, constructorVO.ID, param) );
 				}
 				
-			case var wtf:
+			case wtf:
 				logger.error( wtf );
 				Context.error( '', Context.currentPos() );
 		}
