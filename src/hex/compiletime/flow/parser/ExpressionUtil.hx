@@ -21,6 +21,13 @@ class ExpressionUtil
 				previousValue = previousValue == "" ? field : field + "." + previousValue;
 				return compressField( ee, previousValue );
 				
+			case ECall( _.expr => EField( ee, field ), params ):
+				previousValue = previousValue == "" ? field : field + "." + previousValue;
+				return compressField( ee, previousValue );
+				
+			case ECall( _.expr => EConst(CIdent(id)), params ):
+				return previousValue == "" ? id : id + "." + previousValue;
+				
 			case EConst(CIdent(id)):
 				return previousValue == "" ? id : id + "." + previousValue;
 
