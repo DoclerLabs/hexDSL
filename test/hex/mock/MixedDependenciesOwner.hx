@@ -19,7 +19,8 @@ class MixedDependenciesOwner implements IDependencyOwner
 	public function new( 	a 			: Array<String>, 
 							mapping 	: MappingDefinition, 
 							mappings 	: Array<MappingDefinition>, 
-							s 			: String ) 
+							s 			: String,
+							something	: Dynamic ) 
 	{}
 	
 	public function getInjector() : IDependencyInjector return this._injector;

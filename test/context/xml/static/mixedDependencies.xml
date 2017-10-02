@@ -34,6 +34,7 @@
 		<argument ref="mapping"/>
 		<argument ref="mappings"/>
 		<argument ref="s"/>
+		<argument value="HelloWorld"/>
 	</test>
 	
 </root>
