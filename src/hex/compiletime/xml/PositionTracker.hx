@@ -32,6 +32,7 @@ class PositionTracker implements IXmlPositionTracker
 	
 	public function makePositionFromAttribute( xml : Xml, attributeName : String ) : Position
 	{
+		
 		var dslPosition = this.attributeMap.get( xml ).get( attributeName );
 		return Context.makePosition( { min: dslPosition.from, max: dslPosition.to, file: dslPosition.file } );
 	}

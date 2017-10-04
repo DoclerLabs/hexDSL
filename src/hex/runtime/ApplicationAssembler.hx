@@ -37,7 +37,10 @@ class ApplicationAssembler implements IApplicationAssembler
 	{
 		var itFactory = this._mContextFactories.iterator();
 		var contextFactories = [ while ( itFactory.hasNext() ) itFactory.next() ];
-		contextFactories.map( function( factory ) { factory.finalize(); } );
+		contextFactories.map( function( factory ) { 
+			factory.finalize(); 
+			return factory;
+			});
 	}
 
 	public function release() : Void

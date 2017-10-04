@@ -1,10 +1,11 @@
 @context( name = 'applicationContext' )
 {
 	s = "test";
+	
 	a = new Array<String>( s, 'yes' );
 
 	mapping1 = mapping({fromType: "String", toValue: s});
-	mapping2 = mapping( {fromType: "hex.mock.Interface", toValue: new hex.mock.Clazz(), withName: "anotherID"} );
+	mapping2 = mapping( {fromType: "hex.mock.Interface", toValue: o.value, withName: "anotherID"} );
 	
 	mappings = new Array<hex.di.mapping.MappingDefinition>
 	(
@@ -12,5 +13,6 @@
 		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id", asSingleton:true} )
 	);
 
-	owner = new hex.mock.MixedDependenciesOwner( a, mapping1, mappings, s );
+	owner = new hex.mock.MixedDependenciesOwner( a, mapping1, mappings, s, o.value );
+	o = {value:new hex.mock.Clazz()};
 }

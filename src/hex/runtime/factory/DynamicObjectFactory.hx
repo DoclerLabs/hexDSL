@@ -10,13 +10,8 @@ import hex.runtime.basic.vo.FactoryVOTypeDef;
 class DynamicObjectFactory
 {
 	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
-
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Dynamic
-	{
+    function new() throw new PrivateConstructorException();
+ 
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T )
 		return {};
-	}
 }
