@@ -24,6 +24,10 @@ import hex.preprocess.flow.MacroConditionalVariablesProcessor;
 class BasicFlowCompiler 
 {
 	#if macro
+	public static var ParserCollectionConstructor : hex.core.VariableExpression
+					->hex.parser.AbstractParserCollection<AbstractExprParser<hex.compiletime.basic.BuildRequest>>
+					= hex.compiletime.flow.parser.ParserCollection.new;
+					
 	public static function _readFile(	fileName 						: String,
 										?applicationContextName 		: String,
 										?preprocessingVariables 		: Expr,
@@ -40,7 +44,7 @@ class BasicFlowCompiler
 		
 		var assembler 					= new CompileTimeApplicationAssembler();
 		var assemblerExpression			= { name: '', expression: applicationAssemblerExpression };
-		var parser 						= new CompileTimeParser( new hex.compiletime.flow.parser.ParserCollection( assemblerExpression ) );
+		var parser 						= new CompileTimeParser( ParserCollectionConstructor( assemblerExpression ) );
 		
 		parser.setImportHelper( new ClassImportHelper() );
 		parser.setExceptionReporter( new FlowAssemblingExceptionReporter() );

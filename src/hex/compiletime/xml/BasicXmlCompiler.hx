@@ -26,6 +26,10 @@ using StringTools;
 class BasicXmlCompiler
 {
 	#if macro
+	public static var ParserCollectionConstructor : hex.core.VariableExpression
+					->hex.parser.AbstractParserCollection<hex.compiletime.xml.AbstractXmlParser<hex.compiletime.basic.BuildRequest>>
+					= hex.compiletime.xml.parser.ParserCollection.new;
+					
 	public static function _readFile( 	fileName 						: String,
 										?applicationContextName 		: String,
 										?preprocessingVariables 		: Expr,
@@ -42,7 +46,7 @@ class BasicXmlCompiler
 		
 		var assembler 					= new CompileTimeApplicationAssembler();
 		var assemblerExpression			= { name: '', expression: applicationAssemblerExpression };
-		var parser 						= new CompileTimeParser( new hex.compiletime.xml.parser.ParserCollection( assemblerExpression ) );
+		var parser 						= new CompileTimeParser( ParserCollectionConstructor( assemblerExpression ) );
 		
 		parser.setImportHelper( new ClassImportHelper() );
 		parser.setExceptionReporter( new ExceptionReporter( dslReader.positionTracker ) );

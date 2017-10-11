@@ -32,6 +32,11 @@ using tink.MacroApi;
 class BasicStaticXmlCompiler 
 {
 	#if macro
+	public static var ParserCollectionConstructor : VariableExpression
+					->String
+					->hex.parser.AbstractParserCollection<hex.compiletime.xml.AbstractXmlParser<hex.compiletime.basic.BuildRequest>>
+					= ParserCollection.new;
+					
 	@:allow( hex.compiletime.flow.parser )
 	public static function _readFile(	fileName 						: String,
 										?applicationContextName 		: String,
@@ -49,7 +54,7 @@ class BasicStaticXmlCompiler
 	
 		var assembler 					= new CompileTimeApplicationAssembler();
 		var assemblerExpression			= { name: '', expression: applicationAssemblerExpression };
-		var parser 						= new CompileTimeParser( new ParserCollection( assemblerExpression, fileName ) );
+		var parser 						= new CompileTimeParser( ParserCollectionConstructor( assemblerExpression, fileName ) );
 		
 		parser.setImportHelper( new ClassImportHelper() );
 		parser.setExceptionReporter( new ExceptionReporter( reader.positionTracker ) );
