@@ -55,12 +55,19 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 			else if ( constructorVO.cType != null ) constructorVO.cType;
 				else 								ContextFactoryUtil.getComplexType( constructorVO.type, constructorVO.filePosition );
 
-		hex.compiletime.util.ContextBuilder.getInstance( this )
-			.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?result:null) );
-
-		if ( !constructorVO.lazy )
+		if ( constructorVO.isPublic )
 		{
-			this._expressions.push( macro @:mergeBlock { $result;  /*coreFactory.register( $v { id }, $i { id } );*/ this.$id = $i { id }; } );
+			hex.compiletime.util.ContextBuilder.getInstance( this )
+				.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?result:null) );
+
+			if ( !constructorVO.lazy )
+			{
+				this._expressions.push( macro @:mergeBlock { $result;  /*coreFactory.register( $v { id }, $i { id } );*/ this.$id = $i { id }; } );
+			}
+		}
+		else
+		{
+			this._expressions.push( macro @:mergeBlock { $result;  /*coreFactory.register( $v { id }, $i { id } );*/ } );
 		}
 		
 		this._coreFactory.register( id, result );

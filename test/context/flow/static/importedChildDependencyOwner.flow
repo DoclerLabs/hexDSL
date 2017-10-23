@@ -1,5 +1,8 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	message = "hello";
+	
+	@public
 	name = "world";
 }

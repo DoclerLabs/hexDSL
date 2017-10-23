@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	reference = position;
 	xRef = x;
 	yRef = y;

@@ -1,5 +1,6 @@
 @context( 	name 	= 'applicationContext'
 			params 	= {xParameter: Float} )
 {
+	@public
 	x = xParameter;
 }

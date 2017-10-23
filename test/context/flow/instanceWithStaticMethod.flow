@@ -1,8 +1,12 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	gateway = "http://localhost/amfphp/gateway.php";
+	
+	@public
 	service = hex.mock.MockServiceProvider.getInstance();
 	service.setGateway( gateway );
 
+	@public
 	random = Math.random();
 }

@@ -1289,5 +1289,14 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( hex.mock.MockColor.Red, code.locator.colored.color );
 		Assert.equals( hex.mock.MockColor.Red, code.locator.colored2.color );
 	}
+	
+	@Test( "test building public string" )
+	public function testBuildingPublicString() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/primitives/publicString.flow", "BasicStaticFlowCompiler_testBuildingPublicString" );
+		code.execute();
+		
+		Assert.equals( 'isPublic', code.locator.isPublic );
+	}
 }
 

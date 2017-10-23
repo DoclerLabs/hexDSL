@@ -1,5 +1,8 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	RectangleClass = hex.mock.MockRectangle;
+	
+	@public
 	classContainer = { AnotherRectangleClass: RectangleClass };
 }

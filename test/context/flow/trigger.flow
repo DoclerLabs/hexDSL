@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	model = new hex.mock.MockModelWithTrigger();
 	model.trigger.connect( listenerInterface );
 	model.callbacks.connect( listenerMethod.onTrigger );

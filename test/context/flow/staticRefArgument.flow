@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	instance = new hex.mock.ClassWithConstantConstantArgument
 		( hex.mock.MockClass.MESSAGE_TYPE );
 }

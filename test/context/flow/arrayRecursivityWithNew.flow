@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	test = new Array<Array<Dynamic>>
 	(
 		new Array<Array<hex.mock.MockClassWithIntGeneric>>( new hex.mock.MockClassWithIntGeneric( 1 ) ),

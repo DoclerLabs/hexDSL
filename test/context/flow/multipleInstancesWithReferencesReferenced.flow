@@ -1,4 +1,5 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	anotherRect = new hex.mock.MockRectangle( rectPosition.x, rectPosition.y, rectSize.x, rectSize.y );
 }

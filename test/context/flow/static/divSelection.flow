@@ -1,6 +1,9 @@
 @context( 	name = 'applicationContext',
 			params 	= {divName:String} )
 {
+	@public
 	div1 = hex.mock.MockUtil.querySelector( '#console' );
+	
+	@public
 	div2 = hex.mock.MockUtil.querySelector( divName );
 }

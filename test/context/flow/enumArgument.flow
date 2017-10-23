@@ -1,6 +1,11 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	color = hex.mock.MockColor.Red;
+	
+	@public
 	colored = new hex.mock.MockColorable( color );
+	
+	@public
 	colored2 = new hex.mock.MockColorable( hex.mock.MockColor.Red );
 }

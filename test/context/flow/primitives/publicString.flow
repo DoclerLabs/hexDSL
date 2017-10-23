@@ -1,8 +1,7 @@
 @context( name = 'applicationContext' )
 {
 	@public
-	x = value;
+	isPublic = 'isPublic';
 	
-	@public
-	value = 5;
+	isPrivate = 'isPrivate';
 }

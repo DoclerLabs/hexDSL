@@ -2,10 +2,12 @@
 {
 	i = 3;
 	
+	@public
 	@map_type( 	'hex.mock.IMockInterfaceWithGeneric<Int>', 
 				'hex.mock.IMockInterfaceWithGeneric<UInt>' ) 
 		intInstance = new hex.mock.MockClassWithIntGeneric( i );
 		
 	@map_type( 'hex.mock.IMockInterfaceWithGeneric<String>' ) 
+	@public
 		stringInstance = new hex.mock.MockClassWithStringGeneric( 's' );
 }

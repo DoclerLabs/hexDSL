@@ -1,9 +1,11 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	oDynamic = { };
 	oDynamic.p = refO.property;
 	oClass.property = refO.property;
 	
+	@public
 	oClass = new hex.mock.MockClassWithProperty();
 	refO = new hex.mock.MockClassWithProperty();
 }

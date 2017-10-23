@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	@map_type( 'hex.collection.HashMap<String, hex.mock.MockFruitVO>' ) 
 	fruits = new hex.collection.HashMap<Any, hex.mock.MockFruitVO>
 	([ 

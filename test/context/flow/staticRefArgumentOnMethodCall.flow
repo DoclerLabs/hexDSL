@@ -1,5 +1,8 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	instance = new hex.mock.MockMethodCaller();
+	
+	@public
 	instance.call( hex.mock.MockMethodCaller.staticVar );
 }

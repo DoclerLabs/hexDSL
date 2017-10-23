@@ -1,6 +1,11 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	rect = new hex.mock.MockRectangle( 10, 20, 30, 40 );
+	
+	@public
 	size = new hex.structures.Size( 15, 25 );
+	
+	@public
 	position = new hex.structures.Point( 35, 45 );
 }

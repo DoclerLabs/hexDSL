@@ -1,4 +1,4 @@
 @context( name = 'applicationContext' )
 {
-	value = null;
+	@public value = null;
 }

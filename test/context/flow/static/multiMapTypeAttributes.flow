@@ -1,17 +1,21 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	@inject_into( true )
 	instanceWithSubType = new hex.mock.MockClassWithInjectedMethod();
 	
+	@public
 	@map_type( 	'hex.mock.IMockInterface',
 				'hex.mock.IAnotherMockInterface' ) 
 		instance = new hex.mock.MockClass();
-	
+		
+	@public
 	@map_type( 	'String->String',
 				'hex.mock.MockModuleWithInternalType.FunctionSignature' ) 
 	f = hex.mock.MockClass.getInfos2;
 	
 	@map_type( 	'String->String',
 				'hex.mock.MockModuleWithInternalType.FunctionSignature' ) 
+	@public
 	f2 = hex.mock.MockModuleWithInternalType.getInfos2;
 }

@@ -1,7 +1,12 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	fruits = new Array<hex.mock.MockFruitVO>( fruit0, fruit1, fruit2 );
+	
+	@public
 	empty = [];
+	
+	@public
 	text = [ "hello", "world" ];
 	
 	fruit0 = new hex.mock.MockFruitVO( "orange" );

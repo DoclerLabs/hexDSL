@@ -1,5 +1,6 @@
 @context( 	name 	= 'applicationContext'
 			params 	= {to:String, message: String} )
 {
+	@public
 	text = add( message, " ", to );
 }

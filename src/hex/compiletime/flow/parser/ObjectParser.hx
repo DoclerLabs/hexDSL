@@ -71,6 +71,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				constructorVO.lazy = true;
 				this._parseExpression ( e, constructorVO );
 				
+			case macro @public( $a{ args } ) $e:
+				constructorVO.isPublic = true;
+				this._parseExpression ( e, constructorVO );
+				
 			case _:
 				
 				switch( e.expr )

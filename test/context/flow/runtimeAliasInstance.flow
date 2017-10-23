@@ -1,5 +1,8 @@
 @context( name = 'applicationContext', params = {p: hex.structures.Point} )
 {
+	@public
 	anotherPosition = position;
+	
+	@public
 	position = p;
 }

@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	mockObject = new hex.mock.MockObjectWithRegtangleProperty();
 	mockObject.rectangle.x = 1.5;
 }

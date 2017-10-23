@@ -1,4 +1,5 @@
 @context( name = 'applicationContext', params = {value: Int} )
 {
+	@public
 	x = value;
 }
