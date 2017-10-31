@@ -82,7 +82,7 @@ class ObjectParser
 				constructorVO.filePosition 	= this._positionTracker.getPosition( xml );
 				constructorVO.ifList 		= XmlUtil.getIfList( xml );
 				constructorVO.ifNotList 	= XmlUtil.getIfNotList( xml );
-
+				constructorVO.isPublic		= true;
 				this._builder.build( OBJECT( constructorVO ) );
 			}
 			else
@@ -227,7 +227,7 @@ class ObjectParser
 				constructorVO.ifList 		= ifList;
 				constructorVO.ifNotList 	= ifNotList;
 				constructorVO.filePosition 	= constructorVO.ref == null ? this._positionTracker.getPosition( xml ) : this._positionTracker.getPosition( xml, ContextAttributeList.REF );
-
+				constructorVO.isPublic 		= true;
 				this._builder.build( OBJECT( constructorVO ) );
 			}
 		}

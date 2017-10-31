@@ -1,8 +1,10 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	@map_type( 'hex.mock.IMockInterface' ) 
 	instance = new hex.mock.MockClass();
 	
-	@map_type( 'hex.mock.MockModuleWithInternalType.GetInfosInternalTypedef' ) 
+	@map_type( 'hex.mock.MockModuleWithInternalType.GetInfosInternalTypedef' )
+	@public
 	instance2 = new hex.mock.MockClass();
 }

@@ -1,7 +1,12 @@
 @context( 	name = 'applicationContext'
 			params 	= {x: Float, y:Float} )
 {
+	@public
 	width = sizeContext.size.width;
+	
+	@public
 	height = sizeContext.size.height;
+	
+	@public
 	sizeContext = new Context( 'context/flow/static/beImportedSize.flow', {xParameter: x, yParameter: y} );
 }

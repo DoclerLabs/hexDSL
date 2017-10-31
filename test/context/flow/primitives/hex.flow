@@ -1,4 +1,4 @@
 @context( name = 'applicationContext' )
 {
-	i = 0xFFFFFF;
+	@public i = 0xFFFFFF;
 }

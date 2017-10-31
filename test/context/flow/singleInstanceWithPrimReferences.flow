@@ -1,6 +1,11 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	x = 1;
+	
+	@public
 	y = 2;
+	
+	@public
 	position = new hex.structures.Point( x, y );
 }

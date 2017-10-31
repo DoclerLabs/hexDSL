@@ -1,4 +1,5 @@
 @context( ${context} )
 {
+	@public
 	${node};
 }

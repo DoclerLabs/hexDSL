@@ -1,11 +1,18 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	fruitsInterfaces = new Array<hex.mock.IMockFruit>( fruit0, fruit1, fruit2 );
 	
+	@public
 	fruit0 = new hex.mock.MockFruitVO( "orange" );
+	
+	@public
 	fruit1 = new hex.mock.MockFruitVO( "apple" );
+	
+	@public
 	fruit2 = new hex.mock.MockFruitVO( "banana" );
 	
+	@public
 	caller = new hex.mock.MockCaller();
 	caller.callArray( fruitsInterfaces );
 }

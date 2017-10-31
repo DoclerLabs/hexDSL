@@ -1,5 +1,10 @@
 @context( name = 'applicationContext' )
 {
-	@map_type( 'Array<Int>', 'Array<UInt>' ) intCollection = new Array<Int>();
-	@map_type( 'Array<String>' ) stringCollection = new Array<String>();
+	@public
+	@map_type( 'Array<Int>', 'Array<UInt>' ) 
+	intCollection = new Array<Int>();
+	
+	@map_type( 'Array<String>' ) 
+	@public
+	stringCollection = new Array<String>();
 }

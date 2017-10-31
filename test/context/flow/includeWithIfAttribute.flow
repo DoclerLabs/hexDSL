@@ -3,5 +3,6 @@
 @include( 'context/flow/ifAttribute.flow' )
 #end
 {
+	@public
 	test = 'hello world';
 }

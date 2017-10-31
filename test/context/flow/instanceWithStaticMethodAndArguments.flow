@@ -1,4 +1,5 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	rect = hex.mock.MockRectangleFactory.getRectangle( 10, 20, 30, 40 );
 }

@@ -1,5 +1,6 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	#if ( testing == 'true' ) || ( releasing == 'true' )
 	message = "hello debug";
 	#elseif ( prodz == 'true' )

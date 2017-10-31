@@ -4,6 +4,9 @@
 			, test:{p: hex.mock.IMockInterface}
 			} )
 {
+	@public
 	size = new hex.structures.Size( p.x, p.y );
+	
+	@public
 	alias = test.p;
 }

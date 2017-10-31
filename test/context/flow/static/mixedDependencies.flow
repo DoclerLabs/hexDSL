@@ -1,18 +1,25 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	s = "test";
 	
 	a = new Array<String>( s, 'yes' );
 
+	@public
 	mapping1 = mapping({fromType: "String", toValue: s});
+	
+	@public
 	mapping2 = mapping( {fromType: "hex.mock.Interface", toValue: o.value, withName: "anotherID"} );
 	
+	@public
 	mappings = new Array<hex.di.mapping.MappingDefinition>
 	(
 		mapping2,
 		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id", asSingleton:true} )
 	);
 
+	@public
 	owner = new hex.mock.MixedDependenciesOwner( a, mapping1, mappings, s, o.value );
+	
 	o = {value:new hex.mock.Clazz()};
 }

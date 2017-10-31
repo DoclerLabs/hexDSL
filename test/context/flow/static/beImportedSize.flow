@@ -1,5 +1,6 @@
 @context( 	name = 'applicationContext'
 			params 	= {xParameter: Float, yParameter:Float} )
 {
+	@public
 	size = new hex.structures.Size( xParameter, yParameter );
 }

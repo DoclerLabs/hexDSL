@@ -1,4 +1,8 @@
 @context( name = 'applicationContext' )
 {
-	size = new hex.structures.Size( 10, 20 );
+	@public
+	size = new hex.structures.Size( i, j );
+	
+	i = 10;
+	j = 20;
 }

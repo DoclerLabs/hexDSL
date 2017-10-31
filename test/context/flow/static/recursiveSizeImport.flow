@@ -1,6 +1,9 @@
 @context( 	name = 'applicationContext'
 			params 	= {x: Float, y:Float} )
 {
+	@public
 	sizeContext1 = new Context( 'context/flow/static/sizeImport.flow', {x: x, y: y} );
+	
+	@public
 	sizeContext2 = new Context( 'context/flow/static/sizeImport.flow', {x: x, y: y} );
 }

@@ -2,12 +2,14 @@
 {
 	s = "test";
 	
+	@public
 	mappings1 = new Array<hex.di.mapping.MappingDefinition>
 	(
 		mapping( {fromType: "String", toValue: s} ),
 		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id"} )
 	);
 	
+	@public
 	mappings2 = new Array<hex.di.mapping.MappingDefinition>
 	(
 		new hex.di.mapping.MappingDefinition( {fromType: "String", toValue: s} ),

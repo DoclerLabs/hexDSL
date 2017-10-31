@@ -71,6 +71,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				constructorVO.lazy = true;
 				this._parseExpression ( e, constructorVO );
 				
+			case macro @public( $a{ args } ) $e:
+				constructorVO.isPublic = true;
+				this._parseExpression ( e, constructorVO );
+				
 			case _:
 				
 				switch( e.expr )
@@ -97,6 +101,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						logger.debug( e.pos );
 						logger.debug( e );
 						logger.debug( e.expr );
+						haxe.macro.Context.error( 'Invalid expression', e.pos );
 				}
 				
 		}

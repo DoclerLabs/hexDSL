@@ -1,15 +1,19 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	rect = new hex.mock.MockRectangle();
 	rect.size = rectSize;
 	rect.offsetPoint( rectPosition );
 	
+	@public
 	rectSize = new hex.structures.Point( 30, 40 );
 	
+	@public
 	rectPosition = new hex.structures.Point();
 	rectPosition.x = 10;
 	rectPosition.y = 20;
 	
+	@public
 	anotherRect = new hex.mock.MockRectangle();
 	anotherRect.size = rectSize;
 	anotherRect.reset();

@@ -8,6 +8,7 @@ import hex.vo.ConstructorVO;
 typedef ContextImport =
 {
 	id 			: String,
+	isPublic	: Bool,
 	fileName 	: String,
 	arg			: ConstructorVO,
 	pos 		: haxe.macro.Expr.Position

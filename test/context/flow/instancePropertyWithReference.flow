@@ -1,12 +1,17 @@
 @context( name = 'applicationContext' )
 {
+	@public
 	rect = new hex.mock.MockRectangle();
 	rect.size = size;
 	
+	@public
 	size = new hex.structures.Point();
 	size.x = width;
 	size.y = height;
 	
+	@public
 	width = 10;
+	
+	@public
 	height = 20;
 }
