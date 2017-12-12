@@ -10,10 +10,10 @@
 	
 	@lazy
 	@public
-	isLazy = hex.mock.MockLazyFactory.getLazy( 3 );
+	isLazy = hex.mock.MockLazyFactory.getLazy( '3' );
 	
 	@lazy
-	isPrivateAndLazy = hex.mock.MockLazyFactory.getLazy( 4 );
+	isPrivateAndLazy = hex.mock.MockLazyFactory.getLazy( '4' );
 	
 	@public
 	wasPrivateAndLazy = isPrivateAndLazy;
