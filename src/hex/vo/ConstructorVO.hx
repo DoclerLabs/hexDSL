@@ -23,7 +23,7 @@ class ConstructorVO extends AssemblerVO
 	
 	public var 				abstractType 		: String;
 	public var 				lazy 				: Bool;
-	public var 				isPublic 			: Bool;
+	public var 				isPublic 			= false;
 	
 	public var 				shouldAssign		= true;
 		

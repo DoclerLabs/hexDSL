@@ -1297,6 +1297,10 @@ class BasicStaticFlowCompilerTest
 		code.execute();
 		
 		Assert.equals( 'isPublic', code.locator.isPublic );
+		Assert.equals( 'isPrivate', code.locator.wasPrivate );
+		Assert.equals( 3, code.locator.isLazy );
+		Assert.equals( 4, code.locator.wasPrivateAndLazy );
+		//Assert.equals( 4, code.locator.isPrivateAndLazy );
 	}
 }
 

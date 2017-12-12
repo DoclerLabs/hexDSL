@@ -140,25 +140,25 @@ class ContextUtil
 		return classExpr;
 	}
 
-	public static function buildField( instanceID : String, ct : ComplexType, pos : haxe.macro.Expr.Position, lazy : Bool ) : Field
+	public static function buildField( instanceID : String, ct : ComplexType, pos : haxe.macro.Expr.Position, lazy : Bool, isPublic : Bool = true ) : Field
 	{
 		return !lazy ?
 		{
 			name: instanceID,
 			pos: pos,
 			kind: FVar( ct ),
-			access: [ APublic ]
+			access: isPublic ? [ APublic ] : [ APrivate ]
 		}
 		:
 		{
 			name: instanceID,
 			pos: pos,
 			kind: FProp( 'get', 'null', ct ),
-			access: [ APublic ]
+			access: isPublic ? [ APublic ] : [ APrivate ]
 		}
 	}
 	
-	public static function buildLazyField( instanceID : String, ct : ComplexType, body : Expr, pos : haxe.macro.Expr.Position ) : Field
+	public static function buildLazyField( instanceID : String, ct : ComplexType, body : Expr, pos : haxe.macro.Expr.Position, isPublic : Bool = true ) : Field
 	{
 		var lazyField : Field = 
 		{
@@ -166,9 +166,9 @@ class ContextUtil
 			meta: [ { name: ":noCompletion", params: [], pos: pos } ],
 			pos: pos,
 			kind: null,
-			access: [ APublic ]
+			access: isPublic ? [ APublic ] : [ APrivate ]
 		}
-		
+
 		lazyField.kind = FFun( 
 			{
 				args: [],
