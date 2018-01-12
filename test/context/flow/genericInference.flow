@@ -1,0 +1,6 @@
+@context
+{
+	@type("hex.mock.Sample")
+	sample = hex.mock.Sample.getSomething();
+	sample.testType( sample );
+}

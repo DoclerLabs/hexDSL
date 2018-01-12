@@ -28,6 +28,7 @@ import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.mock.MockTriggerListener;
+import hex.mock.Sample;
 import hex.runtime.ApplicationAssembler;
 import hex.structures.Point;
 import hex.structures.Size;
@@ -1301,6 +1302,15 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( '3', code.locator.isLazy );
 		Assert.equals( '4', code.locator.wasPrivateAndLazy );
 		//Assert.equals( 4, code.locator.isPrivateAndLazy );
+	}
+	
+	@Test( "test generic inference" )
+	public function testGenericInference() : Void
+	{
+		Sample.value = null;
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/genericInference.flow", "BasicStaticFlowCompiler_testGenericInference" );
+		code.execute();
+		Assert.isNotNull( Sample.value );
 	}
 }
 
