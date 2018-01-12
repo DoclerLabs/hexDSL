@@ -1,5 +1,4 @@
 package hex.compiletime.basic;
-import haxe.macro.Printer;
 
 #if macro
 import hex.collection.Locator;
