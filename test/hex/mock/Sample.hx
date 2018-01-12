@@ -15,4 +15,7 @@ class Sample
 
 	static public function getSomething<T>() : T
 		return cast new Sample();
+		
+	static public function test() : Void->String
+		return function () return "test";
 }

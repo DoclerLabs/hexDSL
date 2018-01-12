@@ -1,0 +1,5 @@
+@context
+{
+	@public
+	test = hex.mock.Sample.test();
+}

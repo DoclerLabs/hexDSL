@@ -1312,5 +1312,13 @@ class BasicStaticFlowCompilerTest
 		code.execute();
 		Assert.isNotNull( Sample.value );
 	}
+	
+	@Test( "test closure returned from static call" )
+	public function testClosureReturnedFromStaticCall() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/closureFromStaticCall.flow", "BasicStaticFlowCompiler_testClosureReturnedFromStaticCall" );
+		code.execute();
+		Assert.equals( "test", code.locator.test() );
+	}
 }
 
