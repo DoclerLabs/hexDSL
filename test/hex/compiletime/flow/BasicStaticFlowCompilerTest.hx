@@ -28,6 +28,7 @@ import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.mock.MockTriggerListener;
+import hex.mock.Sample;
 import hex.runtime.ApplicationAssembler;
 import hex.structures.Point;
 import hex.structures.Size;
@@ -1297,6 +1298,27 @@ class BasicStaticFlowCompilerTest
 		code.execute();
 		
 		Assert.equals( 'isPublic', code.locator.isPublic );
+		Assert.equals( 'isPrivate', code.locator.wasPrivate );
+		Assert.equals( '3', code.locator.isLazy );
+		Assert.equals( '4', code.locator.wasPrivateAndLazy );
+		//Assert.equals( 4, code.locator.isPrivateAndLazy );
+	}
+	
+	@Test( "test generic inference" )
+	public function testGenericInference() : Void
+	{
+		Sample.value = null;
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/genericInference.flow", "BasicStaticFlowCompiler_testGenericInference" );
+		code.execute();
+		Assert.isNotNull( Sample.value );
+	}
+	
+	@Test( "test closure returned from static call" )
+	public function testClosureReturnedFromStaticCall() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/closureFromStaticCall.flow", "BasicStaticFlowCompiler_testClosureReturnedFromStaticCall" );
+		code.execute();
+		Assert.equals( "test", code.locator.test() );
 	}
 }
 

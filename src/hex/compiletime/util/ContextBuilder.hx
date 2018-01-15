@@ -1,6 +1,7 @@
 package hex.compiletime.util;
 
 #if macro
+import haxe.macro.Expr.Access;
 import haxe.macro.Expr.TypeDefinition;
 import hex.core.IApplicationContext;
 import hex.core.HashCodeFactory;
@@ -88,9 +89,9 @@ class ContextBuilder
 		ContextBuilder._Map.set( owner, new ContextBuilder( owner, applicationContextClassName ) );
 	}
 	
-	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null ) : Void
+	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null, isPublic : Bool = true ) : Void
 	{
-		var field = ContextUtil.buildField( fieldName, ct, pos, lazyExpr!=null );
+		var field = ContextUtil.buildField( fieldName, ct, pos, lazyExpr!=null, isPublic );
 		this._iteration.definition.fields.push( field );
 	
 		if ( lazyExpr != null )
@@ -103,7 +104,7 @@ class ContextBuilder
 				}
 				return this.$fieldName;
 			}
-			var lazyField = ContextUtil.buildLazyField( fieldName, ct, lazyExpr, pos );
+			var lazyField = ContextUtil.buildLazyField( fieldName, ct, lazyExpr, pos, isPublic );
 			this._iteration.definition.fields.push( lazyField );
 		}
 	}
@@ -130,7 +131,7 @@ class ContextBuilder
 		
 		for ( field in this._iteration.definition.fields )
 		{
-			if ( field.name != 'new' )
+			if ( field.name != 'new' && field.access.indexOf( APrivate ) == -1 )
 			{
 				switch( field.kind )
 				{

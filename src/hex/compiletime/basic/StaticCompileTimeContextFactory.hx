@@ -55,10 +55,10 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 			else if ( constructorVO.cType != null ) constructorVO.cType;
 				else 								ContextFactoryUtil.getComplexType( constructorVO.type, constructorVO.filePosition );
 
-		if ( constructorVO.isPublic )
+		if ( constructorVO.isPublic || constructorVO.lazy )
 		{
 			hex.compiletime.util.ContextBuilder.getInstance( this )
-				.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?result:null) );
+				.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?result:null), constructorVO.isPublic );
 
 			if ( !constructorVO.lazy )
 			{
