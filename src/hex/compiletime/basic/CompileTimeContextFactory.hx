@@ -1,4 +1,5 @@
 package hex.compiletime.basic;
+import haxe.macro.Printer;
 
 #if macro
 import haxe.macro.Context;
@@ -9,6 +10,7 @@ import hex.collection.Locator;
 import hex.compiletime.basic.vo.FactoryVOTypeDef;
 import hex.compiletime.factory.FactoryUtil;
 import hex.compiletime.factory.PropertyFactory;
+import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
 import hex.core.ICoreFactory;
@@ -291,31 +293,128 @@ class CompileTimeContextFactory
 		this._coreFactory.register( id, result );
 	}
 	
-	function _getMappingDefinition( e )
+	function _getMappingDefinition( e, filePosition )
+	{
+		var _getDefinition = function( e )
+		{
+			switch( e.expr )
+			{
+				case EObjectDecl( fields ):
+
+					return fields.fold ( 
+						function (f, o) 
+						{
+							switch( f.field )
+							{
+								case 'fromType': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
+								case 'withName': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
+								case _:
+							}
+							return o;
+						}, {} );
+
+				case _:
+			}
+			
+			return null;
+		};
+		
+		var throwError = function( filePosition, typeToMatch, hasToMatch )
+		{
+			var toString = haxe.macro.TypeTools.toString;
+			Context.error( "Type mismatch in your mapping definition.\n'" +
+				toString( hasToMatch ) + "' doesn't match with '" + toString( typeToMatch )
+				+ "'", filePosition );
+		}
+	
+		//We get mapping definition from the local function
+		var md =  _getDefinition( e );
+		
+		//Now we start to check mapping consistency. 
+		//The concrete type should unify with the abstract one.
+		var fromType = _getField( e, 'fromType' );
+		
+		if ( fromType != null )
+		{
+			//Check for Class mapping
+			var typeName = switch( fromType.expr ) { case EConst(CString(typeName)): typeName; case _: null; };
+			var toValue = _getField( e, 'toValue' ); 
+			var toClass = _getField( e, 'toClass' );
+
+			if ( toClass != null )
+			{
+				var className = ExpressionUtil.compressField( toClass );
+				if ( typeName != null && className != null )
+				{
+					var typeToMatch = Context.getType( typeName );
+					var hasToMatch = Context.getType( className );
+
+					if ( !Context.unify( hasToMatch, typeToMatch ) )
+					{
+						throwError( filePosition, typeToMatch, hasToMatch );
+					}
+				}
+			}
+			else if ( toValue != null )
+			{
+				//Check for value
+				try
+				{
+					var value = haxe.macro.ExprTools.getValue( toValue );
+					var typeToMatch = Context.getType( typeName );
+					var hasToMatch = Context.typeof( toValue );
+
+					if ( !Context.unify( hasToMatch, typeToMatch ) )
+					{
+						throwError( filePosition, typeToMatch, hasToMatch );
+					}
+				}
+				//Check for reference
+				catch ( err : Dynamic )
+				{
+					var compressedField = ExpressionUtil.compressField( toValue );
+					if ( compressedField != null && this._typeLocator.isRegisteredWithKey( compressedField ) )
+					{
+						var typeLoc = this._typeLocator.locate( compressedField );
+
+						var typeToMatch = Context.getType( typeName );
+						var hasToMatch = Context.getType( typeLoc );
+						
+						if ( !Context.unify( hasToMatch, typeToMatch ) )
+						{
+							throwError( filePosition, typeToMatch, hasToMatch );
+						}
+					}
+				}
+			}
+		}
+		
+		return md;
+	}
+	
+	function _getField( e, fieldName )
 	{
 		switch( e.expr )
 		{
 			case EObjectDecl( fields ):
 
-				return fields.fold ( 
-					function (f, o) 
+				for ( f in fields )
+				{
+					if ( f.field == fieldName )
 					{
-						switch( f.field )
+						switch( f.expr.expr )
 						{
-							case 'fromType': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
-							case 'withName': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
-							case _:
+							case EConst(CIdent('null')): return null;
+							case _ : return f.expr;
 						}
-						return o;
-					}, {} );
-
+					}
+				}
 			case _:
 		}
-		
 		return null;
 	}
 	
-	function _getMappingDefinitions( e : Expr ) : Array<hex.di.mapping.MappingDefinition>
+	function _getMappingDefinitions( e : Expr, filePosition ) : Array<hex.di.mapping.MappingDefinition>
 	{
 		var a = [];
 		switch( e.expr )
@@ -333,11 +432,11 @@ class CompileTimeContextFactory
 									switch( value.expr )
 									{
 										case EObjectDecl( fields ):
-											var mapping = _getMappingDefinition( value );
+											var mapping = _getMappingDefinition( value, filePosition );
 											if ( mapping != null ) a.push( mapping );
 											
 										case EConst(CIdent(ident)):
-											a = a.concat( _getMappingDefinitions( this._coreFactory.locate( ident ) ) );
+											a = a.concat( _getMappingDefinitions( this._coreFactory.locate( ident ), filePosition ) );
 											
 										case wtf:
 											trace( 'wtf', wtf );
@@ -350,7 +449,7 @@ class CompileTimeContextFactory
 					}
 					else if ( haxe.macro.ComplexTypeTools.toString( vars[ 0 ].type ) == 'hex.di.mapping.MappingDefinition' )
 					{
-						var mapping = _getMappingDefinition( vars[ 0 ].expr );
+						var mapping = _getMappingDefinition( vars[ 0 ].expr, filePosition );
 						if ( mapping != null ) a.push( mapping );
 					}
 				}
@@ -367,9 +466,9 @@ class CompileTimeContextFactory
 		{
 			var mappings = constructorVO.arguments
 				.filter( function ( arg ) return arg.ref != null )
-					.map( function ( arg ) return this._coreFactory.locate( arg.ref ) )
-						.filter( function ( arg ) return arg != null )
-							.flatMap( _getMappingDefinitions )
+					.map( function ( arg ) return {pos: arg.filePosition, expr: this._coreFactory.locate( arg.ref )} )
+						.filter( function ( arg ) return arg.expr != null )
+							.flatMap( function( arg ) return _getMappingDefinitions( arg.expr, arg.pos ) )
 								.array();
 			
 			if ( !hex.di.mapping.MappingChecker.matchForClassName( constructorVO.className, mappings ) )
