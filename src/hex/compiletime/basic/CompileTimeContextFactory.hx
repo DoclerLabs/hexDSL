@@ -346,7 +346,7 @@ class CompileTimeContextFactory
 				var className = ExpressionUtil.compressField( toClass );
 				if ( typeName != null && className != null )
 				{
-					var typeToMatch = Context.getType( typeName );
+					var typeToMatch = MacroUtil.getTypeFromString( typeName );
 					var hasToMatch = Context.getType( className );
 
 					if ( !Context.unify( hasToMatch, typeToMatch ) )
@@ -361,7 +361,7 @@ class CompileTimeContextFactory
 				try
 				{
 					var value = haxe.macro.ExprTools.getValue( toValue );
-					var typeToMatch = Context.getType( typeName );
+					var typeToMatch = MacroUtil.getTypeFromString( typeName );
 					var hasToMatch = Context.typeof( toValue );
 
 					if ( !Context.unify( hasToMatch, typeToMatch ) )
@@ -377,12 +377,19 @@ class CompileTimeContextFactory
 					{
 						var typeLoc = this._typeLocator.locate( compressedField );
 
-						var typeToMatch = Context.getType( typeName );
-						var hasToMatch = Context.getType( typeLoc );
+						var typeToMatch = MacroUtil.getTypeFromString( typeName );
 						
-						if ( !Context.unify( hasToMatch, typeToMatch ) )
+						try
 						{
-							throwError( filePosition, typeToMatch, hasToMatch );
+							var hasToMatch = Context.getType( typeLoc );
+							if ( !Context.unify( hasToMatch, typeToMatch ) )
+							{
+								throwError( filePosition, typeToMatch, hasToMatch );
+							}
+						}
+						catch ( e : Dynamic )
+						{
+							
 						}
 					}
 				}
