@@ -18,4 +18,10 @@ class Sample
 		
 	static public function test() : Void->String
 		return function () return "test";
+		
+	public function testBind( value : String, anotherValue : Int ) : String
+		return value + anotherValue;
+		
+	static public function testStaticBind( value : String, anotherValue : Int ) : String
+		return value + anotherValue;
 }

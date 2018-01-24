@@ -86,6 +86,17 @@ class PropertyParser
 					propertyVO = new PropertyVO( ident, fieldName, null, null, ExpressionUtil.compressField( e, ff ) );
 				}
 				
+			case ECall( _.expr => EField( e, field ), params ) if ( field == 'bind' ):
+				switch( e.expr )
+				{
+					case EField( ee, ff ):
+						
+						var constructorVO = parser.parseArgument( parser, ident, assigned );
+						propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
+
+					case wtf: trace( wtf );
+				}
+				
 			case _:
 				logger.debug( assigned.expr );
 		}
