@@ -2,6 +2,7 @@ package hex.compiletime.factory;
 
 #if macro
 import haxe.macro.*;
+import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.util.MacroUtil;
 
 /**
@@ -21,19 +22,45 @@ class ClosureFactory
 		var pos 			= vo.filePosition;
 		var id 				= vo.ID;
 		var args 			= ArgumentFactory.build( factoryVO );
-		
+	
+		var coreFactory		= factoryVO.contextFactory.getCoreFactory();
+		var typelocator		= factoryVO.contextFactory.getTypeLocator();
+
 		//We temporary remove the assignment, we want to proceeed it later
 		var shouldAssign = vo.shouldAssign;
 		vo.shouldAssign = false;
 		var ref = ReferenceFactory.build( factoryVO );
 		//We put back the assignment request
 		vo.shouldAssign = shouldAssign;
+
+		var e 		= _bindFactory( ref, args );
+		var refID 	= ExpressionUtil.compressField( ref ).split( '.' )[ 0 ];
 		
-		var e = _bindFactory( ref, args );
-		vo.type = vo.abstractType != null ? vo.abstractType : try MacroUtil.getFQCNFromExpression( e ) catch ( e : Dynamic ) _blankType( vo );
+		if ( coreFactory.isRegisteredWithKey( refID ) )
+		{//Instance method
+			var refExpr = coreFactory.locate( refID );
+			var nullExpr = macro null;
+			var exprType = _bindFactory( ref, [ for ( el in args ) MacroUtil.getIdent( el ) != '_' ?  nullExpr : el ] );
+			vo.type = vo.abstractType != null ? vo.abstractType : try MacroUtil.getFQCNFromComplexType(TypeTools.toComplexType( Context.typeof( macro { $refExpr; $exprType; } ))) catch ( e : Dynamic ) _blankType( vo );
+			_registerType( typelocator, e, vo.type );
+		}
+		else
+		{//Static method
+			var nullExpr = macro null;
+			var exprType = _bindFactory( ref, [ for ( el in args ) MacroUtil.getIdent( el ) != '_' ?  nullExpr : el ] );
+			vo.type = vo.abstractType != null ? vo.abstractType : try MacroUtil.getFQCNFromComplexType(TypeTools.toComplexType( Context.typeof( macro { $exprType; } ))) catch ( e : Dynamic ) _blankType( vo );
+			_registerType( typelocator, e, vo.type );
+		}
+		
+		//Final result
 		var result = ClassInstanceFactory.getResult( e, id, vo );
-		
 		return macro @:pos(pos) $result;
+	}
+	
+	inline static function _registerType( typelocator, e, type ) : Void
+	{
+		var key = new Printer().printExpr( e );
+		if ( !typelocator.isRegisteredWithKey( key ) ) typelocator.register( key, type );
 	}
 }
 #end

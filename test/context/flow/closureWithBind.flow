@@ -15,11 +15,14 @@
 	result = hex.mock.ConstructorWithClosureArgs.staticallWithClosureArgs( sample.testBind.bind( _, i ), hex.mock.Sample.testStaticBind.bind( _, i ) );
 	
 	@public
-	mapping1 = mapping( { fromType: "String->String", toValue: sample.testBind.bind( _, i ) } );
+	mapping1 = mapping( { fromType: "String->String", toValue: binded } );
 	
 	@public
 	mapping2 = mapping( { fromType: "String->String", toValue: hex.mock.Sample.testStaticBind.bind( _, i ) } );
-
+	
+	/*test = mapping( { fromType: "Float->Float->tink.CoreApi.Promise<tink.CoreApi.Noise>", toValue: hex.mock.Sample.prom, withName: "myFunc" } );
+	cdo = new hex.mock.ClosureDependencyOwner( test );*/
+	
 	sample = new hex.mock.Sample();
 	i = 3;
 }

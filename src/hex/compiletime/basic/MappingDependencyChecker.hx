@@ -27,10 +27,9 @@ class MappingDependencyChecker
 	
 	public function new( coreFactory : ICoreFactory, typeLocator : ILocator<String, String> ) 
 	{
-		this._coreFactory = coreFactory;
-		this._typeLocator = typeLocator;
-		
-		this._dependencyInterface = MacroUtil.getClassType( Type.getClassName( hex.di.mapping.IDependencyOwner ) );
+		this._coreFactory 			= coreFactory;
+		this._typeLocator 			= typeLocator;
+		this._dependencyInterface 	= MacroUtil.getClassType( Type.getClassName( hex.di.mapping.IDependencyOwner ) );
 	}
 	
 	public function checkDependencies( constructorVO : ConstructorVO ) : Void
@@ -98,7 +97,7 @@ class MappingDependencyChecker
 		return cast a;
 	}
 	
-	function _getMappingDefinition( e, filePosition )
+	public function _getMappingDefinition( e, filePosition )
 	{
 		var _getDefinition = function( e )
 		{
@@ -177,24 +176,25 @@ class MappingDependencyChecker
 				//Check for reference
 				catch ( err : Dynamic )
 				{
-					var compressedField = ExpressionUtil.compressField( toValue );
+					var compressedField = new haxe.macro.Printer().printExpr( toValue );
 					if ( compressedField != null && this._typeLocator.isRegisteredWithKey( compressedField ) )
 					{
 						var typeLoc = this._typeLocator.locate( compressedField );
-
 						var typeToMatch = MacroUtil.getTypeFromString( typeName );
-						
-						try
+
+						var hasToMatch = try
 						{
-							var hasToMatch = Context.getType( typeLoc );
-							if ( !Context.unify( hasToMatch, typeToMatch ) )
-							{
-								throwError( filePosition, typeToMatch, hasToMatch );
-							}
+							Context.getType( typeLoc );
+							
 						}
 						catch ( e : Dynamic )
 						{
-							
+							Context.typeof(Context.parseInlineString( '( null : ${typeLoc})', filePosition ));
+						}
+						
+						if ( !Context.unify( hasToMatch, typeToMatch ) )
+						{
+							throwError( filePosition, typeToMatch, hasToMatch );
 						}
 					}
 				}

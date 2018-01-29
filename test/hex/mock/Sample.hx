@@ -24,4 +24,9 @@ class Sample
 		
 	static public function testStaticBind( value : String, anotherValue : Int ) : String
 		return value + anotherValue;
+		
+	/*static public function prom( a : Int, b : Int ) : tink.CoreApi.Promise<tink.CoreApi.Noise>
+	{
+		return null;
+	}*/
 }
