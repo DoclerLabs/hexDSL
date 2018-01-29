@@ -1,7 +1,7 @@
 package hex.core;
 
 import hex.unittest.assertion.Assert;
-//import hex.core.ApplicationContextUtil;
+import hex.core.ApplicationContextUtil;
 /**
  * ...
  * @author Francis Bourre
@@ -12,7 +12,7 @@ class ApplicationContextUtilTest
 	@Test( "test validate Name" )
 	public function testValidateName() : Void
 	{
-		/*Assert.isTrue(ApplicationContextUtil.isValidName("d"), "one letter");
+		Assert.isTrue(ApplicationContextUtil.isValidName("d"), "one letter");
 		Assert.isTrue(ApplicationContextUtil.isValidName("isValid"), "many letters with capital");
 		Assert.isTrue(ApplicationContextUtil.isValidName("_"), "one underscore");
 		Assert.isTrue(ApplicationContextUtil.isValidName("__"), "two underscores");
@@ -32,6 +32,6 @@ class ApplicationContextUtilTest
 		Assert.isFalse(ApplicationContextUtil.isValidName("still-notValid"), "with dash in the middle");
 		Assert.isFalse(ApplicationContextUtil.isValidName("0aa"), "start with number");
 		Assert.isFalse(ApplicationContextUtil.isValidName("0_"), "start with number then underscore");
-*/
+
 	}
 }
