@@ -1,7 +1,7 @@
 package hex;
 
 import hex.compiletime.DSLCompiletimeSuite;
-import hex.core.CoreSuite;
+//import hex.core.CoreSuite;
 import hex.runtime.DSLRuntimeSuite;
 
 /**
