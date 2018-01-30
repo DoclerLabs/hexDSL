@@ -1,11 +1,11 @@
 build-each.hxml
 
---each
+#--each
 
---macro include('hex')
---no-output
--js bin/docs.js
+#--macro include('hex')
+#--no-output
+#-js bin/docs.js
 
---next
+#--next
 
 -js bin/MainTest.js
