@@ -2,7 +2,7 @@ package hex;
 
 import hex.compiletime.DSLCompiletimeSuite;
 //import hex.core.CoreSuite;
-import hex.runtime.DSLRuntimeSuite;
+//import hex.runtime.DSLRuntimeSuite;
 
 /**
  * ...
@@ -11,5 +11,5 @@ import hex.runtime.DSLRuntimeSuite;
 class HexDslSuite
 {
 	@Suite( "HexDsl suite" )
-    public var list : Array<Class<Dynamic>> = [ DSLCompiletimeSuite, /*CoreSuite,*/ DSLRuntimeSuite ];
+    public var list : Array<Class<Dynamic>> = [ DSLCompiletimeSuite/*, CoreSuite, DSLRuntimeSuite*/ ];
 }
