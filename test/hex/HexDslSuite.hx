@@ -11,5 +11,5 @@ import hex.runtime.DSLRuntimeSuite;
 class HexDslSuite
 {
 	@Suite( "HexDsl suite" )
-    public var list : Array<Class<Dynamic>> = [ DSLCompiletimeSuite, CoreSuite, DSLRuntimeSuite ];
+    public var list : Array<Class<Dynamic>> = [ DSLCompiletimeSuite, /*CoreSuite,*/ DSLRuntimeSuite ];
 }
