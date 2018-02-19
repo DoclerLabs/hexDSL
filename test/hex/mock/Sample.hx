@@ -18,4 +18,15 @@ class Sample
 		
 	static public function test() : Void->String
 		return function () return "test";
+		
+	public function testBind( value : String, anotherValue : Int ) : String
+		return value + anotherValue;
+		
+	static public function testStaticBind( value : String, anotherValue : Int ) : String
+		return value + anotherValue;
+		
+	/*static public function prom( a : Int, b : Int ) : tink.CoreApi.Promise<tink.CoreApi.Noise>
+	{
+		return null;
+	}*/
 }

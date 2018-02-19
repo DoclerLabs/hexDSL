@@ -46,7 +46,7 @@ class ArgumentParser
 						//Object reference
 						constructorVO =  new ConstructorVO( ident, ContextTypeList.INSTANCE, [ v ], null, null, null, v );
 				}
-
+				
 			case EField( value, field ):
 				//Property or method reference
 				constructorVO =  new ConstructorVO( ident, ContextTypeList.INSTANCE, [], null, null, null, ExpressionUtil.compressField( value ) + '.' + field );
@@ -66,7 +66,18 @@ class ArgumentParser
 			case EObjectDecl( fields ):
 				constructorVO = new ConstructorVO( ident, ContextTypeList.CONTEXT_ARGUMENT, [] );
 				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
-
+				
+			case ECall( _.expr => EField( e, field ), params ) if ( field == 'bind' ):
+				switch( e.expr )
+				{
+					case EField( ee, ff ):
+						constructorVO = new ConstructorVO( ident, ContextTypeList.CLOSURE, [] );
+						constructorVO.ref = ExpressionUtil.compressField( e );
+						constructorVO.arguments = params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) );
+						
+					case wtf: trace( wtf );
+				}
+			
 			case _:
 				logger.error( value.expr );
 				Context.error( '', Context.currentPos() );

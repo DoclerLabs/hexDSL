@@ -1,0 +1,28 @@
+@context
+{
+	recursive.f3 = sample.testBind.bind( _, i );
+	recursive.f4 = hex.mock.Sample.testStaticBind.bind( _, i );
+	
+	@public
+	binded = sample.testBind.bind( _, i );
+	
+	@public
+	staticBinded = hex.mock.Sample.testStaticBind.bind( _, i );
+	
+	@public
+	recursive = new hex.mock.ConstructorWithClosureArgs( sample.testBind.bind( _, i ), hex.mock.Sample.testStaticBind.bind( _, i ) );
+	recursive.callWithClosureArgs( sample.testBind.bind( _, i ), hex.mock.Sample.testStaticBind.bind( _, i ) );
+	result = hex.mock.ConstructorWithClosureArgs.staticallWithClosureArgs( sample.testBind.bind( _, i ), hex.mock.Sample.testStaticBind.bind( _, i ) );
+	
+	@public
+	mapping1 = mapping( { fromType: "String->String", toValue: binded } );
+	
+	@public
+	mapping2 = mapping( { fromType: "String->String", toValue: hex.mock.Sample.testStaticBind.bind( _, i ) } );
+	
+	/*test = mapping( { fromType: "Float->Float->tink.CoreApi.Promise<tink.CoreApi.Noise>", toValue: hex.mock.Sample.prom, withName: "myFunc" } );
+	cdo = new hex.mock.ClosureDependencyOwner( test );*/
+	
+	sample = new hex.mock.Sample();
+	i = 3;
+}

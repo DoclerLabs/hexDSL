@@ -25,7 +25,14 @@ class MappingDefinitionFactory
 				macro @:pos( constructorVO.filePosition ) 
 					$v{{ fromType: "", toValue: null, toClass: null, withName: "", asSingleton: false, injectInto: false }} 
 		);
-
+		
+		//Check type matching
+		var coreFactory		= factoryVO.contextFactory.getCoreFactory();
+		var typelocator		= factoryVO.contextFactory.getTypeLocator();
+		var checker = new hex.compiletime.basic.MappingDependencyChecker( coreFactory, typelocator );
+		checker._getMappingDefinition( result, constructorVO.filePosition );
+		//
+		
 		var ct = macro :hex.di.mapping.MappingDefinition;
 		return constructorVO.shouldAssign ?
 			return macro var $idVar : $ct = $result:

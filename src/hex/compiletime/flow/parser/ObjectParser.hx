@@ -177,7 +177,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					{
 						case EParenthesis( _.expr => ECheckType( ee, TPath(p) ) ):
 							
-							//constructorVO =
 							if ( p.sub != null )
 							{
 								constructorVO.type = ContextTypeList.STATIC_VARIABLE;
@@ -221,12 +220,19 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				switch( e.expr )
 				{
 					case EField( ee, ff ):
-						constructorVO.type = ExpressionUtil.compressField( e );
 						constructorVO.arguments = [];
-						constructorVO.staticCall = field;
+						if ( field != 'bind' )
+						{
+							constructorVO.type = ExpressionUtil.compressField( e );
+							constructorVO.staticCall = field;
+						}
+						else
+						{
+							constructorVO.type = ContextTypeList.CLOSURE;
+							constructorVO.ref = ExpressionUtil.compressField( e );
+						}
 						
 					case ECall( ee, pp ):
-
 						var call = ExpressionUtil.compressField( ee );
 						var a = call.split( '.' );
 						var staticCall = a.pop();
@@ -251,6 +257,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				{
 					constructorVO.arguments = params.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) );
 				}
+
 				
 			case _:
 				logger.error( value.expr );

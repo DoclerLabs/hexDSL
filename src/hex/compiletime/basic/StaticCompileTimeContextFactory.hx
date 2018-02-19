@@ -39,7 +39,7 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 			this._mappedTypes 						= [];
 			this._injectedInto 						= [];
 			this._factoryMap 						= hex.compiletime.basic.BasicCompileTimeSettings.factoryMap;
-			
+			this._dependencyChecker					= new MappingDependencyChecker( this._coreFactory, this._typeLocator );
 			this._coreFactory.addListener( this );
 		}
 	}
