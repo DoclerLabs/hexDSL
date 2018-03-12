@@ -5,7 +5,6 @@ import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
-import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
@@ -52,7 +51,6 @@ class BasicStaticFlowCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._myApplicationAssembler.release();
 	}
 	

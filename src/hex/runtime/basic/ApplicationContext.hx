@@ -5,8 +5,8 @@ import hex.core.IApplicationContext;
 import hex.di.IBasicInjector;
 import hex.di.IDependencyInjector;
 import hex.di.Injector;
-import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
+import hex.event.Dispatcher;
 import hex.event.IDispatcher;
 import hex.event.MessageType;
 import hex.log.ILogger;
@@ -19,7 +19,7 @@ import hex.module.IContextModule;
  */
 class ApplicationContext extends AbstractApplicationContext
 {
-	var _dispatcher 			: IDispatcher<{}>;
+	var _dispatcher 			: IDispatcher<{}> = new Dispatcher();
 	
 	override public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void
 	{
@@ -32,7 +32,7 @@ class ApplicationContext extends AbstractApplicationContext
 	{
 		//build contextDispatcher
 		var domain = Domain.getDomain( applicationContextName );
-		this._dispatcher = ApplicationDomainDispatcher.getInstance( this ).getDomainDispatcher( domain );
+		//this._dispatcher = ApplicationDomainDispatcher.getInstance( this ).getDomainDispatcher( domain );
 		
 		//build injector
 		var injector : IDependencyInjector = new Injector();

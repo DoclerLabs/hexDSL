@@ -7,7 +7,7 @@ import hex.core.ApplicationAssemblerMessage;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.domain.ApplicationDomainDispatcher;
+import hex.event.Dispatcher;
 import hex.event.IDispatcher;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.runtime.factory.ArrayFactory;
@@ -42,7 +42,7 @@ class RunTimeContextFactory
 {
 	var _isInitialized				: Bool;
 	
-	var _contextDispatcher			: IDispatcher<{}>;
+	var _contextDispatcher			: IDispatcher<{}> = new Dispatcher();
 	var _applicationContext 		: IApplicationContext;
 	var _factoryMap 				: Map<String, FactoryVOTypeDef->Dynamic>;
 	var _coreFactory 				: IRunTimeCoreFactory;
@@ -64,7 +64,7 @@ class RunTimeContextFactory
 			
 			//settings
 			this._applicationContext = applicationContext;
-			this._contextDispatcher = ApplicationDomainDispatcher.getInstance( this._applicationContext ).getDomainDispatcher( applicationContext.getDomain() );
+			//this._contextDispatcher = ApplicationDomainDispatcher.getInstance( this._applicationContext ).getDomainDispatcher( applicationContext.getDomain() );
 			var injector = this._applicationContext.getInjector();
 			this._coreFactory = cast ( applicationContext.getCoreFactory(), IRunTimeCoreFactory );
 

@@ -5,7 +5,6 @@ import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.Injector;
 import hex.di.mapping.MappingConfiguration;
-import hex.domain.ApplicationDomainDispatcher;
 import hex.domain.Domain;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
@@ -57,7 +56,6 @@ class BasicXmlCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 	

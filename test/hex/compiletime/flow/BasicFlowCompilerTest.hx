@@ -8,7 +8,6 @@ import hex.di.IDependencyInjector;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
 import hex.di.mapping.MappingConfiguration;
-import hex.domain.ApplicationDomainDispatcher;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
@@ -54,7 +53,6 @@ class BasicFlowCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 	
