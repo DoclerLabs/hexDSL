@@ -36,7 +36,7 @@ class AbstractApplicationContext implements IApplicationContext
 		return this._domain;
 	}
 
-	public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void
+	public function dispatch( messageType : MessageType ) : Void
 	{
 		throw new VirtualMethodException();
 	}

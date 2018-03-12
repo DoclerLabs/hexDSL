@@ -21,9 +21,9 @@ class ApplicationContext extends AbstractApplicationContext
 {
 	var _dispatcher 			: IDispatcher<{}> = new Dispatcher();
 	
-	override public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void
+	override public function dispatch( messageType : MessageType ) : Void
 	{
-		this._dispatcher.dispatch( messageType, data );
+		this._dispatcher.dispatch( messageType );
 	}
 
 	
