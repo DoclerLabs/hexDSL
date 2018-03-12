@@ -4,7 +4,6 @@ import hex.compiletime.flow.BasicStaticFlowCompiler;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.di.mapping.MappingConfiguration;
 import hex.domain.Domain;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
@@ -810,22 +809,6 @@ class BasicStaticFlowCompilerTest
 		code.execute();
 
 		Assert.isFalse( Reflect.hasField(code.locator, "message"), "locator shouldn't have message field" );
-	}
-
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/mappingConfiguration.flow", "BasicStaticFlowCompiler_testBuildingMappingConfiguration" );
-		code.execute();
-		
-		Assert.isInstanceOf( code.locator.config, MappingConfiguration );
-
-		var injector = new Injector();
-		code.locator.config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
-		Assert.equals( code.locator.instance, injector.getInstance( IAnotherMockInterface ) );
 	}
 	
 	@Test( "test trigger method connection" )

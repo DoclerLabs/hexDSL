@@ -3,7 +3,6 @@ package hex.compiletime.xml;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.di.mapping.MappingConfiguration;
 import hex.domain.Domain;
 import hex.error.Exception;
 import hex.mock.AnotherMockClass;
@@ -789,22 +788,6 @@ class BasicStaticXmlCompilerTest
         {
             Assert.fail( e.message, "Exception on this._builderFactory.getCoreFactory().locate( \"message\" ) call" );
         }
-	}
-	
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/mappingConfiguration.xml", "BasicStaticXmlCompiler_testBuildingMappingConfiguration" );
-		code.execute();
-		
-		Assert.isInstanceOf( code.locator.config, MappingConfiguration );
-
-		var injector = new Injector();
-		code.locator.config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
-		Assert.equals( code.locator.instance, injector.getInstance( IAnotherMockInterface ) );
 	}
 	
 	/*@Test( "test trigger method connection" )

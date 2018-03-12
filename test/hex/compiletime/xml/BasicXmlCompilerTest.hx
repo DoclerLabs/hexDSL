@@ -4,7 +4,6 @@ import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.Injector;
-import hex.di.mapping.MappingConfiguration;
 import hex.domain.Domain;
 import hex.error.Exception;
 import hex.error.NoSuchElementException;
@@ -718,86 +717,6 @@ class BasicXmlCompilerTest
 		Assert.equals( 'property', oDynamic.p );
 	}
 	
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfiguration.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
-		Assert.equals( this._locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
-	}
-	
-	@Test( "test building mapping configuration with map names" )
-	public function testBuildingMappingConfigurationWithMapNames() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithMapNames.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name1" ),  MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name2" ), AnotherMockClass );
-	}
-	
-	@Test( "test building mapping configuration with singleton" )
-	public function testBuildingMappingConfigurationWithSingleton() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithSingleton.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		var instance1 = injector.getInstance( IAnotherMockInterface, "name1" );
-		Assert.isInstanceOf( instance1,  MockClass );
-		
-		var copyOfInstance1 = injector.getInstance( IAnotherMockInterface, "name1" );
-		Assert.isInstanceOf( copyOfInstance1,  MockClass, "" );
-		Assert.equals( instance1, copyOfInstance1 );
-		
-		var instance2 = injector.getInstance( IAnotherMockInterface, "name2" );
-		Assert.isInstanceOf( instance2, AnotherMockClass );
-		
-		var copyOfInstance2 = injector.getInstance( IAnotherMockInterface, "name2" );
-		Assert.isInstanceOf( copyOfInstance2,  AnotherMockClass );
-		Assert.notEquals( instance2, copyOfInstance2 );
-	}
-	
-	@Test( "test building mapping configuration with inject-into" )
-	public function testBuildingMappingConfigurationWithInjectInto() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithInjectInto.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		var domain = Domain.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
-		injector.mapToValue( Domain, domain );
-		
-		config.configure( injector, null );
-
-		var mock0 = injector.getInstance( IMockInjectee, "name1" );
-		Assert.isInstanceOf( mock0,  MockInjectee );
-		Assert.equals( domain, mock0.domain  );
-		
-		var mock1 = injector.getInstance( IMockInjectee, "name2" );
-		Assert.isInstanceOf( mock1, MockInjectee );
-		Assert.equals( domain, mock1.domain );
-	}
-
 	/*@Test( "test parsing twice" )
 	public function testParsingTwice() : Void
 	{

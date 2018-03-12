@@ -7,7 +7,6 @@ import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.di.mapping.MappingConfiguration;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
@@ -756,22 +755,6 @@ class BasicFlowCompilerTest
 	{
 		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/includeWithIfAttribute.flow", null, null, [ "prodz" => false, "testing" => true, "releasing" => true ] );
 		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._getCoreFactory().locate, [ "message" ], "'NoSuchElementException' should be thrown" );
-	}
-	
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		this._applicationAssembler = BasicFlowCompiler.compile( "context/flow/mappingConfiguration.flow" );
-
-		var config : MappingConfiguration = this._getCoreFactory().locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
-		Assert.equals( this._getCoreFactory().locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
 	}
 	
 	/*@Test( "test trigger method connection" )

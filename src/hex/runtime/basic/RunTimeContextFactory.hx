@@ -19,7 +19,6 @@ import hex.runtime.factory.FloatFactory;
 import hex.runtime.factory.FunctionFactory;
 import hex.runtime.factory.HashMapFactory;
 import hex.runtime.factory.IntFactory;
-import hex.runtime.factory.MappingConfigurationFactory;
 import hex.runtime.factory.NullFactory;
 import hex.runtime.factory.PropertyFactory;
 import hex.runtime.factory.StaticVariableFactory;
@@ -93,7 +92,7 @@ class RunTimeContextFactory
 			this._factoryMap.set( ContextTypeList.FUNCTION, FunctionFactory.build );
 			this._factoryMap.set( ContextTypeList.INSTANCE, ClassInstanceFactory.build );
 			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, StaticVariableFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, MappingConfigurationFactory.build );
+			//this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, MappingConfigurationFactory.build );
 			
 			this._coreFactory.addListener( this );
 		}

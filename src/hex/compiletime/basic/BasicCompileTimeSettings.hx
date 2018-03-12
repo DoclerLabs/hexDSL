@@ -27,7 +27,7 @@ class BasicCompileTimeSettings
 		ContextTypeList.XML 					=> hex.compiletime.factory.XmlFactory.build,
 		ContextTypeList.FUNCTION 				=> hex.compiletime.factory.FunctionFactory.build,
 		ContextTypeList.STATIC_VARIABLE 		=> hex.compiletime.factory.StaticVariableFactory.build,
-		ContextTypeList.MAPPING_CONFIG 			=> hex.compiletime.factory.MappingConfigurationFactory.build,
+		//ContextTypeList.MAPPING_CONFIG 		=> hex.compiletime.factory.MappingConfigurationFactory.build,
 		ContextTypeList.MAPPING_DEFINITION 		=> hex.compiletime.factory.MappingDefinitionFactory.build,
 		ContextTypeList.ALIAS 					=> hex.compiletime.factory.AliasFactory.build,
 		ContextTypeList.CONTEXT 				=> hex.compiletime.factory.ContextFactory.build,
