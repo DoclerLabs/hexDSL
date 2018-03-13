@@ -38,8 +38,8 @@ install:
   - git clone --recursive -b $DEPENDENCIES_BRANCH https://github.com/DoclerLabs/hexLog.git ./hexlog
   - haxelib dev hexlog ./hexlog
 #hexCore
-  - echo $( git ls-remote --heads https://github.com/DoclerLabs/hexCore.git $DEPENDENCIES_BRANCH | wc -l ) 
-  - if [[ $( git ls-remote --heads https://github.com/DoclerLabs/hexCore.git $DEPENDENCIES_BRANCH | wc -l ) == "0" ]]; then export DEPENDENCIES_BRANCH=develop; fi
+  - echo [[ $( git ls-remote --heads https://github.com/DoclerLabs/hexCore.git $DEPENDENCIES_BRANCH | wc -l ) == 0 ]]
+  - if [[ $( git ls-remote --heads https://github.com/DoclerLabs/hexCore.git $DEPENDENCIES_BRANCH | wc -l ) == 0 ]]; then export DEPENDENCIES_BRANCH=develop; fi
   - echo $DEPENDENCIES_BRANCH
   - git clone --recursive -b $DEPENDENCIES_BRANCH https://github.com/DoclerLabs/hexCore.git ./hexcore
   - haxelib dev hexcore ./hexcore
