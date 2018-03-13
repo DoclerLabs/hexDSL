@@ -33,7 +33,7 @@ before_install:
 install:
   - haxelib newrepo
 #hexLog
-  - if [[ git ls-remote --heads https://github.com/DoclerLabs/hexLog.git $DEPENDENCIES_BRANCH | wc -l ) == "0" ]]; then export DEPENDENCIES_BRANCH=develop; fi
+  - if [[ ( git ls-remote --heads https://github.com/DoclerLabs/hexLog.git $DEPENDENCIES_BRANCH | wc -l ) == "0" ]]; then export DEPENDENCIES_BRANCH=develop; fi
   - git clone --recursive -b $DEPENDENCIES_BRANCH https://github.com/DoclerLabs/hexLog.git ./hexlog
   - haxelib dev hexlog ./hexlog
 #hexCore
