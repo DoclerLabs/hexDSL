@@ -32,7 +32,7 @@ before_install:
 
 install:
   - haxelib newrepo
-  - $BRANCH_REF=$DEPENDENCIES_BRANCH
+  - export BRANCH_REF=$DEPENDENCIES_BRANCH
 #hexLog
   - if [[ $( git ls-remote --heads https://github.com/DoclerLabs/hexLog.git $DEPENDENCIES_BRANCH | wc -l ) == "0" ]]; then export DEPENDENCIES_BRANCH=develop; else export DEPENDENCIES_BRANCH=$BRANCH_REF; fi
   - echo Checking out $DEPENDENCIES_BRANCH
