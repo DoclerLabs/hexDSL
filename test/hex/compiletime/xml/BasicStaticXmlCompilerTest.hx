@@ -706,7 +706,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/targetSubProperty.xml" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/targetSubProperty.xml", "BasicStaticXmlCompiler_testTargetSubProperty" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.mockObject, MockObjectWithRegtangleProperty );
