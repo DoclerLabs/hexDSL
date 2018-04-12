@@ -5,7 +5,6 @@ import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.di.Injector;
 import hex.domain.Domain;
-import hex.error.Exception;
 import hex.error.NoSuchElementException;
 import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
@@ -32,6 +31,8 @@ import hex.structures.Point;
 import hex.structures.PointFactory;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
+
+using tink.CoreApi;
 
 /**
  * ...
@@ -596,7 +597,7 @@ class BasicXmlReaderTest
         {
 			Assert.equals( "bonjour", this._locate( "message" ), "message value should equal 'bonjour'" );
 		}
-		catch ( e : Exception )
+		catch ( e : Error )
         {
             Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
         }

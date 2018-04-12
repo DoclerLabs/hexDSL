@@ -145,8 +145,7 @@ class CompileTimeCoreFactory implements ICoreFactory
 			}
 			catch ( e : IllegalArgumentException )
 			{
-				e.message = this + ".add() fails. " + e.message;
-				throw( e );
+				throw( new IllegalArgumentException( this + ".add() fails. " + e.message ) );
 			}
         }
 	}

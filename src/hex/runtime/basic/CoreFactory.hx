@@ -158,8 +158,7 @@ class CoreFactory implements IRunTimeCoreFactory implements ITriggerOwner
 			}
 			catch ( e : IllegalArgumentException )
 			{
-				e.message = "add() fails. " + e.message;
-				throw( e );
+				throw( new IllegalArgumentException( "add() fails. " + e.message ) );
 			}
         }
 	}

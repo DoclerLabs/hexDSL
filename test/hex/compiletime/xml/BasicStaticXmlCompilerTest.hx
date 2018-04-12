@@ -4,7 +4,6 @@ import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
 import hex.domain.Domain;
-import hex.error.Exception;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -25,6 +24,8 @@ import hex.mock.MockServiceProvider;
 import hex.runtime.ApplicationAssembler;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
+
+using tink.CoreApi;
 
 /**
  * ...
@@ -784,7 +785,7 @@ class BasicStaticXmlCompilerTest
         {
 			Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
 		}
-		catch ( e : Exception )
+		catch ( e : Error )
         {
             Assert.fail( e.message, "Exception on this._builderFactory.getCoreFactory().locate( \"message\" ) call" );
         }
