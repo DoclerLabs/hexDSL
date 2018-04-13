@@ -11,7 +11,6 @@ import hex.compiletime.factory.PropertyFactory;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
 import hex.core.ICoreFactory;
-import hex.event.IDispatcher;
 import hex.util.MacroUtil;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
@@ -37,7 +36,6 @@ class CompileTimeContextFactory
 	var _mappedTypes 				: Array<Expr>;
 	var _injectedInto 				: Array<Expr>;
 	
-	var _contextDispatcher			: IDispatcher<{}>;
 	var _moduleLocator				: Locator<String, String>;
 	var _applicationContext 		: IApplicationContext;
 	var _factoryMap 				: Map<String, FactoryVOTypeDef->Dynamic>;
@@ -128,13 +126,13 @@ class CompileTimeContextFactory
 	public function dispatchAssemblingStart() : Void
 	{
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.ASSEMBLING_START" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function dispatchAssemblingEnd() : Void
 	{
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.ASSEMBLING_END" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	//
@@ -191,7 +189,7 @@ class CompileTimeContextFactory
 		this._injectedInto.map( this._expressions.push );
 		
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.OBJECTS_BUILT" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function buildProperty( key : String ) : Void
@@ -235,7 +233,7 @@ class CompileTimeContextFactory
 		for ( key in this._methodCallVOLocator.keys() ) this.callMethod(  key );
 		this._methodCallVOLocator.clear();
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.METHODS_CALLED" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function callModuleInitialisation() : Void
@@ -243,7 +241,7 @@ class CompileTimeContextFactory
 		this._moduleLocator.values().map( function(moduleName) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(applicationContext); } ) );
 		this._moduleLocator.clear();
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.MODULES_INITIALIZED" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 
 	public function getApplicationContext() return this._applicationContext;

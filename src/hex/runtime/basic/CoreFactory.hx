@@ -7,7 +7,6 @@ import hex.error.NoSuchElementException;
 import hex.event.ITrigger;
 import hex.event.ITriggerOwner;
 import hex.util.ClassUtil;
-import hex.util.Stringifier;
 
 /**
  * ...
@@ -80,7 +79,7 @@ class CoreFactory implements IRunTimeCoreFactory implements ITriggerOwner
 			}
         }
 		
-		throw new NoSuchElementException( "Can't find item with '" + key + "' key in " + Stringifier.stringify( this ) );
+		throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
 	}
 	
 	public function isRegisteredWithKey( key : Dynamic ) : Bool 

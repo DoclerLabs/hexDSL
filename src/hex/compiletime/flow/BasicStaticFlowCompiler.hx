@@ -202,7 +202,7 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		
 		//Dispatch CONTEXT_PARSED message
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.CONTEXT_PARSED" );
-		assembler.addExpression( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		assembler.addExpression( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 
 		//Create applicationcontext injector
 		assembler.addExpression( macro @:mergeBlock { var __applicationContextInjector = applicationContext.getInjector(); } );

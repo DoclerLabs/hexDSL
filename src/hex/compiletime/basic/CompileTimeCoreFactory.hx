@@ -6,7 +6,6 @@ import hex.di.IDependencyInjector;
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
 import hex.runtime.basic.ICoreFactoryListener;
-import hex.util.Stringifier;
 
 /**
  * ...
@@ -77,7 +76,7 @@ class CompileTimeCoreFactory implements ICoreFactory
 			}
         }
 		
-		throw new NoSuchElementException( "Can't find item with '" + key + "' key in " + Stringifier.stringify(this) );
+		throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
 	}
 	
 	public function register( key : String, element : Dynamic ) : Bool 

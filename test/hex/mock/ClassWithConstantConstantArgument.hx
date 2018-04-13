@@ -1,7 +1,5 @@
 package hex.mock;
 
-import hex.event.MessageType;
-
 /**
  * ...
  * @author Francis Bourre
@@ -14,4 +12,11 @@ class ClassWithConstantConstantArgument
 	{
 		this.constant = constant;
 	}
+}
+
+abstract MessageType( String )
+{
+	inline public function new( name : String ) this = name;
+	@:from public static inline function fromString( s : String ) return new MessageType( s );
+	@:to public inline function toString() return this;
 }

@@ -6,7 +6,6 @@ import hex.di.IDependencyInjector;
 import hex.domain.Domain;
 import hex.error.IllegalStateException;
 import hex.error.VirtualMethodException;
-import hex.event.MessageType;
 import hex.log.ILogger;
 
 /**
@@ -34,11 +33,6 @@ class AbstractApplicationContext implements IApplicationContext
 	public function getDomain() : Domain
 	{
 		return this._domain;
-	}
-
-	public function dispatch( messageType : MessageType ) : Void
-	{
-		throw new VirtualMethodException();
 	}
 	
 	public function getCoreFactory() : ICoreFactory 

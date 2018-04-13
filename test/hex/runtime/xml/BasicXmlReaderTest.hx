@@ -6,7 +6,6 @@ import hex.core.IApplicationContext;
 import hex.di.Injector;
 import hex.domain.Domain;
 import hex.error.NoSuchElementException;
-import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
@@ -394,19 +393,15 @@ class BasicXmlReaderTest
 	{
 		this.build( BasicXmlReader.getXml( "context/xml/hashmapFilledWithReferences.xml" ) );
 
-		var fruits : HashMap<Any, MockFruitVO> = this._locate( "fruits" );
+		var fruits : HashMap<Dynamic, MockFruitVO> = this._locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._locate( "stubKey" );
 		Assert.isNotNull( stubKey );
 
-		var orange 	: MockFruitVO = fruits.get( '0' );
-		var apple 	: MockFruitVO = fruits.get( 1 );
-		var banana 	: MockFruitVO = fruits.get( stubKey );
-
-		Assert.equals( "orange", orange.toString() );
-		Assert.equals( "apple", apple.toString() );
-		Assert.equals( "banana", banana.toString() );
+		Assert.equals( "orange", fruits.get( '0' ).toString() );
+		Assert.equals( "apple", fruits.get( 1 ).toString() );
+		Assert.equals( "banana", fruits.get( stubKey ).toString() );
 	}
 
 	@Test( "test building HashMap with map-type" )
