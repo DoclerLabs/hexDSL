@@ -1,5 +1,0 @@
-@context( name = 'applicationContext' )
-{
-	@public
-	applicationDomain = hex.domain.Domain.getDomain( "BasicStaticFlowCompiler_testBuildDomain" );
-}

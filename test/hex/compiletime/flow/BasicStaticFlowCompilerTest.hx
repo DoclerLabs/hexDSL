@@ -4,7 +4,6 @@ import hex.compiletime.flow.BasicStaticFlowCompiler;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.domain.Domain;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -843,15 +842,6 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}
 	
-	@Test( "test build domain" )
-	public function testBuildDomain() : Void
-	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/buildDomain.flow", "BasicStaticFlowCompiler_testBuildDomain" );
-		code.execute();
-		
-		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
-	}
-
 	@Test( "test recursive static calls" )
 	public function testRecursiveStaticCalls() : Void
 	{

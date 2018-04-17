@@ -5,7 +5,6 @@ import hex.core.IApplicationContext;
 import hex.di.IBasicInjector;
 import hex.di.IDependencyInjector;
 import hex.di.Injector;
-import hex.domain.Domain;
 import hex.log.ILogger;
 import hex.log.LogManager;
 import hex.module.IContextModule;
@@ -19,15 +18,12 @@ class ApplicationContext extends AbstractApplicationContext
 	@:allow( hex.runtime, hex.metadata )
 	function new( applicationContextName : String )
 	{
-		//build contextDispatcher
-		var domain = Domain.getDomain( applicationContextName );
-
 		//build injector
 		var injector : IDependencyInjector = new Injector();
 		injector.mapToValue( IBasicInjector, injector );
 		injector.mapToValue( IDependencyInjector, injector );
 		
-		var logger = LogManager.getLogger( domain.getName() );
+		var logger = LogManager.getLogger( applicationContextName );
 		injector.mapToValue( ILogger, logger );
 		
 		//build coreFactory

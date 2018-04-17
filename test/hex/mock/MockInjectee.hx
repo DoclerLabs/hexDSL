@@ -1,7 +1,6 @@
 package hex.mock;
 
 import hex.di.IInjectorContainer;
-import hex.domain.Domain;
 import hex.mock.IMockInjectee;
 
 /**
@@ -11,7 +10,7 @@ import hex.mock.IMockInjectee;
 class MockInjectee implements IInjectorContainer implements IMockInjectee
 {
 	@Inject
-	public var domain : Domain;
+	public var domain : MockObject;
 	
 	public function new() 
 	{

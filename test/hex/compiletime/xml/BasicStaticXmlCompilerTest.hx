@@ -3,7 +3,6 @@ package hex.compiletime.xml;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.domain.Domain;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -857,15 +856,6 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 60, code2.locator.rect1.y );
 		Assert.equals( 70, code2.locator.rect1.width );
 		Assert.equals( 40, code2.locator.rect1.height );
-	}
-	
-	@Test( "test build domain" )
-	public function testBuildDomain() : Void
-	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/buildDomain.xml", "BasicStaticXmlCompiler_testBuildDomain" );
-		code.execute();
-		
-		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
 	}
 
 	@Test( "test recursive static calls" )

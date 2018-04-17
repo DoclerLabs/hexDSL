@@ -4,7 +4,6 @@ import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.Injector;
-import hex.domain.Domain;
 import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
