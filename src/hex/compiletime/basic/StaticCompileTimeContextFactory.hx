@@ -52,11 +52,19 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		
 		var finalResult = result;
 		finalResult = this._parseAutoInject( constructorVO, finalResult );
-		
+
 		var type = 
 		if ( constructorVO.abstractType != null ) 	ContextFactoryUtil.getComplexType( constructorVO.abstractType, constructorVO.filePosition );
 			else if ( constructorVO.cType != null ) constructorVO.cType;
 				else 								ContextFactoryUtil.getComplexType( constructorVO.type, constructorVO.filePosition );
+
+		//We need to unregister previous type and register the abstract type
+		//For future checkings (ie: Mapping checking)
+		if ( constructorVO.abstractType != null )
+		{
+			this._typeLocator.unregister( id );
+			this._typeLocator.register( id, constructorVO.abstractType );
+		}
 
 		if ( constructorVO.isPublic || constructorVO.lazy )
 		{
