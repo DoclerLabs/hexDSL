@@ -98,7 +98,9 @@ class CoreFactory implements IRunTimeCoreFactory implements ITriggerOwner
 		{
 			this._map.set( key, element ) ;
 			//Find a fix to remove cast for typedef
-			(cast this.trigger).onRegister( key, element );
+			#if !macro
+			this.trigger.onRegister( key, element );
+			#end
 			return true ;
 		}
 		else
@@ -114,7 +116,9 @@ class CoreFactory implements IRunTimeCoreFactory implements ITriggerOwner
 			var instance : Dynamic = this._map.get( key );
 			this._map.remove( key );
 			//Find a fix to remove cast for typedef
-			(cast this.trigger).onUnregister( key ) ;
+			#if !macro
+			this.trigger.onUnregister( key ) ;
+			#end
 			return true ;
 		}
 		else
