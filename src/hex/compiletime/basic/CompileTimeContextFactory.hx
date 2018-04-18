@@ -28,6 +28,7 @@ class CompileTimeContextFactory
 	implements hex.collection.ILocatorListener<String, Dynamic>
 {
 	var _injectorContainerInterface : ClassType;
+	var _autoInjectInterface 		: ClassType;
 	var _moduleInterface 			: ClassType;
 	
 	
@@ -51,6 +52,7 @@ class CompileTimeContextFactory
 		this._expressions 					= expressions;
 		this._isInitialized 				= false;
 		this._injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( hex.di.IInjectorContainer ) );
+		this._autoInjectInterface 			= MacroUtil.getClassType( Type.getClassName( hex.di.IAutoInject ) );
 		this._moduleInterface 				= MacroUtil.getClassType( Type.getClassName( hex.module.IContextModule ) );
 	}
 	
@@ -284,8 +286,11 @@ class CompileTimeContextFactory
 		this._tryToRegisterModule( constructorVO );
 		this._parseInjectInto( constructorVO );
 		this._parseMapTypes( constructorVO );
-
-		this._expressions.push( macro @:mergeBlock { $result;  coreFactory.register( $v { id }, $i { id } ); } );
+		
+		var finalResult = result;
+		finalResult = this._parseAutoInject( constructorVO, finalResult );
+		
+		this._expressions.push( macro @:mergeBlock { $finalResult; coreFactory.register( $v { id }, $i { id } ); } );
 		this._coreFactory.register( id, result );
 	}
 	
@@ -310,6 +315,23 @@ class CompileTimeContextFactory
 						}
 			);
 		}
+	}
+	
+	function _parseAutoInject( constructorVO : ConstructorVO, result : Expr ) : Expr
+	{
+		if ( !constructorVO.injectInto && MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _autoInjectInterface ) )
+		{
+			//TODO throws an error if interface is not implemented
+			this._injectedInto.push( 
+				macro 	@:pos( constructorVO.filePosition )
+						@:mergeBlock
+						{ 
+							__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+						}
+			);
+		}
+		
+		return result;
 	}
 	
 	function _parseMapTypes( constructorVO : ConstructorVO ) : Void

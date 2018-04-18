@@ -50,6 +50,9 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		this._parseInjectInto( constructorVO );
 		this._parseMapTypes( constructorVO );
 		
+		var finalResult = result;
+		finalResult = this._parseAutoInject( constructorVO, finalResult );
+		
 		var type = 
 		if ( constructorVO.abstractType != null ) 	ContextFactoryUtil.getComplexType( constructorVO.abstractType, constructorVO.filePosition );
 			else if ( constructorVO.cType != null ) constructorVO.cType;
@@ -58,16 +61,16 @@ class StaticCompileTimeContextFactory extends CompileTimeContextFactory
 		if ( constructorVO.isPublic || constructorVO.lazy )
 		{
 			hex.compiletime.util.ContextBuilder.getInstance( this )
-				.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?result:null), constructorVO.isPublic );
+				.addField( id, type, constructorVO.filePosition, (constructorVO.lazy?finalResult:null), constructorVO.isPublic );
 
 			if ( !constructorVO.lazy )
 			{
-				this._expressions.push( macro @:mergeBlock { $result;  /*coreFactory.register( $v { id }, $i { id } );*/ this.$id = $i { id }; } );
+				this._expressions.push( macro @:mergeBlock { $finalResult;  /*coreFactory.register( $v { id }, $i { id } );*/ this.$id = $i { id }; } );
 			}
 		}
 		else
 		{
-			this._expressions.push( macro @:mergeBlock { $result;  /*coreFactory.register( $v { id }, $i { id } );*/ } );
+			this._expressions.push( macro @:mergeBlock { $finalResult;  /*coreFactory.register( $v { id }, $i { id } );*/ } );
 		}
 		
 		this._coreFactory.register( id, result );
