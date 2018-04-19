@@ -52,7 +52,7 @@ class CompileTimeContextFactory
 		this._expressions 					= expressions;
 		this._isInitialized 				= false;
 		this._injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( hex.di.IInjectorContainer ) );
-		this._autoInjectInterface 			= MacroUtil.getClassType( Type.getClassName( hex.di.IAutoInject ) );
+		this._autoInjectInterface 			= MacroUtil.getClassType( Type.getClassName( hex.di.annotation.IAutoInject ) );
 		this._moduleInterface 				= MacroUtil.getClassType( Type.getClassName( hex.module.IContextModule ) );
 	}
 	
