@@ -1,4 +1,5 @@
 package hex.compiletime.basic;
+import haxe.macro.Context;
 
 #if macro
 import haxe.macro.Expr;
@@ -304,32 +305,51 @@ class CompileTimeContextFactory
 	
 	function _parseInjectInto( constructorVO : ConstructorVO ) : Void
 	{
+		if ( constructorVO.injectInto )
+		{
+			if ( MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _injectorContainerInterface ) )
+			{
+				this._injectedInto.push( 
+					macro 	@:pos( constructorVO.filePosition )
+							@:mergeBlock
+							{ 
+								__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+							}
+				);
+			}
+			else
+			{
+				Context.error( "@inject_into failed, '" + constructorVO.ID + "' should implement `IInjectorContainer`", constructorVO.filePosition );
+			}
+		}
+		
 		if ( constructorVO.injectInto && MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _injectorContainerInterface ) )
 		{
 			//TODO throws an error if interface is not implemented
-			this._injectedInto.push( 
-				macro 	@:pos( constructorVO.filePosition )
-						@:mergeBlock
-						{ 
-							__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
-						}
-			);
+			
 		}
 	}
 	
 	function _parseAutoInject( constructorVO : ConstructorVO, result : Expr ) : Expr
 	{
-		if ( !constructorVO.injectInto && MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _autoInjectInterface ) )
+		if ( MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _autoInjectInterface ) )
 		{
-			//TODO throws an error if interface is not implemented
-			this._injectedInto.push( 
-				macro 	@:pos( constructorVO.filePosition )
-						@:mergeBlock
-						{ 
-							__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
-						}
-			);
+			if ( !constructorVO.injectInto )
+			{
+				this._injectedInto.push( 
+					macro 	@:pos( constructorVO.filePosition )
+							@:mergeBlock
+							{ 
+								__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+							}
+				);
+			}
+			else
+			{
+				Context.warning( '@inject_into is not needed on an instance that implements `IAutoInject`', constructorVO.filePosition );
+			}
 		}
+		
 		
 		return result;
 	}
