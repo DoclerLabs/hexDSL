@@ -299,7 +299,10 @@ class CompileTimeContextFactory
 	{
 		if ( MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _moduleInterface ) )
 		{
-			this._moduleLocator.register( constructorVO.ID, constructorVO.ID );
+			if (constructorVO.ref == null)
+			{
+				this._moduleLocator.register( constructorVO.ID, constructorVO.ID );
+			}
 		}
 	}
 	
