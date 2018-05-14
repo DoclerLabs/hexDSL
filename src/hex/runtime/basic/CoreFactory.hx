@@ -1,33 +1,30 @@
 package hex.runtime.basic;
 
-import hex.collection.ILocatorListener;
-import hex.collection.LocatorMessage;
 import hex.core.CoreFactoryVODef;
 import hex.di.IDependencyInjector;
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
-import hex.event.ClosureDispatcher;
-import hex.event.MessageType;
-import hex.util.Stringifier;
+import hex.event.ITrigger;
+import hex.event.ITriggerOwner;
 import hex.util.ClassUtil;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class CoreFactory implements IRunTimeCoreFactory
+class CoreFactory implements IRunTimeCoreFactory implements ITriggerOwner
 {
-	var _injector 				: IDependencyInjector;
-	var _dispatcher 			: ClosureDispatcher;
-	var _map 					: Map<String, {}>;
-	var _classPaths 			: Map<String, ProxyFactoryMethodHelper>;
+	var _injector 						: IDependencyInjector;
+	var _map 							: Map<String, {}>;
+	var _classPaths 					: Map<String, ProxyFactoryMethodHelper>;
+	
+	public var trigger (default, never) : ITrigger<ICoreFactoryListener>;
 	
 	static var _fastEvalMethod : Dynamic->String->IRunTimeCoreFactory->Dynamic = FastEval.fromTarget;
 	
 	public function new( injector : IDependencyInjector ) 
 	{
 		this._injector 				= injector;
-		this._dispatcher 			= new ClosureDispatcher();
 		this._map 					= new Map();
 		this._classPaths 			= new Map();
 		
@@ -39,26 +36,14 @@ class CoreFactory implements IRunTimeCoreFactory
 		return s;
 	}
 	
-	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.addHandler( messageType, callback );
-	}
-	
-	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.removeHandler( messageType, callback );
-	}
-	
-	public function addListener( listener : ILocatorListener<String, Dynamic> ) : Bool
+	public function addListener( listener : ICoreFactoryListener ) : Bool
     {
-		var b = this._dispatcher.addHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.addHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.connect( listener );
     }
 
-    public function removeListener( listener : ILocatorListener<String, Dynamic> ) : Bool
+    public function removeListener( listener : ICoreFactoryListener ) : Bool
     {
-		var b = this._dispatcher.removeHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.removeHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.disconnect( listener );
     }
 	
 	public function keys() : Array<String> 
@@ -94,7 +79,7 @@ class CoreFactory implements IRunTimeCoreFactory
 			}
         }
 		
-		throw new NoSuchElementException( "Can't find item with '" + key + "' key in " + Stringifier.stringify( this ) );
+		throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
 	}
 	
 	public function isRegisteredWithKey( key : Dynamic ) : Bool 
@@ -112,7 +97,10 @@ class CoreFactory implements IRunTimeCoreFactory
 		if ( !this._map.exists( key ) )
 		{
 			this._map.set( key, element ) ;
-			this._dispatcher.dispatch( LocatorMessage.REGISTER, [ key, element ] ) ;
+			//Find a fix to remove cast for typedef
+			#if !macro
+			this.trigger.onRegister( key, element );
+			#end
 			return true ;
 		}
 		else
@@ -126,8 +114,11 @@ class CoreFactory implements IRunTimeCoreFactory
 		if ( this._map.exists( key ) )
 		{
 			var instance : Dynamic = this._map.get( key );
-			this._map.remove( key ) ;
-			this._dispatcher.dispatch( LocatorMessage.UNREGISTER, [ key ] ) ;
+			this._map.remove( key );
+			//Find a fix to remove cast for typedef
+			#if !macro
+			this.trigger.onUnregister( key ) ;
+			#end
 			return true ;
 		}
 		else
@@ -170,8 +161,7 @@ class CoreFactory implements IRunTimeCoreFactory
 			}
 			catch ( e : IllegalArgumentException )
 			{
-				e.message = "add() fails. " + e.message;
-				throw( e );
+				throw( new IllegalArgumentException( "add() fails. " + e.message ) );
 			}
         }
 	}

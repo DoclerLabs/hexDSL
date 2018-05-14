@@ -1,15 +1,11 @@
 package hex.compiletime.basic;
 
-import hex.collection.ILocatorListener;
-import hex.collection.LocatorMessage;
 import hex.compiletime.basic.CompileTimeFastEval;
 import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
-import hex.event.ClosureDispatcher;
-import hex.event.MessageType;
-import hex.util.Stringifier;
+import hex.runtime.basic.ICoreFactoryListener;
 
 /**
  * ...
@@ -17,14 +13,13 @@ import hex.util.Stringifier;
  */
 class CompileTimeCoreFactory implements ICoreFactory
 {
-	var _dispatcher 			: ClosureDispatcher;
+	public var trigger (default, never) : _Trigger = new _Trigger();
 	var _map 					: Map<String, {}>;
 
 	static var _fastEvalMethod : Dynamic->String->ICoreFactory->Dynamic = CompileTimeFastEval.fromTarget;
 	
 	public function new() 
 	{
-		this._dispatcher 			= new ClosureDispatcher();
 		this._map 					= new Map();
 	}
 	
@@ -81,7 +76,7 @@ class CompileTimeCoreFactory implements ICoreFactory
 			}
         }
 		
-		throw new NoSuchElementException( "Can't find item with '" + key + "' key in " + Stringifier.stringify(this) );
+		throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
 	}
 	
 	public function register( key : String, element : Dynamic ) : Bool 
@@ -89,7 +84,8 @@ class CompileTimeCoreFactory implements ICoreFactory
 		if ( !this._map.exists( key ) )
 		{
 			this._map.set( key, element ) ;
-			this._dispatcher.dispatch( LocatorMessage.REGISTER, [ key, element ] ) ;
+			//Find a fix to remove cast for typedef
+			(cast this.trigger).onRegister( key, element );
 			return true ;
 		}
 		else
@@ -104,7 +100,8 @@ class CompileTimeCoreFactory implements ICoreFactory
 		{
 			var instance : Dynamic = this._map.get( key );
 			this._map.remove( key ) ;
-			this._dispatcher.dispatch( LocatorMessage.UNREGISTER, [ key ] ) ;
+			//Find a fix to remove cast for typedef
+			(cast this.trigger).onUnregister( key ) ;
 			return true ;
 		}
 		else
@@ -147,32 +144,19 @@ class CompileTimeCoreFactory implements ICoreFactory
 			}
 			catch ( e : IllegalArgumentException )
 			{
-				e.message = this + ".add() fails. " + e.message;
-				throw( e );
+				throw( new IllegalArgumentException( this + ".add() fails. " + e.message ) );
 			}
         }
 	}
 	
-	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.addHandler( messageType, callback );
-	}
-	
-	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.removeHandler( messageType, callback );
-	}
-	
-	public function addListener( listener : ILocatorListener<String, Dynamic> ) : Bool
+	public function addListener( listener : ICoreFactoryListener ) : Bool
     {
-		var b = this._dispatcher.addHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.addHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.connect( listener );
     }
 
-    public function removeListener( listener : ILocatorListener<String, Dynamic> ) : Bool
+    public function removeListener( listener : ICoreFactoryListener ) : Bool
     {
-		var b = this._dispatcher.removeHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.removeHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.disconnect( listener );
     }
 	
 	public function fastEvalFromTarget( target : Dynamic, toEval : String ) : Dynamic
@@ -184,4 +168,52 @@ class CompileTimeCoreFactory implements ICoreFactory
 	{
 		CompileTimeCoreFactory._fastEvalMethod = method;
 	}
+}
+
+private class _Trigger
+{
+	var _inputs : Array<ICoreFactoryListener>;
+	
+	public function new() 
+	{
+		this._inputs = [];
+	}
+
+	public function connect( input : ICoreFactoryListener ) : Bool
+	{
+		if ( this._inputs.indexOf( input ) == -1 )
+		{
+			this._inputs.push( input );
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function disconnect( input : ICoreFactoryListener ) : Bool
+	{
+		var index = this._inputs.indexOf( input );
+		if ( index > -1 )
+		{
+			this._inputs.splice( index, 1 );
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function disconnectAll() : Void
+	{
+		this._inputs = [];
+	}
+	
+	function onRegister( key : String, value : Dynamic ) : Void
+		for ( input in this._inputs ) input.onRegister( key, value );
+	
+    function onUnregister( key : String ) : Void
+		for ( input in this._inputs ) input.onUnregister( key );
 }

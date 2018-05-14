@@ -5,10 +5,6 @@ import hex.core.IApplicationContext;
 import hex.di.IBasicInjector;
 import hex.di.IDependencyInjector;
 import hex.di.Injector;
-import hex.domain.ApplicationDomainDispatcher;
-import hex.domain.Domain;
-import hex.event.IDispatcher;
-import hex.event.MessageType;
 import hex.log.ILogger;
 import hex.log.LogManager;
 import hex.module.IContextModule;
@@ -19,27 +15,15 @@ import hex.module.IContextModule;
  */
 class ApplicationContext extends AbstractApplicationContext
 {
-	var _dispatcher 			: IDispatcher<{}>;
-	
-	override public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void
-	{
-		this._dispatcher.dispatch( messageType, data );
-	}
-
-	
 	@:allow( hex.runtime, hex.metadata )
 	function new( applicationContextName : String )
 	{
-		//build contextDispatcher
-		var domain = Domain.getDomain( applicationContextName );
-		this._dispatcher = ApplicationDomainDispatcher.getInstance( this ).getDomainDispatcher( domain );
-		
 		//build injector
 		var injector : IDependencyInjector = new Injector();
 		injector.mapToValue( IBasicInjector, injector );
 		injector.mapToValue( IDependencyInjector, injector );
 		
-		var logger = LogManager.getLogger( domain.getName() );
+		var logger = LogManager.getLogger( applicationContextName );
 		injector.mapToValue( ILogger, logger );
 		
 		//build coreFactory
@@ -51,12 +35,7 @@ class ApplicationContext extends AbstractApplicationContext
 		coreFactory.register( applicationContextName, this );
 		
 		super( coreFactory, applicationContextName );
-		
-		coreFactory.getInjector().mapClassNameToValue( "hex.event.IDispatcher<{}>", this._dispatcher );
 	}
 	
-	override public function getLogger() : ILogger 
-	{
-		return this.getInjector().getInstance( ILogger );
-	}
+	override public function getLogger() return this.getInjector().getInstance( ILogger );
 }

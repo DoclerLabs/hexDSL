@@ -1,7 +1,7 @@
 package hex.preprocess;
 
-import hex.error.Exception;
 import hex.error.IllegalArgumentException;
+using tink.CoreApi;
 
 /**
  * ...
@@ -63,7 +63,7 @@ class ConditionalVariablesChecker
 				}
 				else if ( this._strictMode )
 				{
-					throw new Exception( "'" + ifItem + "' was not found in application assembler" );
+					throw new Error( "'" + ifItem + "' was not found in application assembler" );
 				}
 			}
 		}
@@ -90,7 +90,7 @@ class ConditionalVariablesChecker
 				}
 				else if ( this._strictMode )
 				{
-					throw new Exception( "'" + ifNotItem + "' was not found in application assembler" );
+					throw new Error( "'" + ifNotItem + "' was not found in application assembler" );
 				}
 			}
 		}

@@ -1,7 +1,6 @@
 package hex.compiletime;
 
 import hex.core.IApplicationAssembler;
-import hex.domain.ApplicationDomainDispatcher;
 import hex.runtime.ApplicationAssembler;
 
 /**
@@ -21,7 +20,6 @@ class MixedDslTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 
