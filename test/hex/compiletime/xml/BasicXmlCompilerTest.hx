@@ -4,12 +4,7 @@ import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.Injector;
-import hex.di.mapping.MappingConfiguration;
-import hex.domain.ApplicationDomainDispatcher;
-import hex.domain.Domain;
-import hex.error.Exception;
 import hex.error.NoSuchElementException;
-import hex.event.Dispatcher;
 import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
@@ -38,6 +33,8 @@ import hex.structures.Point;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
+using tink.CoreApi;
+
 /**
  * ...
  * @author Francis Bourre
@@ -57,7 +54,6 @@ class BasicXmlCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 	
@@ -493,19 +489,15 @@ class BasicXmlCompilerTest
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/hashmapFilledWithReferences.xml" );
 
-		var fruits : HashMap<Any, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
+		var fruits : HashMap<Dynamic, MockFruitVO> = this._getCoreFactory().locate( "fruits" );
 		Assert.isNotNull( fruits );
 
 		var stubKey : Point = this._getCoreFactory().locate( "stubKey" );
 		Assert.isNotNull( stubKey );
 
-		var orange 	: MockFruitVO = fruits.get( '0' );
-		var apple 	: MockFruitVO = fruits.get( 1 );
-		var banana 	: MockFruitVO = fruits.get( stubKey );
-
-		Assert.equals( "orange", orange.toString() );
-		Assert.equals( "apple", apple.toString() );
-		Assert.equals( "banana", banana.toString() );
+		Assert.equals( "orange", fruits.get( '0' ).toString() );
+		Assert.equals( "apple", fruits.get( 1 ).toString() );
+		Assert.equals( "banana", fruits.get( stubKey ).toString() );
 	}
 
 	@Test( "test building HashMap with map-type" )
@@ -720,86 +712,6 @@ class BasicXmlCompilerTest
 		Assert.equals( 'property', oDynamic.p );
 	}
 	
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfiguration.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
-		Assert.equals( this._locate( "instance" ), injector.getInstance( IAnotherMockInterface ) );
-	}
-	
-	@Test( "test building mapping configuration with map names" )
-	public function testBuildingMappingConfigurationWithMapNames() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithMapNames.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name1" ),  MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface, "name2" ), AnotherMockClass );
-	}
-	
-	@Test( "test building mapping configuration with singleton" )
-	public function testBuildingMappingConfigurationWithSingleton() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithSingleton.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		config.configure( injector, null );
-
-		var instance1 = injector.getInstance( IAnotherMockInterface, "name1" );
-		Assert.isInstanceOf( instance1,  MockClass );
-		
-		var copyOfInstance1 = injector.getInstance( IAnotherMockInterface, "name1" );
-		Assert.isInstanceOf( copyOfInstance1,  MockClass, "" );
-		Assert.equals( instance1, copyOfInstance1 );
-		
-		var instance2 = injector.getInstance( IAnotherMockInterface, "name2" );
-		Assert.isInstanceOf( instance2, AnotherMockClass );
-		
-		var copyOfInstance2 = injector.getInstance( IAnotherMockInterface, "name2" );
-		Assert.isInstanceOf( copyOfInstance2,  AnotherMockClass );
-		Assert.notEquals( instance2, copyOfInstance2 );
-	}
-	
-	@Test( "test building mapping configuration with inject-into" )
-	public function testBuildingMappingConfigurationWithInjectInto() : Void
-	{
-		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/mappingConfigurationWithInjectInto.xml" );
-
-		var config : MappingConfiguration = this._locate( "config" );
-		Assert.isInstanceOf( config, MappingConfiguration );
-
-		var injector = new Injector();
-		var domain = Domain.getDomain( 'BasicXmlCompilerTest.testBuildingMappingConfigurationWithInjectInto' );
-		injector.mapToValue( Domain, domain );
-		
-		config.configure( injector, null );
-
-		var mock0 = injector.getInstance( IMockInjectee, "name1" );
-		Assert.isInstanceOf( mock0,  MockInjectee );
-		Assert.equals( domain, mock0.domain  );
-		
-		var mock1 = injector.getInstance( IMockInjectee, "name2" );
-		Assert.isInstanceOf( mock1, MockInjectee );
-		Assert.equals( domain, mock1.domain );
-	}
-
 	/*@Test( "test parsing twice" )
 	public function testParsingTwice() : Void
 	{
@@ -875,7 +787,7 @@ class BasicXmlCompilerTest
         {
 			Assert.equals( "bonjour", this._locate( "message" ), "message value should equal 'bonjour'" );
 		}
-		catch ( e : Exception )
+		catch ( e : Error )
         {
             Assert.fail( e.message, "Exception on this._locate( \"message\" ) call" );
         }

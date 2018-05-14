@@ -7,8 +7,6 @@ import hex.core.ApplicationAssemblerMessage;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.domain.ApplicationDomainDispatcher;
-import hex.event.IDispatcher;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.runtime.factory.ArrayFactory;
 import hex.runtime.factory.BoolFactory;
@@ -19,7 +17,6 @@ import hex.runtime.factory.FloatFactory;
 import hex.runtime.factory.FunctionFactory;
 import hex.runtime.factory.HashMapFactory;
 import hex.runtime.factory.IntFactory;
-import hex.runtime.factory.MappingConfigurationFactory;
 import hex.runtime.factory.NullFactory;
 import hex.runtime.factory.PropertyFactory;
 import hex.runtime.factory.StaticVariableFactory;
@@ -29,6 +26,8 @@ import hex.runtime.factory.XmlFactory;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
 import hex.vo.PropertyVO;
+
+using tink.CoreApi;
 
 /**
  * ...
@@ -42,7 +41,7 @@ class RunTimeContextFactory
 {
 	var _isInitialized				: Bool;
 	
-	var _contextDispatcher			: IDispatcher<{}>;
+//	var _contextDispatcher			: IDispatcher<{}> = new Dispatcher();
 	var _applicationContext 		: IApplicationContext;
 	var _factoryMap 				: Map<String, FactoryVOTypeDef->Dynamic>;
 	var _coreFactory 				: IRunTimeCoreFactory;
@@ -50,6 +49,8 @@ class RunTimeContextFactory
 	var _propertyVOLocator 			: Locator<String, Array<PropertyVO>>;
 	var _methodCallVOLocator 		: Locator<String, MethodCallVO>;
 	var _injectedInto				: Array<Any>;
+	
+	public var signal( default, null ) = Signal.trigger();
 
 	public function new()
 	{
@@ -64,12 +65,11 @@ class RunTimeContextFactory
 			
 			//settings
 			this._applicationContext = applicationContext;
-			this._contextDispatcher = ApplicationDomainDispatcher.getInstance( this._applicationContext ).getDomainDispatcher( applicationContext.getDomain() );
 			var injector = this._applicationContext.getInjector();
 			this._coreFactory = cast ( applicationContext.getCoreFactory(), IRunTimeCoreFactory );
 
 			//initialization
-			this._contextDispatcher.dispatch( ApplicationAssemblerMessage.CONTEXT_PARSED );
+			signal.trigger( ApplicationAssemblerMessage.CONTEXT_PARSED );
 			
 			//
 			this._factoryMap 				= new Map();
@@ -93,7 +93,6 @@ class RunTimeContextFactory
 			this._factoryMap.set( ContextTypeList.FUNCTION, FunctionFactory.build );
 			this._factoryMap.set( ContextTypeList.INSTANCE, ClassInstanceFactory.build );
 			this._factoryMap.set( ContextTypeList.STATIC_VARIABLE, StaticVariableFactory.build );
-			this._factoryMap.set( ContextTypeList.MAPPING_CONFIG, MappingConfigurationFactory.build );
 			
 			this._coreFactory.addListener( this );
 		}
@@ -136,12 +135,12 @@ class RunTimeContextFactory
 	
 	public function dispatchAssemblingStart() : Void
 	{
-		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.ASSEMBLING_START );
+		signal.trigger( ApplicationAssemblerMessage.ASSEMBLING_START );
 	}
 	
 	public function dispatchAssemblingEnd() : Void
 	{
-		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.ASSEMBLING_END );
+		signal.trigger( ApplicationAssemblerMessage.ASSEMBLING_END );
 	}
 	
 	//
@@ -209,7 +208,7 @@ class RunTimeContextFactory
 			}
 		}
 		
-		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.OBJECTS_BUILT );
+		signal.trigger( ApplicationAssemblerMessage.OBJECTS_BUILT );
 	}
 	
 	public function registerMethodCallVO( methodCallVO : MethodCallVO ) : Void
@@ -243,7 +242,7 @@ class RunTimeContextFactory
 		}
 		
 		this._methodCallVOLocator.clear();
-		this._contextDispatcher.dispatch( ApplicationAssemblerMessage.METHODS_CALLED );
+		signal.trigger( ApplicationAssemblerMessage.METHODS_CALLED );
 	}
 
 	public function getApplicationContext() : IApplicationContext

@@ -1,7 +1,6 @@
 package hex.compiletime.flow;
 
 import hex.core.ICoreFactory;
-import hex.domain.ApplicationDomainDispatcher;
 import hex.mock.MockApplicationContext;
 import hex.runtime.ApplicationAssembler;
 import hex.runtime.basic.ApplicationContext;
@@ -24,7 +23,6 @@ class ApplicationContextBuildingTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 		

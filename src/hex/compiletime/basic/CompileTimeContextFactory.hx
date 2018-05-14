@@ -1,4 +1,5 @@
 package hex.compiletime.basic;
+import haxe.macro.Context;
 
 #if macro
 import haxe.macro.Expr;
@@ -11,7 +12,6 @@ import hex.compiletime.factory.PropertyFactory;
 import hex.core.ContextTypeList;
 import hex.core.IApplicationContext;
 import hex.core.ICoreFactory;
-import hex.event.IDispatcher;
 import hex.util.MacroUtil;
 import hex.vo.ConstructorVO;
 import hex.vo.MethodCallVO;
@@ -29,6 +29,7 @@ class CompileTimeContextFactory
 	implements hex.collection.ILocatorListener<String, Dynamic>
 {
 	var _injectorContainerInterface : ClassType;
+	var _autoInjectInterface 		: ClassType;
 	var _moduleInterface 			: ClassType;
 	
 	
@@ -37,7 +38,6 @@ class CompileTimeContextFactory
 	var _mappedTypes 				: Array<Expr>;
 	var _injectedInto 				: Array<Expr>;
 	
-	var _contextDispatcher			: IDispatcher<{}>;
 	var _moduleLocator				: Locator<String, String>;
 	var _applicationContext 		: IApplicationContext;
 	var _factoryMap 				: Map<String, FactoryVOTypeDef->Dynamic>;
@@ -53,6 +53,7 @@ class CompileTimeContextFactory
 		this._expressions 					= expressions;
 		this._isInitialized 				= false;
 		this._injectorContainerInterface 	= MacroUtil.getClassType( Type.getClassName( hex.di.IInjectorContainer ) );
+		this._autoInjectInterface 			= MacroUtil.getClassType( Type.getClassName( hex.di.annotation.IAutoInject ) );
 		this._moduleInterface 				= MacroUtil.getClassType( Type.getClassName( hex.module.IContextModule ) );
 	}
 	
@@ -128,13 +129,13 @@ class CompileTimeContextFactory
 	public function dispatchAssemblingStart() : Void
 	{
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.ASSEMBLING_START" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function dispatchAssemblingEnd() : Void
 	{
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.ASSEMBLING_END" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	//
@@ -191,7 +192,7 @@ class CompileTimeContextFactory
 		this._injectedInto.map( this._expressions.push );
 		
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.OBJECTS_BUILT" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function buildProperty( key : String ) : Void
@@ -235,7 +236,7 @@ class CompileTimeContextFactory
 		for ( key in this._methodCallVOLocator.keys() ) this.callMethod(  key );
 		this._methodCallVOLocator.clear();
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.METHODS_CALLED" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 	
 	public function callModuleInitialisation() : Void
@@ -243,7 +244,7 @@ class CompileTimeContextFactory
 		this._moduleLocator.values().map( function(moduleName) this._expressions.push( macro @:mergeBlock { $i{moduleName}.initialize(applicationContext); } ) );
 		this._moduleLocator.clear();
 		var messageType = MacroUtil.getStaticVariable( "hex.core.ApplicationAssemblerMessage.MODULES_INITIALIZED" );
-		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
+//		this._expressions.push( macro @:mergeBlock { applicationContext.dispatch( $messageType ); } );
 	}
 
 	public function getApplicationContext() return this._applicationContext;
@@ -286,8 +287,11 @@ class CompileTimeContextFactory
 		this._tryToRegisterModule( constructorVO );
 		this._parseInjectInto( constructorVO );
 		this._parseMapTypes( constructorVO );
-
-		this._expressions.push( macro @:mergeBlock { $result;  coreFactory.register( $v { id }, $i { id } ); } );
+		
+		var finalResult = result;
+		finalResult = this._parseAutoInject( constructorVO, finalResult );
+		
+		this._expressions.push( macro @:mergeBlock { $finalResult; coreFactory.register( $v { id }, $i { id } ); } );
 		this._coreFactory.register( id, result );
 	}
 	
@@ -295,23 +299,62 @@ class CompileTimeContextFactory
 	{
 		if ( MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _moduleInterface ) )
 		{
-			this._moduleLocator.register( constructorVO.ID, constructorVO.ID );
+			if (constructorVO.ref == null)
+			{
+				this._moduleLocator.register( constructorVO.ID, constructorVO.ID );
+			}
 		}
 	}
 	
 	function _parseInjectInto( constructorVO : ConstructorVO ) : Void
 	{
+		if ( constructorVO.injectInto )
+		{
+			if ( MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _injectorContainerInterface ) )
+			{
+				this._injectedInto.push( 
+					macro 	@:pos( constructorVO.filePosition )
+							@:mergeBlock
+							{ 
+								__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+							}
+				);
+			}
+			else
+			{
+				Context.error( "@inject_into failed, '" + constructorVO.ID + "' should implement `IInjectorContainer`", constructorVO.filePosition );
+			}
+		}
+		
 		if ( constructorVO.injectInto && MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _injectorContainerInterface ) )
 		{
 			//TODO throws an error if interface is not implemented
-			this._injectedInto.push( 
-				macro 	@:pos( constructorVO.filePosition )
-						@:mergeBlock
-						{ 
-							__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
-						}
-			);
+			
 		}
+	}
+	
+	function _parseAutoInject( constructorVO : ConstructorVO, result : Expr ) : Expr
+	{
+		if ( MacroUtil.implementsInterface( MacroUtil.getClassType( constructorVO.className, null, false ), _autoInjectInterface ) )
+		{
+			if ( !constructorVO.injectInto )
+			{
+				this._injectedInto.push( 
+					macro 	@:pos( constructorVO.filePosition )
+							@:mergeBlock
+							{ 
+								__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+							}
+				);
+			}
+			else
+			{
+				Context.warning( '@inject_into is not needed on an instance that implements `IAutoInject`', constructorVO.filePosition );
+			}
+		}
+		
+		
+		return result;
 	}
 	
 	function _parseMapTypes( constructorVO : ConstructorVO ) : Void

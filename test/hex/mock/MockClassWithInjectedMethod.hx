@@ -1,8 +1,6 @@
 package hex.mock;
 
 import hex.di.IInjectorContainer;
-import hex.event.MessageType;
-
 import hex.mock.MockModuleWithInternalType.FunctionSignature;
 
 /**

@@ -17,9 +17,11 @@
 		mapping2,
 		mapping( {fromType: "hex.mock.Interface", toClass: hex.mock.Clazz, withName: "id", asSingleton:true} )
 	);
+	
+	test = new hex.mock.MixedDependenciesOwner( a, mapping1, mappings, s, o.value );
 
 	@public
-	owner = new hex.mock.MixedDependenciesOwner( a, mapping1, mappings, s, o.value );
+	owner = test;
 	
 	o = {value:new hex.mock.Clazz()};
 }

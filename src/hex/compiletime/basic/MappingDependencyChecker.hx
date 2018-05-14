@@ -43,7 +43,7 @@ class MappingDependencyChecker
 							.flatMap( function( arg ) return _getMappingDefinitions( arg.expr, arg.pos ) )
 								.array();
 			
-			if ( !MappingChecker.matchForClassName( constructorVO.className, mappings ) )
+			if ( constructorVO.ref == null && !MappingChecker.matchForClassName( constructorVO.className, mappings ) )
 			{
 				var missingMappings = MappingChecker.getMissingMapping( constructorVO.className, mappings );
 				Context.fatalError( "Missing mappings:" + missingMappings, constructorVO.filePosition );

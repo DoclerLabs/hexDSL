@@ -3,6 +3,7 @@ package hex.compiletime.util;
 #if macro
 import haxe.macro.Context;
 import hex.core.ContextTypeList;
+using tink.CoreApi;
 
 /**
  * ...
@@ -44,7 +45,7 @@ class ClassImportHelper
 				}
 				catch ( e : Dynamic )
 				{
-					if ( Std.is( e, hex.error.Exception ) )
+					if ( Std.is( e, TypedError ) )
 					{
 						Context.error( "Failed to get type '" + type + "': " + e.message, e.pos );
 					}

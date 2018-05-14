@@ -3,10 +3,6 @@ package hex.compiletime.xml;
 import hex.core.IApplicationAssembler;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.di.mapping.MappingConfiguration;
-import hex.domain.ApplicationDomainDispatcher;
-import hex.domain.Domain;
-import hex.error.Exception;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.IAnotherMockInterface;
@@ -28,6 +24,8 @@ import hex.runtime.ApplicationAssembler;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
+using tink.CoreApi;
+
 /**
  * ...
  * @author Francis Bourre
@@ -46,7 +44,6 @@ class BasicStaticXmlCompilerTest
 	@After
 	public function tearDown() : Void
 	{
-		ApplicationDomainDispatcher.release();
 		this._applicationAssembler.release();
 	}
 
@@ -706,7 +703,7 @@ class BasicStaticXmlCompilerTest
 	@Test( "test target sub property" )
 	public function testTargetSubProperty() : Void
 	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/targetSubProperty.xml" );
+		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/targetSubProperty.xml", "BasicStaticXmlCompiler_testTargetSubProperty" );
 		code.execute();
 		
 		Assert.isInstanceOf( code.locator.mockObject, MockObjectWithRegtangleProperty );
@@ -787,26 +784,10 @@ class BasicStaticXmlCompilerTest
         {
 			Assert.equals( "bonjour", code.locator.message, "message value should equal 'bonjour'" );
 		}
-		catch ( e : Exception )
+		catch ( e : Error )
         {
             Assert.fail( e.message, "Exception on this._builderFactory.getCoreFactory().locate( \"message\" ) call" );
         }
-	}
-	
-	@Test( "test building mapping configuration" )
-	public function testBuildingMappingConfiguration() : Void
-	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/mappingConfiguration.xml", "BasicStaticXmlCompiler_testBuildingMappingConfiguration" );
-		code.execute();
-		
-		Assert.isInstanceOf( code.locator.config, MappingConfiguration );
-
-		var injector = new Injector();
-		code.locator.config.configure( injector, null );
-
-		Assert.isInstanceOf( injector.getInstance( IMockInterface ), MockClass );
-		Assert.isInstanceOf( injector.getInstance( IAnotherMockInterface ), AnotherMockClass );
-		Assert.equals( code.locator.instance, injector.getInstance( IAnotherMockInterface ) );
 	}
 	
 	/*@Test( "test trigger method connection" )
@@ -875,15 +856,6 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 60, code2.locator.rect1.y );
 		Assert.equals( 70, code2.locator.rect1.width );
 		Assert.equals( 40, code2.locator.rect1.height );
-	}
-	
-	@Test( "test build domain" )
-	public function testBuildDomain() : Void
-	{
-		var code = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/buildDomain.xml", "BasicStaticXmlCompiler_testBuildDomain" );
-		code.execute();
-		
-		Assert.isInstanceOf( code.locator.applicationDomain, Domain );
 	}
 
 	@Test( "test recursive static calls" )
