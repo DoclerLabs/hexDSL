@@ -43,7 +43,7 @@ class BasicXmlReaderTest
 	{
 		this._applicationAssembler 	= new ApplicationAssembler();
 		this._applicationContext 	= this._applicationAssembler.getApplicationContext( "applicationContext", ApplicationContext );
-		cast ( this._applicationContext.getCoreFactory(), CoreFactory ).addProxyFactoryMethod( "hex.structures.Point", PointFactory, PointFactory.build );
+		cast ( this._applicationContext.getCoreFactory(), CoreFactory ).addProxyFactoryMethod( "hex.structures.Point", null, PointFactory.build );
 	}
 
 	@After
@@ -338,8 +338,6 @@ class BasicXmlReaderTest
 		Assert.isInstanceOf( fruits, Xml );
 	}
 
-	#if !flash
-	//todo have to fixe this test issue on Flash target
 	@Test( "test building XML with parser class" )
 	public function testBuildingXMLWithParserClass() : Void
 	{
@@ -356,7 +354,6 @@ class BasicXmlReaderTest
 		Assert.equals( "apple", apple.toString() );
 		Assert.equals( "banana", banana.toString() );
 	}
-	#end
 
 	@Test( "test building Arrays" )
 	public function testBuildingArrays() : Void
@@ -561,7 +558,7 @@ class BasicXmlReaderTest
 	{
 		var variables = [ "production" => false, "test" => true, "release" => true ];
 		this.build( BasicXmlReader.getXml( "context/xml/includeWithIfAttribute.xml", null, null,  [ "production" => false, "test" => true, "release" => true ] ) );
-		Assert.methodCallThrows( NoSuchElementException, this._applicationContext.getCoreFactory(), this._locate, [ "message" ], "message value should equal 'hello production'" );
+		Assert.methodCallThrows( NoSuchElementException, this._applicationContext.getCoreFactory(), this._applicationContext.getCoreFactory().locate, [ "message" ], "message value should equal 'hello production'" );
 	}
 
 	@Test( "test file preprocessor with Xml file" )

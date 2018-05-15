@@ -5,7 +5,7 @@
 	(
 		[ new hex.mock.MockClassWithIntGeneric( 1 ) ],
 		[ new hex.mock.MockClassWithIntGeneric( 2 ) ],
-		new Array<Array<hex.mock.MockClassWithIntGeneric>>( new hex.mock.MockClassWithIntGeneric( 3 ) ),
-		new Array<Array<Dynamic>>( new hex.mock.MockClassWithIntGeneric( 4 ), 5 )
+		new Array<hex.mock.MockClassWithIntGeneric>( new hex.mock.MockClassWithIntGeneric( 3 ) ),
+		new Array<Dynamic>( new hex.mock.MockClassWithIntGeneric( 4 ), "5" )
 	);
 }

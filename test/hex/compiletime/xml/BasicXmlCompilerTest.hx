@@ -761,7 +761,7 @@ class BasicXmlCompilerTest
 	public function testIncludeFailsWithIfAttribute() : Void
 	{
 		this._applicationAssembler = BasicXmlCompiler.compile( "context/xml/includeWithIfAttribute.xml", null, null, [ "production" => false, "test" => true, "release" => true ] );
-		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._locate, [ "message" ], "'NoSuchElementException' should be thrown" );
+		Assert.methodCallThrows( NoSuchElementException, this._getCoreFactory(), this._getCoreFactory().locate, [ "message" ], "'NoSuchElementException' should be thrown" );
 	}
 
 	@Test( "test file preprocessor with Xml file" )

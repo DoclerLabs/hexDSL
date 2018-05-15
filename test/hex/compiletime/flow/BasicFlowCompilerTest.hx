@@ -831,7 +831,7 @@ class BasicFlowCompilerTest
 		var a = cast test[ 3 ];
 		Assert.isInstanceOf( a[ 0 ] , hex.mock.MockClassWithIntGeneric );
 		Assert.equals( 4, a[ 0 ].property );
-		Assert.equals( 5, a[ 1 ] );
+		Assert.equals( "5", a[ 1 ] );
 	}
 	
 	@Test( "test array recursivity with new mixed with brackets" )
@@ -853,7 +853,7 @@ class BasicFlowCompilerTest
 		var a = cast test[ 3 ];
 		Assert.isInstanceOf( a[ 0 ] , hex.mock.MockClassWithIntGeneric );
 		Assert.equals( 4, a[ 0 ].property );
-		Assert.equals( 5, a[ 1 ] );
+		Assert.equals( "5", a[ 1 ] );
 	}
 	
 	@Test( "test new recursivity" )

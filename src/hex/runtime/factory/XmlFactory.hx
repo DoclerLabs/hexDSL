@@ -19,9 +19,9 @@ class XmlFactory
         throw new PrivateConstructorException();
     }
 
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Xml
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Dynamic
 	{
-		var result : Xml 	= null;
+		var result : Dynamic 		= null;
 		var constructorVO 	= factoryVO.constructorVO;
 		var args 			= constructorVO.arguments;
 		var factory 		= constructorVO.factory;
