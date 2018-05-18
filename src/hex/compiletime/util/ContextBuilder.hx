@@ -21,7 +21,10 @@ class ContextBuilder
 	//Each application context owner got its own context builder
 	static var _Map 				: Map<ApplicationContextOwner, ContextBuilder>;
 	
+	static var _callbacks			: Array<TypeDefinition->Void> = [];
+	
 	var _owner 						: ApplicationContextOwner;
+	
 	
 	public var _iteration 			: BuildIteration;
 
@@ -88,6 +91,8 @@ class ContextBuilder
 		
 		ContextBuilder._Map.set( owner, new ContextBuilder( owner, applicationContextClassName ) );
 	}
+	
+	static public function onContextTyping( callback ) : Void _callbacks.push( callback );
 	
 	public function addField( fieldName : String, ct : haxe.macro.Expr.ComplexType, pos : haxe.macro.Expr.Position, lazyExpr : haxe.macro.Expr = null, isPublic : Bool = true ) : Void
 	{
@@ -173,6 +178,8 @@ class ContextBuilder
 				contextIteration.defined = true;
 				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
 				haxe.macro.Context.defineType( td );
+				//broadcast
+				for ( callback in _callbacks ) callback( td );
 			}
 		}
 	}
