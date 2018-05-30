@@ -16,6 +16,7 @@ import hex.module.IContextModule;
 class ApplicationContext extends AbstractApplicationContext
 {
 	@:allow( hex.runtime, hex.metadata )
+	@:keep
 	function new( applicationContextName : String )
 	{
 		//build injector

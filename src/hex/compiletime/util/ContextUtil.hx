@@ -111,7 +111,7 @@ class ContextUtil
 		var applicationContextCT		= TypeTools.toComplexType( Context.getType( applicationContextClassName ) );
 		var applicationContextClassPack = MacroUtil.getPack( applicationContextClassName );
 		
-		var classExpr = macro class $className implements $tp { public function new( applicationAssembler : $assemblerCT ) 
+		var classExpr = macro class $className implements $tp { @:keep public function new( applicationAssembler : $assemblerCT ) 
 		{ 
 			this._applicationAssembler = applicationAssembler;
 			this.$className = _applicationAssembler.getApplicationContext( $v{className}, $p{applicationContextClassPack} );

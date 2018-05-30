@@ -178,6 +178,7 @@ class ContextBuilder
 				contextIteration.defined = true;
 				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
 				haxe.macro.Context.defineType( td );
+				
 				//broadcast
 				for ( callback in _callbacks ) callback( td );
 			}
@@ -192,6 +193,9 @@ class ContextBuilder
 			contextIteration.defined = true;
 			var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
 			haxe.macro.Context.defineType( td );
+			
+			//broadcast
+			for ( callback in _callbacks ) callback( td );
 		}
 	}
 }
