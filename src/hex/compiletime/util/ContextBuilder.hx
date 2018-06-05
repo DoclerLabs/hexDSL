@@ -7,6 +7,7 @@ import hex.core.IApplicationContext;
 import hex.core.HashCodeFactory;
 import hex.compiletime.ICompileTimeApplicationAssembler;
 import hex.compiletime.util.ContextBuilder;
+using tink.CoreApi;
 
 /**
  * ...
@@ -164,10 +165,15 @@ class ContextBuilder
 		return haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( 'hex.context.' + interfaceExpr.name ) );
 	}
 	
+	static var allDefined = Signal.trigger();
+	static public function afterContextsDefined(cb:Callback<Noise>)
+		return allDefined.handle(cb);
+	
 	//Build final class for each different context name
 	static function _onAfterTyping( types : Array<haxe.macro.Type.ModuleType> ) : Void
 	{
 		var iti = ContextBuilder._Iteration.keys();
+		var anyDefined = false;
 		while ( iti.hasNext() )
 		{
 			var contextName = iti.next();
@@ -175,7 +181,7 @@ class ContextBuilder
 	
 			if ( !contextIteration.defined )
 			{
-				contextIteration.defined = true;
+				anyDefined = contextIteration.defined = true;
 				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
 				haxe.macro.Context.defineType( td );
 				
@@ -183,6 +189,7 @@ class ContextBuilder
 				for ( callback in _callbacks ) callback( td );
 			}
 		}
+		if (!anyDefined) allDefined.trigger(Noise);
 	}
 	
 	public static function forceGeneration( contextName : String ) : Void
