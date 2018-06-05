@@ -339,13 +339,16 @@ class CompileTimeContextFactory
 		{
 			if ( !constructorVO.injectInto )
 			{
-				this._injectedInto.push( 
-					macro 	@:pos( constructorVO.filePosition )
-							@:mergeBlock
-							{ 
-								__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
-							}
-				);
+				if ( constructorVO.ref == null )
+				{
+					this._injectedInto.push( 
+						macro 	@:pos( constructorVO.filePosition )
+								@:mergeBlock
+								{ 
+									__applicationContextInjector.injectInto( $i{ constructorVO.ID } ); 
+								}
+					);
+				}
 			}
 			else
 			{
