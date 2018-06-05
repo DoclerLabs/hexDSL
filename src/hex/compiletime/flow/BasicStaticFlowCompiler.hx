@@ -233,7 +233,7 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		var applicationContextClassPack = MacroUtil.getPack( applicationContextClassName );
 		var applicationContextCT		= haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( applicationContextClassName ) );
 		
-		classExpr = macro class $className { public function new( assembler )
+		classExpr = macro class $className { @:keep public function new( assembler )
 		{
 			this.locator 				= hex.compiletime.CodeLocator.get( $v { contextName }, assembler );
 			this.applicationAssembler 	= assembler;

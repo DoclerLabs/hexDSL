@@ -1,0 +1,5 @@
+@context( name = 'applicationContext' )
+{
+	@public
+	reseter = new hex.mock.Reseter( rect.reset );
+}

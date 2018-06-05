@@ -1,5 +1,6 @@
 @context( 	name = 'applicationContext',
-			params = {x: Float, y: Float, p:hex.structures.Point} )
+			params = {x: Float, y: Float, p:hex.structures.Point, rect: hex.mock.MockRectangle} )
+@include( 'context/flow/includedReference.flow' )
 {
 	@public
 	size = new hex.structures.Size( x, y );

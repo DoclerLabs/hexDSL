@@ -884,7 +884,9 @@ class BasicStaticFlowCompilerTest
 	public function testRuntimeArguments() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/runtimeArguments.flow", "BasicStaticFlowCompiler_testRuntimeArguments" );
-		code.execute( { x:10, y: 20, p: new Point( 30, 40 ) } );
+		var p = new Point( 30, 40 );
+		var rect = new MockRectangle( 1, 1, 1, 1 );
+		code.execute( { x:10, y: 20, p: p, rect: rect } );
 		
 		Assert.isInstanceOf( code.locator.size, Size );
 		Assert.equals( 10, code.locator.size.width );
@@ -893,6 +895,9 @@ class BasicStaticFlowCompilerTest
 		Assert.isInstanceOf( code.locator.anotherSize, Size );
 		Assert.equals( 30, code.locator.anotherSize.width );
 		Assert.equals( 40, code.locator.anotherSize.height );
+		
+		code.locator.reseter.resetMethod();
+		Assert.equals( 0, rect.x );
 	}
 	
 	@Test( "test array recursivity" )
@@ -1195,6 +1200,28 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 'hello world', code.locator.childContext2.text );
 	}
 	
+	@Test( "test runtime arguments" )
+	public function testImportRuntimeArgumentsWithInclude() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/importRuntimeArguments.flow", "BasicStaticFlowCompiler_testImportRuntimeArgumentsWithInclude" );
+		
+		code.execute();
+		
+		var p = code.locator.p;
+		var rect = code.locator.rect;
+		
+		Assert.isInstanceOf( code.locator.child.size, Size );
+		Assert.equals( 10, code.locator.child.size.width );
+		Assert.equals( 20, code.locator.child.size.height );
+		
+		Assert.isInstanceOf( code.locator.child.anotherSize, Size );
+		Assert.equals( 30, code.locator.child.anotherSize.width );
+		Assert.equals( 40, code.locator.child.anotherSize.height );
+		
+		code.locator.child.reseter.resetMethod();
+		Assert.equals( 0, rect.x );
+	}
+	
 	@Test( "test child method call with another child argument" )
 	public function testChildMethodCallWithAnotherChildArgument() : Void
 	{
@@ -1308,5 +1335,14 @@ class BasicStaticFlowCompilerTest
 		
 		Assert.equals( 'test3', (cast code.locator.mapping1.toValue)('test') );
 		Assert.equals( 'test3', (cast code.locator.mapping2.toValue)('test') );
+	}
+	
+	public function testDependencyOwnerAsRuntimeArg() : Void
+	{
+		var code1 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/dependency.flow", "BasicStaticFlowCompiler_testDependencyOwnerAsRuntimeArg" );
+		code1.execute();
+		
+		var code2 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/importDependency.flow", "BasicStaticFlowCompiler_testDependencyOwnerAsRuntimeArg" );
+		code2.execute( {o: code1.locator.owner} );
 	}
 }

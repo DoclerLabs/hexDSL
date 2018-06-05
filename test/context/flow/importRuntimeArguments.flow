@@ -1,0 +1,17 @@
+@context( name = 'applicationContext' )
+{
+	@public
+	child = new Context( 'context/flow/runtimeArguments.flow', {x: x, y: y, p: p, rect: rect} );
+	
+	@public
+	rect = new hex.mock.MockRectangle( 1, 1, 1, 1 );
+	
+	@public
+	x = 10;
+	
+	@public
+	y = 20;
+	
+	@public
+	p = new hex.structures.Point( 30, 40 );
+}

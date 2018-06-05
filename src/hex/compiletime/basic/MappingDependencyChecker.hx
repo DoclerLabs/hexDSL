@@ -38,10 +38,11 @@ class MappingDependencyChecker
 		{
 			var mappings = constructorVO.arguments
 				.filter( function ( arg ) return arg.ref != null )
-					.map( function ( arg ) return {pos: arg.filePosition, expr: this._coreFactory.locate( arg.ref )} )
-						.filter( function ( arg ) return arg.expr != null )
-							.flatMap( function( arg ) return _getMappingDefinitions( arg.expr, arg.pos ) )
-								.array();
+					.filter( function ( arg ) return this._coreFactory.isRegisteredWithKey( arg.ref ) )
+						.map( function ( arg ) return {pos: arg.filePosition, expr: this._coreFactory.locate( arg.ref )} )
+							.filter( function ( arg ) return arg.expr != null )
+								.flatMap( function( arg ) return _getMappingDefinitions( arg.expr, arg.pos ) )
+									.array();
 			
 			if ( constructorVO.ref == null && !MappingChecker.matchForClassName( constructorVO.className, mappings ) )
 			{

@@ -1,0 +1,5 @@
+@context( name = 'applicationContext', params = {o: hex.mock.DependencyOwner} )
+{
+	@public
+	module = o;
+}
