@@ -29,8 +29,7 @@ class CodeLocator
 		}
 		
 		var contextMap = __M.get( assembler );
-		contextName = 'hex.context.' + contextName;
-		
+
 		if ( !contextMap.exists( contextName ) )
 		{
 			if ( assembler == null )

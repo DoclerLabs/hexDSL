@@ -34,11 +34,11 @@ class ContextUtil
 	 * @param 	String ID used to generate class name
 	 * @return 	TypeDefinition
 	 */
-	public static function buildClassDefintion( id : String ) : TypeDefinition
+	public static function buildClassDefintion( className : String, pack : Array<String> ) : TypeDefinition
 	{
-		var className = id;
+		var className = className;
 		var classExpr = macro class $className{ public function new(){} };
-		classExpr.pack = [ "hex", "context" ];
+		classExpr.pack = pack;
 		return classExpr;
 	}
 	
@@ -48,9 +48,8 @@ class ContextUtil
 	 * @param	TypeDefinition Previous class to copy definition from
 	 * @return TypeDefinition
 	 */
-	public static function updateClassDefintion( id : String, previous : TypeDefinition ) : TypeDefinition
+	public static function updateClassDefintion( className : String, previous : TypeDefinition ) : TypeDefinition
 	{
-		var className = id;
 		var classExpr = macro class $className{ public function new(){} };
 		
 		var fields =  previous.fields;
@@ -62,7 +61,7 @@ class ContextUtil
 			}
 		}
 		
-		classExpr.pack = [ "hex", "context" ];
+		classExpr.pack = previous.pack;
 		return classExpr;
 	}
 	
@@ -71,11 +70,11 @@ class ContextUtil
 	 * @param	String ID used to generate interface name
 	 * @return 	TypeDefinition
 	 */
-	public static function buildInterfaceDefintion( id : String ) : TypeDefinition
+	public static function buildInterfaceDefintion( interfaceName : String, pack : Array<String> ) : TypeDefinition
 	{
-		var interfaceName = 'I' + id;
-		var interfaceExpr = macro interface $interfaceName{};
-		interfaceExpr.pack = [ "hex", "context" ];
+		var name = 'I' + interfaceName;
+		var interfaceExpr = macro interface $name{};
+		interfaceExpr.pack = pack;
 		return interfaceExpr;
 	}
 	
@@ -85,12 +84,12 @@ class ContextUtil
 	 * @param	TypeDefinition Previous class to copy definition from and to extend
 	 * @return TypeDefinition
 	 */
-	public static function extendInterfaceDefintion( id : String, previous : TypeDefinition ) : TypeDefinition
+	public static function extendInterfaceDefintion( interfaceName : String, previous : TypeDefinition ) : TypeDefinition
 	{
-		var tp = MacroUtil.getTypePath( 'hex.context.' + previous.name );
-		var interfaceName = 'I' + id;
-		var interfaceExpr = macro interface $interfaceName extends $tp{};
-		interfaceExpr.pack = [ "hex", "context" ];
+		var tp = MacroUtil.getTypePath( previous.pack.join('.') + '.' + previous.name );
+		var name = 'I' + interfaceName;
+		var interfaceExpr = macro interface $name extends $tp{};
+		interfaceExpr.pack = previous.pack;
 		return interfaceExpr;
 	}
 	
@@ -105,8 +104,8 @@ class ContextUtil
 	{
 		var className 					= id;
 		
-		var interfaceName 				= 'I' + previous.name;
-		var tp 							= MacroUtil.getTypePath( 'hex.context.I' + previous.name );
+		var name 						= 'I' + previous.name;
+		var tp 							= MacroUtil.getTypePath( previous.pack.join('.') + '.' + name );
 		var assemblerCT 				= macro:hex.core.IApplicationAssembler;
 		var applicationContextCT		= TypeTools.toComplexType( Context.getType( applicationContextClassName ) );
 		var applicationContextClassPack = MacroUtil.getPack( applicationContextClassName );
@@ -136,7 +135,7 @@ class ContextUtil
 			}
 		}
 		
-		classExpr.pack = [ "hex", "context" ];
+		classExpr.pack = previous.pack;
 		return classExpr;
 	}
 

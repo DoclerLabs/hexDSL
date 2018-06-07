@@ -210,7 +210,10 @@ class ApplicationContextParser extends hex.compiletime.xml.AbstractXmlParser<hex
 	override public function parse() : Void
 	{
 		//Register
-		this._applicationContextClass.name = this._applicationContextClass.name != null ? this._applicationContextClass.name : Type.getClassName( hex.runtime.basic.ApplicationContext );
+		if ( this._applicationContextClass.name == null )
+		{
+			this._applicationContextClass.name = 'hex.runtime.basic.ApplicationContext';
+		}
 		ContextBuilder.register( this._applicationAssembler.getFactory( this._factoryClass, this.getApplicationContext() ), this._applicationContextClass.name );
 		
 		//Create runtime applicationAssembler
@@ -231,7 +234,6 @@ class ApplicationContextParser extends hex.compiletime.xml.AbstractXmlParser<hex
 			this._exceptionReporter.report( "Type not found '" + this._applicationContextClass.name + "' ", this._applicationContextClass.pos );
 		}
 
-		
 		//Add expression
 		var expr = macro @:mergeBlock { var applicationContext = this._applicationAssembler.getApplicationContext( $v { this._applicationContextName }, $p { applicationContextClass } ); };
 		( cast this._applicationAssembler ).addExpression( expr );
@@ -290,14 +292,15 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 		var applicationContextClassPack = MacroUtil.getPack( applicationContextClassName );
 		var applicationContextCT		= haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( applicationContextClassName ) );
 		
+		var contextFQN = this._applicationContextPack.join('.') + '.' + contextName;
 		classExpr = macro class $className { public function new( assembler )
 		{
-			this.locator 				= hex.compiletime.CodeLocator.get( $v { contextName }, assembler );
+			this.locator 				= hex.compiletime.CodeLocator.get( $v { contextFQN }, assembler );
 			this.applicationAssembler 	= assembler;
 			this.applicationContext 	= this.locator.$contextName;
 		}};
 
-		classExpr.pack = [ "hex", "context" ];
+		classExpr.pack = this._applicationContextPack;
 		
 		classExpr.fields.push(
 		{
@@ -326,8 +329,8 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 		var locatorArguments = if ( this._runtimeParam.type != null ) [ { name: 'param', type:_runtimeParam.type } ] else [];
 		
 		var locatorBody = this._runtimeParam.type != null ?
-			macro hex.compiletime.CodeLocator.get( $v { contextName }, applicationAssembler ).$file(param) :
-				macro hex.compiletime.CodeLocator.get( $v { contextName }, applicationAssembler ).$file();
+			macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file(param) :
+				macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file();
 				
 		var className = classExpr.pack.join( '.' ) + '.' + classExpr.name;
 		var cls = className.asTypePath();

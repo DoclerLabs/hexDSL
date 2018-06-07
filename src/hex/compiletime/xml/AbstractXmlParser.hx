@@ -37,7 +37,7 @@ class AbstractXmlParser<RequestType> extends DSLParser<Xml, RequestType>
 			this._exceptionReporter.report( "Context data should be an instance of Xml." );
 		}
 	}
-	
+	//TODO MAKE PACK
 	override function _findApplicationContextName( xml : Xml ) : String
 	{
 		return xml.firstElement().get( ContextAttributeList.NAME );
@@ -53,6 +53,7 @@ class AbstractXmlParser<RequestType> extends DSLParser<Xml, RequestType>
 	{
 		var name = xml.firstElement().get( ContextAttributeList.TYPE );
 		var pos = name != null ? this._positionTracker.getPosition( xml.firstElement() ) : null;
+
 		return { name: name, pos: pos };
 	}
 	

@@ -31,18 +31,22 @@ class ContextBuilder
 
 	function new( owner : ApplicationContextOwner, applicationContextClassName : String ) 
 	{
-		this._owner = owner;
-		this._iteration = ContextBuilder._getContextIteration( owner.getApplicationContext().getName(), applicationContextClassName );
+		this._owner 	= owner;
+		
+		var contextName = owner.getApplicationContext().getName();
+		var pack 		= [ 'hex', 'context' ];
+		
+		this._iteration = ContextBuilder._getContextIteration( contextName, applicationContextClassName, pack );
 	}
 	
-	static private function _getContextIteration( applicationContextName : String, applicationContextClassName : String ) : BuildIteration
+	static private function _getContextIteration( applicationContextName : String, applicationContextClassName : String, pack : Array<String> ) : BuildIteration
 	{
 		var contextIteration;
 		
 		if ( !ContextBuilder._Iteration.exists( applicationContextName ) )
 		{
-			var definition = ContextUtil.buildClassDefintion( getIterationName( applicationContextName, 0 ) );
-			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ) );
+			var definition = ContextUtil.buildClassDefintion( getIterationName( applicationContextName, 0 ), pack );
+			var iDefinition = ContextUtil.buildInterfaceDefintion( getIterationName( applicationContextName, 0 ), pack );
 			
 			//Add a field for applicationContext with the name of the context.
 			definition.fields.push( ContextUtil.buildField( applicationContextName, hex.util.MacroUtil.getComplexTypeFromString( applicationContextClassName ), haxe.macro.Context.currentPos(), false ) );
@@ -68,7 +72,7 @@ class ContextBuilder
 	}
 	
 	public static function getApplicationContextName( interfaceIterationName : String ) : String
-	{
+	{trace( interfaceIterationName );
 		return interfaceIterationName.substring( 0, interfaceIterationName.lastIndexOf( '_' ) );
 	}
 	
@@ -161,8 +165,9 @@ class ContextBuilder
 		interfaceExpr.isExtern = false;
 		haxe.macro.Context.defineType( interfaceExpr );
 
-		haxe.macro.TypeTools.getClass( haxe.macro.Context.getType( 'hex.context.' + interfaceExpr.name ) ).fields.get();
-		return haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( 'hex.context.' + interfaceExpr.name ) );
+		var interfaceFQN = interfaceExpr.pack.join('.') + '.' + interfaceExpr.name;
+		haxe.macro.TypeTools.getClass( haxe.macro.Context.getType( interfaceFQN ) ).fields.get();
+		return haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( interfaceFQN ) );
 	}
 	
 	static var allDefined = Signal.trigger();

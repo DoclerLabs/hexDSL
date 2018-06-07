@@ -12,7 +12,9 @@ import hex.parser.AbstractContextParser;
  */
 class DSLParser<ContentType, RequestType> extends AbstractContextParser<ContentType, RequestType>
 {
-	var _applicationContextName 	: String = 'applicationContext';
+	var _applicationContextName 	: String 		= 'applicationContext';
+	var _applicationContextPack 	: Array<String> = ['hex', 'context'];
+	
 	var _isContextNameLocked 		: Bool = false;
 	
 	var _applicationContextClass 	: {name: String, pos: haxe.macro.Expr.Position};
