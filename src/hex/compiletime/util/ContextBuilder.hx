@@ -72,7 +72,7 @@ class ContextBuilder
 	}
 	
 	public static function getApplicationContextName( interfaceIterationName : String ) : String
-	{trace( interfaceIterationName );
+	{
 		return interfaceIterationName.substring( 0, interfaceIterationName.lastIndexOf( '_' ) );
 	}
 	
