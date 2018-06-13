@@ -822,7 +822,7 @@ class BasicStaticXmlCompilerTest
 		Assert.equals( 'hello world', MockTriggerListener.message );
 	}*/
 	
-	@Test( "test read twice the same context" )
+	/*@Test( "test read twice the same context" )
 	public function testReadTwiceTheSameContext() : Void
 	{
 		var code1 = BasicStaticXmlCompiler.compile( this._applicationAssembler, "context/xml/simpleInstanceWithoutArguments.xml", "BasicStaticXmlCompiler_testReadTwiceTheSameContext" );
@@ -835,7 +835,7 @@ class BasicStaticXmlCompilerTest
 		Assert.isInstanceOf( code2.locator.instance, MockClassWithoutArgument );
 		
 		Assert.notEquals( code1.locator.instance, code2.locator.instance );
-	}
+	}*/
 	
 	@Test( "test parsing twice" )
 	public function testParsingTwice() : Void

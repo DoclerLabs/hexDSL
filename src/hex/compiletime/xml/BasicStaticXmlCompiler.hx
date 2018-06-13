@@ -290,9 +290,9 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 		var applicationContextCT		= haxe.macro.TypeTools.toComplexType( haxe.macro.Context.getType( applicationContextClassName ) );
 		
 		var contextFQN = this._applicationContextPack.join('.') + '.' + contextName;
-		classExpr = macro class $className { public function new( assembler )
+		classExpr = macro class $className { @:keep public function new( locatorClass, assembler )
 		{
-			this.locator 				= hex.compiletime.CodeLocator.get( $v { contextFQN }, assembler );
+			this.locator 				= hex.compiletime.CodeLocator.get( locatorClass, assembler );
 			this.applicationAssembler 	= assembler;
 			this.applicationContext 	= this.locator.$contextName;
 		}};
@@ -325,16 +325,22 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 		
 		var locatorArguments = if ( this._runtimeParam.type != null ) [ { name: 'param', type:_runtimeParam.type } ] else [];
 		
-		var locatorBody = this._runtimeParam.type != null ?
+/*		var locatorBody = this._runtimeParam.type != null ?
 			macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file(param) :
 				macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file();
+*/	
+		var locatorBody = this._runtimeParam.type != null ?
+			macro this.locator.$file( param ) :
+				macro this.locator.$file();
 				
 		var className = classExpr.pack.join( '.' ) + '.' + classExpr.name;
 		var cls = className.asTypePath();
-		var cloneBody = macro @:mergeBlock 
+		
+		//Clone
+		/*var cloneBody = macro @:mergeBlock 
 		{
 			return new $cls( assembler ); 
-		};
+		};*/
 		
 		classExpr.fields.push(
 		{
@@ -349,7 +355,7 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 			access: [ APublic ]
 		});
 		
-		classExpr.fields.push(
+		/*classExpr.fields.push(
 		{
 			name: 'clone',
 			pos: haxe.macro.Context.currentPos(),
@@ -360,11 +366,18 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 				expr: cloneBody
 			}),
 			access: [ APublic ]
-		});
+		});*/
+		
+		//Generate module's name
+		//var module = className.substr( 0, className.length - 2 ).split('.').join('_');
+		var module = className.split('_').join('_$').split('.').join('_');
+		var mods = module.split('_');
+		mods.splice( mods.length -1, 1 );
+		module = mods.join( '_' );
 		
 		haxe.macro.Context.defineType( classExpr );
 		var typePath = MacroUtil.getTypePath( className );
-		assembler.setMainExpression( macro @:mergeBlock { new $typePath( $assemblerVarExpression ); }  );
+		assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { [module] }, $assemblerVarExpression ); }  );
 	}
 }
 #end
