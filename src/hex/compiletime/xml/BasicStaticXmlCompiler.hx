@@ -210,10 +210,7 @@ class ApplicationContextParser extends hex.compiletime.xml.AbstractXmlParser<hex
 	override public function parse() : Void
 	{
 		//Register
-		if ( this._applicationContextClass.name == null )
-		{
-			this._applicationContextClass.name = 'hex.runtime.basic.ApplicationContext';
-		}
+		if ( this._applicationContextClass.name == null ) this._applicationContextClass.name = Type.getClassName( hex.runtime.basic.ApplicationContext );
 		ContextBuilder.register( this._applicationAssembler.getFactory( this._factoryClass, this.getApplicationContext() ), this._applicationContextClass.name );
 		
 		//Create runtime applicationAssembler
@@ -300,7 +297,7 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 			this.applicationContext 	= this.locator.$contextName;
 		}};
 
-		classExpr.pack = this._applicationContextPack;
+		classExpr.pack = builder._iteration.definition.pack;
 		
 		classExpr.fields.push(
 		{

@@ -26,6 +26,8 @@ class ContextBuilder
 	
 	var _owner 						: ApplicationContextOwner;
 	
+	static var _uniqueID = 0;
+	
 	
 	public var _iteration 			: BuildIteration;
 
@@ -34,7 +36,9 @@ class ContextBuilder
 		this._owner 	= owner;
 		
 		var contextName = owner.getApplicationContext().getName();
-		var pack 		= [ 'hex', 'context' ];
+		
+		//Unique name
+		var pack 		= [ 'hex', 'context' + (_uniqueID++) ];
 		
 		this._iteration = ContextBuilder._getContextIteration( contextName, applicationContextClassName, pack );
 	}

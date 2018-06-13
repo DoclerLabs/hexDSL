@@ -92,7 +92,7 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "hello", code.locator.s );
 	}
 	
-	@Test( "test read twice the same context" )
+	/*@Test( "test read twice the same context" )
 	public function testReadTwiceTheSameContext() : Void
 	{
 		var code1 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/simpleInstanceWithoutArguments.flow", "BasicStaticFlowCompiler_testReadTwiceTheSameContext" );
@@ -105,7 +105,7 @@ class BasicStaticFlowCompilerTest
 		Assert.isInstanceOf( code2.locator.instance, MockClassWithoutArgument );
 		
 		Assert.notEquals( code1.locator.instance, code2.locator.instance );
-	}
+	}*/
 	
 	@Test( "test overriding context name" )
 	public function testOverridingContextName() : Void
@@ -1135,7 +1135,7 @@ class BasicStaticFlowCompilerTest
 		}
 	}
 	#end
-	
+/*
 	//Import
 	@Test( "test recursive empty import" )
 	public function testRecursiveEmptyImport() : Void
@@ -1344,5 +1344,5 @@ class BasicStaticFlowCompilerTest
 		
 		var code2 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/importDependency.flow", "BasicStaticFlowCompiler_testDependencyOwnerAsRuntimeArg" );
 		code2.execute( {o: code1.locator.owner} );
-	}
+	}*/
 }
