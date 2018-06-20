@@ -191,7 +191,7 @@ class ContextUtil
 		var newField : Field = 
 		{
 			name: fileName,
-			meta: [ { name: ":noCompletion", params: [], pos: Context.currentPos() } ],
+			meta: [ { name: ":noCompletion", params: [], pos: Context.currentPos() }, { name: ":keep", params: [], pos: Context.currentPos() } ],
 			pos: Context.currentPos(),
 			kind: null,
 			access: [ APublic ]

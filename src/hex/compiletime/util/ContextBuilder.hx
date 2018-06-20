@@ -34,13 +34,8 @@ class ContextBuilder
 	function new( owner : ApplicationContextOwner, applicationContextClassName : String ) 
 	{
 		this._owner 	= owner;
-		
 		var contextName = owner.getApplicationContext().getName();
-		
-		//Unique name
-		var pack 		= [ 'hex', 'context' + (_uniqueID++) ];
-		
-		this._iteration = ContextBuilder._getContextIteration( contextName, applicationContextClassName, pack );
+		this._iteration = ContextBuilder._getContextIteration( contextName, applicationContextClassName, [ 'hex', 'context' + (ContextBuilder._uniqueID++) ] );
 	}
 	
 	static private function _getContextIteration( applicationContextName : String, applicationContextClassName : String, pack : Array<String> ) : BuildIteration
@@ -154,7 +149,7 @@ class ContextBuilder
 						
 					case FFun( f ):
 						if ( field.name.indexOf('get_') != 0 )
-							interfaceExpr.fields.push( { name: field.name, meta: [ { name: ":noCompletion", params: [], pos: haxe.macro.Context.currentPos() } ], kind: FFun( {args: f.args, ret:f.ret, expr:null, params:f.params} ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
+							interfaceExpr.fields.push( { name: field.name, meta: [ { name: ":noCompletion", params: [], pos: haxe.macro.Context.currentPos() }, { name: ":keep", params: [], pos: haxe.macro.Context.currentPos() } ], kind: FFun( {args: f.args, ret:f.ret, expr:null, params:f.params} ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
 
 					case FProp( get, set, t, e ):
 						interfaceExpr.fields.push( { name: field.name, kind: FProp( get, set, t ), pos:haxe.macro.Context.currentPos(), access: [ APublic ] } );
@@ -162,7 +157,6 @@ class ContextBuilder
 					case _:
 						haxe.macro.Context.error( 'field not handled here', haxe.macro.Context.currentPos() );
 				}
-				
 			}
 		}
 		

@@ -15,6 +15,7 @@ class AbstractApplicationContext implements IApplicationContext
 {
 	var _name 					: String;
 	var _coreFactory 			: ICoreFactory;
+	var _injector 				: IDependencyInjector;
 	
 	public function new( coreFactory : ICoreFactory, name : String ) 
 	{
@@ -34,7 +35,12 @@ class AbstractApplicationContext implements IApplicationContext
 	
 	public function getInjector() : IDependencyInjector 
 	{
-		return this._coreFactory.getInjector();
+		if ( this._injector == null )
+		{
+			throw new IllegalStateException( "injector can't be null and should be defined in concrete class." );
+		}
+
+		return this._injector;
 	}
 	
 	public function getLogger() : ILogger

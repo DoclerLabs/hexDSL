@@ -20,23 +20,23 @@ class ApplicationContext extends AbstractApplicationContext
 	function new( applicationContextName : String )
 	{
 		//build injector
-		var injector : IDependencyInjector = new Injector();
-		injector.mapToValue( IBasicInjector, injector );
-		injector.mapToValue( IDependencyInjector, injector );
+		this._injector = new Injector();
+		this._injector .mapToValue( IBasicInjector, this._injector );
+		this._injector .mapToValue( IDependencyInjector, this._injector );
 		
 		var logger = LogManager.getLogger( applicationContextName );
-		injector.mapToValue( ILogger, logger );
+		this._injector .mapToValue( ILogger, logger );
 		
 		//build coreFactory
-		var coreFactory = new CoreFactory( injector );
+		var coreFactory = new CoreFactory( this._injector );
 		
 		//register applicationContext
-		injector.mapToValue( IApplicationContext, this );
-		injector.mapToValue( IContextModule, this );
+		this._injector .mapToValue( IApplicationContext, this );
+		this._injector .mapToValue( IContextModule, this );
 		coreFactory.register( applicationContextName, this );
 		
 		super( coreFactory, applicationContextName );
 	}
 	
-	override public function getLogger() return this.getInjector().getInstance( ILogger );
+	override public function getLogger() return this._injector .getInstance( ILogger );
 }
