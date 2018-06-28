@@ -268,10 +268,6 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 
 		var locatorArguments = if ( this._runtimeParam.type != null ) [ { name: 'param', type:_runtimeParam.type } ] else [];
 
-/*		var locatorBody = this._runtimeParam.type != null ?
-			macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file(param) :
-				macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file();
-*/
 		var locatorBody = this._runtimeParam.type != null ?
 			macro this.locator.$file( param ) :
 				macro this.locator.$file();
@@ -289,6 +285,7 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		{
 			name: 'execute',
 			pos: haxe.macro.Context.currentPos(),
+			meta: [ { name: ":keep", params: [], pos: haxe.macro.Context.currentPos() } ],
 			kind: FFun( 
 			{
 				args: locatorArguments,
@@ -298,21 +295,6 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 			access: [ APublic ]
 		});
 		
-		/*classExpr.fields.push(
-		{
-			name: 'clone',
-			pos: haxe.macro.Context.currentPos(),
-			kind: FFun( 
-			{
-				args: [{name:'assembler', type:macro:hex.core.IApplicationAssembler}],
-				ret: className.asComplexType(),
-				expr: cloneBody
-			}),
-			access: [ APublic ]
-		});*/
-		
-		//Generate module's name
-		//var module = className.substr( 0, className.length - 2 ).split('.').join('_');
 		var module = className.split('_').join('_$').split('.').join('_');
 		var mods = module.split('_');
 		mods.splice( mods.length -1, 1 );
