@@ -469,6 +469,56 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "http://localhost/amfphp/gateway.php", MockServiceProvider.getInstance().getGateway() );
 	}
 
+	@Test( "test building instance with instance method" )
+	public function testBuildingInstanceWithInstanceMethod() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithInstanceMethod.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithInstanceMethod" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.service, hex.mock.MockService );
+		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.gateway );
+	}
+	
+	@Test( "test building instance with instance method and arguments" )
+	public function testBuildingInstanceWithInstanceMethodAndArguments() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithInstanceMethodAndArguments.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithInstanceMethodAndArguments" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.service, hex.mock.MockService );
+		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.gateway );
+	}
+
+	@Test( "test building instance with closure" )
+	public function testBuildingInstanceWithClosure() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithClosure.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithClosure" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.service, hex.mock.MockService );
+		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.gateway );
+	}
+
+	@Test( "test building instance with closure and arguments" )
+	public function testBuildingInstanceWithClosureAndArguments() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithClosureAndArguments.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithClosureAndArguments" );
+		code.execute();
+		
+		Assert.isInstanceOf( code.locator.service, hex.mock.MockService );
+		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.gateway );
+	}
+	
+	@Test( "test building instance with static closure and arguments" )
+	public function testBuildingInstanceWithStaticClosureAndArguments() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/instanceWithStaticClosureAndArguments.flow", "BasicStaticFlowCompiler_testBuildingInstanceWithStaticClosureAndArguments" );
+		code.execute();
+
+		Assert.isInstanceOf( code.locator.cloned, hex.mock.MockService );
+		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.cloned.gateway );
+	}
+
 	@Test( "test static method on class without classpath" )
 	public function testStaticMethodOnClassWitoutClasspath() : Void
 	{
@@ -1135,9 +1185,9 @@ class BasicStaticFlowCompilerTest
 		}
 	}
 	#end
-/*
+
 	//Import
-	@Test( "test recursive empty import" )
+	/*@Test( "test recursive empty import" )
 	public function testRecursiveEmptyImport() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/emptyImport.flow", "BasicStaticFlowCompiler_testRecursiveEmptyImport" );
@@ -1229,8 +1279,8 @@ class BasicStaticFlowCompilerTest
 		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/static/childMethodCallWithAnotherChildArg.flow", "BasicStaticFlowCompiler_testChildMethodCallWithAnotherChildArgument" );
 		code.execute();
 		Assert.deepEquals( [ 3, 4 ], code.locator.childContext3.o.owner.collection );
-	}
-	
+	}*/
+
 	@Test( "test abstract typed field with map-type" )
 	public function testAbstractTypedFieldWithMapType() : Void
 	{
@@ -1344,5 +1394,5 @@ class BasicStaticFlowCompilerTest
 		
 		var code2 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/importDependency.flow", "BasicStaticFlowCompiler_testDependencyOwnerAsRuntimeArg" );
 		code2.execute( {o: code1.locator.owner} );
-	}*/
+	}
 }

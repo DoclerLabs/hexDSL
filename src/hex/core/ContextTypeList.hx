@@ -27,4 +27,5 @@ class ContextTypeList
 	public inline static var CONTEXT 			= "Context";
 	public inline static var CONTEXT_ARGUMENT 	= "ContextArgument";
 	public inline static var CLOSURE 			= "Closure";
+	public inline static var CLOSURE_FACTORY 	= "ClosureFactory";
 }

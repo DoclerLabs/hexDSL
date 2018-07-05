@@ -20,6 +20,7 @@ class ConstructorVO extends AssemblerVO
 	public var              ref             	: String;
 	public var 				mapTypes			: Array<String>;
 	public var 				staticRef			: String;
+	public var 				instanceCall		: String;
 	
 	public var 				abstractType 		: String;
 	public var 				lazy 				: Bool;

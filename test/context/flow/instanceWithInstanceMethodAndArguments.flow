@@ -1,0 +1,11 @@
+@context
+{
+	@public 
+	gateway = service.getGatewayURL( url, page );
+	
+	@public
+	service = new hex.mock.MockService();
+	
+	url = "http://localhost/amfphp/";
+	page = "gateway.php";
+}

@@ -1,0 +1,13 @@
+@context
+{
+	@public 
+	gateway = closure( url );
+	
+	@public
+	service = new hex.mock.MockService();
+	
+	url = "http://localhost/amfphp/";
+	page = "gateway.php";
+	
+	closure = service.getGatewayURL.bind( _, page );
+}

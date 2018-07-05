@@ -1,4 +1,6 @@
 package hex.compiletime.factory;
+import haxe.macro.Printer;
+import hex.core.ContextTypeList;
 
 #if macro
 /**
@@ -31,14 +33,42 @@ class ReferenceFactory
 		{
 			factoryVO.contextFactory.buildObject( key );
 		}
-		
+
 		if ( constructorVO.ref.indexOf( "." ) != -1 )
 		{
-			result = macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) };
+			if ( constructorVO.instanceCall == null )
+			{
+				result = macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) };
+			}
+			else
+			{
+				if ( constructorVO.type == ContextTypeList.INSTANCE )
+				{
+					var methodName = constructorVO.instanceCall;
+					constructorVO.cType = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
+					return macro @:pos( constructorVO.filePosition ) var $idVar =  $p { constructorVO.ref.split( '.' ) } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+				}
+			}
 		}
 		else 
 		{
-			result = macro @:pos( constructorVO.filePosition ) $i{ key };
+			if ( constructorVO.instanceCall == null )
+			{
+				result = macro @:pos( constructorVO.filePosition ) $i { key };
+			}
+			else
+			{
+				var methodName = constructorVO.instanceCall;
+				constructorVO.cType = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
+				if ( constructorVO.type == ContextTypeList.INSTANCE )
+				{
+					return macro @:pos( constructorVO.filePosition ) var $idVar = $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+				}
+				else if ( constructorVO.type == ContextTypeList.CLOSURE_FACTORY )
+				{
+					return macro @:pos( constructorVO.filePosition ) var $idVar = $i {methodName}( $a { ArgumentFactory.build( factoryVO ) } );
+				}
+			}
 		}
 		
 		//Building result

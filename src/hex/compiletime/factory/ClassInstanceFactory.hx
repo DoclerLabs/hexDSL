@@ -48,7 +48,6 @@ class ClassInstanceFactory
 		var pos 			= vo.filePosition;
 		var id 				= vo.ID;
 		var args 			= ArgumentFactory.build( factoryVO );
-		var argsLength 		= args.length;
 		var pack 			= MacroUtil.getPack( vo.className, pos );
 		var typePath 		= MacroUtil.getTypePath( vo.className, pos );
 		var staticCall 		= vo.staticCall;

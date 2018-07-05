@@ -212,7 +212,11 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				else
 				{
-					Context.error( "'" + keyword + "' keyword is not defined for your current compiler", value.pos );
+					constructorVO.ref = ExpressionUtil.compressField( value );
+					constructorVO.arguments = params.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) );
+					constructorVO.instanceCall = constructorVO.ref;
+					constructorVO.type = ContextTypeList.CLOSURE_FACTORY;
+					constructorVO.shouldAssign = true;
 				}
 				
 				
@@ -245,9 +249,23 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						constructorVO.staticCall = staticCall;
 
 					case EConst( ee ):
-						constructorVO.type = ExpressionUtil.compressField( e );
-						constructorVO.arguments = [];
-						constructorVO.staticCall = field;
+						
+						var comp = ExpressionUtil.compressField( e );
+						try
+						{
+							Context.getType( comp );
+							constructorVO.type = comp;
+							constructorVO.arguments = [];
+							constructorVO.staticCall = field;
+						}
+						catch ( e: Dynamic )
+						{
+							constructorVO.ref = comp.split('.')[0];
+							constructorVO.arguments = [];
+							constructorVO.instanceCall = field;
+							constructorVO.type = ContextTypeList.INSTANCE;
+							constructorVO.shouldAssign = true;
+						}
 
 					case _:
 						logger.error( e.expr );
