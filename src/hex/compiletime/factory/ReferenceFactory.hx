@@ -46,7 +46,10 @@ class ReferenceFactory
 				{
 					var methodName = constructorVO.instanceCall;
 					constructorVO.cType = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
-					return macro @:pos( constructorVO.filePosition ) var $idVar =  $p { constructorVO.ref.split( '.' ) } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+					
+					return return constructorVO.shouldAssign ?
+						macro @:pos( constructorVO.filePosition ) var $idVar =  $p { constructorVO.ref.split( '.' ) } .$methodName( $a { ArgumentFactory.build( factoryVO ) } ):
+						macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
 				}
 			}
 		}
@@ -62,11 +65,15 @@ class ReferenceFactory
 				constructorVO.cType = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
 				if ( constructorVO.type == ContextTypeList.INSTANCE )
 				{
-					return macro @:pos( constructorVO.filePosition ) var $idVar = $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+					return constructorVO.shouldAssign ?
+						macro @:pos( constructorVO.filePosition ) var $idVar = $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO ) } ):
+						macro @:pos( constructorVO.filePosition ) $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
 				}
 				else if ( constructorVO.type == ContextTypeList.CLOSURE_FACTORY )
 				{
-					return macro @:pos( constructorVO.filePosition ) var $idVar = $i {methodName}( $a { ArgumentFactory.build( factoryVO ) } );
+					return constructorVO.shouldAssign ?
+						macro @:pos( constructorVO.filePosition ) var $idVar = $i {methodName}( $a { ArgumentFactory.build( factoryVO ) } ):
+						macro @:pos( constructorVO.filePosition ) $i {methodName}( $a { ArgumentFactory.build( factoryVO ) } );
 				}
 			}
 		}

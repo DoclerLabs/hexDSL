@@ -1,0 +1,19 @@
+@context( name = 'applicationContext' )
+{
+	@public
+	foo = new hex.mock.ConstructorWithAnonStruct( { s: Std.string(5) } );
+	
+	@public
+	o = { s: Std.string(5) };
+	
+	@public
+	o2 = { s: foo.getString() };
+	
+	@public
+	foo2 = new hex.mock.ConstructorWithAnonStruct( { s: foo.getString() } );
+	
+	@public
+	foo3 = new hex.mock.ConstructorWithAnonStruct( { s: closure() } );
+	
+	closure = foo.getString.bind();
+}

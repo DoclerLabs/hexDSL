@@ -1,0 +1,9 @@
+@context
+{
+	@public 
+	cloned = closure( service );
+	
+	service = new hex.mock.MockService();
+	closure = hex.mock.MockService.clone.bind( _, gateway );
+	gateway = "http://localhost/amfphp/gateway.php";
+}

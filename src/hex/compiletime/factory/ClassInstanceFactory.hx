@@ -54,13 +54,13 @@ class ClassInstanceFactory
 		var factoryMethod 	= vo.factory;
 		var staticRef 		= vo.staticRef;
 		var classType 		= MacroUtil.getClassType( vo.className, pos );
-		
-		if ( !vo.shouldAssign && !vo.lazy )//TODO remove
+
+		/*if ( !vo.shouldAssign && !vo.lazy )//TODO remove
 		{
 			return macro @:pos( pos ) new $typePath( $a { args } );
 		}
 		else
-		{
+		{*/
 			var result = //Assign result
 			if ( factoryMethod != null )//factory method
 			{
@@ -100,7 +100,7 @@ class ClassInstanceFactory
 			}
 
 			return macro @:pos(pos) $result;
-		}
+		/*}*/
 	}
 }
 #end

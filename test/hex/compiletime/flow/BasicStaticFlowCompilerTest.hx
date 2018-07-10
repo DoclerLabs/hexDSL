@@ -51,7 +51,7 @@ class BasicStaticFlowCompilerTest
 	{
 		this._myApplicationAssembler.release();
 	}
-	
+
 	@Test( "test building String" )
 	public function testBuildingString() : Void
 	{
@@ -91,7 +91,7 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( BasicStaticFlowCompilerTest.applicationAssembler, code.applicationAssembler );
 		Assert.equals( "hello", code.locator.s );
 	}
-	
+
 	/*@Test( "test read twice the same context" )
 	public function testReadTwiceTheSameContext() : Void
 	{
@@ -106,7 +106,7 @@ class BasicStaticFlowCompilerTest
 		
 		Assert.notEquals( code1.locator.instance, code2.locator.instance );
 	}*/
-	
+
 	@Test( "test overriding context name" )
 	public function testOverridingContextName() : Void
 	{
@@ -517,6 +517,18 @@ class BasicStaticFlowCompilerTest
 
 		Assert.isInstanceOf( code.locator.cloned, hex.mock.MockService );
 		Assert.equals( "http://localhost/amfphp/gateway.php", code.locator.cloned.gateway );
+	}
+
+	@Test( "test recursive construction with anonymous object" )
+	public function testRecursiveConstructionWithAnonymousObject() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/recursiveConstructionWithAnonymousObject.flow", "BasicStaticFlowCompiler_testRecursiveConstructionWithAnonymousObject" );
+		code.execute();
+
+		Assert.equals( "5", code.locator.foo.o.s );
+		Assert.equals( "5", code.locator.o.s );
+		Assert.equals( "5", code.locator.foo2.o.s );
+		Assert.equals( "5", code.locator.foo3.o.s );
 	}
 
 	@Test( "test static method on class without classpath" )
@@ -1186,16 +1198,17 @@ class BasicStaticFlowCompilerTest
 	}
 	#end
 
+/*
 	//Import
-	/*@Test( "test recursive empty import" )
+	@Test( "test recursive empty import" )
 	public function testRecursiveEmptyImport() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/emptyImport.flow", "BasicStaticFlowCompiler_testRecursiveEmptyImport" );
 		code.execute();
 		Assert.equals( 'hello world', code.locator.childContext.childContext.test );
 	}
-	
-	@Test( "test two Int import" )
+*/
+	/*@Test( "test two Int import" )
 	public function testTwoIntImport() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/twoIntImport.flow", "BasicStaticFlowCompiler_testTwoIntImport" );
