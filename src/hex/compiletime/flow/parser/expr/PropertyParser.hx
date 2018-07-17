@@ -137,8 +137,6 @@ class PropertyParser
 							constructorVO.type = comp;
 							constructorVO.arguments = [];
 							constructorVO.staticCall = field;
-							
-							trace( constructorVO );
 						}
 						catch ( e: Dynamic )
 						{

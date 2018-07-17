@@ -291,7 +291,7 @@ class CompileTimeContextFactory
 		var finalResult = result;
 		finalResult = this._parseAutoInject( constructorVO, finalResult );
 		
-		this._expressions.push( macro @:mergeBlock { $finalResult; coreFactory.register( $v { id }, $i { id } ); } );
+		this._expressions.push( macro @:mergeBlock @:pos( constructorVO.filePosition ) { $finalResult; coreFactory.register( $v { id }, $i { id } ); } );
 		this._coreFactory.register( id, result );
 	}
 	

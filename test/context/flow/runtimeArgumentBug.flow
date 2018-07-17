@@ -1,0 +1,5 @@
+@context( params = {arg: hex.mock.Interface} )
+{
+	@public
+	instance = arg;
+}

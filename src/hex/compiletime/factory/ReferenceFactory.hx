@@ -1,4 +1,5 @@
 package hex.compiletime.factory;
+import haxe.macro.Context;
 import haxe.macro.Printer;
 import hex.core.ContextTypeList;
 
@@ -36,9 +37,12 @@ class ReferenceFactory
 
 		if ( constructorVO.ref.indexOf( "." ) != -1 )
 		{
+			//var fields = macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) };
+			var fields = Context.parseInlineString( constructorVO.ref/*.split( '.' )*/, constructorVO.filePosition );
+			
 			if ( constructorVO.instanceCall == null )
 			{
-				result = macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) };
+				result = fields;
 			}
 			else
 			{
@@ -48,8 +52,8 @@ class ReferenceFactory
 					constructorVO.cType = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
 					
 					return return constructorVO.shouldAssign ?
-						macro @:pos( constructorVO.filePosition ) var $idVar =  $p { constructorVO.ref.split( '.' ) } .$methodName( $a { ArgumentFactory.build( factoryVO ) } ):
-						macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+						macro @:pos( constructorVO.filePosition ) var $idVar =  $fields .$methodName( $a { ArgumentFactory.build( factoryVO ) } ):
+						macro @:pos( constructorVO.filePosition ) $fields .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
 				}
 			}
 		}
@@ -80,8 +84,8 @@ class ReferenceFactory
 		
 		//Building result
 		return constructorVO.shouldAssign ?
-			macro var $idVar = $v{ result }:
-			macro $result;
+			macro @:pos( constructorVO.filePosition ) var $idVar = $v{ result }:
+			macro @:pos( constructorVO.filePosition ) $result;
 	}
 }
 #end

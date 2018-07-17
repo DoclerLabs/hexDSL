@@ -37,8 +37,18 @@ class ClassInstanceFactory
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
 		return _build( factoryVO, 
-			function( typePath, args, id, vo ) 
-				return getResult( macro new $typePath( $a { args } ), id, vo ) 
+			function( typePath, args, id, vo )
+			{
+				var t =  Context.getType( typePath.pack.join('.') + '.' + typePath.name );
+				switch( t )
+				{
+					case TInst( t, params ): if ( !t.get().constructor.get().isPublic ) 
+						Context.error( 'WTF, you try to instantiate a class with a private constructor!', vo.filePosition );
+					case _:
+				}
+				
+				return getResult( macro new $typePath( $a { args } ), id, vo );
+			}
 		);
 	}
 	
