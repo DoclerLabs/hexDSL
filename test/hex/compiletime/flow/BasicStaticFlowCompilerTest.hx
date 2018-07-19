@@ -1206,7 +1206,7 @@ class BasicStaticFlowCompilerTest
 	}
 	#end
 
-/*
+
 	//Import
 	@Test( "test recursive empty import" )
 	public function testRecursiveEmptyImport() : Void
@@ -1215,8 +1215,8 @@ class BasicStaticFlowCompilerTest
 		code.execute();
 		Assert.equals( 'hello world', code.locator.childContext.childContext.test );
 	}
-*/
-	/*@Test( "test two Int import" )
+
+	@Test( "test two Int import" )
 	public function testTwoIntImport() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/twoIntImport.flow", "BasicStaticFlowCompiler_testTwoIntImport" );
@@ -1300,7 +1300,7 @@ class BasicStaticFlowCompilerTest
 		var code = BasicStaticFlowCompiler.compile( applicationAssembler, "context/flow/static/childMethodCallWithAnotherChildArg.flow", "BasicStaticFlowCompiler_testChildMethodCallWithAnotherChildArgument" );
 		code.execute();
 		Assert.deepEquals( [ 3, 4 ], code.locator.childContext3.o.owner.collection );
-	}*/
+	}
 
 	@Test( "test abstract typed field with map-type" )
 	public function testAbstractTypedFieldWithMapType() : Void

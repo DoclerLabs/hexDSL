@@ -38,6 +38,8 @@ class ContextBuilder
 		this._iteration = ContextBuilder._getContextIteration( contextName, applicationContextClassName, [ 'hex', 'context' + (ContextBuilder._uniqueID++) ] );
 	}
 	
+	static public function getNextID() return _uniqueID;
+	
 	static private function _getContextIteration( applicationContextName : String, applicationContextClassName : String, pack : Array<String> ) : BuildIteration
 	{
 		var contextIteration;

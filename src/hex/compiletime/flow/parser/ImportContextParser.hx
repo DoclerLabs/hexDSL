@@ -74,30 +74,17 @@ class ImportContextParser extends AbstractExprParser<hex.compiletime.basic.Build
 	
 	function _parseImport( i : ContextImport )
 	{
+		var contextID = ContextBuilder.getNextID();
 		var className = this._applicationContextName + '_' + i.id;
+		
 		var e = this._getCompiler( i.fileName)( i.fileName, className, null, null, macro this._applicationAssembler );
 		ContextBuilder.forceGeneration( className );
 		
-		var args = [ { className: 'hex.context.' + className/*this._getClassName( e )*/, expr: e, arg: i.arg } ];
+		var args = [ { className: 'hex.context' + contextID + '.' + className, expr: e, arg: i.arg } ];
 		var vo = new ConstructorVO( i.id, ContextTypeList.CONTEXT, args );
 		vo.isPublic = true;
 		vo.filePosition = i.pos;
 		this._builder.build( OBJECT( vo ) );
-	}
-	
-	function _getClassName( expr : Expr ) : String
-	{
-		var className = '';
-		
-		function findClassName( e )
-			switch( e.expr )
-			{
-				case ENew( t, params ): className = /*'I' +*/ t.pack.join('.') + '.' + t.name;
-				case _: 				ExprTools.iter( e, findClassName );
-			}
-		
-		ExprTools.iter( expr, findClassName );
-		return className;
 	}
 	
 	function _getCompiler( url : String )
