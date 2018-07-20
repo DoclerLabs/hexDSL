@@ -52,6 +52,7 @@ class BasicStaticFlowCompilerTest
 		this._myApplicationAssembler.release();
 	}
 	
+	@Ignore
 	@Test( "test building String" )
 	public function testIssue297() : Void
 	{
