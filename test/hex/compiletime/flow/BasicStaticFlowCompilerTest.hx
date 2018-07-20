@@ -52,14 +52,14 @@ class BasicStaticFlowCompilerTest
 		this._myApplicationAssembler.release();
 	}
 	
-	@Ignore
+	/*
 	@Test( "test building String" )
 	public function testIssue297() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/runtimeArgumentBug.flow", "BasicStaticFlowCompiler_testIssue297" );
 		code.execute( {arg: new MockClass()});
 	}
-	
+	*/
 
 	@Test( "test building String" )
 	public function testBuildingString() : Void
