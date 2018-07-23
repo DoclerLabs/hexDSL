@@ -376,14 +376,22 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 			var mods = modulePath.split('_');
 			mods.splice( mods.length -1, 1 );
 			module = [mods.join( '_' )];
+			haxe.macro.Context.defineType( classExpr );
+			var typePath = MacroUtil.getTypePath( className );
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { module }, $assemblerVarExpression ); }  );
+		} else if ( haxe.macro.Context.getDefines().exists("php") )
+		{
+			haxe.macro.Context.defineType( classExpr );
+			var typePath = MacroUtil.getTypePath( className );
+			var s = "_hx_qtype(\"" + className.substr( 0, className.length - 2 ) + "\")";
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped __php__($v { s }) , $assemblerVarExpression ); }  );
 		} else
 		{
 			module = className.substr( 0, className.length - 2 ).split('.');
+			haxe.macro.Context.defineType( classExpr );
+			var typePath = MacroUtil.getTypePath( className );
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { module }, $assemblerVarExpression ); }  );
 		}
-		
-		haxe.macro.Context.defineType( classExpr );
-		var typePath = MacroUtil.getTypePath( className );
-		assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { module }, $assemblerVarExpression ); }  );
 	}
 }
 #end
