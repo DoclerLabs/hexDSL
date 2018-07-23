@@ -369,15 +369,21 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 		});*/
 		
 		//Generate module's name
-		//var module = className.substr( 0, className.length - 2 ).split('.').join('_');
-		var module = className.split('_').join('_$').split('.').join('_');
-		var mods = module.split('_');
-		mods.splice( mods.length -1, 1 );
-		module = mods.join( '_' );
+		var module = null;
+		if ( haxe.macro.Context.getDefines().exists("js") )
+		{
+			var modulePath = className.split('_').join('_$').split('.').join('_');
+			var mods = modulePath.split('_');
+			mods.splice( mods.length -1, 1 );
+			module = [mods.join( '_' )];
+		} else
+		{
+			module = className.substr( 0, className.length - 2 ).split('.');
+		}
 		
 		haxe.macro.Context.defineType( classExpr );
 		var typePath = MacroUtil.getTypePath( className );
-		assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { [module] }, $assemblerVarExpression ); }  );
+		assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { module }, $assemblerVarExpression ); }  );
 	}
 }
 #end
