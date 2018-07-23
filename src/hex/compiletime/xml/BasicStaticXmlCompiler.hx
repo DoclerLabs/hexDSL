@@ -367,33 +367,31 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 			}),
 			access: [ APublic ]
 		});*/
-		
+
 		//Generate module's name
-		var module = null;
 		haxe.macro.Context.defineType( classExpr );
+		var typePath = MacroUtil.getTypePath( className );
 		if ( haxe.macro.Context.getDefines().exists("js") )
 		{
 			var modulePath = className.split('_').join('_$').split('.').join('_');
 			var mods = modulePath.split('_');
 			mods.splice( mods.length -1, 1 );
-			module = [mods.join( '_' )];
-			var typePath = MacroUtil.getTypePath( className );
-			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { module }, $assemblerVarExpression ); }  );
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { [mods.join( '_' )] }, $assemblerVarExpression ); }  );
+		} else if ( haxe.macro.Context.getDefines().exists("flash") )
+		{
+			var s = className.substr( 0, className.length - 2 );
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped __global__[ $v { s } ] , $assemblerVarExpression ); }  );
 		} else if ( haxe.macro.Context.getDefines().exists("php7") )
 		{
-			var typePath = MacroUtil.getTypePath( className );
 			var s = "Boot::getClass(\\" + className.substr( 0, className.length - 2 ).split('.').join('\\') + "::class)";
 			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped __php__($v { s }) , $assemblerVarExpression ); }  );
 		} else if ( haxe.macro.Context.getDefines().exists("php") )
 		{
-			var typePath = MacroUtil.getTypePath( className );
 			var s = '_hx_qtype("' + className.substr( 0, className.length - 2 ) + '")';
 			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped __php__($v { s }) , $assemblerVarExpression ); }  );
 		} else
 		{
-			module = className.substr( 0, className.length - 2 ).split('.');
-			var typePath = MacroUtil.getTypePath( className );
-			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { module }, $assemblerVarExpression ); }  );
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { className.substr( 0, className.length - 2 ).split('.') }, $assemblerVarExpression ); }  );
 		}
 	}
 }
