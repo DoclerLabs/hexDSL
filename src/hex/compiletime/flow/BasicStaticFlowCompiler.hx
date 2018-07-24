@@ -316,6 +316,10 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 		{
 			var s = '_hx_qtype("' + className.substr( 0, className.length - 2 ) + '")';
 			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped __php__($v { s }) , $assemblerVarExpression ); }  );
+		} else if ( haxe.macro.Context.getDefines().exists("hl") )
+		{
+			var s = className.substr( 0, className.length - 2 );
+			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped Type.resolveClass( $v { s } ) , $assemblerVarExpression ); }  );
 		} else
 		{
 			assembler.setMainExpression( macro @:mergeBlock { new $typePath( untyped $p { className.substr( 0, className.length - 2 ).split('.') }, $assemblerVarExpression ); }  );
