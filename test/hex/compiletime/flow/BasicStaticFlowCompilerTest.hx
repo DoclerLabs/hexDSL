@@ -1045,7 +1045,7 @@ class BasicStaticFlowCompilerTest
 		code.execute();
 		
 		Assert.deepEquals( [ 3, 7, 11 ], code.locator.o1 );
-		Assert.deepEquals( [ 1, 2, 3 ], code.locator.o2 );
+		Assert.deepEquals( [ '1', '2', '3' ], code.locator.o2 );
 	}
 	
 	@Test( "test new recursivity" )
