@@ -1,0 +1,7 @@
+@context( name = 'applicationContext' )
+{
+
+	m = new Map<Array<String>, Array<Int>>();
+	mapping = mapping({fromType: "Map<Array<String>, Array<Int>>", toValue: m});
+	owner = new hex.mock.MapDependencyOwner( mapping );
+}

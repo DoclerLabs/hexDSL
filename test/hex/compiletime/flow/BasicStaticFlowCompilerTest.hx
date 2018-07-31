@@ -1066,6 +1066,13 @@ class BasicStaticFlowCompilerTest
 		Assert.deepEquals( code.locator.mappings1, code.locator.mappings2 );
 	}
 	
+	@Test( "test dependency checking with space character" )
+	public function testDependencyCheckWithSpaceChar() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/dependencyWithSpaceChar.flow", "BasicStaticFlowCompiler_testDependencyCheckWithSpaceChar" );
+		code.execute();
+	}
+	
 	@Test( "test mixed dependencies checking" )
 	public function testMixedDependenciesChecking() : Void
 	{

@@ -111,7 +111,7 @@ class MappingDependencyChecker
 						{
 							switch( f.field )
 							{
-								case 'fromType': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
+								case 'fromType': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ).split(' ').join('') );
 								case 'withName': Reflect.setField( o, f.field, haxe.macro.ExprTools.getValue( f.expr ) );
 								case _:
 							}
