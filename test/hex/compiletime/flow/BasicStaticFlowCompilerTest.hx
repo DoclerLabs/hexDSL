@@ -1038,6 +1038,16 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "5", a[ 1 ] );
 	}
 	
+	@Test( "test array recursivity with function return argument" )
+	public function testArrayWithFunctionReturnArg() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/arrayWithStaticFunctionReturnArg.flow", "BasicStaticFlowCompiler_testArrayWithFunctionReturnArg" );
+		code.execute();
+		
+		Assert.deepEquals( [ 3, 7, 11 ], code.locator.o1 );
+		Assert.deepEquals( [ 1, 2, 3 ], code.locator.o2 );
+	}
+	
 	@Test( "test new recursivity" )
 	public function testNewRecursivity() : Void
 	{

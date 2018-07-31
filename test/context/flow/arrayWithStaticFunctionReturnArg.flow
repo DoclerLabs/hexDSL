@@ -1,0 +1,18 @@
+@context
+{
+	@public
+	o1 = new Array<Int>(
+		hex.mock.MathUtil.sum( 1, 2 ), 
+		hex.mock.MathUtil.sum( 3, 4 ), 
+		hex.mock.MathUtil.sum( 5, 6 )
+	);
+	
+	@public
+	o2 = new Array<String>(
+		stringifier.string(1),
+		stringifier.string(2),
+		stringifier.string(3)
+	);
+	
+	stringifier = new hex.mock.Stringifier();
+}
