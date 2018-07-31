@@ -39,7 +39,13 @@ class ClassInstanceFactory
 		return _build( factoryVO, 
 			function( typePath, args, id, vo )
 			{
-				var t =  Context.getType( typePath.pack.join('.') + '.' + typePath.name );
+				var p = '';
+				if ( typePath.pack.length != 0 )
+				{
+					p = typePath.pack.join('.') + '.';
+				}
+
+				var t =  Context.getType( p + typePath.name );
 				switch( t )
 				{
 					case TInst( t, params ): if ( !t.get().constructor.get().isPublic ) 
