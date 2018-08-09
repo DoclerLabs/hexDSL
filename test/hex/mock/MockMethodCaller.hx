@@ -6,7 +6,7 @@ package hex.mock;
  */
 class MockMethodCaller 
 {
-	inline public static var staticVar : Int = 3;
+	public static var staticVar : Int = 3;
 	
 	public var argument : Int;
 	

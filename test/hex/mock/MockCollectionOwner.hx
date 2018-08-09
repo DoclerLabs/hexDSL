@@ -10,6 +10,7 @@ class MockCollectionOwner
 
 	public function new() {}
 	
+	@:keep
 	public function setCollection( a : Array<Int> )
 	{
 		this.collection = a;

@@ -45,7 +45,9 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 			
 			case macro $i{ ident }.$field( $a{ params } ):
 				var args = params.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) );
-				this._builder.build( METHOD_CALL( new MethodCallVO( ident, field, args ) ) );
+				var methodCallVO = new MethodCallVO( ident, field, args );
+				methodCallVO.filePosition = e.pos;
+				this._builder.build( METHOD_CALL( methodCallVO ) );
 			
 			case macro @inject_into( $a{ args } ) $e:
 				constructorVO.injectInto = true;
@@ -93,7 +95,9 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					case ECall( _.expr => EField( ref, field ), params ):
 						var ident = ExpressionUtil.compressField( ref );
 						var args = params.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) );
-						this._builder.build( METHOD_CALL( new MethodCallVO( ident, field, args ) ) );
+						var methodCallVO = new MethodCallVO( ident, field, args );
+						methodCallVO.filePosition = e.pos;
+						this._builder.build( METHOD_CALL( methodCallVO ) );
 						
 					case _:
 						//TODO remove
