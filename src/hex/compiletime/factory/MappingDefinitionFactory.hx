@@ -35,8 +35,8 @@ class MappingDefinitionFactory
 		
 		var ct = macro :hex.di.mapping.MappingDefinition;
 		return constructorVO.shouldAssign ?
-			return macro var $idVar : $ct = $result:
-			return macro $result;
+			return macro @:pos( constructorVO.filePosition ) var $idVar : $ct = $result:
+			return macro @:pos( constructorVO.filePosition ) $result;
 	}
 	
 	static function setPropertyValue( p : hex.vo.PropertyVO, o : Dynamic ) : Dynamic
@@ -68,7 +68,7 @@ class MappingDefinitionFactory
 					var constructorVO 			= new ConstructorVO( null, ContextTypeList.INSTANCE, null, null, null, false, property.ref, null, null );
 					constructorVO.filePosition 	= property.filePosition;
 					value 						= factory.buildVO( constructorVO );
-					fields.push( { field: propertyName, expr: macro $p{ property.ref.split('.') } } );
+					fields.push( { field: propertyName, expr: macro @:pos( property.filePosition ) $p{ property.ref.split('.') } } );
 
 				} else if ( property.staticRef != null )
 				{

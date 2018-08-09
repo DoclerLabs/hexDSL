@@ -35,8 +35,8 @@ class XmlFactory
 					var typePath 	= hex.util.MacroUtil.getTypePath( factory, constructorVO.filePosition );
 					
 					//Assign right type description
-					var xmlContent = macro Xml.parse( $v { source } );
-					constructorVO.type = hex.util.MacroUtil.getFQCNFromExpression( macro ( new $typePath() ).parse( $xmlContent ) );
+					var xmlContent = macro @:pos( constructorVO.filePosition ) Xml.parse( $v { source } );
+					constructorVO.type = hex.util.MacroUtil.getFQCNFromExpression( macro @:pos( constructorVO.filePosition ) ( new $typePath() ).parse( $xmlContent ) );
 
 					result = macro 	@:pos( constructorVO.filePosition ) 
 									( new $typePath() ).parse( $xmlContent );
@@ -48,7 +48,7 @@ class XmlFactory
 				Context.warning( "Empty XML.", constructorVO.filePosition );
 				#end
 				
-				result = macro Xml.parse( '' );
+				result = macro @:pos( constructorVO.filePosition ) Xml.parse( '' );
 			}
 		}
 		else
@@ -57,7 +57,7 @@ class XmlFactory
 			Context.warning( "Empty XML.", constructorVO.filePosition );
 			#end
 
-			result = macro Xml.parse( '' );
+			result = macro @:pos( constructorVO.filePosition ) Xml.parse( '' );
 		}
 		
 		//Building result

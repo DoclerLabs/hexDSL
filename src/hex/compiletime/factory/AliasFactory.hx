@@ -28,7 +28,7 @@ class AliasFactory
 		else
 		{
 			type = _getType( factoryVO, constructorVO.ref );
-			value = macro $i{ constructorVO.ref };
+			value = macro @:pos( constructorVO.filePosition ) $i{ constructorVO.ref };
 		}
 		
 		constructorVO.type = type;

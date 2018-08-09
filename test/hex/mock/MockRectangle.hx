@@ -21,6 +21,7 @@ class MockRectangle
 		this.height = height;
 	}
 	
+	@:keep
 	public var size ( get, set ) : Point;
 	function get_size() : Point
 	{

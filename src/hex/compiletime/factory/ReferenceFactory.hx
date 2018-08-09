@@ -37,7 +37,6 @@ class ReferenceFactory
 
 		if ( constructorVO.ref.indexOf( "." ) != -1 )
 		{
-			//var fields = macro @:pos( constructorVO.filePosition ) $p { constructorVO.ref.split( '.' ) };
 			var fields = Context.parseInlineString( constructorVO.ref/*.split( '.' )*/, constructorVO.filePosition );
 			
 			if ( constructorVO.instanceCall == null )

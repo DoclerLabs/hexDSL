@@ -1,0 +1,11 @@
+@context( name = 'applicationContext' )
+{
+	s = "test";
+	
+	mapping = new hex.di.mapping.MappingDefinition(
+		{fromType: "String->String", toValue: hex.mock.OptionalDependencyOwner.string }
+	);
+	
+	@public
+	owner = new hex.mock.OptionalDependencyOwner( mapping );
+}

@@ -55,7 +55,7 @@ class ContextArgumentFactory
 					var constructorVO 			= new ConstructorVO( null, ContextTypeList.INSTANCE, null, null, null, false, property.ref, null, null );
 					constructorVO.filePosition 	= property.filePosition;
 					value 						= factory.buildVO( constructorVO );
-					fields.push( { field: propertyName, expr: macro $p{ property.ref.split('.') } } );
+					fields.push( { field: propertyName, expr: macro @:pos(property.filePosition) $p{ property.ref.split('.') } } );
 
 				} else if ( property.staticRef != null )
 				{

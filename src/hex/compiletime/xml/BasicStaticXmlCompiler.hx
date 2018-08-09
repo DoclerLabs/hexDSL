@@ -325,22 +325,12 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 		
 		var locatorArguments = if ( this._runtimeParam.type != null ) [ { name: 'param', type:_runtimeParam.type } ] else [];
 		
-/*		var locatorBody = this._runtimeParam.type != null ?
-			macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file(param) :
-				macro hex.compiletime.CodeLocator.get( $v { contextFQN }, applicationAssembler ).$file();
-*/	
 		var locatorBody = this._runtimeParam.type != null ?
 			macro this.locator.$file( param ) :
 				macro this.locator.$file();
 				
 		var className = classExpr.pack.join( '.' ) + '.' + classExpr.name;
 		var cls = className.asTypePath();
-		
-		//Clone
-		/*var cloneBody = macro @:mergeBlock 
-		{
-			return new $cls( assembler ); 
-		};*/
 		
 		classExpr.fields.push(
 		{
@@ -354,19 +344,6 @@ class Launcher extends hex.compiletime.xml.AbstractXmlParser<hex.compiletime.bas
 			}),
 			access: [ APublic ]
 		});
-		
-		/*classExpr.fields.push(
-		{
-			name: 'clone',
-			pos: haxe.macro.Context.currentPos(),
-			kind: FFun( 
-			{
-				args: [{name:'assembler', type:macro:hex.core.IApplicationAssembler}],
-				ret: className.asComplexType(),
-				expr: cloneBody
-			}),
-			access: [ APublic ]
-		});*/
 
 		//Generate module's name
 		haxe.macro.Context.defineType( classExpr );

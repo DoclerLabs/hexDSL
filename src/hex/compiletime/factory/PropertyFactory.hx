@@ -24,27 +24,27 @@ class PropertyFactory
 			var constructorVO 			= new ConstructorVO( null, ContextTypeList.FUNCTION, [ property.method ], null, null, false, null, null, null );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
-			e 							= macro $i{ id }.$propertyName = $value;
+			e 							= macro @:pos(property.filePosition) $i{ id }.$propertyName = $value;
 
 		} else if ( property.ref != null )
 		{
 			var constructorVO 			= new ConstructorVO( null, ContextTypeList.INSTANCE, null, null, null, false, property.ref, null, null );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
-			e 							= macro $i{ id }.$propertyName = $p { property.ref.split( '.' ) };
+			e 							= macro @:pos(property.filePosition) $i{ id }.$propertyName = $p { property.ref.split( '.' ) };
 
 		} else if ( property.staticRef != null )
 		{
 			var constructorVO 			= new ConstructorVO( null, ContextTypeList.STATIC_VARIABLE, null, null, null, false, null, null,  property.staticRef );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
-			e 							= macro $i { id } .$propertyName = $value;
+			e 							= macro @:pos(property.filePosition) $i { id } .$propertyName = $value;
 			
 		} else if ( property.valueToBuild != null )
 		{
 			property.valueToBuild.filePosition = property.filePosition;
 			value 						= factory.buildVO( property.valueToBuild );
-			e 							= macro $i{ id }.$propertyName = $value;
+			e 							= macro @:pos(property.filePosition) $i{ id }.$propertyName = $value;
 
 		} else
 		{
@@ -52,7 +52,7 @@ class PropertyFactory
 			var constructorVO 			= new ConstructorVO( property.ownerID, type, [ property.value ], null, null, false, null, null, null );
 			constructorVO.filePosition 	= property.filePosition;
 			value 						= factory.buildVO( constructorVO );
-			e 							= macro $p{ ( id + "." + propertyName ).split( '.' ) } = $value;
+			e 							= macro @:pos(property.filePosition) $p{ ( id + "." + propertyName ).split( '.' ) } = $value;
 		}
 		
 		return e;

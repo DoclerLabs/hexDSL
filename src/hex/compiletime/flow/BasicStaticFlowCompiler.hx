@@ -274,12 +274,6 @@ class Launcher extends AbstractExprParser<hex.compiletime.basic.BuildRequest>
 				
 		var className = classExpr.pack.join( '.' ) + '.' + classExpr.name;
 		var cls = className.asTypePath();
-		
-		//Clone
-		/*var cloneBody = macro @:mergeBlock 
-		{
-			return new $cls( assembler ); 
-		};*/
 
 		classExpr.fields.push(
 		{

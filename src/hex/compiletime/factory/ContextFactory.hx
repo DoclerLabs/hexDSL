@@ -26,11 +26,11 @@ class ContextFactory
 		{
 			constructorVO.arguments = [ arg ];
 			var eArg = ArgumentFactory.build( factoryVO )[ 0 ];
-			macro var fx = function() { var code = $expr; code.execute($eArg); return code.locator; };
+			macro @:pos(constructorVO.filePosition) var fx = function() { var code = $expr; code.execute($eArg); return code.locator; };
 		}
 		else
 		{
-			macro var fx = function() { var code = $expr; code.execute(); return code.locator; };
+			macro @:pos(constructorVO.filePosition) var fx = function() { var code = $expr; code.execute(); return code.locator; };
 		}
 		
 		constructorVO.type = className;

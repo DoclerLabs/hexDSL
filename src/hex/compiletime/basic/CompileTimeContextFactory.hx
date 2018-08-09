@@ -200,7 +200,7 @@ class CompileTimeContextFactory
 		if ( this._propertyVOLocator.isRegisteredWithKey( key ) )
 		{
 			this._propertyVOLocator.locate( key )
-				.map( function( property ) this._expressions.push( macro @:mergeBlock ${ PropertyFactory.build( this, property ) } ) );
+				.map( function( property ) this._expressions.push( macro @:mergeBlock @:pos(property.filePosition) ${ PropertyFactory.build( this, property ) } ) );
 			this._propertyVOLocator.unregister( key );
 		}
 	}
@@ -224,11 +224,11 @@ class CompileTimeContextFactory
 		var arguments 		= method.arguments;
 
 		var idArgs = method.ownerID + "_" + method.name + "Args";
-		var varIDArgs = macro $i { idArgs };
+		var varIDArgs = macro @:pos(method.filePosition) $i { idArgs };
 		var args = arguments.map( function(e) return this.buildVO( e ) );
 		
-		var varOwner = macro $p{ method.ownerID.split('.') };
-		this._expressions.push( macro @:mergeBlock { $varOwner.$methodName( $a{ args } ); } );
+		var varOwner = macro @:pos(method.filePosition) $p{ method.ownerID.split('.') };
+		this._expressions.push( macro @:mergeBlock @:pos(method.filePosition) { $varOwner.$methodName( $a{ args } ); } );
 	}
 
 	public function callAllMethods() : Void

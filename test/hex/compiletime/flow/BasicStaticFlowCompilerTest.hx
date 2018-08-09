@@ -25,6 +25,7 @@ import hex.mock.MockReceiver;
 import hex.mock.MockRectangle;
 import hex.mock.MockServiceProvider;
 import hex.mock.MockTriggerListener;
+import hex.mock.OptionalDependencyOwner;
 import hex.mock.Sample;
 import hex.runtime.ApplicationAssembler;
 import hex.structures.Point;
@@ -1038,16 +1039,6 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( "5", a[ 1 ] );
 	}
 	
-	@Test( "test array recursivity with function return argument" )
-	public function testArrayWithFunctionReturnArg() : Void
-	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/arrayWithStaticFunctionReturnArg.flow", "BasicStaticFlowCompiler_testArrayWithFunctionReturnArg" );
-		code.execute();
-		
-		Assert.deepEquals( [ 3, 7, 11 ], code.locator.o1 );
-		Assert.deepEquals( [ '1', '2', '3' ], code.locator.o2 );
-	}
-	
 	@Test( "test new recursivity" )
 	public function testNewRecursivity() : Void
 	{
@@ -1079,8 +1070,17 @@ class BasicStaticFlowCompilerTest
 	@Test( "test dependency checking with space character" )
 	public function testDependencyCheckWithSpaceChar() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/dependencyWithSpaceChar.flow", "BasicStaticFlowCompiler_testDependencyCheckWithSpaceChar" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/dependencyWithSpaceChar.flow", "BasicStaticFlowCompiler_testDependenciesChecking" );
 		code.execute();
+	}
+	
+	@Test( "test optional dependency checking" )
+	public function testOptionalDependencyChecking() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/optionalDependency.flow", "BasicStaticFlowCompiler_testOptionalDependencyChecking" );
+		code.execute();
+		
+		Assert.equals( OptionalDependencyOwner.string, code.locator.owner.getInjector().getInstanceWithClassName('String->String') );
 	}
 	
 	@Test( "test mixed dependencies checking" )

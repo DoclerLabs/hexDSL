@@ -27,7 +27,7 @@ class HashMapParser
 					
 				case wtf:
 					logger.error( wtf );
-					haxe.macro.Context.error( '', haxe.macro.Context.currentPos() );
+					haxe.macro.Context.error( 'HashMapParser fails', constructorVO.filePosition );
 			}
 		}
 		
