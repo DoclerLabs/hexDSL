@@ -7,8 +7,9 @@ package hex.mock;
 class Sample
 {
 	static public var value : Sample;
+	public var name : String;
 	
-	public function new() {}
+	public function new() this.name = 'test';
 
 	public function testType( value : Sample ) : Void
 		Sample.value = value;
@@ -25,8 +26,6 @@ class Sample
 	static public function testStaticBind( value : String, anotherValue : Int ) : String
 		return value + anotherValue;
 		
-	/*static public function prom( a : Int, b : Int ) : tink.CoreApi.Promise<tink.CoreApi.Noise>
-	{
-		return null;
-	}*/
+	static public function testRecursivity( newInstance : Bool ) return newInstance? new Sample() : value;
+	public function getConcanetatedName( prefix : String ) return prefix + this.name;
 }

@@ -21,7 +21,7 @@ class ClosureFactory
 		var vo 				= factoryVO.constructorVO;
 		var pos 			= vo.filePosition;
 		var id 				= vo.ID;
-		var args 			= ArgumentFactory.build( factoryVO );
+		var args 			= ArgumentFactory.build( factoryVO,  vo.arguments );
 	
 		var coreFactory		= factoryVO.contextFactory.getCoreFactory();
 		var typelocator		= factoryVO.contextFactory.getTypeLocator();

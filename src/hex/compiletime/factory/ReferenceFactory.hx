@@ -51,8 +51,8 @@ class ReferenceFactory
 					constructorVO.cType = tink.macro.Positions.makeBlankType( constructorVO.filePosition );
 					
 					return return constructorVO.shouldAssign ?
-						macro @:pos( constructorVO.filePosition ) var $idVar =  $fields .$methodName( $a { ArgumentFactory.build( factoryVO ) } ):
-						macro @:pos( constructorVO.filePosition ) $fields .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+						macro @:pos( constructorVO.filePosition ) var $idVar =  $fields .$methodName( $a { ArgumentFactory.build( factoryVO,  constructorVO.arguments ) } ):
+						macro @:pos( constructorVO.filePosition ) $fields .$methodName( $a { ArgumentFactory.build( factoryVO,  constructorVO.arguments ) } );
 				}
 			}
 		}
@@ -69,14 +69,14 @@ class ReferenceFactory
 				if ( constructorVO.type == ContextTypeList.INSTANCE )
 				{
 					return constructorVO.shouldAssign ?
-						macro @:pos( constructorVO.filePosition ) var $idVar = $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO ) } ):
-						macro @:pos( constructorVO.filePosition ) $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO ) } );
+						macro @:pos( constructorVO.filePosition ) var $idVar = $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO, constructorVO.arguments) } ):
+						macro @:pos( constructorVO.filePosition ) $i { key } .$methodName( $a { ArgumentFactory.build( factoryVO, constructorVO.arguments ) } );
 				}
 				else if ( constructorVO.type == ContextTypeList.CLOSURE_FACTORY )
 				{
 					return constructorVO.shouldAssign ?
-						macro @:pos( constructorVO.filePosition ) var $idVar = $i {methodName}( $a { ArgumentFactory.build( factoryVO ) } ):
-						macro @:pos( constructorVO.filePosition ) $i {methodName}( $a { ArgumentFactory.build( factoryVO ) } );
+						macro @:pos( constructorVO.filePosition ) var $idVar = $i {methodName}( $a { ArgumentFactory.build( factoryVO, constructorVO.arguments ) } ):
+						macro @:pos( constructorVO.filePosition ) $i {methodName}( $a { ArgumentFactory.build( factoryVO, constructorVO.arguments ) } );
 				}
 			}
 		}

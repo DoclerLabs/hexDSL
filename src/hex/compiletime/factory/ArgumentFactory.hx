@@ -13,14 +13,15 @@ class ArgumentFactory
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
-	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Array<Expr>
+	static public function build<T:FactoryVOTypeDef>( factoryVO : T, arguments : Array<Dynamic> ) : Array<Expr>
 	{
 		var result 			= [];
 		var factory 		= factoryVO.contextFactory;
 		var constructorVO 	= factoryVO.constructorVO;
 		
-		for ( arg in constructorVO.arguments )
-			result.push( factory.buildVO( arg ) );
+		if ( arguments != null )
+			for ( arg in arguments )
+				result.push( factory.buildVO( arg ) );
 
 		return result;
 	}

@@ -1426,6 +1426,14 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( 'test3', (cast code.locator.mapping2.toValue)('test') );
 	}
 	
+	@Test( "test recursive method call" )
+	public function testRecursiveMethodCall() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/recursiveMethodCall.flow", "BasicStaticFlowCompiler_testRecursiveMethodCall" );
+		code.execute();
+		Assert.equals( "#test", code.locator.test );
+	}
+	
 	public function testDependencyOwnerAsRuntimeArg() : Void
 	{
 		var code1 = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/dependency.flow", "BasicStaticFlowCompiler_testDependencyOwnerAsRuntimeArg" );

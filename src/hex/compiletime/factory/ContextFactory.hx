@@ -25,7 +25,7 @@ class ContextFactory
 		var e = if ( arg != null )
 		{
 			constructorVO.arguments = [ arg ];
-			var eArg = ArgumentFactory.build( factoryVO )[ 0 ];
+			var eArg = ArgumentFactory.build( factoryVO,  constructorVO.arguments )[ 0 ];
 			macro @:pos(constructorVO.filePosition) var fx = function() { var code = $expr; code.execute($eArg); return code.locator; };
 		}
 		else

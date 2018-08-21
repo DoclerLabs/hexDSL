@@ -16,6 +16,7 @@ class ConstructorVO extends AssemblerVO
 	public var              arguments       	: Array<Dynamic>;
 	public var              factory         	: String;
 	public var              staticCall       	: String;
+	public var              staticArgs       	: Array<Dynamic>;
 	public var              injectInto      	: Bool;
 	public var              ref             	: String;
 	public var 				mapTypes			: Array<String>;

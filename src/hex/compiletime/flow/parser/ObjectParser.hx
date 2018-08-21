@@ -251,6 +251,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						constructorVO.arguments = [];
 						constructorVO.factory = factory;
 						constructorVO.staticCall = staticCall;
+						constructorVO.staticArgs = pp.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) );
 
 					case EConst( ee ):
 						

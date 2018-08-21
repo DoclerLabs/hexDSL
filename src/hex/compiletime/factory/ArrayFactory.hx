@@ -16,7 +16,7 @@ class ArrayFactory
 	{
 		var constructorVO 		= factoryVO.constructorVO;
 		var idVar 				= constructorVO.ID;
-		var args 				= ArgumentFactory.build( factoryVO );
+		var args 				= ArgumentFactory.build( factoryVO, constructorVO.arguments );
 
 		if ( constructorVO.shouldAssign )
 		{
