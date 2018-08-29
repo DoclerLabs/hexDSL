@@ -228,30 +228,25 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				switch( e.expr )
 				{
 					case EField( ee, ff ):
-						constructorVO.arguments = [];
+
 						if ( field != 'bind' )
 						{
-							constructorVO.type = ExpressionUtil.compressField( e );
-							constructorVO.staticCall = field;
+							constructorVO.type = ContextTypeList.EXPRESSION;
+							constructorVO.arguments = [ value ];
 						}
 						else
 						{
+							constructorVO.arguments = [];
 							constructorVO.type = ContextTypeList.CLOSURE;
 							constructorVO.ref = ExpressionUtil.compressField( e );
 						}
 						
 					case ECall( ee, pp ):
-						var call = ExpressionUtil.compressField( ee );
-						var a = call.split( '.' );
-						var staticCall = a.pop();
-						var factory = field;
-						var type = a.join( '.' );
+
+						constructorVO.type = ContextTypeList.EXPRESSION;
+						constructorVO.arguments = [ value ];
+						constructorVO.arguments = constructorVO.arguments.concat( pp.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) ) );
 						
-						constructorVO.type = type;
-						constructorVO.arguments = [];
-						constructorVO.factory = factory;
-						constructorVO.staticCall = staticCall;
-						constructorVO.staticArgs = pp.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) );
 
 					case EConst( ee ):
 						
@@ -278,7 +273,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 				if ( params.length > 0 )
 				{
-					constructorVO.arguments = params.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) );
+					constructorVO.arguments = constructorVO.arguments.concat( params.map( function (e) return this.parser.parseArgument( this.parser, constructorVO.ID, e ) ) );
 				}
 
 				
@@ -289,5 +284,30 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 		constructorVO.filePosition = value.pos;
 		return constructorVO;
 	}
+	
+	/*static function getArgumentList( e : Expr ) : Array<ConstructorVO>
+	{
+		
+	
+	
+		case EConst( ee ):
+							
+			var comp = ExpressionUtil.compressField( e );
+			try
+			{
+				Context.getType( comp );
+				constructorVO.type = comp;
+				constructorVO.arguments = [];
+				constructorVO.staticCall = field;
+			}
+			catch ( e: Dynamic )
+			{
+				constructorVO.ref = comp.split('.')[0];
+				constructorVO.arguments = [];
+				constructorVO.instanceCall = field;
+				constructorVO.type = ContextTypeList.INSTANCE;
+				constructorVO.shouldAssign = true;
+			}
+	}*/
 }
 #end

@@ -28,4 +28,5 @@ class ContextTypeList
 	public inline static var CONTEXT_ARGUMENT 	= "ContextArgument";
 	public inline static var CLOSURE 			= "Closure";
 	public inline static var CLOSURE_FACTORY 	= "ClosureFactory";
+	public inline static var EXPRESSION 		= "haxe.macro.Expr";
 }

@@ -17,7 +17,7 @@ class ClassInstanceFactory
 
 	static var _fqcn = MacroUtil.getFQCNFromExpression;
 	static inline function _staticRefFactory( tp, staticRef, factoryMethod, args, position ) return macro @:pos(position) $p{ tp }.$staticRef.$factoryMethod( $a{ args } );
-	static inline function _staticCallFactory( tp, staticCall, factoryMethod, args, staticArgs, position ) return macro @:pos(position) $p{ tp }.$staticCall( $a{ staticArgs } ).$factoryMethod( $a{ args } );
+	static inline function _staticCallFactory( tp, staticCall, factoryMethod, args, position ) return macro @:pos(position) $p{ tp }.$staticCall( $a{ staticArgs } ).$factoryMethod( $a{ args } );
 	static inline function _staticCall( tp, staticCall, args, position ) return macro @:pos(position) $p{ tp }.$staticCall( $a{ args } );
 	static inline function _nullArray( length : UInt ) return  [ for ( i in 0...length ) macro null ];
 	static inline function _implementsInterface( classRef, interfaceRef ) return  MacroUtil.implementsInterface( classRef, MacroUtil.getClassType( Type.getClassName( interfaceRef ) ) );
@@ -67,7 +67,6 @@ class ClassInstanceFactory
 		var pack 			= MacroUtil.getPack( vo.className, pos );
 		var typePath 		= MacroUtil.getTypePath( vo.className, pos );
 		var staticCall 		= vo.staticCall;
-		var staticArgs		= ArgumentFactory.build( factoryVO, vo.staticArgs );
 		var factoryMethod 	= vo.factory;
 		var staticRef 		= vo.staticRef;
 		var classType 		= MacroUtil.getClassType( vo.className, pos );
@@ -85,7 +84,7 @@ class ClassInstanceFactory
 			}
 			else if ( staticCall != null )//static method call - with factory method
 			{
-				var e = _staticCallFactory( pack, staticCall, factoryMethod, args, staticArgs, pos );
+				var e = _staticCallFactory( pack, staticCall, factoryMethod, args, pos );
 				vo.type = vo.abstractType != null ? vo.abstractType : 
 					try _fqcn( e ) catch ( e : Dynamic ) _blankType( vo );
 				

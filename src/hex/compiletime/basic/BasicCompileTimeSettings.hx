@@ -31,7 +31,8 @@ class BasicCompileTimeSettings
 		ContextTypeList.ALIAS 					=> hex.compiletime.factory.AliasFactory.build,
 		ContextTypeList.CONTEXT 				=> hex.compiletime.factory.ContextFactory.build,
 		ContextTypeList.CONTEXT_ARGUMENT 		=> hex.compiletime.factory.ContextArgumentFactory.build,
-		ContextTypeList.CLOSURE 				=> hex.compiletime.factory.ClosureFactory.build
+		ContextTypeList.CLOSURE 				=> hex.compiletime.factory.ClosureFactory.build,
+		ContextTypeList.EXPRESSION 				=> hex.compiletime.factory.ExpressionFactory.build
 	];
 }
 #end
