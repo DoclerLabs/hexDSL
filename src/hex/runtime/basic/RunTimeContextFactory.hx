@@ -15,6 +15,7 @@ import hex.runtime.factory.ClassInstanceFactory;
 import hex.runtime.factory.DynamicObjectFactory;
 import hex.runtime.factory.FloatFactory;
 import hex.runtime.factory.FunctionFactory;
+import hex.runtime.factory.MapFactory;
 import hex.runtime.factory.HashMapFactory;
 import hex.runtime.factory.IntFactory;
 import hex.runtime.factory.NullFactory;
@@ -87,6 +88,7 @@ class RunTimeContextFactory
 			this._factoryMap.set( ContextTypeList.STRING, StringFactory.build );
 			this._factoryMap.set( ContextTypeList.UINT, UIntFactory.build );
 			this._factoryMap.set( ContextTypeList.DEFAULT, StringFactory.build );
+			this._factoryMap.set( ContextTypeList.MAP, MapFactory.build );
 			this._factoryMap.set( ContextTypeList.HASHMAP, HashMapFactory.build );
 			this._factoryMap.set( ContextTypeList.CLASS, ClassFactory.build );
 			this._factoryMap.set( ContextTypeList.XML, XmlFactory.build );

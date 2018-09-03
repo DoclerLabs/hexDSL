@@ -1,4 +1,5 @@
 package hex.compiletime.flow.parser;
+import hex.compiletime.flow.parser.custom.MapParser;
 
 #if macro
 import haxe.macro.*;
@@ -164,9 +165,21 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				) );
 				
 			case EArrayDecl( values ):
-				constructorVO.type = ContextTypeList.ARRAY;
-				constructorVO.arguments = [];
-				values.map( function( e ) constructorVO.arguments.push( this.parser.parseArgument( this.parser, constructorVO.ID, e ) ) );
+				
+				var isMap = function ( v ) return switch( v[ 0 ].expr ) { case EBinop( op, e1, e2 ): op == OpArrow;  case _: false; };
+				
+				if ( values.length > 0 && isMap( values ) )
+				{
+					constructorVO.type = ContextTypeList.EXPRESSION;
+					constructorVO.arguments = [ value ];
+					constructorVO.arguments = constructorVO.arguments.concat( values.map( function (e) return this.parser.parseMapArgument( this.parser, constructorVO.ID, e ) ) );
+				}
+				else
+				{
+					constructorVO.type = ContextTypeList.ARRAY;
+					constructorVO.arguments = [];
+					values.map( function( e ) constructorVO.arguments.push( this.parser.parseArgument( this.parser, constructorVO.ID, e ) ) );
+				}
 					
 			case EField( e, field ):
 				

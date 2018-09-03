@@ -805,7 +805,24 @@ class BasicStaticFlowCompilerTest
 	@Test( "test building Map with class reference" )
 	public function testBuildingMapWithClassReference() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/hashmapWithClassReference.flow", "BasicStaticFlowCompiler_testBuildingMapWithClassReference" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/simpleMap.flow", "BasicStaticFlowCompiler_testBuildingMapWithClassReference" );
+		code.execute();
+
+		Assert.equals( 1, code.locator.map.get( 'one' ) );
+		Assert.equals( 2, code.locator.map.get( 'two' ) );
+		Assert.equals( 3, code.locator.map.get( 'three' ) );
+		Assert.equals( 4, code.locator.map.get( 'four' ) );
+
+		Assert.equals( 1, code.locator.anotherMap.get( 'one' ) );
+		Assert.equals( 2, code.locator.anotherMap.get( 'two' ) );
+		Assert.equals( 3, code.locator.anotherMap.get( 'three' ) );
+		Assert.equals( 4, code.locator.anotherMap.get( 'four' ) );
+	}
+	
+	@Test( "test building HashMap with class reference" )
+	public function testBuildingHashMapWithClassReference() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/hashmapWithClassReference.flow", "BasicStaticFlowCompiler_testBuildingHashMapWithClassReference" );
 		code.execute();
 
 		Assert.equals( IMockInterface, code.locator.map.getKeys()[ 0 ] );
@@ -1067,12 +1084,12 @@ class BasicStaticFlowCompilerTest
 		Assert.deepEquals( code.locator.mappings1, code.locator.mappings2 );
 	}
 	
-	@Test( "test dependency checking with space character" )
+	/*@Test( "test dependency checking with space character" )
 	public function testDependencyCheckWithSpaceChar() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/static/dependencyWithSpaceChar.flow", "BasicStaticFlowCompiler_testDependenciesChecking" );
 		code.execute();
-	}
+	}*/
 	
 	@Test( "test optional dependency checking" )
 	public function testOptionalDependencyChecking() : Void

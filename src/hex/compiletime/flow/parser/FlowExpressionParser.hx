@@ -18,6 +18,7 @@ class FlowExpressionParser
 		
 		typeParser:		
 		[
+			hex.core.ContextTypeList.MAP 				=> hex.compiletime.flow.parser.custom.MapParser.parse,
 			hex.core.ContextTypeList.HASHMAP 			=> hex.compiletime.flow.parser.custom.HashMapParser.parse,
 			hex.core.ContextTypeList.MAPPING_CONFIG		=> hex.compiletime.flow.parser.custom.MappingConfigParser.parse,
 			hex.core.ContextTypeList.MAPPING_DEFINITION	=> hex.compiletime.flow.parser.custom.MappingParser.parse

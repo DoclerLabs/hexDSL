@@ -1,0 +1,25 @@
+@context( name = 'applicationContext' )
+{
+	@public
+	map =
+	[ 
+		one 	=> 1,
+		two 	=> 2,
+		three 	=> 3,
+		four 	=> 4
+	];
+	
+	@public
+	anotherMap = new Map<String, Int>
+	([ 
+		one 	=> 1,
+		two 	=> 2,
+		three 	=> 3,
+		four 	=> 4
+	]);
+	
+	one 	= 'one';
+	two 	= 'two';
+	three 	= 'three';
+	four 	= 'four';
+}

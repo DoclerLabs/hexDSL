@@ -22,6 +22,7 @@ class BasicCompileTimeSettings
 		ContextTypeList.STRING 					=> hex.compiletime.factory.StringFactory.build,
 		ContextTypeList.UINT 					=> hex.compiletime.factory.UIntFactory.build,
 		ContextTypeList.DEFAULT 				=> hex.compiletime.factory.StringFactory.build,
+		ContextTypeList.MAP 					=> hex.compiletime.factory.MapFactory.build,
 		ContextTypeList.HASHMAP 				=> hex.compiletime.factory.HashMapFactory.build,
 		ContextTypeList.CLASS 					=> hex.compiletime.factory.ClassFactory.build,
 		ContextTypeList.XML 					=> hex.compiletime.factory.XmlFactory.build,

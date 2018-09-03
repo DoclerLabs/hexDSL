@@ -19,7 +19,17 @@ class ExpressionFactory
 	{
 		var constructorVO = factoryVO.constructorVO;
 		var e = constructorVO.arguments.shift();
-		var args = ArgumentFactory.build( factoryVO, constructorVO.arguments );
+		
+		try
+		{
+			//Refact this nasty trick (condition)
+			var o = constructorVO.arguments[0].key;
+			MapArgumentFactory.build( factoryVO );
+		}
+		catch( e:Dynamic)
+		{
+			ArgumentFactory.build( factoryVO, constructorVO.arguments );
+		}
 		
 		var idVar 				= constructorVO.ID;
 		var args 				= constructorVO.arguments;
