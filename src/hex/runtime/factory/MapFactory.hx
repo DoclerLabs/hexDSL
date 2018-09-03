@@ -33,7 +33,7 @@ class MapFactory
 			{
 				if ( item.key != null )
 				{
-					result.put( item.key, item.value );
+					result.set( item.key, item.value );
 
 				} else
 				{
