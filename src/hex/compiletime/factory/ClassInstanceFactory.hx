@@ -20,7 +20,6 @@ class ClassInstanceFactory
 	static inline function _staticCallFactory( tp, staticCall, factoryMethod, args, staticArgs, position ) return macro @:pos(position) $p{ tp }.$staticCall( $a{ staticArgs } ).$factoryMethod( $a{ args } );
 	static inline function _staticCall( tp, staticCall, args, position ) return macro @:pos(position) $p{ tp }.$staticCall( $a{ args } );
 	static inline function _nullArray( length : UInt ) return  [ for ( i in 0...length ) macro null ];
-	static inline function _implementsInterface( classRef, interfaceRef ) return  MacroUtil.implementsInterface( classRef, MacroUtil.getClassType( Type.getClassName( interfaceRef ) ) );
 	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );
 	static inline function _blankType( vo ) { vo.cType = tink.macro.Positions.makeBlankType( vo.filePosition ); return MacroUtil.getFQCNFromComplexType( vo.cType ); }
 	
