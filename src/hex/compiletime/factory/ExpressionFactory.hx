@@ -26,7 +26,7 @@ class ExpressionFactory
 			var o = constructorVO.arguments[0].key;
 			MapArgumentFactory.build( factoryVO );
 		}
-		catch( e:Dynamic)
+		catch( e: Dynamic )
 		{
 			ArgumentFactory.build( factoryVO, constructorVO.arguments );
 		}

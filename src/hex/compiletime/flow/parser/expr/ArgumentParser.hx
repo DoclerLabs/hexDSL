@@ -53,7 +53,7 @@ class ArgumentParser
 			
 			case ENew( t, params ):
 				constructorVO = parser.parseType( parser, new ConstructorVO( ident ), value );
-				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
+				//constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				
 			case EArrayDecl( values ):
 				constructorVO = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );

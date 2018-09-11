@@ -26,12 +26,15 @@ class TypeParser
 				
 				if ( parser.typeParser.exists( type ) )
 				{
+					constructorVO.type = ExprTools.toString( e ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 					return parser.typeParser.get( type )( parser, constructorVO, params, e );
 				}
 				else
 				{
-					constructorVO.type = type;
+					//constructorVO.type = type;
+					constructorVO.type = ContextTypeList.EXPRESSION;
 					constructorVO.arguments = params.map( function (param) return parser.parseArgument (parser, constructorVO.ID, param) );
+					constructorVO.arguments.unshift( e );
 				}
 				
 			case wtf:

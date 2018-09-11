@@ -18,7 +18,7 @@ class MapArgumentFactory
 		var constructorVO 		= factoryVO.constructorVO;
 		var args : Array<MapVO>	= cast constructorVO.arguments;
 		
-		for ( mapVO in args )
+		if ( args != null ) for ( mapVO in args )
 		{
 			mapVO.key 			= factory.buildVO( mapVO.getPropertyKey() );
 			mapVO.value 		= factory.buildVO( mapVO.getPropertyValue() );
