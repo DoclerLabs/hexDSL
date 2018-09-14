@@ -23,6 +23,7 @@ class MapParser
 			{
 				case EArrayDecl( values ):
 					constructorVO.type = ContextTypeList.MAP;
+					constructorVO.fqcn = ExprTools.toString( expr ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 					constructorVO.arguments = values.map( function(e) return parser.parseMapArgument( parser, constructorVO.ID, e ) );
 					
 				case wtf:

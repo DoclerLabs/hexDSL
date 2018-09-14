@@ -12,6 +12,7 @@ class ExpressionFactory
 {
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	
+	static var _fqcn = MacroUtil.getFQCNFromExpression;
 	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );
 	static inline function _blankType( vo ) { vo.cType = tink.macro.Positions.makeBlankType( vo.filePosition ); return MacroUtil.getFQCNFromComplexType( vo.cType ); }
 	
@@ -19,7 +20,7 @@ class ExpressionFactory
 	{
 		var constructorVO = factoryVO.constructorVO;
 		var e = constructorVO.arguments.shift();
-		
+
 		try
 		{
 			//Refact this nasty trick (condition)
@@ -33,8 +34,8 @@ class ExpressionFactory
 		
 		var idVar 				= constructorVO.ID;
 		var args 				= constructorVO.arguments;
-		
-		constructorVO.type = constructorVO.abstractType != null ? constructorVO.abstractType : try
+	
+		/*constructorVO.type = constructorVO.abstractType != null ? constructorVO.abstractType : try
 		{
 			hex.util.MacroUtil.getFQCNFromComplexType( TypeTools.toComplexType( Context.typeof( e ) ) );
 		}
@@ -43,7 +44,10 @@ class ExpressionFactory
 			//We cannot predict the type
 			_blankType( constructorVO );
 			
-		}
+		}*/
+		
+		//TODO Use fqcn everywhere
+		constructorVO.type = constructorVO.fqcn != null ? constructorVO.fqcn : (constructorVO.abstractType != null ? constructorVO.abstractType : try _fqcn( e ) catch ( e : Dynamic ) _blankType( constructorVO ));
 
 		//Used only if the result is not lazy and should be assigned
 		var t = constructorVO.cType = constructorVO.cType != null ? constructorVO.cType : _varType( constructorVO.type, constructorVO.filePosition ); 

@@ -17,6 +17,8 @@ class TypeParser
 	
 	static public function parse( parser : ExpressionParser, constructorVO : ConstructorVO, e : Expr ) : ConstructorVO
 	{
+		var fqcn = ExprTools.toString( e ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
+		
 		switch( e.expr )
 		{
 			case ENew( t, params ):
@@ -26,7 +28,7 @@ class TypeParser
 				
 				if ( parser.typeParser.exists( type ) )
 				{
-					constructorVO.type = ExprTools.toString( e ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
+					constructorVO.type = fqcn;
 					return parser.typeParser.get( type )( parser, constructorVO, params, e );
 				}
 				else
@@ -36,6 +38,8 @@ class TypeParser
 					constructorVO.arguments = params.map( function (param) return parser.parseArgument (parser, constructorVO.ID, param) );
 					constructorVO.arguments.unshift( e );
 				}
+
+				constructorVO.fqcn = fqcn;
 				
 			case wtf:
 				logger.error( wtf );
