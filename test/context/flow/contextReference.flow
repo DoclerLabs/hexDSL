@@ -1,5 +1,5 @@
 @context
 {
 	@public
-	contextHolder = new hex.mock.MockContextHolder( this );
+	contextHolder = new hex.mock.MockContextHolder( applicationContext );
 }
