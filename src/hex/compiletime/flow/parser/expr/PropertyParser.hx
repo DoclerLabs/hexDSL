@@ -165,12 +165,7 @@ class PropertyParser
 				propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
 
 			case _:
-				logger.debug( assigned.expr );
-		}
-
-		if (propertyVO == null)
-		{
-			assigned.reject('This type of expression cannot be used here: ${assigned.toString()}');
+				assigned.reject('This type of expression cannot be used here: ${assigned.toString()}');
 		}
 
 		propertyVO.filePosition = assigned.pos;
