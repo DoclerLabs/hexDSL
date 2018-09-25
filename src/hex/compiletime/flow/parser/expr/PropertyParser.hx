@@ -7,6 +7,7 @@ import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 import hex.vo.PropertyVO;
 
+using tink.MacroApi;
 /**
  * ...
  * @author Francis Bourre
@@ -56,6 +57,12 @@ class PropertyParser
 				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.ARRAY,
 					new ConstructorVO( ident, ContextTypeList.ARRAY,
 						values.map( function(e) return parser.parseArgument( parser, ident, e ) ) ) );
+
+			case EObjectDecl( fields ):
+
+				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.CONTEXT_ARGUMENT,
+					parser.parseArgument( parser, ident, assigned )
+				);
 				
 			case EField( e, ff ):
 				
@@ -158,8 +165,9 @@ class PropertyParser
 				propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
 
 			case _:
-				logger.debug( assigned.expr );
+				assigned.reject('This type of expression cannot be used here: ${assigned.toString()}');
 		}
+
 		propertyVO.filePosition = assigned.pos;
 		return propertyVO;
 	}
