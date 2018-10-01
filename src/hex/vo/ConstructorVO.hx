@@ -13,7 +13,7 @@ class ConstructorVO extends AssemblerVO
 	public var              ID              	: String;
 	public var              type (default, set) : String;
 	
-	@:deprecated
+	//@:deprecated
 	public var              className           : String;
 	
 	public var              arguments       	: Array<Dynamic>;

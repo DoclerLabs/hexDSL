@@ -42,7 +42,7 @@ class ArgumentParser
 						//Boolean
 						constructorVO =  new ConstructorVO( ident, ContextTypeList.BOOLEAN, [ v ] );
 
-					case _:
+					case _: 
 						//Object reference
 						constructorVO =  new ConstructorVO( ident, ContextTypeList.INSTANCE, [ v ], null, null, null, v );
 				}
@@ -53,7 +53,6 @@ class ArgumentParser
 			
 			case ENew( t, params ):
 				constructorVO = parser.parseType( parser, new ConstructorVO( ident ), value );
-				//constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
 				
 			case EArrayDecl( values ):
 				constructorVO = new ConstructorVO( ident, ContextTypeList.ARRAY, [] );
@@ -78,35 +77,29 @@ class ArgumentParser
 						constructorVO.arguments = [];
 						if ( field != 'bind' )
 						{
-							constructorVO.type = ExpressionUtil.compressField( e );
-							constructorVO.staticCall = field;
+							constructorVO.type = ContextTypeList.EXPRESSION;
+							constructorVO.arguments = [ value ];
 						}
 						else
 						{
+							constructorVO.arguments = [];
 							constructorVO.type = ContextTypeList.CLOSURE;
 							constructorVO.ref = ExpressionUtil.compressField( e );
 						}
 						
 					case ECall( ee, pp ):
-						var call = ExpressionUtil.compressField( ee );
-						var a = call.split( '.' );
-						var staticCall = a.pop();
-						var factory = field;
-						var type = a.join( '.' );
 						
-						constructorVO.type = type;
-						constructorVO.arguments = [];
-						constructorVO.factory = factory;
-						constructorVO.staticCall = staticCall;
-
+						constructorVO.type = ContextTypeList.EXPRESSION;
+						constructorVO.arguments = [ value ];
+						constructorVO.arguments = constructorVO.arguments.concat( pp.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) ) );
+						
 					case EConst( ee ):
 						var comp = ExpressionUtil.compressField( value );
 						try
 						{
 							Context.getType( comp );
-							constructorVO.type = comp;
-							constructorVO.arguments = [];
-							constructorVO.staticCall = field;
+							constructorVO.type = ContextTypeList.EXPRESSION;
+							constructorVO.arguments = [ value ];
 							
 							trace( constructorVO );
 						}

@@ -34,17 +34,6 @@ class ExpressionFactory
 		
 		var idVar 				= constructorVO.ID;
 		var args 				= constructorVO.arguments;
-	
-		/*constructorVO.type = constructorVO.abstractType != null ? constructorVO.abstractType : try
-		{
-			hex.util.MacroUtil.getFQCNFromComplexType( TypeTools.toComplexType( Context.typeof( e ) ) );
-		}
-		catch ( e: Dynamic )
-		{
-			//We cannot predict the type
-			_blankType( constructorVO );
-			
-		}*/
 		
 		//TODO Use fqcn everywhere
 		constructorVO.type = constructorVO.fqcn != null ? constructorVO.fqcn : (constructorVO.abstractType != null ? constructorVO.abstractType : try _fqcn( e ) catch ( e : Dynamic ) _blankType( constructorVO ));
