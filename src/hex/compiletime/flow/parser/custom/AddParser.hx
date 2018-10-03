@@ -55,7 +55,9 @@ class AddParser
 		var f = function( e ) {switch( e.expr )
 		{
 			case EConst(CIdent(ident)):
-				constructorVO.arguments.push( new ConstructorVO( constructorVO.ID, ContextTypeList.INSTANCE, null, null, null, null, ident ) );
+				var vo = new ConstructorVO( constructorVO.ID, ContextTypeList.INSTANCE, null, null, null, null, ident );
+				vo.filePosition = expr.pos;
+				constructorVO.arguments.push( vo );
 				case _:
 		}};
 		
