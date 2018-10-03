@@ -26,17 +26,21 @@ class ExpressionFactory
 		var constructorVO = factoryVO.constructorVO;
 		var e = constructorVO.arguments.shift();
 
-		try
+		if ( constructorVO.arguments.length > 0 )
 		{
-			//Refact this nasty trick (condition)
-			var o = constructorVO.arguments[0].key;
-			MapArgumentFactory.build( factoryVO );
+			if( constructorVO.arguments[0]._key != null )
+			{
+
+				MapArgumentFactory.build( factoryVO );
+
+					
+			}
+			else
+			{
+				ArgumentFactory.build( factoryVO, constructorVO.arguments );
+			}
 		}
-		catch( e: Dynamic )
-		{
-			ArgumentFactory.build( factoryVO, constructorVO.arguments );
-		}
-		
+
 		var idVar 				= constructorVO.ID;
 		var args 				= constructorVO.arguments;
 		
