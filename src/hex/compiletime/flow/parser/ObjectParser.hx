@@ -155,7 +155,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 
 			case EBlock([]):
-				constructorVO.type = ContextTypeList.OBJECT;
+				constructorVO.type = ContextTypeList.EXPRESSION;
+				constructorVO.arguments = [ value ];
 
 			case EObjectDecl( fields ):
 				constructorVO.type = ContextTypeList.OBJECT;
@@ -254,18 +255,17 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					case EConst( ee ):
 						
 						var comp = ExpressionUtil.compressField( e );
+						constructorVO.type = ContextTypeList.EXPRESSION;
+						constructorVO.arguments = [ value ];
+							
 						try
 						{
 							Context.getType( comp );
-							constructorVO.type = ContextTypeList.EXPRESSION;
-							constructorVO.arguments = [ value ];
 						}
 						catch ( e: Dynamic )
 						{
 							constructorVO.ref = comp.split('.')[0];
-							constructorVO.arguments = [];
-							constructorVO.instanceCall = field;
-							constructorVO.type = ContextTypeList.INSTANCE;
+							
 						}
 
 					case _:
