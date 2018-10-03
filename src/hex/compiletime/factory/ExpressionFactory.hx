@@ -18,10 +18,10 @@ class ExpressionFactory
 	
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{
-		if ( factoryVO.constructorVO.ref != null ) 
+		/*if ( factoryVO.constructorVO.ref != null ) 
 		{
 			ReferenceFactory.build( factoryVO );
-		}
+		}*/
 		
 		var constructorVO = factoryVO.constructorVO;
 		var e = constructorVO.arguments.shift();
