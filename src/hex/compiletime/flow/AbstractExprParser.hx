@@ -7,7 +7,6 @@ import hex.compiletime.DSLParser;
 import hex.core.IApplicationContext;
 
 using hex.util.MacroUtil;
-using hex.compiletime.flow.parser.ExpressionUtil;
 
 /**
  * ...
@@ -37,7 +36,7 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 				{
 					var name = null;
 				
-					var a = Lambda.filter( entry.params, function ( p ) 
+					var a = entry.params.filter(function ( p ) 
 						{ 
 							return switch( p.expr ) 
 							{
@@ -48,7 +47,7 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 
 					if ( a.length == 1 )
 					{
-						name = switch( a.first().expr )
+						name = switch( a[0].expr )
 						{
 							case EBinop( OpAssign, e1, _.expr => EConst(CString(id)) ) :
 								id;
@@ -81,7 +80,7 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 				{
 					var name = null;
 				
-					var a = Lambda.filter( entry.params, function ( p ) 
+					var a:Array<Expr> = entry.params.filter(function ( p ) 
 						{ 
 							return switch( p.expr ) 
 							{
@@ -92,7 +91,7 @@ class AbstractExprParser<RequestType> extends DSLParser<Expr, RequestType>
 
 					if ( a.length == 1 )
 					{
-						name = switch( a.first().expr )
+						name = switch( a[0].expr )
 						{
 							case EBinop( OpAssign, e1, e2 ) :
 								e2.compressField();
