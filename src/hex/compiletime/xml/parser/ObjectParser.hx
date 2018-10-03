@@ -228,6 +228,10 @@ class ObjectParser
 				constructorVO.ifNotList 	= ifNotList;
 				constructorVO.filePosition 	= constructorVO.ref == null ? this._positionTracker.getPosition( xml ) : this._positionTracker.getPosition( xml, ContextAttributeList.REF );
 				constructorVO.isPublic 		= true;
+				
+				//To keep compatibility with the updated factories
+				if ( strippedType == ContextTypeList.HASHMAP ) constructorVO.fqcn = constructorVO.type;
+				
 				this._builder.build( OBJECT( constructorVO ) );
 			}
 		}

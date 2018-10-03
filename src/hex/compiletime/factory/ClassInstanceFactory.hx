@@ -110,6 +110,6 @@ class ClassInstanceFactory
 		}
 
 		return macro @:pos(pos) $result;
-}
+	}
 }
 #end

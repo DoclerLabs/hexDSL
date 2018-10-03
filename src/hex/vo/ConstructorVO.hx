@@ -12,7 +12,10 @@ class ConstructorVO extends AssemblerVO
 	
 	public var              ID              	: String;
 	public var              type (default, set) : String;
+	
+	//@:deprecated
 	public var              className           : String;
+	
 	public var              arguments       	: Array<Dynamic>;
 	public var              factory         	: String;
 	public var              staticCall       	: String;
@@ -22,6 +25,8 @@ class ConstructorVO extends AssemblerVO
 	public var 				mapTypes			: Array<String>;
 	public var 				staticRef			: String;
 	public var 				instanceCall		: String;
+	
+	public var 				fqcn				: String;
 	
 	public var 				abstractType 		: String;
 	public var 				lazy 				: Bool;
@@ -65,6 +70,7 @@ class ConstructorVO extends AssemblerVO
 				+ "id:"                 + ID            	+ ", "
 				+ "type:"               + type 				+ ", "
 				+ "className:"          + className         + ", "
+				+ "fcqn:"          		+ fqcn         		+ ", "
 				+ "arguments:[" 		+ arguments 		+ "], "
 				+ "factory:"    		+ factory       	+ ", "
 				+ "staticCall:"  		+ staticCall 		+ ", "

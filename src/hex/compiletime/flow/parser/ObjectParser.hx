@@ -1,5 +1,4 @@
 package hex.compiletime.flow.parser;
-import hex.compiletime.flow.parser.custom.MapParser;
 
 #if macro
 import haxe.macro.*;
@@ -110,7 +109,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				}
 				
 		}
-		//logger.debug(e);
+		//logger.debug(e); 
 	}
 
 	function _getConstructorVO( constructorVO : ConstructorVO, value : Expr ) : ConstructorVO 
@@ -153,10 +152,11 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				
 			case ENew( t, params ):
 				this.parser.parseType( this.parser, constructorVO, value );
-				constructorVO.type = ExprTools.toString( value ).split( 'new ' )[ 1 ].split( '(' )[ 0 ];
+				
 
-			case EBlock([]): // empty object
-				constructorVO.type = ContextTypeList.OBJECT;
+			case EBlock([]):
+				constructorVO.type = ContextTypeList.EXPRESSION;
+				constructorVO.arguments = [ value ];
 
 			case EObjectDecl( fields ):
 				constructorVO.type = ContextTypeList.OBJECT;
@@ -193,19 +193,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					switch( exp.expr )
 					{
 						case EParenthesis( _.expr => ECheckType( ee, TPath(p) ) ):
-							
-							if ( p.sub != null )
-							{
-								constructorVO.type = ContextTypeList.STATIC_VARIABLE;
-								constructorVO.arguments = [];
-								constructorVO.staticRef = className;
-							}
-							else
-							{
-								constructorVO.type = ContextTypeList.CLASS;
-								constructorVO.arguments = [ className];
-							}
-							
+
+							constructorVO.type = ContextTypeList.EXPRESSION;
+							constructorVO.arguments = [ value ];
+
 						case _:
 							logger.error( exp );
 					}
@@ -267,9 +258,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						try
 						{
 							Context.getType( comp );
-							constructorVO.type = comp;
-							constructorVO.arguments = [];
-							constructorVO.staticCall = field;
+							constructorVO.type = ContextTypeList.EXPRESSION;
+							constructorVO.arguments = [ value ];
 						}
 						catch ( e: Dynamic )
 						{
@@ -277,7 +267,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 							constructorVO.arguments = [];
 							constructorVO.instanceCall = field;
 							constructorVO.type = ContextTypeList.INSTANCE;
-							constructorVO.shouldAssign = true;
 						}
 
 					case _:
@@ -297,30 +286,5 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 		constructorVO.filePosition = value.pos;
 		return constructorVO;
 	}
-	
-	/*static function getArgumentList( e : Expr ) : Array<ConstructorVO>
-	{
-		
-	
-	
-		case EConst( ee ):
-							
-			var comp = ExpressionUtil.compressField( e );
-			try
-			{
-				Context.getType( comp );
-				constructorVO.type = comp;
-				constructorVO.arguments = [];
-				constructorVO.staticCall = field;
-			}
-			catch ( e: Dynamic )
-			{
-				constructorVO.ref = comp.split('.')[0];
-				constructorVO.arguments = [];
-				constructorVO.instanceCall = field;
-				constructorVO.type = ContextTypeList.INSTANCE;
-				constructorVO.shouldAssign = true;
-			}
-	}*/
 }
 #end

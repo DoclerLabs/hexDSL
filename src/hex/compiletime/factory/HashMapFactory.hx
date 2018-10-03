@@ -16,7 +16,9 @@ class HashMapFactory
 		var idVar 				= constructorVO.ID;
 		var args 				= MapArgumentFactory.build( factoryVO );
 		
-		var e = Context.parseInlineString( "new " + constructorVO.type + "()", constructorVO.filePosition );
+		var e = Context.parseInlineString( "new " + constructorVO.fqcn + "()", constructorVO.filePosition );
+		constructorVO.type = constructorVO.fqcn;
+		
 		if ( constructorVO.shouldAssign )
 		{
 			var varType = TypeTools.toComplexType( Context.typeof( e ) );
