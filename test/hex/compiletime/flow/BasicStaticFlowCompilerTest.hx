@@ -1461,12 +1461,11 @@ class BasicStaticFlowCompilerTest
 		code2.execute( {o: code1.locator.owner} );
 	}
 	
-	/*@Test( "test multiple recursive method call" )
+	@Test( "test multiple recursive method call" )
 	public function testMultiRecursiveMethodCall() : Void
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/multiRecursiveMethodCall.flow", "BasicStaticFlowCompiler_testMultiRecursiveMethodCall" );
 		code.execute();
 		Assert.equals( "#test", code.locator.test );
-		//Assert.equals( code.locator.o1.arg, code.locator.o2 );
-	}*/
+	}
 }
