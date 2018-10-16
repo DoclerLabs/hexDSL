@@ -1461,14 +1461,25 @@ class BasicStaticFlowCompilerTest
 		code2.execute( {o: code1.locator.owner} );
 	}
 	
-	@Test( "test multiple recursive method call" )
-	public function testMultiRecursiveMethodCall() : Void
+	@Test( "test random expressions" )
+	public function testRandomExpressions() : Void
 	{
-		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/multiRecursiveMethodCall.flow", "BasicStaticFlowCompiler_testMultiRecursiveMethodCall" );
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/randomExpressions.flow", "BasicStaticFlowCompiler_testRandomExpressions" );
 		code.execute();
-		Assert.isNotNull( code.locator.o );
 		Assert.isNotNull( code.locator.o1 );
+		Assert.equals( '#test', code.locator.o1.prop1.propA );
+		Assert.equals( code.locator.o, code.locator.o1.prop1.propB );
+		Assert.equals( 'a', code.locator.o1.prop2[0] );
+		Assert.equals( 'b', code.locator.o1.prop2[1] );
+		Assert.equals( 'c', code.locator.o1.prop2[2] );
+
 		Assert.isNotNull( code.locator.o2 );
+
 		Assert.isNotNull( code.locator.o3 );
+		Assert.isTrue( code.locator.o3.prop.get( 'key1' )[0] );
+		Assert.isTrue( code.locator.o3.prop.get( 'key2' )[0] );
+		Assert.isFalse( code.locator.o3.prop.get( 'key2' )[1] );
+		Assert.isTrue( code.locator.o3.prop.get( 'key2' )[2] );
+		Assert.isInstanceOf( code.locator.o3.prop2.p.arg.arg.arg, hex.mock.ClassWithArgument );
 	}
 }
