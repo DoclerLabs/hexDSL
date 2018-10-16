@@ -1466,6 +1466,9 @@ class BasicStaticFlowCompilerTest
 	{
 		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/multiRecursiveMethodCall.flow", "BasicStaticFlowCompiler_testMultiRecursiveMethodCall" );
 		code.execute();
-		Assert.equals( "#test", code.locator.test );
+		Assert.isNotNull( code.locator.o );
+		Assert.isNotNull( code.locator.o1 );
+		Assert.isNotNull( code.locator.o2 );
+		Assert.isNotNull( code.locator.o3 );
 	}
 }

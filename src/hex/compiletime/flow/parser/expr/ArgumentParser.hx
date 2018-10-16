@@ -66,6 +66,20 @@ class ArgumentParser
 				constructorVO = new ConstructorVO( ident, ContextTypeList.CONTEXT_ARGUMENT, [] );
 				constructorVO.arguments = fields.map( function( e ) return parser.parseProperty( parser, constructorVO.ID, e.field, e.expr ) );
 
+			case ECall( _.expr => EConst(CIdent(keyword)), params ):
+				if ( parser.buildMethodParser.exists( keyword ) )
+				{
+					return parser.buildMethodParser.get( keyword )( parser, constructorVO, params, value );
+				}
+				else
+				{
+					constructorVO.ref = ExpressionUtil.compressField( value );
+					constructorVO.arguments = params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) );
+					constructorVO.instanceCall = constructorVO.ref;
+					constructorVO.type = ContextTypeList.CLOSURE_FACTORY;
+					constructorVO.shouldAssign = true;
+				}
+
 			case ECall( _.expr => EField( e, field ), params ):
 				
 				constructorVO = new ConstructorVO( ident );
@@ -82,7 +96,6 @@ class ArgumentParser
 						}
 						else
 						{
-							constructorVO.arguments = [];
 							constructorVO.type = ContextTypeList.CLOSURE;
 							constructorVO.ref = ExpressionUtil.compressField( e );
 						}
@@ -92,23 +105,21 @@ class ArgumentParser
 						constructorVO.type = ContextTypeList.EXPRESSION;
 						constructorVO.arguments = [ value ];
 						constructorVO.arguments = constructorVO.arguments.concat( pp.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) ) );
-						
+					
 					case EConst( ee ):
-						var comp = ExpressionUtil.compressField( value );
+						
+						var comp = ExpressionUtil.compressField( e );
+						
+						constructorVO.type = ContextTypeList.EXPRESSION;
+						constructorVO.arguments = [ value ];
+						
 						try
 						{
 							Context.getType( comp );
-							constructorVO.type = ContextTypeList.EXPRESSION;
-							constructorVO.arguments = [ value ];
-							
-							trace( constructorVO );
 						}
 						catch ( e: Dynamic )
 						{
 							constructorVO.ref = comp.split('.')[0];
-							constructorVO.arguments = [];
-							constructorVO.instanceCall = field;
-							constructorVO.type = ContextTypeList.INSTANCE;
 						}
 
 					case _:
@@ -117,7 +128,7 @@ class ArgumentParser
 				
 				if ( params.length > 0 )
 				{
-					constructorVO.arguments = params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) );
+					constructorVO.arguments = constructorVO.arguments.concat( params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) ) );
 				}
 			
 			case _:
