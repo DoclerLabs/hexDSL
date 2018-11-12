@@ -2,6 +2,7 @@ package hex.compiletime.flow.parser.expr;
 
 #if macro
 import haxe.macro.*;
+import haxe.macro.Expr;
 import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
@@ -17,13 +18,13 @@ class PropertyParser
 	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( PropertyParser );
 	
-	static public function parse( parser : ExpressionParser, ident : ID, fieldName : FieldName, assigned : Expr ) : PropertyVO
+	static public function parse( parser : ExpressionParser, ident : ID, fieldName : FieldName, value : Expr ) : PropertyVO
 	{
 		var propertyVO 	: PropertyVO;
 		var type 		: String;
 		var ref 		: String;
 
-		switch( assigned.expr )
+		switch( value.expr )
 		{
 			case EConst(CIdent(v)):
 				
@@ -41,7 +42,7 @@ class PropertyParser
 				
 			case ENew( t, params ):
 				
-				var constructorVO = parser.parseType( parser, new ConstructorVO( ident ), assigned );
+				var constructorVO = parser.parseType( parser, new ConstructorVO( ident ), value );
 				propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
 				
 			case EConst(CInt(v)):
@@ -52,16 +53,32 @@ class PropertyParser
 				
 			case EConst(CString(v)):
 				propertyVO = new PropertyVO( ident, fieldName, v, ContextTypeList.STRING );
-				
+
 			case EArrayDecl( values ):
-				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.ARRAY,
-					new ConstructorVO( ident, ContextTypeList.ARRAY,
-						values.map( function(e) return parser.parseArgument( parser, ident, e ) ) ) );
+				
+				var isMap = function ( v ) return switch( v[ 0 ].expr ) { case EBinop( op, e1, e2 ): op == OpArrow;  case _: false; };
+				var constructorVO = new ConstructorVO( ident );
+
+				if ( values.length > 0 && isMap( values ) )
+				{
+					constructorVO.type = ContextTypeList.EXPRESSION;
+					constructorVO.arguments = [ value ];
+					constructorVO.arguments = constructorVO.arguments.concat( values.map( function (e) return parser.parseMapArgument( parser, constructorVO.ID, e ) ) );
+					propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.MAP, constructorVO );
+				}
+				else
+				{
+					constructorVO.type = ContextTypeList.ARRAY;
+					constructorVO.arguments = [];
+					values.map( function( e ) constructorVO.arguments.push( parser.parseArgument( parser, constructorVO.ID, e ) ) );
+
+					propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.ARRAY, constructorVO );
+				}
 
 			case EObjectDecl( fields ):
 
 				propertyVO = new PropertyVO( ident, fieldName, null, ContextTypeList.CONTEXT_ARGUMENT,
-					parser.parseArgument( parser, ident, assigned )
+					parser.parseArgument( parser, ident, value )
 				);
 				
 			case EField( e, ff ):
@@ -96,7 +113,7 @@ class PropertyParser
 			case ECall( _.expr => EConst(CIdent(keyword)), params ):
 
 				var constructorVO = new ConstructorVO( ident );
-				constructorVO.ref = ExpressionUtil.compressField( assigned );
+				constructorVO.ref = ExpressionUtil.compressField( value );
 				constructorVO.arguments = params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) );
 				constructorVO.instanceCall = constructorVO.ref;
 				constructorVO.type = ContextTypeList.CLOSURE_FACTORY;
@@ -115,8 +132,8 @@ class PropertyParser
 						constructorVO.arguments = [];
 						if ( field != 'bind' )
 						{
-							constructorVO.type = ExpressionUtil.compressField( e );
-							constructorVO.staticCall = field;
+							constructorVO.type = ContextTypeList.EXPRESSION;
+							constructorVO.arguments = [ value ];
 						}
 						else
 						{
@@ -125,32 +142,25 @@ class PropertyParser
 						}
 						
 					case ECall( ee, pp ):
-						var call = ExpressionUtil.compressField( ee );
-						var a = call.split( '.' );
-						var staticCall = a.pop();
-						var factory = field;
-						var type = a.join( '.' );
 						
-						constructorVO.type = type;
-						constructorVO.arguments = [];
-						constructorVO.factory = factory;
-						constructorVO.staticCall = staticCall;
-
+						constructorVO.type = ContextTypeList.EXPRESSION;
+						constructorVO.arguments = [ value ];
+						constructorVO.arguments = constructorVO.arguments.concat( pp.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) ) );
+					
 					case EConst( ee ):
-						var comp = ExpressionUtil.compressField( assigned );
+						
+						var comp = ExpressionUtil.compressField( e );
+						
+						constructorVO.type = ContextTypeList.EXPRESSION;
+						constructorVO.arguments = [ value ];
+						
 						try
 						{
 							Context.getType( comp );
-							constructorVO.type = comp;
-							constructorVO.arguments = [];
-							constructorVO.staticCall = field;
 						}
 						catch ( e: Dynamic )
 						{
 							constructorVO.ref = comp.split('.')[0];
-							constructorVO.arguments = [];
-							constructorVO.instanceCall = field;
-							constructorVO.type = ContextTypeList.INSTANCE;
 						}
 
 					case _:
@@ -159,16 +169,16 @@ class PropertyParser
 				
 				if ( params.length > 0 )
 				{
-					constructorVO.arguments = params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) );
+					constructorVO.arguments = constructorVO.arguments.concat( params.map( function (e) return parser.parseArgument( parser, constructorVO.ID, e ) ) );
 				}
 
 				propertyVO = new PropertyVO( ident, fieldName, null, type, ref, null, null, constructorVO );
 
 			case _:
-				assigned.reject('This type of expression cannot be used here: ${assigned.toString()}');
+				value.reject('This type of expression cannot be used here: ${value.toString()}');
 		}
 
-		propertyVO.filePosition = assigned.pos;
+		propertyVO.filePosition = value.pos;
 		return propertyVO;
 	}
 }
