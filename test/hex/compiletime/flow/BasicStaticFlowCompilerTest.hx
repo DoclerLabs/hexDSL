@@ -1482,4 +1482,14 @@ class BasicStaticFlowCompilerTest
 		Assert.isTrue( code.locator.o3.prop.get( 'key2' )[2] );
 		Assert.isInstanceOf( code.locator.o3.prop2.p.arg.arg.arg, hex.mock.ClassWithArgument );
 	}
+
+	@Test( "test if keyword" )
+	public function testIfKeyword() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/ifExpression.flow", "BasicStaticFlowCompiler_testIfKeyword" );
+		code.execute();
+
+		Assert.equals( code.locator.hello, code.locator.provider );
+		Assert.equals( code.locator.world, code.locator.anotherProvider );
+	}
 }

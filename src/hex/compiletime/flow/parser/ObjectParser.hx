@@ -35,6 +35,32 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 	{
 		switch ( e )
 		{
+			case macro $i{ ident } = _if( $a{ args } ):
+
+				constructorVO.ID = ident;
+				constructorVO.filePosition = e.pos;
+
+				
+
+				//var arr = macro @:pos(e.pos) [$arg1, $arg2];
+				//trace( hex.util.MacroUtil.getFQCNFromExpression( arr ) );
+				//if( constructorVO.abstractType == null ) constructorVO.abstractType = 'String';
+		
+				//var e = macro @:pos( constructorVO.filePosition ) tink.state.Observable.auto( function () return if ( $arg0 ) $arg1 else $arg2 );
+
+
+				constructorVO.type = ContextTypeList.IF;
+
+				var arg0 = args[0];
+				var arg1 = args[1];
+				var arg2 = args[2];
+				
+				var e = macro @:pos( constructorVO.filePosition ) tink.state.Observable.auto( function () return if ( $arg0 ) $arg1 else $arg2 );
+				constructorVO.arguments = [ e ];
+				constructorVO.arguments = constructorVO.arguments.concat( args.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) ) );
+				this._builder.build( OBJECT( constructorVO ) );
+
+
 			case macro $i{ ident } = $value:
 				constructorVO.ID = ident;
 				this._builder.build( OBJECT( this._getConstructorVO( constructorVO, value ) ) );
@@ -76,7 +102,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 			case macro @public( $a{ args } ) $e:
 				constructorVO.isPublic = true;
 				this._parseExpression ( e, constructorVO );
-				
+
 			case _:
 				
 				switch( e.expr )
