@@ -1492,4 +1492,24 @@ class BasicStaticFlowCompilerTest
 		Assert.equals( code.locator.hello, code.locator.provider );
 		Assert.equals( code.locator.world, code.locator.anotherProvider );
 	}
+
+	@Test( "test or keyword" )
+	public function testOrKeyword() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/orExpression.flow", "BasicStaticFlowCompiler_testOrKeyword" );
+		code.execute();
+
+		Assert.isTrue( code.locator.isTrue );
+		Assert.isFalse( code.locator.isFalse );
+	}
+
+	@Test( "test and keyword" )
+	public function testAndKeyword() : Void
+	{
+		var code = BasicStaticFlowCompiler.compile( this._myApplicationAssembler, "context/flow/andExpression.flow", "BasicStaticFlowCompiler_testAndKeyword" );
+		code.execute();
+
+		Assert.isTrue( code.locator.isTrue );
+		Assert.isFalse( code.locator.isFalse );
+	}
 }

@@ -31,4 +31,5 @@ class ContextTypeList
 	public inline static var CLOSURE_FACTORY 	= "ClosureFactory";
 	public inline static var EXPRESSION 		= "haxe.macro.Expr";
 	public inline static var IF 				= "If";
+	public inline static var BOOL_OP 			= "BoolOp";
 }

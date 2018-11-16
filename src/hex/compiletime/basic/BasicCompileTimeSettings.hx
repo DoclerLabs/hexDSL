@@ -34,7 +34,8 @@ class BasicCompileTimeSettings
 		ContextTypeList.CONTEXT_ARGUMENT 		=> hex.compiletime.factory.ContextArgumentFactory.build,
 		ContextTypeList.CLOSURE 				=> hex.compiletime.factory.ClosureFactory.build,
 		ContextTypeList.EXPRESSION 				=> hex.compiletime.factory.ExpressionFactory.build,
-		ContextTypeList.IF 						=> hex.compiletime.factory.IfFactory.build
+		ContextTypeList.IF 						=> hex.compiletime.factory.IfFactory.build,
+		ContextTypeList.BOOL_OP 				=> hex.compiletime.factory.BoolOpFactory.build
 	];
 }
 #end
