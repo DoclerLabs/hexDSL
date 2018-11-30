@@ -8,12 +8,7 @@ class DependencyChecker implements IDependencyChecker
     var _m      : Map<String, Map<String, DependencyVO>>    = new Map();
     var _pos    : Map<String, haxe.macro.Expr.Position>     = new Map();
 
-    static var _i = 0;
-
-    public function new()
-    {
-        _i++;
-    }
+    public function new(){}
 
     public function registerDependency( vo: hex.vo.ConstructorVO ) : Void
     {
@@ -51,9 +46,10 @@ class DependencyChecker implements IDependencyChecker
                         ownerID:    String, 
                         visited:    Map<String, Bool>, tree: Array<String> )
     {
-        var dependencies = m.exists( argID )? m.get( argID ) : null;
-        if ( dependencies != null )
+        if ( m.exists( argID ) )
         {
+            var dependencies = m.get( argID );
+
             if ( !visited.exists( argID ) && dependencies.exists( ownerID ) )
             {
                 tree.push( argID );
@@ -67,8 +63,7 @@ class DependencyChecker implements IDependencyChecker
                 var it = dependencies.keys();
                 while ( it.hasNext() ) 
                 {
-                    var key = it.next();
-                    var arg = dependencies.get( key );
+                    var arg = dependencies.get( it.next() );
                     if ( !visited.exists( arg.ID ) )  f( arg.ID, m, pos, ownerID, visited, tree );
                 }
             }
