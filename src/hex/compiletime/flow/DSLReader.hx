@@ -5,6 +5,7 @@ import hex.compiletime.DSLData;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.preprocess.ConditionalVariablesChecker;
+import hex.preprocess.KeywordPreprocessor;
 import hex.preprocess.MacroPreprocessor;
 import hex.preprocess.RuntimeParametersPreprocessor;
 import hex.compiletime.flow.parser.ExpressionUtil;
@@ -36,6 +37,7 @@ class DSLReader
 		var dsl = this._readFile( file.fileName, file.pos );
 
 		//preprocess
+		dsl.data = KeywordPreprocessor.parse( dsl.data );
 		dsl.data = MacroPreprocessor.parse( dsl.data, preprocessingVariables );
 
 		//replace runtime parameters with whitespaces

@@ -83,6 +83,7 @@ install:
   - haxelib dev hexinject ./hexinject
 # hexDSL
   - haxelib dev hexdsl .
+  - haxelib install haxelib.json --always
   - haxelib path hexdsl
 
 script:

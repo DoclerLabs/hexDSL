@@ -35,9 +35,7 @@ class ExpressionFactory
 			if( constructorVO.arguments[0]._key != null )
 			{
 
-				MapArgumentFactory.build( factoryVO );
-
-					
+				MapArgumentFactory.build( factoryVO );	
 			}
 			else
 			{

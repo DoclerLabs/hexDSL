@@ -1,0 +1,11 @@
+@context
+{
+	@public provider = 'hello';
+	@public anotherProvider = 'world';
+
+	@public hello = if ( b, provider, anotherProvider );
+	@public world = if( c, 'hello', anotherProvider );
+
+	b = true;
+	c = false;
+}
