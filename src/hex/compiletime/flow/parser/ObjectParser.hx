@@ -18,6 +18,7 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 	var logger 				: hex.log.ILogger;
 	var parser 				: ExpressionParser;
 	var _runtimeParam 		: hex.preprocess.RuntimeParam;
+	var _dependencyChecker	: hex.core.IDependencyChecker = new hex.core.DependencyChecker();
 
 	public function new( parser : ExpressionParser, ?runtimeParam : hex.preprocess.RuntimeParam ) 
 	{
@@ -48,6 +49,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 
 				constructorVO.arguments = [ e ];
 				constructorVO.arguments = constructorVO.arguments.concat( args.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) ) );
+				//Register dependency
+				this._dependencyChecker.registerDependency( constructorVO );
 				this._builder.build( OBJECT( constructorVO ) );
 
 			case macro $i{ ident } = _or( $a{ args } ):
@@ -58,10 +61,12 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 
 				var arg0 = args[0];
 				var arg1 = args[1];
-				var e = macro @:pos( constructorVO.filePosition ) tink.state.Observable.auto(function () return $arg0 || $arg1 );
+				var e = macro @:pos( constructorVO.filePosition ) tink.state.Observable.auto( function () return $arg0 || $arg1 );
 
 				constructorVO.arguments = [ e ];
 				constructorVO.arguments = constructorVO.arguments.concat( args.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) ) );
+				//Register dependency
+				this._dependencyChecker.registerDependency( constructorVO );
 				this._builder.build( OBJECT( constructorVO ) );
 
 			case macro $i{ ident } = _and( $a{ args } ):
@@ -76,10 +81,16 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 
 				constructorVO.arguments = [ e ];
 				constructorVO.arguments = constructorVO.arguments.concat( args.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) ) );
+				//Register dependency
+				this._dependencyChecker.registerDependency( constructorVO );
 				this._builder.build( OBJECT( constructorVO ) );
 
 			case macro $i{ ident } = $value:
 				constructorVO.ID = ident;
+
+				//Register dependency
+				this._dependencyChecker.registerDependency( constructorVO );
+
 				this._builder.build( OBJECT( this._getConstructorVO( constructorVO, value ) ) );
 			
 			case macro $i{ ident }.$field = $assigned:	
@@ -90,6 +101,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				var args = params.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) );
 				var methodCallVO = new MethodCallVO( ident, field, args );
 				methodCallVO.filePosition = e.pos;
+
+				//Register dependency
+				//this._dependencyChecker.registerDependency( constructorVO );
+
 				this._builder.build( METHOD_CALL( methodCallVO ) );
 			
 			case macro @inject_into( $a{ args } ) $e:
@@ -140,6 +155,10 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						var args = params.map( function( param ) return this.parser.parseArgument( this.parser, ident, param ) );
 						var methodCallVO = new MethodCallVO( ident, field, args );
 						methodCallVO.filePosition = e.pos;
+						
+						//Register dependency
+						//this._dependencyChecker.registerDependency( constructorVO );
+						
 						this._builder.build( METHOD_CALL( methodCallVO ) );
 						
 					case _:
@@ -326,6 +345,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 		}
 		
 		constructorVO.filePosition = value.pos;
+		//Register dependency
+		this._dependencyChecker.registerDependency( constructorVO );
 		return constructorVO;
 	}
 }
