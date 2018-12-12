@@ -10,7 +10,7 @@ class DependencyChecker implements IDependencyChecker
 
     public function new(){}
 
-    public function registerDependency( vo: hex.vo.ConstructorVO ) : Void
+    public function registerDependency( vo: {ID: String, filePosition: haxe.macro.Expr.Position, arguments: Array<Dynamic>} ) : Void
     {
         var ownerID = vo.ID;
         if ( !_m.exists( ownerID ) ) 
@@ -54,7 +54,9 @@ class DependencyChecker implements IDependencyChecker
             {
                 tree.push( argID );
                 for ( e in tree ) haxe.macro.Context.warning( "Circular dependency caught on '" + e + "'", pos.get( e ) );
-                haxe.macro.Context.error( "Circular dependency caught between '" + ownerID + "' and '" + tree[1] + "'", pos.get( ownerID ) );
+                var err = "Circular dependency caught between '" + ownerID + "' and '" + tree[1] + "'";
+                haxe.macro.Context.warning( err, pos.get( ownerID ) );
+                throw err;
             }
             else
             {

@@ -87,7 +87,7 @@ class ContextBuilder
 		return ContextBuilder._Map.get( owner );
 	}
 	
-	static public function register( owner : ApplicationContextOwner, applicationContextClassName : String ) 
+	static public function register( owner : ApplicationContextOwner, applicationContextClassName : String ) : Void
 	{
 		if ( ContextBuilder._Map == null )
 		{
@@ -97,6 +97,11 @@ class ContextBuilder
 		
 		ContextBuilder._Map.set( owner, new ContextBuilder( owner, applicationContextClassName ) );
 	}
+
+	/*static public function unregister() : Void
+	{
+		haxe.macro.Context.onAfterTyping( ContextBuilder._onAfterTyping );
+	}*/
 	
 	static public function onContextTyping( callback ) : Void _callbacks.push( callback );
 	
@@ -187,11 +192,21 @@ class ContextBuilder
 			if ( !contextIteration.defined )
 			{
 				anyDefined = contextIteration.defined = true;
-				var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
-				haxe.macro.Context.defineType( td );
 				
-				//broadcast
-				for ( callback in _callbacks ) callback( td );
+				try
+				{ 
+					var td = ContextUtil.makeFinalClassDefintion( contextName, contextIteration.definition, contextIteration.contextClassName );
+					haxe.macro.Context.defineType( td ); 
+
+					//broadcast
+					for ( callback in _callbacks ) callback( td );
+				}
+				catch( err: Dynamic ) 
+				{ 
+					var pos = err.pos;
+					if ( err.pos == null ) pos = (macro null).pos;
+					haxe.macro.Context.warning( err, pos );
+				}
 			}
 		}
 		if (!anyDefined) allDefined.trigger(Noise);

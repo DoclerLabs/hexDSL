@@ -102,8 +102,9 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 				var methodCallVO = new MethodCallVO( ident, field, args );
 				methodCallVO.filePosition = e.pos;
 
-				//Register dependency
-				//this._dependencyChecker.registerDependency( constructorVO );
+				//Method calls are executed in random order
+				//No dependency between calls
+				//this._dependencyChecker.registerDependency( methodCallVO );
 
 				this._builder.build( METHOD_CALL( methodCallVO ) );
 			
@@ -156,8 +157,8 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						var methodCallVO = new MethodCallVO( ident, field, args );
 						methodCallVO.filePosition = e.pos;
 						
-						//Register dependency
-						//this._dependencyChecker.registerDependency( constructorVO );
+						//Method calls are executed in random order
+						//No dependency between calls
 						
 						this._builder.build( METHOD_CALL( methodCallVO ) );
 						
@@ -169,7 +170,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 						logger.debug( e.expr );
 						haxe.macro.Context.error( 'Invalid expression', e.pos );
 				}
-				
 		}
 		//logger.debug(e); 
 	}
@@ -288,7 +288,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 					constructorVO.type = ContextTypeList.CLOSURE_FACTORY;
 					constructorVO.shouldAssign = true;
 				}
-				
 				
 			case ECall( _.expr => EField( e, field ), params ):
 				switch( e.expr )
