@@ -1,0 +1,5 @@
+@context
+{
+	@public isTrue = if ( isFalse, true, false );
+	@public isFalse = if ( isTrue, false, true );
+}

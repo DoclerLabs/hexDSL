@@ -1512,4 +1512,32 @@ class BasicStaticFlowCompilerTest
 		Assert.isTrue( code.locator.isTrue );
 		Assert.isFalse( code.locator.isFalse );
 	}
+
+	@Test( "test circular reference exception with 'and' keyword" )
+	public function testAndCircularReferenceException() : Void
+	{
+		var code = hex.mock.CompileTimeRunner.compile( this._myApplicationAssembler, "context/flow/static/andCircularReference.flow", "BasicStaticFlowCompiler_testAndCircularReferenceException", "Circular dependency caught between 'isFalse' and 'isTrue'" );
+		code.execute();
+	}
+
+	@Test( "test circular reference exception with 'or' keyword" )
+	public function testOrCircularReferenceException() : Void
+	{
+		var code = hex.mock.CompileTimeRunner.compile( this._myApplicationAssembler, "context/flow/static/orCircularReference.flow", "BasicStaticFlowCompiler_testOrCircularReferenceException", "Circular dependency caught between 'isFalse' and 'isTrue'" );
+		code.execute();
+	}
+
+	@Test( "test circular reference exception with 'if' keyword" )
+	public function testIfCircularReferenceException() : Void
+	{
+		var code = hex.mock.CompileTimeRunner.compile( this._myApplicationAssembler, "context/flow/static/ifCircularReference.flow", "BasicStaticFlowCompiler_testIfCircularReferenceException", "Circular dependency caught between 'isFalse' and 'isTrue'" );
+		code.execute();
+	}
+
+	@Test( "test circular reference exception with new operator" )
+	public function testCircularReferenceExceptionWithNewOperator() : Void
+	{
+		var code = hex.mock.CompileTimeRunner.compile( this._myApplicationAssembler, "context/flow/newOperatorCircularReference.flow", "BasicStaticFlowCompiler_testCircularReferenceExceptionWithNewOperator", "Circular dependency caught between 'b' and 'a'" );
+		code.execute();
+	}
 }

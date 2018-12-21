@@ -1,0 +1,5 @@
+@context
+{
+	@public isTrue = or ( isFalse, true, false );
+	@public isFalse = or ( isTrue, false, true );
+}

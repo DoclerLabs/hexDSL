@@ -87,10 +87,6 @@ class ObjectParser extends AbstractExprParser<hex.compiletime.basic.BuildRequest
 
 			case macro $i{ ident } = $value:
 				constructorVO.ID = ident;
-
-				//Register dependency
-				this._dependencyChecker.registerDependency( constructorVO );
-
 				this._builder.build( OBJECT( this._getConstructorVO( constructorVO, value ) ) );
 			
 			case macro $i{ ident }.$field = $assigned:	

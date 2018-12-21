@@ -11,14 +11,14 @@ class DependencyChecker implements IDependencyChecker
     public function new(){}
 
     public function registerDependency( vo: {ID: String, filePosition: haxe.macro.Expr.Position, arguments: Array<Dynamic>} ) : Void
-    {
+    {//trace( vo.filePosition );
         var ownerID = vo.ID;
         if ( !_m.exists( ownerID ) ) 
         {
             _m.set( ownerID, new Map() );
             _pos.set( ownerID, vo.filePosition );
         }
-
+//trace( ownerID, _pos.get( ownerID ) );
         var visited = new Map<String, Bool>();
         visited.set( ownerID, true );
 
@@ -53,9 +53,18 @@ class DependencyChecker implements IDependencyChecker
             if ( !visited.exists( argID ) && dependencies.exists( ownerID ) )
             {
                 tree.push( argID );
-                for ( e in tree ) haxe.macro.Context.warning( "Circular dependency caught on '" + e + "'", pos.get( e ) );
+                for ( e in tree ) 
+                {
+                    var position = pos.get( e );
+                    if ( position == null ) position = (macro null).pos;
+                    //trace( e, pos.get( e ) );
+                    haxe.macro.Context.warning( "Circular dependency caught on '" + e + "'", position );
+                }
                 var err = "Circular dependency caught between '" + ownerID + "' and '" + tree[1] + "'";
-                haxe.macro.Context.warning( err, pos.get( ownerID ) );
+                var position = pos.get( ownerID );
+                //trace( ownerID, pos.get( ownerID ) );
+                if ( position == null ) position = (macro null).pos;
+                haxe.macro.Context.warning( err, position );
                 throw err;
             }
             else

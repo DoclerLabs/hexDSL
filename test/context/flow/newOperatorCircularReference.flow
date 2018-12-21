@@ -1,0 +1,5 @@
+@context
+{
+	@public a = new hex.mock.MockCircularDependency( b );
+	@public b = new hex.mock.MockCircularDependency( a );
+}
