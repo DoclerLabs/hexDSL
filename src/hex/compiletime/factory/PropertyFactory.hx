@@ -3,6 +3,7 @@ package hex.compiletime.factory;
 #if macro
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
+using hex.error.Error;
 
 /**
  * ...
@@ -10,7 +11,7 @@ import hex.vo.ConstructorVO;
  */
 class PropertyFactory 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function build( factory : hex.compiletime.basic.IContextFactory, property : hex.vo.PropertyVO ) : haxe.macro.Expr
 	{

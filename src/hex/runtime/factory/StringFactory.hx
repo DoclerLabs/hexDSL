@@ -1,8 +1,8 @@
 package hex.runtime.factory;
 
-import hex.error.IllegalArgumentException;
-import hex.error.PrivateConstructorException;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
+
+using hex.error.Error;
 
 #if debug
 import hex.log.HexLog.*;
@@ -13,11 +13,7 @@ import hex.log.HexLog.*;
  */
 class StringFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException( "This class can't be instantiated." );
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : String
 	{

@@ -1,8 +1,9 @@
 package hex.runtime.factory;
 
 import hex.collection.HashMap;
-import hex.error.PrivateConstructorException;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
+
+using hex.error.Error;
 
 #if debug
 import hex.log.HexLog.*;
@@ -13,11 +14,7 @@ import hex.log.HexLog.*;
  */
 class HashMapFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : HashMap<Dynamic, Dynamic>
 	{

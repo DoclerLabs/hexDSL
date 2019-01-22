@@ -1,7 +1,8 @@
 package hex.preprocess;
 
 import hex.data.IParser;
-import hex.error.IllegalArgumentException;
+
+using hex.error.Error;
 
 class Preprocessor implements IParser<String>
 {

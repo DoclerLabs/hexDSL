@@ -1,10 +1,10 @@
 package hex.runtime.xml;
 
 import hex.core.IApplicationContext;
-import hex.error.IllegalArgumentException;
-import hex.error.NullPointerException;
 import hex.parser.AbstractContextParser;
 import hex.runtime.error.ParsingException;
+
+using hex.error.Error;
 
 /**
  * ...

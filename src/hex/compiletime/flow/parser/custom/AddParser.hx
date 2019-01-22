@@ -1,5 +1,7 @@
 package hex.compiletime.flow.parser.custom;
 
+using hex.error.Error;
+
 #if macro
 import haxe.macro.*;
 import haxe.macro.Expr;
@@ -14,7 +16,7 @@ import hex.vo.ConstructorVO;
  */
 class AddParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( AddParser );
 	
 	macro public static function activate() : haxe.macro.Expr.ExprOf<Bool>

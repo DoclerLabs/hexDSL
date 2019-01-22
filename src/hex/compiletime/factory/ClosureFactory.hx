@@ -1,9 +1,11 @@
 package hex.compiletime.factory;
 
 #if macro
-import haxe.macro.*;
 import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.util.MacroUtil;
+import haxe.macro.*;
+
+using hex.error.Error;
 
 /**
  * ...
@@ -11,7 +13,7 @@ import hex.util.MacroUtil;
  */
 class ClosureFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static inline function _bindFactory( ref, args, pos ) return macro @:pos(pos)  $ref .bind( $a { args } );
 	static inline function _blankType( vo ) { vo.cType = tink.macro.Positions.makeBlankType( vo.filePosition ); return MacroUtil.getFQCNFromComplexType( vo.cType ); }

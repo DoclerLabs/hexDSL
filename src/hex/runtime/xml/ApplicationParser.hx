@@ -1,10 +1,11 @@
 package hex.runtime.xml;
 
 import hex.core.IApplicationAssembler;
-import hex.error.NullPointerException;
 import hex.runtime.basic.ApplicationContext;
 import hex.runtime.basic.RunTimeContextFactory;
 import hex.runtime.xml.parser.ParserCollection;
+
+using hex.error.Error;
 
 /**
  * ...

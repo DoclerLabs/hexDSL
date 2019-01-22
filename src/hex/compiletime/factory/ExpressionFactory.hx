@@ -4,13 +4,15 @@ package hex.compiletime.factory;
 import haxe.macro.*;
 import hex.util.MacroUtil;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class ExpressionFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static var _fqcn = MacroUtil.getFQCNFromExpression;
 	static inline function _varType( type, position ) return TypeTools.toComplexType( Context.typeof( Context.parseInlineString( '( null : ${type})', position ) ) );

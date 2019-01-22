@@ -2,7 +2,8 @@ package hex.compiletime;
 
 import haxe.ds.ObjectMap;
 import hex.core.IApplicationAssembler;
-import hex.error.NullPointerException;
+
+using hex.error.Error;
 
 /**
  * ...

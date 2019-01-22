@@ -6,8 +6,9 @@ import haxe.macro.Expr;
 import haxe.macro.Expr.Field;
 import haxe.macro.TypeTools;
 import hex.compiletime.util.ContextExecution;
-import hex.error.PrivateConstructorException;
 import hex.util.MacroUtil;
+
+using hex.error.Error;
 
 /**
  * ...
@@ -16,11 +17,7 @@ import hex.util.MacroUtil;
 @:final 
 class ContextUtil 
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	public static function instantiateContextDefinition( definition : TypeDefinition ) : Expr
 	{

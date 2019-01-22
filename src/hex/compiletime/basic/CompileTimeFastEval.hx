@@ -1,7 +1,7 @@
 package hex.compiletime.basic;
 
 import hex.core.ICoreFactory;
-import hex.error.PrivateConstructorException;
+using hex.error.Error;
 
 /**
  * ...
@@ -9,11 +9,7 @@ import hex.error.PrivateConstructorException;
  */
 class CompileTimeFastEval
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function fromTarget( target : Dynamic, toEval : String, coreFactory : ICoreFactory ) : Dynamic
 	{

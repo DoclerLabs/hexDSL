@@ -9,13 +9,15 @@ import hex.vo.ConstructorVO;
 import hex.vo.PropertyVO;
 
 using tink.MacroApi;
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class PropertyParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( PropertyParser );
 	
 	static public function parse( parser : ExpressionParser, ident : ID, fieldName : FieldName, value : Expr ) : PropertyVO

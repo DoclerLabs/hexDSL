@@ -1,6 +1,6 @@
 package hex.compiletime.xml;
 
-import hex.error.PrivateConstructorException;
+using hex.error.Error;
 
 /**
  * ...

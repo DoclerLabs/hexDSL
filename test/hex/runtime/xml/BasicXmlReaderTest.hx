@@ -3,7 +3,6 @@ package hex.runtime.xml;
 import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
-import hex.error.NoSuchElementException;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
 import hex.mock.IMockInterface;
@@ -27,6 +26,7 @@ import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
 using tink.CoreApi;
+using hex.error.Error;
 
 /**
  * ...

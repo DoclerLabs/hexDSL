@@ -5,13 +5,15 @@ package hex.compiletime.basic;
 import haxe.macro.*;
 import hex.util.MacroUtil;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class ContextFactoryUtil 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function getComplexType( className : String, pos : haxe.macro.Expr.Position )
 	{

@@ -1,11 +1,12 @@
 package hex.runtime.factory;
 
-import hex.error.PrivateConstructorException;
 import hex.core.ContextTypeList;
 import hex.runtime.basic.IRunTimeContextFactory;
 import hex.vo.ConstructorVO;
 import hex.vo.PropertyVO;
 import hex.util.ClassUtil;
+
+using hex.error.Error;
 
 /**
  * ...
@@ -13,11 +14,7 @@ import hex.util.ClassUtil;
  */
 class PropertyFactory 
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function build( factory : IRunTimeContextFactory, property : PropertyVO, target : Dynamic ) : Dynamic
 	{

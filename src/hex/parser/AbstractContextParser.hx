@@ -1,9 +1,11 @@
 package hex.parser;
 
+
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.error.VirtualMethodException;
+
+using hex.error.Error;
 
 /**
  * ...
@@ -17,10 +19,7 @@ class AbstractContextParser<ContentType, RequestType> implements IContextParser<
 	var _applicationContextDefaultClass : Class<IApplicationContext>;
 	var _builder 						: IBuilder<RequestType>;
 
-	function new() 
-	{
-		//
-	}
+	function new() {}
 	
 	public function parse() : Void
 	{

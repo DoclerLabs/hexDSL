@@ -3,13 +3,15 @@ package hex.compiletime.basic;
 #if macro
 import hex.core.ContextTypeList;
 
+using hex.error.Error;
+
 /**
  * These are the factory settings for the CompileTimeContextFactory
  * @author Francis Bourre
  */
 class BasicCompileTimeSettings 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public var factoryMap = 
 	[

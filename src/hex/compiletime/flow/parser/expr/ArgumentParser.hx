@@ -10,9 +10,11 @@ import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 
+using hex.error.Error;
+
 class ArgumentParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( ArgumentParser );
 	
 	static public function parse( parser : ExpressionParser, ident : ID, value : Expr ) : ConstructorVO

@@ -6,13 +6,15 @@ import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class MapTypeParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( MapTypeParser );
 	
 	public static function parse( parser : ExpressionParser, constructorVO : ConstructorVO, params : Array<Expr>, expr : Expr ) : ConstructorVO

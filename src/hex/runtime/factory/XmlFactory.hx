@@ -1,11 +1,12 @@
 package hex.runtime.factory;
 
 import hex.data.IParser;
-import hex.error.PrivateConstructorException;
 import hex.log.LogManager;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.runtime.error.ParsingException;
 import hex.vo.ConstructorVO;
+
+using hex.error.Error;
 
 /**
  * ...
@@ -13,11 +14,7 @@ import hex.vo.ConstructorVO;
  */
 class XmlFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Dynamic
 	{

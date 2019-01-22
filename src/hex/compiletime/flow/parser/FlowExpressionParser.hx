@@ -1,5 +1,7 @@
 package hex.compiletime.flow.parser;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
@@ -7,7 +9,7 @@ package hex.compiletime.flow.parser;
 #if macro
 class FlowExpressionParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	public static var parser = 
 	{
