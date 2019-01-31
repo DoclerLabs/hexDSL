@@ -2,11 +2,11 @@ package hex.runtime.basic;
 
 import hex.core.CoreFactoryVODef;
 import hex.di.IDependencyInjector;
-import hex.error.IllegalArgumentException;
-import hex.error.NoSuchElementException;
 import hex.event.ITrigger;
 import hex.event.ITriggerOwner;
 import hex.util.ClassUtil;
+
+using hex.error.Error;
 
 /**
  * ...

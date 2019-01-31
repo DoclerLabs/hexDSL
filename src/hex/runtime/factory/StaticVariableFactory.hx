@@ -1,8 +1,9 @@
 package hex.runtime.factory;
 
-import hex.error.PrivateConstructorException;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.util.ClassUtil;
+
+using hex.error.Error;
 
 /**
  * ...
@@ -10,11 +11,7 @@ import hex.util.ClassUtil;
  */
 class StaticVariableFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : Dynamic
 	{ 

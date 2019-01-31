@@ -3,13 +3,15 @@ package hex.compiletime.factory;
 #if macro
 import haxe.macro.*;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class FactoryUtil 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function checkTypeParamsExist( typeParams : String, filePosition : haxe.macro.Expr.Position ) : Void
 	{

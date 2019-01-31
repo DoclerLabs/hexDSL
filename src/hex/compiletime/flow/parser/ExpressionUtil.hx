@@ -4,6 +4,8 @@ package hex.compiletime.flow.parser;
 import haxe.macro.Expr;
 import haxe.macro.ExprTools;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
@@ -11,7 +13,7 @@ import haxe.macro.ExprTools;
 @:final
 class ExpressionUtil 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function compressField( e : Expr, ?previousValue : String = "" ) : String
 	{

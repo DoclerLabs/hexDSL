@@ -7,7 +7,6 @@ import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
 import hex.di.Injector;
 import hex.di.mapping.MappingChecker;
-import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ArrayOfDependenciesOwner;
 import hex.mock.ClassWithConstantConstantArgument;
@@ -32,6 +31,8 @@ import hex.runtime.basic.ApplicationContext;
 import hex.structures.Point;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
+
+using hex.error.Error;
 
 /**
  * ...

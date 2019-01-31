@@ -1,23 +1,21 @@
 package hex.runtime.factory;
 
 import hex.collection.HashMap;
-import hex.error.PrivateConstructorException;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 
 #if debug
 import hex.log.HexLog.*;
 #end
+
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class HashMapFactory
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T ) : HashMap<Dynamic, Dynamic>
 	{

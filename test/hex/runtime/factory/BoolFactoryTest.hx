@@ -1,12 +1,13 @@
 package hex.runtime.factory;
 
 import hex.core.IApplicationContext;
-import hex.error.IllegalArgumentException;
 import hex.runtime.basic.IRunTimeContextFactory;
 import hex.runtime.basic.IRunTimeCoreFactory;
 import hex.runtime.basic.vo.FactoryVOTypeDef;
 import hex.unittest.assertion.Assert;
 import hex.vo.ConstructorVO;
+
+using hex.error.Error;
 
 /**
  * ...

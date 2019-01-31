@@ -3,8 +3,9 @@ package hex.compiletime;
 #if macro
 import hex.compiletime.error.IExceptionReporter;
 import hex.compiletime.util.ClassImportHelper;
-import hex.error.VirtualMethodException;
 import hex.parser.AbstractContextParser;
+
+using hex.error.Error;
 
 /**
  * ...

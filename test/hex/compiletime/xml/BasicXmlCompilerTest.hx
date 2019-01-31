@@ -4,7 +4,6 @@ import hex.collection.HashMap;
 import hex.core.IApplicationAssembler;
 import hex.core.ICoreFactory;
 import hex.di.Injector;
-import hex.error.NoSuchElementException;
 import hex.mock.AnotherMockClass;
 import hex.mock.ClassWithConstantConstantArgument;
 import hex.mock.IAnotherMockInterface;
@@ -34,6 +33,7 @@ import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
 using tink.CoreApi;
+using hex.error.Error;
 
 /**
  * ...

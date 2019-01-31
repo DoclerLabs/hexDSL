@@ -3,7 +3,8 @@ package hex.parser;
 import hex.core.IApplicationAssembler;
 import hex.core.IApplicationContext;
 import hex.core.IBuilder;
-import hex.error.VirtualMethodException;
+
+using hex.error.Error;
 
 /**
  * ...

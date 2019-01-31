@@ -1,7 +1,7 @@
 package hex.preprocess;
 
-import hex.error.IllegalArgumentException;
 using tink.CoreApi;
+using hex.error.Error;
 
 /**
  * ...

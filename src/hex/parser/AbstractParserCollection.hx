@@ -1,6 +1,6 @@
 package hex.parser;
 
-import hex.error.VirtualMethodException;
+using hex.error.Error;
 
 /**
  * ...

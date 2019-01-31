@@ -7,13 +7,15 @@ import haxe.macro.TypeTools;
 import hex.compiletime.factory.ArgumentFactory;
 import hex.util.MacroUtil;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class ClassInstanceFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static var _fqcn = MacroUtil.getFQCNFromExpression;
 	static inline function _staticRefFactory( tp, staticRef, factoryMethod, args, position ) return macro @:pos(position) $p{ tp }.$staticRef.$factoryMethod( $a{ args } );

@@ -1,5 +1,7 @@
 package hex.compiletime.flow;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
@@ -7,7 +9,7 @@ package hex.compiletime.flow;
 @:final 
 class ContextKeywordList 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public inline var CONTEXT 	: String = "context";
 	static public inline var TYPE 		: String = "type";

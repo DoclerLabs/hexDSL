@@ -1,6 +1,6 @@
 package hex.compiletime.xml;
 
-import hex.error.PrivateConstructorException;
+using hex.error.Error;
 
 /**
  * ...
@@ -25,10 +25,6 @@ class ContextAttributeList
 	public static inline var IF 					: String = "if";
 	public static inline var IF_NOT 				: String = "if-not";
 	public static inline var FILE 					: String = "file";
-	
-	/** @private */
-	function new() 
-	{
-		throw new PrivateConstructorException();
-	}
+
+	/** @private */ function new() throw new PrivateConstructorException();
 }

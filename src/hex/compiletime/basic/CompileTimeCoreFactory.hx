@@ -3,9 +3,9 @@ package hex.compiletime.basic;
 import hex.compiletime.basic.CompileTimeFastEval;
 import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
-import hex.error.IllegalArgumentException;
-import hex.error.NoSuchElementException;
 import hex.runtime.basic.ICoreFactoryListener;
+
+using hex.error.Error;
 
 /**
  * ...

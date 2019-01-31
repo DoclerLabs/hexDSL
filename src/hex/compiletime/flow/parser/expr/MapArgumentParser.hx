@@ -10,9 +10,11 @@ import hex.compiletime.flow.parser.ExpressionParser;
 import hex.core.ContextTypeList;
 import hex.vo.MapVO;
 
+using hex.error.Error;
+
 class MapArgumentParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( MapArgumentParser );
 	
 	static public function parse( parser : ExpressionParser, ident : ID, param : Expr ) : MapVO

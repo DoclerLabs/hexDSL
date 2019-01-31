@@ -1,6 +1,6 @@
 package hex.compiletime.xml;
 
-import hex.error.PrivateConstructorException;
+using hex.error.Error;
 
 /**
  * ...
@@ -16,10 +16,6 @@ class ContextNodeNameList
 	static public inline var ITEM 			= "item";
 	static public inline var KEY 			= "key";
 	static public inline var VALUE 			= "value";
-	
-	/** @private */
-	function new() 
-	{
-		throw new PrivateConstructorException();
-	}
+
+	/** @private */ function new() throw new PrivateConstructorException();
 }

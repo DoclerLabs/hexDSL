@@ -5,13 +5,15 @@ import haxe.macro.*;
 import hex.compiletime.flow.parser.ExpressionUtil;
 import hex.util.MacroUtil;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class ClosureFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static inline function _bindFactory( ref, args, pos ) return macro @:pos(pos)  $ref .bind( $a { args } );
 	static inline function _blankType( vo ) { vo.cType = tink.macro.Positions.makeBlankType( vo.filePosition ); return MacroUtil.getFQCNFromComplexType( vo.cType ); }

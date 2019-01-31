@@ -8,13 +8,15 @@ import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 #end
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class AddParser 
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	static var logger = hex.log.LogManager.LogManager.getLoggerByClass( AddParser );
 	
 	macro public static function activate() : haxe.macro.Expr.ExprOf<Bool>

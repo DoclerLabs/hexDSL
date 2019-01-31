@@ -3,7 +3,7 @@ package hex.core;
 #if macro
 import haxe.macro.Context;
 #else
-import hex.error.IllegalArgumentException;
+using hex.error.Error;
 #end
 
 /**

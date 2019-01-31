@@ -5,13 +5,15 @@ import haxe.macro.Expr;
 import hex.vo.ConstructorVO;
 import hex.compiletime.basic.vo.FactoryVOTypeDef;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
  */
 class ArgumentFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function build<T:FactoryVOTypeDef>( factoryVO : T, arguments : Array<Dynamic> ) : Array<Expr>
 	{

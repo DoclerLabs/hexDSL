@@ -6,13 +6,14 @@ import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
 
 using Lambda;
+using hex.error.Error;
 /**
  * ...
  * @author Francis Bourre
  */
 class ContextArgumentFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{

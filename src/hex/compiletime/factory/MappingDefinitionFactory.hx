@@ -4,7 +4,9 @@ package hex.compiletime.factory;
 import haxe.macro.Expr;
 import hex.core.ContextTypeList;
 import hex.vo.ConstructorVO;
+
 using Lambda;
+using hex.error.Error;
 
 /**
  * ...
@@ -12,7 +14,7 @@ using Lambda;
  */
 class MappingDefinitionFactory
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	static public function build<T:hex.compiletime.basic.vo.FactoryVOTypeDef>( factoryVO : T ) : Expr
 	{

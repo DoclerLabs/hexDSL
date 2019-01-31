@@ -3,9 +3,9 @@ package hex.core;
 import hex.core.IApplicationContext;
 import hex.core.ICoreFactory;
 import hex.di.IDependencyInjector;
-import hex.error.IllegalStateException;
-import hex.error.VirtualMethodException;
 import hex.log.ILogger;
+
+using hex.error.Error;
 
 /**
  * ...
