@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 
 language: haxe
 
@@ -48,7 +48,7 @@ before_install:
   - echo $DEPENDENCIES_BRANCH
 
 install:
-  - export BRANCH_REF=$DEPENDENCIES_BRANCH
+  - nvm install 8
   - haxelib install travix --always
 # hexLog
   - if [ $( git ls-remote https://github.com/DoclerLabs/hexLog.git $BRANCH_REF --heads | wc -l ) == "0" ]; then export DEPENDENCIES_BRANCH=master; else export DEPENDENCIES_BRANCH=$BRANCH_REF; fi
